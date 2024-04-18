@@ -1,0 +1,43 @@
+{
+    "name": "fastsaas",
+    "version": "1.0.0",
+    "description": "fastsaas",
+    "main": "dist/fastsaas.js",
+    "scripts": {
+        "build": "tsc",
+        "lint": "eslint src --ext .ts",
+        "lint:fix": "eslint --fix src --ext .ts",
+        "start": "tsc && node dist/index.js",
+        "dev": "ts-node src/index.ts",
+        "product": "node dist/index.js",
+        "clean": "rm -rf \"./dist\" \"./coverage\"",
+        "test": "jest --coverage"
+    },
+    "keywords": [
+        "orm"
+    ],
+    "author": "gmj",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jest": "^24.9.0",
+        "@types/node": "^13.7.0",
+        "jest": "^24.9.0",
+        "nodemon": "^2.0.2",
+        "ts-jest": "^24.3.0",
+        "ts-node": "^8.6.1",
+        "tsconfig-paths": "^3.9.0",
+        "typescript": "^5.0.0"
+        
+    },
+    "dependencies": {
+        "lodash": "^4.17.15",
+        "ioredis": "^4.14.1",
+        "mysql": "^2.18.1",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "jsonwebtoken": "^8.5.1",
+        "lodash.findindex": "^4.6.0",
+        "socket.io": "4.0.1",
+        "socket.io-redis": "^6.1.0"
+    }
+}

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+      "esModuleInterop": true,
+      "declaration": true,
+      "lib": [
+          "ES2018",
+          "DOM"
+      ],
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "resolveJsonModule": true,
+      "rootDir": "./src",
+      "target": "ES2018",
+      "experimentalDecorators":true
+  },
+  "include": [
+      "src/**/*.ts"
+  ],
+  "exclude": [
+      "node_modules"
+  ]
+}
