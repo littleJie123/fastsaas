@@ -18,8 +18,8 @@ interface IExe{
 
 export default class Control<Param=any,Result = any> {
   protected _param: Param = null;
-  protected _req: any = null;
-  protected _resp: any = null;
+  protected _req: Request = null;
+  protected _resp: Response = null;
   protected _context: Context = null;
 
   @Bean()

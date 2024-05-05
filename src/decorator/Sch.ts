@@ -37,6 +37,9 @@ export default function(opt?:SchOpt ) {
           })
         }
         let cache = null;
+        if(this.getIsDel() && opt.otherCdt == null ){
+          opt.otherCdt = {isDel:0};
+        }
         if(opt.cacheClazz){
           let CacheClazz:any = opt.cacheClazz
           cache = new CacheClazz({funName:propertyName})

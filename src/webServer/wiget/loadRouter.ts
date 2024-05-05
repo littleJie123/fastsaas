@@ -105,9 +105,7 @@ function loadFromWebPath(app,opt){
     for(var dir of dirs){
         _parseDir(dir,opt.webPath,opt.webPath)
     }
-    // for(var e in map){
-    //     app.use('/'+e,map[e])
-    // }
+
 }
 
 

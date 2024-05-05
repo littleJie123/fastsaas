@@ -224,7 +224,7 @@ export class StrUtil {
   /**
   判断是否字符串
   */
-   static  isStr(str:any):boolean{
+  static  isStr(str:any):boolean{
     if(str == null)
       return false;
     return  ((typeof str)=='string') || (str instanceof String)
