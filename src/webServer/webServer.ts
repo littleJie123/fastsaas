@@ -33,6 +33,7 @@ interface WebServerOption{
      * 保留body
      */
     keepBody?:boolean;
+    interceptorBeans?:string[]
 }
 
 
