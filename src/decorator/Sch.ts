@@ -22,7 +22,15 @@ interface SchOpt{
  */
 export default function(opt?:SchOpt ) {
   return function(target: any, propertyName: string,descriptor: PropertyDescriptor) {
-    descriptor.value = function(param,col?:string){
+    descriptor.value =async function(param,col?:string){
+      let key:string = null;
+      let keys = ['get','find'];
+      for(let k of keys){
+        if(propertyName.startsWith(k)){
+          key = k;
+          break;
+        }
+      }
 
       let inquiry = this.get(propertyName);
       if(inquiry == null){
@@ -31,7 +39,7 @@ export default function(opt?:SchOpt ) {
         }
         let cols = opt.cols;
         if(cols == null){
-          cols = propertyName.substring(4).split('And');
+          cols = propertyName.substring(key.length).split('And');
           cols = cols.map((key:string):string=>{
             return StrUtil.firstLower(key);
           })
@@ -61,7 +69,12 @@ export default function(opt?:SchOpt ) {
         inquiry.setKey(this.getKey()); 
         inquiry.setContext(this._context);
       }
-      return inquiry.find(param,col);
+
+      let ret = await inquiry.find(param,col);
+      if(key == 'get'){
+        ret = ret[0]
+      }
+      return ret;
     }
   }
 }

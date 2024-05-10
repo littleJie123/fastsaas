@@ -4,6 +4,7 @@ import SqlTokenFac from "./sqlToken/SqlTokenFac";
 export default class {
   
   
+  
   private dbToPojoMap:{[key:string]:string};
   private pojoToDbMap:{[key:string]:string};
   private clazz:any;
@@ -19,6 +20,14 @@ export default class {
       pojoToDbMap[dbToPojoMap[e]] = e
     }
     this.pojoToDbMap = pojoToDbMap;
+  }
+
+  /**
+   * 是否有效的key
+   * @param col 
+   */
+  isValid(col: string):boolean {
+    return this.pojoToDbMap[col] != null;
   }
   /**
    * 将db的字段转成pojo的字段

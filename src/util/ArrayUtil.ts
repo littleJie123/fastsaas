@@ -9,65 +9,65 @@
 
 
 interface GroupByParam {
-	list?:Array<any>, //数组
-	array?:Array<any>,
-	key:any, //分组的key
-	fun:Function // 处理函数
+	list?: Array<any>, //数组
+	array?: Array<any>,
+	key: any, //分组的key
+	fun: Function // 处理函数
 }
 
-interface AbsJoinParam{
-	list:Array<any>;
-	list2:Array<any>;
-	fun?:Function;
-	keys?:Array<string>;
+interface AbsJoinParam {
+	list: Array<any>;
+	list2: Array<any>;
+	fun?: Function;
+	keys?: Array<string>;
 }
 
- 
-interface JoinOpt{
-	list:Array<any>;
-	list2:Array<any>;
+
+interface JoinOpt {
+	list: Array<any>;
+	list2: Array<any>;
 	/**
 	 * 两边都有的死后处理的函数
 	 * function(array1,array2,e)
 	 */
-	fun:Function;
+	fun: Function;
 	/**
 	 * 对应的key
 	 */
-	key:Function|string|Array<string>;
+	key: Function | string | Array<string>;
 	/**
 	 * 默认和key相同
 	 */
-	key2?:Function|string|Array<string>;
+	key2?: Function | string | Array<string>;
 	/**
 	 * 只有数组1有的时候处理函数
 	 * function(array,e)
 	 */
-	onlyOne?:Function;
+	onlyOne?: Function;
 	/**
 	 * 只有数组2有的时候处理函数
 	 * function(array,e)
 	 */
-	onlyTwo?:Function;
+	onlyTwo?: Function;
 }
 
 /**
 从一个元素中取值
 也支持有function
 */
-function get(obj: object, key:Function|string|string[]) {
-	if(key == null)
+function get(obj: object, key: Function | string | string[]) {
+	if (key == null)
 		return obj;
 	if (key instanceof Function) {
 		return key(obj)
 	}
 	var ret = []
-	if(key instanceof Array){
-		for(var k of key){
+	if (key instanceof Array) {
+		for (var k of key) {
 			ret.push(obj[k])
 		}
 		return ret.join('#___#');
-	}else{
+	} else {
 		return obj[key];
 	}
 }
@@ -79,20 +79,20 @@ export class ArrayUtil {
 	 * @param array 
 	 * @param key 
 	 */
-	static isDuplicate(array:any[],key:Function|string|string[]):boolean{
-		let map:any = {}
-		for(let row of array){
-			let keyStr = get(row,key);
-			if(map[keyStr] == null){
+	static isDuplicate(array: any[], key: Function | string | string[]): boolean {
+		let map: any = {}
+		for (let row of array) {
+			let keyStr = get(row, key);
+			if (map[keyStr] == null) {
 				map[keyStr] = true;
-			}else{
+			} else {
 				return true;
 			}
 		}
 		return false;
-	} 
+	}
 
-	static keys(array:any[]){
+	static keys(array: any[]) {
 		return array.join('#___#')
 	}
 
@@ -102,20 +102,20 @@ export class ArrayUtil {
 	 * @param array 
 	 * @param keys 
 	 */
-	static countObj(array:any[],keys:string[]){
-		let keyMap:any = {};
-		let ret:any = {};
-		for(let key of keys){
+	static countObj(array: any[], keys: string[]) {
+		let keyMap: any = {};
+		let ret: any = {};
+		for (let key of keys) {
 			ret[key] = 0
 			keyMap[key] = {}
 		}
-		for(let row of array){
-			for(let key of keys){
+		for (let row of array) {
+			for (let key of keys) {
 				let value = row[key];
-				if(value != null){
-					if(keyMap[key][value] == null){
+				if (value != null) {
+					if (keyMap[key][value] == null) {
 						keyMap[key][value] = true;
-						ret[key] ++;
+						ret[key]++;
 					}
 				}
 			}
@@ -128,14 +128,14 @@ export class ArrayUtil {
 	 * @param array 
 	 * @param keys 
 	 */
-	static sumObj(array:any[],keys:string[]){
-		let ret:any = {};
-		for(let row of array){
-			for(let key of keys){
-				if(ret[key] == null){
+	static sumObj(array: any[], keys: string[]) {
+		let ret: any = {};
+		for (let row of array) {
+			for (let key of keys) {
+				if (ret[key] == null) {
 					ret[key] = row[key];
-				}else{
-					if(row[key] != null)
+				} else {
+					if (row[key] != null)
 						ret[key] += row[key]
 				}
 			}
@@ -143,7 +143,7 @@ export class ArrayUtil {
 		return ret;
 	}
 
-	static sum(array:Array<any>, key?:Array<string>|Function|string):number {
+	static sum(array: Array<any>, key?: Array<string> | Function | string): number {
 		var ret = 0
 		if (!array) return 0
 		var len = array.length
@@ -160,7 +160,7 @@ export class ArrayUtil {
 		}
 		return ret
 	}
-	static distinctByKey(array,keys:string|Function|Array<string>) {
+	static distinctByKey(array, keys: string | Function | Array<string>) {
 		var map = ArrayUtil.toMapByKey(array, keys)
 		var list = []
 		for (var e in map) {
@@ -173,8 +173,8 @@ export class ArrayUtil {
 	 * @param obj 
 	 * @param keys 
 	 */
-	static get(obj,keys:string|Function|Array<string>){
-		return get(obj,keys)
+	static get(obj, keys: string | Function | Array<string>) {
+		return get(obj, keys)
 
 	}
 	/**
@@ -184,7 +184,7 @@ export class ArrayUtil {
 	 * 	
 	 * 
 	 */
-	static order(array, opts:any):Array<any> {
+	static order(array, opts: any): Array<any> {
 		if (!(opts instanceof Array)) {
 			if (opts.order == null) {
 				opts = {
@@ -199,28 +199,28 @@ export class ArrayUtil {
 				if (opt.fun) {
 					return opt.fun
 				}
-				return function(obj1, obj2) {
+				return function (obj1, obj2) {
 					var order = opt.order
 					var desc = opt.desc
 					var ret = 0
 					let d1 = get(obj1, order);
 					let d2 = get(obj2, order);
-					if(d1==null && d2 == null){
+					if (d1 == null && d2 == null) {
 						ret = 0;
-					}else  if(d1 == null && d2 != null){
+					} else if (d1 == null && d2 != null) {
 						ret = -1;
-					}else if(d1 != null && d2 == null){
-						
-						ret = 1;
-					}else{
+					} else if (d1 != null && d2 == null) {
 
-						if((d1 instanceof Date) ){
+						ret = 1;
+					} else {
+
+						if ((d1 instanceof Date)) {
 							d1 = d1.getTime()
 						}
-						if((d2 instanceof Date) ){
+						if ((d2 instanceof Date)) {
 							d2 = d2.getTime()
 						}
-						if ( d1<d2 ) {
+						if (d1 < d2) {
 							ret = -1
 						} else if (d1 > d2) {
 							ret = 1
@@ -228,10 +228,10 @@ export class ArrayUtil {
 					}
 
 					if (desc == 'desc') {
-						
+
 						ret = ret * -1
 					}
-					
+
 					return ret
 				}
 			}
@@ -251,7 +251,7 @@ export class ArrayUtil {
 	 * @param opt 
 	 * @returns 
 	 */
-	static async groupBySync(opt:GroupByParam):Promise<any[]>{
+	static async groupBySync(opt: GroupByParam): Promise<any[]> {
 		if (opt == null) {
 			return null
 		}
@@ -273,7 +273,7 @@ export class ArrayUtil {
 		var map = ArrayUtil.toMapArray(list, key)
 		var ret = []
 		for (var e in map) {
-			var row =await fun(map[e], e)
+			var row = await fun(map[e], e)
 			if (row != null) {
 				if (row instanceof Array) {
 					ret.push(...row);
@@ -285,15 +285,15 @@ export class ArrayUtil {
 		return ret
 
 	}
-    /**
-     对数组做group by操作
-	opt:{
-		list:list, //数组
-		key:key, //分组的key
-		fun:fun(list,e) // 处理函数
-	}
-	*/
-	static groupBy(opt:GroupByParam):Array<any> {
+	/**
+	 对数组做group by操作
+opt:{
+	list:list, //数组
+	key:key, //分组的key
+	fun:fun(list,e) // 处理函数
+}
+*/
+	static groupBy(opt: GroupByParam): Array<any> {
 		if (opt == null) {
 			return null
 		}
@@ -326,24 +326,24 @@ export class ArrayUtil {
 		}
 		return ret
 	}
-    /**
-	 * 将 通过比较key将两个数组按and的方式and
-	   
-        array1:数组1
-        array2:数组2
-        key1 
-        key2
-	 */
-	static andByKey(array1:Array<any>,array2:Array<any>,key1?,key2?) {
-		
-		if(key1 == null){
-			key1 = (row)=>row;
+	/**
+ * 将 通过比较key将两个数组按and的方式and
+	 
+			array1:数组1
+			array2:数组2
+			key1 
+			key2
+ */
+	static andByKey(array1: Array<any>, array2: Array<any>, key1?, key2?) {
+
+		if (key1 == null) {
+			key1 = (row) => row;
 		}
-		
+
 		if (key2 == null) {
 			key2 = key1
 		}
-		
+
 
 		var map = ArrayUtil.toMapByKey(array1, key1)
 		var retMap = {}
@@ -360,8 +360,8 @@ export class ArrayUtil {
 		}
 		return ret
 	}
-    static inArray(array:Array<any>, obj:any):boolean {
-		
+	static inArray(array: Array<any>, obj: any): boolean {
+
 		if (obj == null) return false
 		if (!Array.isArray(obj)) {
 			var len = array.length
@@ -376,9 +376,9 @@ export class ArrayUtil {
 			var list = ArrayUtil.and(array, obj);
 			return list.length == obj.length
 		}
-    }
-    static and(array1,array2):Array<any>{
-        var map = ArrayUtil.toMap(array1)
+	}
+	static and(array1, array2): Array<any> {
+		var map = ArrayUtil.toMap(array1)
 		var retMap = {}
 		var ret = []
 		for (var i = 0; i < array2.length; i++) {
@@ -391,11 +391,11 @@ export class ArrayUtil {
 			ret.push(retMap[e])
 		}
 		return ret
-    }
-    static distinct(array:Array<any>):Array<any> {
+	}
+	static distinct(array: Array<any>): Array<any> {
 		if (array == null || array.length == 0) return array
 		var map = {};
-		for(let row of array){
+		for (let row of array) {
 			map[row] = row;
 		}
 		var ret = []
@@ -404,109 +404,111 @@ export class ArrayUtil {
 		}
 		return ret
 	}
-  
 
-    /**
-	建议使用
-	 * 根据key 转化为map
-	 * @param array
-	 * @param key
+
+	/**
+建议使用
+ * 根据key 转化为map
+ * @param array
+ * @param key
+ */
+	static toMapByKey(array: any[], key: any, fun?: Function | string) {
+		if (fun == null) {
+			fun = (data) => {
+				return data
+			}
+		}
+		let map = {}
+		if (key==null){
+			key = (data)=>data;
+		}
+		if (array) {
+			const len = array.length
+			for (let i = 0; i < len; i++) {
+				let data = array[i]
+				let mapKey = get(data, key)
+				map[mapKey] = get(data, fun)
+			}
+		}
+		return map
+	}
+
+	/**
+ * @description 将一个list按key分组，放在map中
+ */
+	static toMapArray(list: any[], key: any, fun?: Function) {
+
+		var ret = {}
+		if (list != null && key != null) {
+			for (let i = 0; i < list.length; i++) {
+				let data = list[i]
+				let val = get(data, key)
+				let mapData = get(data, fun)
+				if (val != null && mapData != null) {
+					var array = ret[val]
+					if (array == null) {
+						array = []
+						ret[val] = array
+					}
+					array.push(mapData)
+				}
+			}
+		}
+		return ret
+	}
+
+	static copy(destArray, srcArray, maxLen) {
+		if (destArray == null) return []
+		if (srcArray == null) return destArray
+		var len = srcArray.length
+		if (maxLen != null && maxLen >= 0 && maxLen < len) {
+			len = maxLen
+		}
+		for (let i = 0; i < len; i++) {
+			destArray.push(srcArray[i])
+		}
+		return destArray
+	}
+
+	static toMap(array) {
+		let obj = {}
+		if (array) {
+			if (!(array instanceof Array)) {
+				array = [array];
+			}
+			for (let i = 0; i < array.length; i++) {
+				obj[array[i]] = true
+			}
+		}
+		return obj
+	}
+
+
+	/**
+	 * 两个数组求not_in,根据key 来 进行
+	 * @param array1 
+	 * @param array2 
+	 * @param key 
+	 * @param key2 
 	 */
-    static toMapByKey(array: any[], key: any, fun?: Function|string) {
-        if (fun == null) {
-            fun = (data) => {
-                return data
-            }
-        }
-        let map = {}
-        if (!key) key = 'id'
-        if (array) {
-            const len = array.length
-            for (let i = 0; i < len; i++) {
-                let data = array[i]
-                let mapKey = get(data, key)
-                map[mapKey] = get(data, fun)
-            }
-        }
-        return map
-    }
-
-    /**
-	 * @description 将一个list按key分组，放在map中
-	 */
-    static toMapArray(list: any[], key: any, fun?: Function) {
-       
-        var ret = {}
-        if (list != null && key != null) {
-            for (let i = 0; i < list.length; i++) {
-                let data = list[i]
-                let val = get(data, key)
-                let mapData = get(data, fun)
-                if (val != null && mapData != null) {
-                    var array = ret[val]
-                    if (array == null) {
-                        array = []
-                        ret[val] = array
-                    }
-                    array.push(mapData)
-                }
-            }
-        }
-        return ret
-    }
-
-    static copy(destArray, srcArray, maxLen) {
-        if (destArray == null) return []
-        if (srcArray == null) return destArray
-        var len = srcArray.length
-        if (maxLen != null && maxLen >= 0 && maxLen < len) {
-            len = maxLen
-        }
-        for (let i = 0; i < len; i++) {
-            destArray.push(srcArray[i])
-        }
-        return destArray
-    }
-
-    static toMap(array) {
-        let obj = {}
-        if (array) {
-            if (!(array instanceof Array)) {
-                array = [array];
-            }
-            for (let i = 0; i < array.length; i++) {
-                obj[array[i]] = true
-            }
-        }
-        return obj
-    }
-
-   
-    /**
-     * 两个数组求not_in,根据key 来 进行
-     * @param array1 
-     * @param array2 
-     * @param key 
-     * @param key2 
-     */
-    static notInByKey(array1: any[], array2: any[], key?, key2?) {
-        if (key == null) {
-            return ArrayUtil.notIn(array1, array2)
-        }
-        if (key2 == null) {
-            key2 = key
-        }
-        var map = ArrayUtil.toMapByKey(array2, key2)
-        var retMap = {}
-        for (let i = 0; i < array1.length; i++) {
-            var val = array1[i]
-            var valKey = get(val, key)
-            if (map[valKey] == null) {
-                retMap[valKey] = val
-            }
-        }
+	static notInByKey(array1: any[], array2: any[], key?, key2?) {
+		if (key == null) {
+			return ArrayUtil.notIn(array1, array2)
+		}
+		if (key2 == null) {
+			key2 = key
+		}
+		var map = ArrayUtil.toMapByKey(array2, key2)
+		var retMap = {}
+		for (let i = 0; i < array1.length; i++) {
+			var val = array1[i]
+			var valKey = get(val, key)
+			if (map[valKey] == null) {
+				retMap[valKey] = val
+			}
+		}
 		var array = [];
-		for(var e in retMap){
+		for (var e in retMap) {
 			array.push(retMap[e]);
 		}
 		return array;
@@ -517,17 +519,17 @@ export class ArrayUtil {
 	 * @param fun 
 	 * @returns 
 	 */
-	static findMax(array:any[],fun:string|((row:any)=>any)){
+	static findMax(array: any[], fun: string | ((row: any) => any)) {
 		let ret = null;
 		let val = null;
-		for(let row of array){
-			
-			if(ret == null){
+		for (let row of array) {
+
+			if (ret == null) {
 				ret = row
-				val = get(row,fun)	
-			}else{
-				let rowVal = get(row,fun);
-				if(rowVal>val){
+				val = get(row, fun)
+			} else {
+				let rowVal = get(row, fun);
+				if (rowVal > val) {
 					val = rowVal;
 					ret = row;
 				}
@@ -537,7 +539,7 @@ export class ArrayUtil {
 	}
 
 
-	
+
 
 	/**
 	 * 查找最大的
@@ -545,17 +547,17 @@ export class ArrayUtil {
 	 * @param fun 
 	 * @returns 
 	 */
-	static findMin(array:any[],fun:string|((row:any)=>any)){
+	static findMin(array: any[], fun: string | ((row: any) => any)) {
 		let ret = null;
 		let val = null;
-		for(let row of array){
-			
-			if(ret == null){
+		for (let row of array) {
+
+			if (ret == null) {
 				ret = row
-				val = get(row,fun)	
-			}else{
-				let rowVal = get(row,fun);
-				if(rowVal<val){
+				val = get(row, fun)
+			} else {
+				let rowVal = get(row, fun);
+				if (rowVal < val) {
 					val = rowVal;
 					ret = row;
 				}
@@ -567,9 +569,9 @@ export class ArrayUtil {
 	/**
 	第二个参数可以是function、map、array
 	*/
-	static filter(array, fun):Array<any> {
+	static filter(array, fun): Array<any> {
 		var ret = []
-		if(!(array instanceof Array)){
+		if (!(array instanceof Array)) {
 			array = [array];
 		}
 		for (var i = 0; i < array.length; i++) {
@@ -577,8 +579,8 @@ export class ArrayUtil {
 				ret.push(array[i])
 			}
 		}
-			
-	
+
+
 		return ret
 	}
 	/**
@@ -586,14 +588,14 @@ export class ArrayUtil {
 	 * @param array 
 	 * @param fun 
 	 */
-	static filterOne(array,fun):any{
-		return ArrayUtil.filter(array,fun)[0]
+	static filterOne(array, fun): any {
+		return ArrayUtil.filter(array, fun)[0]
 	}
-    /**
-	 * 找出在array1 不在array2的数据
-	 */
-    static notIn(array1, array2):Array<any> {
-        var map = ArrayUtil.toMap(array2)
+	/**
+ * 找出在array1 不在array2的数据
+ */
+	static notIn(array1, array2): Array<any> {
+		var map = ArrayUtil.toMap(array2)
 
 		var retMap = {}
 		for (var i = 0; i < array1.length; i++) {
@@ -606,8 +608,8 @@ export class ArrayUtil {
 		for (var e in retMap) {
 			ret.push(retMap[e])
 		}
-		return ret 
-    }
+		return ret
+	}
 
 	/**
 	 * 将一个数组转换成另外一个数组
@@ -616,10 +618,10 @@ export class ArrayUtil {
 	 * @param list 
 	 * @param fun 
 	 */
-	static async map(list:Array<any>, fun) {
+	static async map(list: Array<any>, fun) {
 		var ret = []
 		for (var i = 0; i < list.length; i++) {
-			var funRet =await fun(list[i],i)
+			var funRet = await fun(list[i], i)
 			if (funRet != null) {
 				if (funRet instanceof Array) {
 					ArrayUtil.addAll(ret, funRet)
@@ -631,102 +633,102 @@ export class ArrayUtil {
 		return ret
 	}
 
-    static parse(array, fun?: Function) {
-        if (!array) return []
-        if (!(array instanceof Array)) {
-            array = [array];
-        }
-        return ArrayUtil._parseArray(array, fun)
-    }
+	static parse(array, fun?: Function) {
+		if (!array) return []
+		if (!(array instanceof Array)) {
+			array = [array];
+		}
+		return ArrayUtil._parseArray(array, fun)
+	}
 
-    /**
-	 * 根据fun转化array后返回
-	 * @param array
-	 * @param fun
-	 * @returns
-	 */
-    private static _parseArray(array: any[], fun: Function) {
-        if (!array) return []
-        if (!fun) {
-            return array
-        }
-        var ret = []
-        for (let i = 0; i < array.length; i++) {
-            var obj = fun(array[i], i)
-            if (obj != null) {
-                ret.push(obj)
-            }
-        }
-        return ret
-    }
+	/**
+ * 根据fun转化array后返回
+ * @param array
+ * @param fun
+ * @returns
+ */
+	private static _parseArray(array: any[], fun: Function) {
+		if (!array) return []
+		if (!fun) {
+			return array
+		}
+		var ret = []
+		for (let i = 0; i < array.length; i++) {
+			var obj = fun(array[i], i)
+			if (obj != null) {
+				ret.push(obj)
+			}
+		}
+		return ret
+	}
 
-    static addAll(array1, array2) {
-        if (array1 == null) array1 = []
-        if (array2 == null) return array1;
-        if (!(array2 instanceof Array)) {
+	static addAll(array1, array2) {
+		if (array1 == null) array1 = []
+		if (array2 == null) return array1;
+		if (!(array2 instanceof Array)) {
 			array1.push(array2)
 		} else {
 			for (var i = 0; i < array2.length; i++) {
 				array1.push(array2[i])
 			}
 		}
-        return array1
-    }
-
-    static toArray(array, key:string|Function|Array<string>) {
-		if(array == null)
-			return [];
-        if (!(array instanceof Array))
-            array = [array];
-        if (!key) key = 'id'
-        var ret = []
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                var obj = get(array[i], key)
-                if (obj != null) {
-                    ret.push(obj)
-                }
-            }
-        }
-        return ret
-    }
-
-    static isSame(array1:Array<any>,array2:Array<any>):boolean{
-        function _isSame(a:any,b:any){
-            var aProps = Object.getOwnPropertyNames(a);
-            var bProps = Object.getOwnPropertyNames(b);
-
-            if (aProps.length != bProps.length) {
-                return false;
-            }
-
-            for (var i = 0; i < aProps.length; i++) {
-                var propName = aProps[i];
-                if (a[propName] !== b[propName]) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        if(array1 == null || array2 == null){
-            return false;
-        }
-        if(array1.length != array2.length)
-            return false;
-        for(var i=0;i<array1.length;i++){
-            if(!_isSame(array1[i],array2[i])){
-                return false;
-            }
-        }
-            
-
-        return true;
+		return array1
 	}
-	
-	static orByKey(array1, array2, key1?:string|Array<string>|Function, key2?:string|Array<string>|Function) {
+
+	static toArray(array, key: string | Function | Array<string>) {
+		if (array == null)
+			return [];
+		if (!(array instanceof Array))
+			array = [array];
+		if (!key) key = 'id'
+		var ret = []
+		if (array) {
+			for (let i = 0; i < array.length; i++) {
+				var obj = get(array[i], key)
+				if (obj != null) {
+					ret.push(obj)
+				}
+			}
+		}
+		return ret
+	}
+
+	static isSame(array1: Array<any>, array2: Array<any>): boolean {
+		function _isSame(a: any, b: any) {
+			var aProps = Object.getOwnPropertyNames(a);
+			var bProps = Object.getOwnPropertyNames(b);
+
+			if (aProps.length != bProps.length) {
+				return false;
+			}
+
+			for (var i = 0; i < aProps.length; i++) {
+				var propName = aProps[i];
+				if (a[propName] !== b[propName]) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+		if (array1 == null || array2 == null) {
+			return false;
+		}
+		if (array1.length != array2.length)
+			return false;
+		for (var i = 0; i < array1.length; i++) {
+			if (!_isSame(array1[i], array2[i])) {
+				return false;
+			}
+		}
+
+
+		return true;
+	}
+
+	static orByKey(array1, array2, key1?: string | Array<string> | Function, key2?: string | Array<string> | Function) {
 		if (key1 == null) {
-			key1 = (row)=>row;
+			key1 = (row) => row;
 		}
 		if (key2 == null) key2 = key1
 		var map = ArrayUtil.toMapByKey(array1, key1)
@@ -745,31 +747,31 @@ export class ArrayUtil {
 		return array
 	}
 
-    /**
-	两个list进行join操作,
-	类似数据库中inner join
-	{
-		list:[],
-		list2:[],
-		fun:function(data,data1){
-			return data
-		},
-		key:function(){ //可以是function 也可以是key 在list中必须唯一
+	/**
+两个list进行join操作,
+类似数据库中inner join
+{
+	list:[],
+	list2:[],
+	fun:function(data,data1){
+		return data
+	},
+	key:function(){ //可以是function 也可以是key 在list中必须唯一
 
-		},
-		key2:function(){
+	},
+	key2:function(){
 
-		},
-		onlyOne:function(data){ //只有第一个数组有的情况
+	},
+	onlyOne:function(data){ //只有第一个数组有的情况
 
-		},
-		onlyTwo:function(data){ //只存在2，不存在1
-
-		}
+	},
+	onlyTwo:function(data){ //只存在2，不存在1
 
 	}
-	*/
-	static join(opt:JoinOpt):Array<any> {
+
+}
+*/
+	static join(opt: JoinOpt): Array<any> {
 		var list = opt.list
 		var list2 = opt.list2
 		if (list == null ||
@@ -786,7 +788,7 @@ export class ArrayUtil {
 			key2 = key
 		}
 		if (fun == null) {
-			fun = function(data) {
+			fun = function (data) {
 				return data
 			}
 		}
@@ -857,7 +859,7 @@ export class ArrayUtil {
 
 	}
 	*/
-	static joinArray(opt:JoinOpt) {
+	static joinArray(opt: JoinOpt) {
 		var list = opt.list
 		var list2 = opt.list2
 		if (list == null && list2 == null)
@@ -877,7 +879,7 @@ export class ArrayUtil {
 			key2 = key
 		}
 		if (fun == null) {
-			fun = function(data) {
+			fun = function (data) {
 				return data
 			}
 		}
@@ -933,7 +935,7 @@ export class ArrayUtil {
 
 	}
 	*/
-	static joinMany(opt:JoinOpt) {
+	static joinMany(opt: JoinOpt) {
 		var list = opt.list
 		var list2 = opt.list2
 		var onlyOne = opt.onlyOne;
@@ -952,7 +954,7 @@ export class ArrayUtil {
 			key2 = key
 		}
 		if (fun == null) {
-			fun = function(data) {
+			fun = function (data) {
 				return data
 			}
 		}
@@ -988,25 +990,25 @@ export class ArrayUtil {
 	 * @param array 
 	 * @param key 
 	 */
-	static toArrayDis(array:Array<any>,key:string|Function|Array<string>):Array<any>{
+	static toArrayDis(array: Array<any>, key: string | Function | Array<string>): Array<any> {
 		if (array == null)
 			return null;
 		let set = new Set();
-		for(let row of array){
-			let val = get(row,key);
-			if(val != null)
+		for (let row of array) {
+			let val = get(row, key);
+			if (val != null)
 				set.add(val);
 		}
-		return [... set];
+		return [...set];
 	}
 	/**
 	 * 将一个mapArray 转成map
 	 * @param map 
 	 */
-	static mapArray2Array(map){
+	static mapArray2Array(map) {
 		let array = [];
-		for(var e in map){
-			ArrayUtil.addAll(array,map[e])
+		for (var e in map) {
+			ArrayUtil.addAll(array, map[e])
 		}
 		return array;
 	}
@@ -1017,13 +1019,13 @@ export class ArrayUtil {
 	 * @param array2 
 	 * @param key 
 	 */
-	static isSameByKey(array1:Array<any>,array2:Array<any>,key:string|Array<string>|Function){
-		if(array1 == null && array2==null) return true;
-		if(array1 == null || array2==null) return false;
-		if(array1.length != array2.length)
+	static isSameByKey(array1: Array<any>, array2: Array<any>, key: string | Array<string> | Function) {
+		if (array1 == null && array2 == null) return true;
+		if (array1 == null || array2 == null) return false;
+		if (array1.length != array2.length)
 			return false;
-		for(let i=0;i<array1.length;i++){
-			if(get(array1[i],key) != get(array2[i],key))
+		for (let i = 0; i < array1.length; i++) {
+			if (get(array1[i], key) != get(array2[i], key))
 				return false;
 		}
 		return true;
@@ -1039,15 +1041,15 @@ export class ArrayUtil {
 		fun:function(data,data2 ,i,t) //i和t 是数组的索引
 	}
 	*/
-	static absJoin(opt:AbsJoinParam) {
+	static absJoin(opt: AbsJoinParam) {
 		var array = [];
 		var list = opt.list;
-		
-		
-		var list2 =opt.list2
-		if(opt.fun == null){
+
+
+		var list2 = opt.list2
+		if (opt.fun == null) {
 			let keys = opt.keys;
-			opt.fun = function(data1,data2){
+			opt.fun = function (data1, data2) {
 				let obj = {};
 				obj[keys[0]] = data1[keys[0]];
 				obj[keys[1]] = data2[keys[1]];
@@ -1070,16 +1072,16 @@ export class ArrayUtil {
 	 * @param list 
 	 * @param key 
 	 */
-	static onlyKeys(list:any[],key){
-		if(key == null)
+	static onlyKeys(list: any[], key) {
+		if (key == null)
 			return null;
-		if(!(key instanceof Array)){
+		if (!(key instanceof Array)) {
 			key = [key]
 		}
 		let array = [];
-		for(let data of list){
+		for (let data of list) {
 			let obj = {}
-			for(let dataKey of key){
+			for (let dataKey of key) {
 				obj[dataKey] = data[dataKey]
 			}
 			array.push(obj)

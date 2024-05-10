@@ -13,10 +13,18 @@ export default abstract class SqlBuilder extends Builder {
   }
 
   protected _isValidCol(col: string): boolean {
+    let colChanger = this._opt.getColChanger();
+    if(!colChanger.isValid(col)){
+      return false;
+    }
     return col.substring(0, 1) != '_';
   }
 
   protected _need(name: string): Boolean {
+    let colChanger = this._opt.getColChanger();
+    if(!colChanger.isValid(name)){
+      return false;
+    }
     return (name.substring(0, 1) === '_') ? false : true
   }
 

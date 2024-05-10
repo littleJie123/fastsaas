@@ -29,17 +29,19 @@ export default class UpdateArraySql extends SqlBuilder {
     if (other) {
       var index = cols.length
       for (var e in other) {
-        if (index > 0) {
-          this._pushSqlTxt(sql, ',')
+        if(this._need(e)){
+          if (index > 0) {
+            this._pushSqlTxt(sql, ',')
+          }
+          if (other[e] && other[e].getSql) {
+            this._pushSqlTxt(sql, other[e].getSql(colChanger))
+          } else {
+            this._pushSqlTxt(sql, new ColSql(this.parsePojoField(e)))
+            this._pushSqlTxt(sql, '=')
+            this._pushSqlTxt(sql, new ValSql(other[e]))
+          }
+          index++
         }
-        if (other[e] && other[e].getSql) {
-          this._pushSqlTxt(sql, other[e].getSql(colChanger))
-        } else {
-          this._pushSqlTxt(sql, new ColSql(this.parsePojoField(e)))
-          this._pushSqlTxt(sql, '=')
-          this._pushSqlTxt(sql, new ValSql(other[e]))
-        }
-        index++
       }
     }
     let idCol = opt.acqPojoFirstId()

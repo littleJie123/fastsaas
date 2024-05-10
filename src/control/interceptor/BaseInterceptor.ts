@@ -25,16 +25,25 @@ export default abstract class BaseInterceptor{
     return false;
   }
   protected abstract doOnBefore(req:Request,resp:Response):Promise<void>;
+  /**
+   * 
+   * @param req 
+   * @param resp 
+   * @returns 返回true表示停止运行
+   */
   async onBefore(req:Request,resp:Response):Promise<boolean>{
     if(this.isValid(req)){
       try{
         await this.doOnBefore(req,resp);
       }catch(e){
+        console.log('error');
+        console.error(e);
         this._sendError(resp,e);
-        return false;
+
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   protected _sendError(resp,e){

@@ -50,7 +50,7 @@ function createFun(clazz, opt): Function {
         }
 
       }
-    }
+    } 
     ctrl.execute(req, resp);
   }
 }

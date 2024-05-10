@@ -1,4 +1,6 @@
+export {default as BaseInterceptor} from './control/interceptor/BaseInterceptor';
 
+ 
 export {default as BaseDomain} from './base/BaseDomain';
 export {default as BaseHttpInf} from './base/BaseHttpInf';
 export {default as BasePojo} from './base/BasePojo';

@@ -5,24 +5,21 @@ import DaoUtil from './../util/DaoUtil';
  */
 
 
-interface ContextIdOpt{
-    col:string
+interface ContextIdOpt {
+  col: string
 }
-export default  function(opt?:ContextIdOpt){
-    if(opt == null){
-        opt = {col:'contextId'};
+export default function (opt?: ContextIdOpt) {
+  if (opt == null) {
+    opt = { col: 'contextId' };
+  }
+  return DaoUtil.createAddAndUpdate({
+    updateCol: opt.col,
+    processFun: function (dao: any, data) {
+      let context = dao.getContext();
+      if (context != null) {
+        return context.getId();
+      }
     }
-    return DaoUtil.createAddAndUpdate({
-     
-        updateCol:opt.col,
-        processFun:function(dao:any,data){
-            let context = dao.getContext();
-            if(context != null){
-                
-                
-                return context.getId();
-            }
-        }
-    })
+  })
 }
 
