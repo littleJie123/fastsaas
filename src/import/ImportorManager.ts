@@ -17,10 +17,10 @@ export default class {
     this.opt = opt;
   }
 
-  async process(context:Context,param:any,dataArray:any[],colMap?:any):Promise<ImportorResult>{
+  async process(context:Context,param:any,dataArray:any[]):Promise<ImportorResult>{
     let imports = this.opt.importors;
     let count = 0;
-    let datas:ImportorObj[] = this.change(dataArray,colMap);
+    let datas:ImportorObj[] = this.change(dataArray);
     
     for(let importor of imports){
       let importorChecked = await importor.checked(context,param,datas);
@@ -57,21 +57,14 @@ export default class {
    * @param data 
    * @param caolMap 
    */
-  protected change(data:any[],colMap):ImportorObj[]{
+  protected change(datas:any[]):ImportorObj[]{
     let retArray:ImportorObj[] = []
-    for(let row of data){
-      if(row != null){
-        let data:ImportorObj = {};
-        for(let e in row){
-          let e1 = colMap?.[e];
-          if(e1 == null){
-            data[e] = {name:row[e]};
-          }else{
-            data[e1] = {name:row[e]};
-          }
-        }
-        retArray.push(data);
+    for(let data of datas){
+      let newData:ImportorObj = {};
+      for(let importor of this.opt.importors){
+        importor.change(data,newData);  
       }
+      retArray.push(newData);
     }
     return retArray;
   }

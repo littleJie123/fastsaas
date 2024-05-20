@@ -1,3 +1,4 @@
+export {default as ImportorInf} from './import/ImportorInf';
 export {default as ImportorManager} from './import/ImportorManager';
 export {default as ImportorObj} from './import/dto/ImportorObj';
 export {default as Importor} from './import/Importor';

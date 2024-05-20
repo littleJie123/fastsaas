@@ -2,7 +2,15 @@ import { ArrayUtil, BeanUtil, Context, Dao, StrUtil } from "../fastsaas";
 import ImportorObj from "./dto/ImportorObj";
 
 interface ImportOpt{
+  /**
+   * 默认值
+   */
+  defVal?: string;
+
+  paramKeys?:string[];
+
   key:string;
+
   needId?:string[];
   /**
    * 不需要domain进行处理
@@ -39,6 +47,21 @@ export default class {
   opt:ImportOpt;
   constructor(opt:ImportOpt){
     this.opt = opt;
+  }
+
+  /**
+   * 转变数据
+   * @param data 
+   * @param caolMap 
+   */
+  change(oldData:any,newData:ImportorObj):void{
+    let opt = this.opt
+    let value = oldData[opt.key];
+    if(value == null || value==''){
+      value = opt.defVal;
+    }
+    newData[opt.key] = {name:value};
+    
   }
 
   async checked(context: Context, param: any, datas: ImportorObj[]):Promise<boolean> {
@@ -78,6 +101,8 @@ export default class {
     let domain = context.get(this.opt.key+'Domain');
     if(domain?.onImportChecker){
       return await domain.onImportChecker(param,datas, datas.map(row=>this.parseDataToPojo(param,row)));
+    }else{
+      return true;
     }
   }
 
@@ -88,11 +113,16 @@ export default class {
    * @param datas 
    */
   async process(context: Context, param: any, datas: ImportorObj[]):Promise<void> {
+    console.log('*****process',this.opt.key);
+    if(this.isAllNull(datas)){
+      console.log('isAllnull');
+      return;
+    }
+    console.log('datas',datas);
     let ret = await this.processByDomain(context,param,datas);
     if(!ret){
-      ret = await this.processByDao(context,param,datas);
+      await this.processByDao(context,param,datas);
     }
-    this.join(datas,ret);
   }
 
 
@@ -106,8 +136,19 @@ export default class {
     let opt = this.opt;
     let retData:any = {}
     retData.name = data[opt.key].name;
-    for(let e in param){
-      retData[e] = param[e]
+    if(retData.name == null){
+      retData.name = opt.defVal;
+    }
+    if(param != null){
+      if(opt.paramKeys == null){
+        for(let e in param){
+          retData[e] = param[e]
+        }
+      }else{
+        for(let paramKey of opt.paramKeys){
+          retData[paramKey] = param[paramKey];
+        }
+      }
     }
     let needId = this.opt.needId;
     if(needId != null){
@@ -132,7 +173,7 @@ export default class {
    * @param datas 
    * @returns 
    */
-  protected async processByDao(context,param,datas: ImportorObj[]):Promise<any[]>{
+  protected async processByDao(context,param,datas: ImportorObj[]):Promise<void>{
     let dao:Dao = context.get(this.opt.key +'Dao');
     if(dao != null){
       let query = this.opt.query;
@@ -148,9 +189,9 @@ export default class {
       for(let data of datas){
         array.push(this.parseDataToPojo(param,data))
       }
-      array = ArrayUtil.distinctByKey(array,'name');
-      
-      return await dao.onlyArray({
+      array = array.filter(row=>row.name!=null);
+      array = ArrayUtil.distinctByKey(array,'name');      
+      let ret = await dao.onlyArray({
         query:{
           name:ArrayUtil.toArray(array,'name'),
           ... query
@@ -159,6 +200,7 @@ export default class {
         array,
         needUpdate:this.opt.needUpdate
       })
+      this.join(datas,ret);
     }
   }
 
@@ -211,29 +253,60 @@ export default class {
    * @param param 
    * @param datas 
    */
-  async processByDomain(context: Context, param: any, datas: ImportorObj[]):Promise<any[]>{
+  async processByDomain(context: Context, param: any, datas: ImportorObj[]):Promise<boolean>{
     let noDomain = this.opt.noDomain;
     if(noDomain){
-      return null;
+      return false;
     }
     let domain = context.get(this.opt.key+'Domain');
     if(domain?.onImport){
-      return await domain.onImport(param,datas, datas.map(row=>this.parseDataToPojo(param,row)));
+      let ret = await domain.onImport(param,datas, datas.map(row=>this.parseDataToPojo(param,row)));
+      this.join(datas,ret);
+      return true;
     }
+    return false;
   }
 
   getKey(){
     return this.opt.key;
   }
+  /**
+   * 该列所有对应的数据为空
+   * @param datas 
+   * @returns 
+   */
+  isAllNull(datas:ImportorObj[]):boolean{
+    let key = this.opt.key;
+    for(let data of datas){
+      if(data[key]!=null && data[key].name != null){
+        console.log('isallnull',data)
+        return false;
+      }
+    }
+    return true;
+  }
+
   isReady(datas: ImportorObj[]):boolean {
-    
+    if(this.isAllNull(datas)){
+      return true;
+    }
     let needId = this.opt.needId;
-    if(needId != null){ 
-      for(let data of datas){ 
-        for(let key of needId){ 
-          if(data[key]!=null && data[key].id == null){
-            return false;
+    if(needId != null){
+      for(let key of needId){
+        let allNull = true;
+        let allNameNull = true; 
+        for(let data of datas){
+          if(data[key] != null && data[key].name != null){
+            allNameNull = false;
           }
+          if(data[key]!=null && data[key].id != null){
+            allNull = false;
+            break;
+          }
+
+        }
+        if(!allNameNull && allNull){
+          return false;
         }
       }
     }

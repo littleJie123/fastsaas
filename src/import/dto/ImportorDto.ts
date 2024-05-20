@@ -4,7 +4,7 @@
 
 interface ImportDto{
   id?:number;
-  name:string;
+  name:any;
   error?:string;
   dbId?:number;
 }

@@ -66,14 +66,16 @@ function get(obj: object, key: Function | string | string[]) {
 		for (var k of key) {
 			ret.push(obj[k])
 		}
-		return ret.join('#___#');
+		return ArrayUtil.link(ret);
 	} else {
 		return obj[key];
 	}
 }
 
 export class ArrayUtil {
-
+	static link(strs:any[]):string{
+		return strs.join('#___#')
+	}
 	/**
 	 * 是否有重复
 	 * @param array 
