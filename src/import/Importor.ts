@@ -113,12 +113,9 @@ export default class {
    * @param datas 
    */
   async process(context: Context, param: any, datas: ImportorObj[]):Promise<void> {
-    console.log('*****process',this.opt.key);
     if(this.isAllNull(datas)){
-      console.log('isAllnull');
       return;
     }
-    console.log('datas',datas);
     let ret = await this.processByDomain(context,param,datas);
     if(!ret){
       await this.processByDao(context,param,datas);
@@ -279,7 +276,6 @@ export default class {
     let key = this.opt.key;
     for(let data of datas){
       if(data[key]!=null && data[key].name != null){
-        console.log('isallnull',data)
         return false;
       }
     }
