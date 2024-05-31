@@ -39,7 +39,7 @@ function createFun(clazz, opt): Function {
           try{
             let bean = childContext.get(beanStr);
             if(bean != null && bean.onBefore){
-              let ret = await bean.onBefore(req,resp);
+              let ret = await bean.onBefore(req,resp,req._param);
               if(ret){
                 return 
               }

@@ -1,3 +1,4 @@
+export {default as DaoHelper} from './dao/DaoHelper';
 export {default as ImportorInf} from './import/ImportorInf';
 export {default as ImportorManager} from './import/ImportorManager';
 export {default as ImportorObj} from './import/dto/ImportorObj';
@@ -202,8 +203,7 @@ export {default as StrParser} from './formula/parser/imp/StrParser';
 
 export {default as BaseHat} from './hat/BaseHat';
 export {default as GroupHat} from './hat/imp/GroupHat';
-export {default as Hat} from './hat/imp/Hat';
-export {default as Hats} from './hat/imp/Hats';
+export {default as Hat} from './hat/imp/Hat'; 
 export {default as PojoHat} from './hat/imp/PojoHat';
 export {default as SearcherHat} from './hat/imp/SearcherHat';
 

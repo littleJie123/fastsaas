@@ -1,5 +1,5 @@
 import BaseHat from "../BaseHat";
-import {ArrayUtil} from './../../util/ArrayUtil';
+import { ArrayUtil } from './../../util/ArrayUtil';
 import Searcher from './../../searcher/Searcher';
 import Dao from './../../dao/Dao';
 
@@ -11,31 +11,31 @@ import Dao from './../../dao/Dao';
  * 
  */
 // dataXxxx 主表 hatXxx 从表字段
-export default class Hat extends BaseHat{
-    
-    /**
-     * 返回从数据中查询的字段名
-     */
-    protected acqHatCol(row) {
+export default class Hat extends BaseHat {
+
+	/**
+	 * 返回从数据中查询的字段名
+	 */
+	protected acqHatCol(row) {
 		var opt = this._opt
 		if (opt.hatCol) {
 			return opt.hatCol
 		}
-		if(row.name != null)
+		if (row.name != null)
 			return 'name'
 		else
-			return this.getKey()+'_name';
-    }
-    /**
-	 * 返回给主表的名称
-	 */
+			return this.getKey() + '_name';
+	}
+	/**
+ * 返回给主表的名称
+ */
 	protected acqDataName() {
 		var opt = this._opt
 		if (opt.dataName) {
 			return opt.dataName
 		}
 		var key = this.getKey()
-		return key + '_name'
+		return key + 'Name'
 	}
 	/**
 	返回读取data中的字段
@@ -46,71 +46,56 @@ export default class Hat extends BaseHat{
 			return opt.dataCol
 		}
 		var key = this.getKey()
-		key = key + '_id'
+		key = key + 'Id'
 		return key
 	}
 	protected _acqMapKey(data) {
 		return data[this.acqDataCol()]
 	}
 
-	
-	protected getKey(){
+
+	protected getKey() {
 		return this._opt.key
 	}
-	
-	
-	protected getDao(key?:string):Dao{
+
+
+	protected getDao(key?: string): Dao {
 		if (key == null) {
 			key = this.getKey()
 		}
-		return this.getContext().get(key+'Dao')
+		return this.getContext().get(key + 'Dao')
 	}
 
-	protected getSearcher<T>(key?:string):T {
+	protected getSearcher<T>(key?: string): T {
 		if (key == null) {
 			key = this.getKey()
 		}
-		return this.getContext().get(key+'searcher')
+		return this.getContext().get(key + 'searcher')
 	}
-	
-	async process(list:Array<any>):Promise<Array<any>> {
+
+	async process(list: Array<any>): Promise<Array<any>> {
 		var map = await this._schMap(list);
-		let ret = null;
-		if(this.getFast()){
-			for (var i = 0; i < list.length; i++) {
-				let data = list[i];
-				let hatData = this._acqFastHatData(data,map);
-				if(hatData != null){
-					if(this._fun == null){
-						this._processData(data,hatData);
-					}else{
-						this._fun(data,hatData);
-					}
-				}
-			}
-			ret = list
-		}else{
-			
-			let prmses = []
-			for (var i = 0; i < list.length; i++) {
-				
-				prmses.push(this._process(list[i],map));
-			}
-			await Promise.all(prmses);
-			ret = list
+		
+
+		let prmses = []
+		for (var i = 0; i < list.length; i++) {
+
+			prmses.push(this._process(list[i], map));
 		}
-		return ret
+		await Promise.all(prmses);
+		
+		return list
 	}
-	protected async _schMap(list):Promise<any> {
+	protected async _schMap(list): Promise<any> {
 		list = this._acqIdsFromList(list)
 		if (list.length == 0) return {}
 		var array = await this._findByIds(list)
-		
+
 		let map = this._toMap(array)
-		
+
 		return map;
 	}
-	protected _acqIdsFromList(list:Array<any>) {
+	protected _acqIdsFromList(list: Array<any>) {
 		var key = this.acqDataCol()
 		var funName = '_filterList'
 		if (this[funName]) {
@@ -125,13 +110,13 @@ export default class Hat extends BaseHat{
 	 * @param array 
 	 */
 	protected _toMap(array) {
-		if(array.length == 0)
+		if (array.length == 0)
 			return {};
 		var row = array[0]
-		if(row.id == null){
+		if (row.id == null) {
 			//数据没有id
-			return ArrayUtil.toMapByKey(array, this.getKey()+'_id')
-		}else{
+			return ArrayUtil.toMapByKey(array, this.getKey() + 'Id')
+		} else {
 			return ArrayUtil.toMapByKey(array, 'id')
 		}
 	}
@@ -140,7 +125,7 @@ export default class Hat extends BaseHat{
 	 * @param list 
 	 */
 	protected async _findByIds(list) {
-		var searcher:Searcher = this.getSearcher()
+		var searcher: Searcher = this.getSearcher()
 		var array = await searcher.findByIds(list)
 		return array
 	}
@@ -155,36 +140,19 @@ export default class Hat extends BaseHat{
 			return null;
 		}
 		var hatData = map[mapKey]
-
 		return hatData
 	}
 
-	protected  _acqFastHatData(data, map) {
-		var mapKey =  this._acqMapKey(data)
-		if (mapKey == null) {
-			return null;
-		}
-		var hatData = map[mapKey]
-
-		return hatData
-	}
+ 
 	protected _acqDefData(data) {
 		return null
 	}
-	getFast(){
-		let opt = this._opt;
-		return opt.fast;
-	}
+	 
 	protected async _process(data, map) {
-		
-		
 		let hatData = await this._acqHatData(data, map)
 		if (hatData == null) {
-			
-			
-			hatData = this._acqDefData(data)
-		}
-		
+ 			hatData = this._acqDefData(data)
+		} 
 		if (hatData != null) {
 			if (this._fun) {
 				await this._fun(data, hatData)
@@ -192,15 +160,18 @@ export default class Hat extends BaseHat{
 				await this._processData(data, hatData)
 			}
 
-		} 
+		}
 		return data
 	}
 
 	protected _processData(data, hatData) {
-		
-		data[this.acqDataName()] = hatData[this.acqHatCol(hatData)]
+		if(!this._opt.getObj){ 
+			data[this.acqDataName()] = hatData[this.acqHatCol(hatData)]
+		}else{ 
+			data[this._opt.key] = hatData;
+		}
 	}
 
-	
-    
+
+
 }

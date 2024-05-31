@@ -24,17 +24,17 @@ export default abstract class BaseInterceptor{
   protected  isNot():boolean{
     return false;
   }
-  protected abstract doOnBefore(req:Request,resp:Response):Promise<void>;
+  protected abstract doOnBefore(req:Request,resp:Response,param?:any):Promise<void>;
   /**
    * 
    * @param req 
    * @param resp 
    * @returns 返回true表示停止运行
    */
-  async onBefore(req:Request,resp:Response):Promise<boolean>{
+  async onBefore(req:Request,resp:Response,param?:any):Promise<boolean>{
     if(this.isValid(req)){
       try{
-        await this.doOnBefore(req,resp);
+        await this.doOnBefore(req,resp,param);
       }catch(e){
         console.log('error');
         console.error(e);

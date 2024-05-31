@@ -5,6 +5,7 @@ import Query from './../dao/query/Query';
 import BaseCdt from './../dao/query/cdt/BaseCdt';
 import Dao from './../dao/Dao';
 import Control from "./Control";
+import { JsonUtil } from '../fastsaas';
 interface Col {
   title: string;
   dataIndex: string;
@@ -398,17 +399,21 @@ export default abstract class ListControl extends Control {
       totalPages++;
     }
 
-    map.numberOfElements = map.list.length;
     map.totalPages = totalPages;
-    if (param.first != null) {
-      map.first = (param.first == 0)
-      map.last = (param.first + map.list.length >= map.totalElements)
-    } else {
-      map.first = (param.pageNo == null || param.pageNo == 1);
-      map.last = (totalPages == param.pageNo);
-    }
-    map.content = map.list
+    map.content = this.onlyCols(map.list)
+    
     delete map.list;
+  }
+
+  protected getOnlyCols():string[]{
+    return null;
+  }
+
+  protected onlyCols(list:any[]){
+    let cols = this.getOnlyCols();
+    
+    return JsonUtil.onlyKeys4List(list,cols)   
+    
   }
 
 

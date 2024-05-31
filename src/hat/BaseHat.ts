@@ -2,14 +2,16 @@
 /**
  * 帽子的父类
  */
+import { BaseCdt } from '../fastsaas';
 import Context from './../context/Context';
+import BaseHatOpt from './BaseHatOpt';
 
 export default abstract class BaseHat{
-	protected _opt:any;
-	protected _fun:Function;
-	constructor(opt) {
+	protected _opt:BaseHatOpt;
+	protected _fun:(data:any,hatData:any)=>Promise<void>;
+	constructor(opt:BaseHatOpt) {
 		if (opt == null) {
-			opt = {}
+			opt = <any>{}
 		}
 		this._opt = opt
 		if (opt.fun) {

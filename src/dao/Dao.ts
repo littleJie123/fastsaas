@@ -213,15 +213,7 @@ export default abstract class Dao<Pojo = any> {
     const res = await this._execute('delArray', array, opts)
     return res.affectedRows
   }
-  /**
-   * 这个方法 不会相应DaoUtil 的 事件
-   * @param query 
-   */
-  async delByQuery(query):Promise<number>{
-    query = Query.parse(query);
-    var ret = await this._execute('delByQuery', query)
-    return ret.affectedRows;
-  }
+   
   /**
    * 查询
    * @param query 可以是个结构体，可以是个Cdt，可以是个Query 
