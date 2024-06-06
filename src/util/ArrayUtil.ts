@@ -73,6 +73,44 @@ function get(obj: object, key: Function | string | string[]) {
 }
 
 export class ArrayUtil {
+	/**
+	 * 类似字符串的indexOf
+	 * @param array1 
+	 * @param arra2 
+	 * @param fun 
+	 */
+	static indexOf(array1:any[],array2:any[],fun?:(row1,row2)=>boolean):number{
+		
+		let ret = -1;
+		for(let i=0;i<array1.length;i++){
+			if(this.equalArray(array1,array2,i,fun)){
+				return i;
+			}
+		}
+		return ret;
+	}
+
+	static equalArray(array1:any[],
+		array2:any[],
+		start?:number,
+		fun?:(row1,row2)=>boolean):boolean{
+		if(fun == null){
+			fun = (row1,row2)=>row1==row2
+		}
+		if(start == null){
+			start = 0;
+		}
+		if(array2.length > array1.length-start){
+			return false;
+		}
+		for(let i=0;i<array2.length;i++){
+			if(!fun(array2[i],array1[i+start])){
+				return false
+			}
+		}
+		return true;
+	}
+
 	static link(strs:any[]):string{
 		return strs.join('#___#')
 	}
