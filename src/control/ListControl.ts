@@ -29,7 +29,7 @@ export default abstract class ListControl extends Control {
           col:'sort',desc:'desc'
       }]
    */
-  protected _orderArray: Array<any> = null;
+  protected _orderArray: {col:string,desc:string}[] = null;
   /*
   指定只有_schCols 才产生的查询条件
   */
@@ -88,7 +88,7 @@ export default abstract class ListControl extends Control {
   /**
    返回查询字段
   */
-  protected acqCol(): Array<any> {
+  protected acqCol(): Array<string> {
     return null;
   }
   /**
@@ -240,8 +240,8 @@ export default abstract class ListControl extends Control {
     if (this._orderArray) {
       for (var i = 0; i < this._orderArray.length; i++) {
         var item = this._orderArray[i]
-        if (item.column != null) {
-          query.addOrder(item.column, item.type)
+        if (item.col != null) {
+          query.addOrder(item.col, item.desc)
         } else {
           query.addOrder(item)
         }
@@ -252,7 +252,7 @@ export default abstract class ListControl extends Control {
    * 返回默认的查询条件
    */
   protected acqDefPageSize() {
-    return 500
+    return 1500
   }
 
   /**

@@ -467,7 +467,9 @@ opt:{
 			for (let i = 0; i < len; i++) {
 				let data = array[i]
 				let mapKey = get(data, key)
-				map[mapKey] = get(data, fun)
+				if(mapKey != null){
+					map[mapKey] = get(data, fun)
+				}
 			}
 		}
 		return map

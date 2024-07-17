@@ -16,6 +16,15 @@ export default class DaoHelper{
     this.opt = opt;
   }
 
+  async insertByNames(key:string,names:string[]){
+    let datas = names.map(name=>({name}));
+    let dao = this.getDao(key);
+    await dao.addArray(datas);
+    for(let data of datas){
+      this.saveToCache(key,data.name,data);
+    }
+  }
+
   async findCount(key:string,col:string|null,cdt){
     let query = new Query();
     if(col == null){
@@ -71,10 +80,16 @@ export default class DaoHelper{
    * @param key 
    * @param names 
    */
-  async loadByNames(key:string,names:string[]){
-    let datas = await this.find(key,{
-      name:names
-    })
+  async loadByNames(key:string,names:string[],query?:any){
+    if(query == null){
+      query = {name:names}
+    }else{
+      query = {
+        ... query,
+        name:names
+      }
+    }
+    let datas = await this.find(key,query);
     this.nameMaps[key] = ArrayUtil.toMapByKey(datas,'name')
     
   }
@@ -95,10 +110,10 @@ export default class DaoHelper{
   private getSearcher(key:string):Searcher{
     return this.opt.context.get(key+"Searcher");
   }
-  async getByName(key:string,name:string){
+  async getByName(key:string,name:string,query?:any){
     let data = this.getFromCache(key,name);
     if(data == null){
-      data = await this.getByDb(key,name);
+      data = await this.getByDb(key,name,query);
       if(data != null){
         this.saveToCache(key,name,data)
       }
@@ -126,9 +141,16 @@ export default class DaoHelper{
     return data;
   }
 
-  private async getByDb(key:string,name:string){
-    
-    let list = await this.find(key,{name});
+  private async getByDb(key:string,name:string,query?:any){
+    if(query == null){
+      query = {name}
+    }else{
+      query = {
+        ... query,
+        name
+      }
+    }
+    let list = await this.find(key,query);
     return list[0]
   }
 
