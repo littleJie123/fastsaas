@@ -8,7 +8,7 @@ import BaseHatOpt from './BaseHatOpt';
 
 export default abstract class BaseHat{
 	protected _opt:BaseHatOpt;
-	protected _fun:(data:any,hatData:any)=>Promise<void>;
+	protected _fun:(data:any,hatData:any)=>Promise<void> | void;
 	constructor(opt:BaseHatOpt) {
 		if (opt == null) {
 			opt = <any>{}

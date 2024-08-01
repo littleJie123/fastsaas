@@ -82,7 +82,7 @@ export default abstract class ListControl extends Control {
    * 对查询结果的后处理
    * @param list 
    */
-  protected async _processList(list: Array<any>): Promise<Array<any>> {
+  protected async _processList(list: Array<any>): Promise<any[]> {
     return list;
   }
   /**
@@ -102,7 +102,7 @@ export default abstract class ListControl extends Control {
   /**
    根据params的列和值构建某个条件
   */
-  protected async buildCdt(e, val): Promise<BaseCdt> {
+  protected async buildCdt(e:string, val): Promise<BaseCdt> {
     if (e.substring(0, 1) == '_') return null;
     if (val == null) {
       return null;

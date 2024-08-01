@@ -309,6 +309,8 @@ export {default as loadRouter} from './webServer/wiget/loadRouter';
 export {default as tokenCheck} from './webServer/wiget/tokenCheck';
 
 export {default as Socket} from './webSocket/Socket';
+export {default as SocketProcessor} from './webSocket/SocketProcessor'
+export {default as SocketRoom} from './webSocket/SocketRoom'
 
 export {default as TimeCnt} from './wiget/TimeCnt';
 export {default as TimeLink} from './wiget/TimeLink';

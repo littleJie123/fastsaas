@@ -25,7 +25,7 @@ interface BaseHatOpt{
 	 * @param hatData 
 	 * @returns 
 	 */
-	fun?:(data:any,hatData:any)=>Promise<void>
+	fun?:(data:any,hatData:any)=>Promise<void>|void
 	
   /**
    * 整个obj拿过来
