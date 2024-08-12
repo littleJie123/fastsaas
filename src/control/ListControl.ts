@@ -291,6 +291,13 @@ export default abstract class ListControl extends Control {
     if (ret == null) ret = name
     return ret
   }
+
+  /**
+   * 使用findData 函数
+   */
+  protected useFindData(){
+    return false;
+  }
   /**
   返回关联表
   */
@@ -300,7 +307,9 @@ export default abstract class ListControl extends Control {
     return this._opMap[name]
   }
   protected async findByDao(query: Query) {
-
+    if(this.useFindData()){
+      return this.getDao().findData(query);
+    }
     return this.getDao().find(query)
   }
 
@@ -394,12 +403,6 @@ export default abstract class ListControl extends Control {
       return;
 
     let param = this._param;
-    let totalPages = Math.floor(map.totalElements / param.pageSize);
-    if (totalPages * param.pageSize < map.totalElements) {
-      totalPages++;
-    }
-
-    map.totalPages = totalPages;
     map.content = this.onlyCols(map.list)
     
     delete map.list;

@@ -14,6 +14,10 @@ export default abstract class extends Control {
   };
   protected abstract getTableName(): string;
 
+
+  protected getBaseDataCdt():any{
+    return this.dataCdt;
+  }
   protected getNameCol(): string {
     return 'name'
   }
@@ -80,10 +84,11 @@ export default abstract class extends Control {
     return array;
   }
   getOtherCdt(): any {
-    if(this.dataCdt == null){
+    let dataCdt = this.getBaseDataCdt();
+    if(dataCdt == null){
       return {};
     }
-    let ret = this.dataCdt.getOtherCdt();
+    let ret = dataCdt.getOtherCdt();
     return ret;
   }
   protected async getData() {
@@ -93,8 +98,9 @@ export default abstract class extends Control {
   }
 
   getDataCdt() {
-    if(this.dataCdt != null){
-      return this.dataCdt.get()
+    let dataCdt = this.getBaseDataCdt();
+    if(dataCdt != null){
+      return dataCdt.get()
     }
     return null;
   }

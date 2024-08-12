@@ -88,8 +88,15 @@ export default abstract class GroupControl extends ListControl {
 
     return query
   }
+   /**
+   * 使用findData 函数
+   */
+   protected useFindData(){
+    return false;
+  }
   protected async find(query: Query) {
-    var list = await this.findByDao(query)
+    
+    let list = await this.findByDao(query)
 
     return list
   }

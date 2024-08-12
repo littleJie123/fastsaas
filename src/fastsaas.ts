@@ -1,3 +1,5 @@
+export {default as MySqlUtil} from './util/MySqlUtil'
+
 export {default as DaoHelper} from './dao/DaoHelper';
 export {default as ImportorInf} from './import/ImportorInf';
 export {default as ImportorManager} from './import/ImportorManager';
@@ -134,8 +136,7 @@ export {default as ReturnSql} from './dao/sql/ReturnSql';
 export {default as Sql} from './dao/sql/Sql';
 export {default as SqlUtilFactory} from './dao/sql/SqlUtilFactory';
 export {default as ValSql} from './dao/sql/ValSql';
-export {default as MysqlUtil} from './dao/sqlUtil/MysqlUtil';
-export {default as PgUtil} from './dao/sqlUtil/PgUtil';
+
 export {default as SqlUtil} from './dao/sqlUtil/SqlUtil';
 
 
