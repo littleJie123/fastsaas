@@ -175,7 +175,8 @@ class Control {
         });
     }
     _printErrorLog(error) {
-        if (error['code'] == null) {
+        let base = fastsaas_1.ConfigFac.get('base');
+        if (error['code'] != 0 || base.env == 'local') {
             let logger = this._getLogger();
             logger.error(error);
         }

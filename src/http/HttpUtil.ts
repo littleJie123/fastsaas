@@ -37,6 +37,7 @@ export default class {
     return await jsonHtpp.submit(param);
   }
 
+  
   static async getH(url: string, param?: any, headers?: any): Promise<HttpResult> {
     let jsonHtpp = new JsonGetHttp({ url, headers });
     if (param == null)
