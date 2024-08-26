@@ -23,8 +23,9 @@ export default class {
     room[processor.getUuid()] = processor;
   }
   static  levelRoom(roomId: string, processor: SocketProcessor) {
-    let room = this.getRoom(roomId);
-    delete room[processor.getUuid()] ;
+ 
+    let room = this.getRoom(roomId); 
+    delete room[processor.getUuid()] ; 
   }
 
   static emitMsg(roomId:string,msg:ISocketEvent){
@@ -37,11 +38,9 @@ export default class {
   }
 
   static emit(roomId:string,eventType:string,msg:any){
-    console.log('roomId',roomId,eventType,msg)
     let room = this.getRoom(roomId);
     
     for(let e in room){
-      console.log('emit',e)
       room[e].send({
         msg,
         eventType

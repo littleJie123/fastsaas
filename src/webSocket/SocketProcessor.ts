@@ -2,7 +2,7 @@ import { v4 as uuidv4} from 'uuid';
 import ISocketEvent from './inf/ISocketEvent';
 import { Socket } from 'socket.io';
 import SocketRoom from './SocketRoom';
-
+import WebSocket from 'ws';
 const S_Join = 'join';
 const S_Level = 'level';
 
@@ -14,7 +14,12 @@ export default abstract class {
   private roomIds:{[key:string]:boolean} = {}
   
   send(msg: ISocketEvent) {
-    
+    let ws = this.ws;
+
+    console.log('ws.readyState',ws.readyState,this.uuid);
+    if (ws.readyState === WebSocket.OPEN) {
+      console.log('is open');
+    }
     this.ws.send(JSON.stringify(msg));
   }
   getUuid():string{
@@ -42,6 +47,7 @@ export default abstract class {
   
     // 监听关闭事件
     ws.on('close', () => {
+      console.log('------------------ on close------------------------');
       this.onClose();
     });
   }
@@ -68,7 +74,7 @@ export default abstract class {
 
   onClose(){
     for(let e in this.roomIds){
-      this.levelRoom(this.roomIds[e]);
+      this.levelRoom(e);
     }
   }
 

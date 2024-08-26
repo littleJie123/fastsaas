@@ -27,10 +27,8 @@ class default_1 {
         }
     }
     static emit(roomId, eventType, msg) {
-        console.log('roomId', roomId, eventType, msg);
         let room = this.getRoom(roomId);
         for (let e in room) {
-            console.log('emit', e);
             room[e].send({
                 msg,
                 eventType

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
 const SocketRoom_1 = __importDefault(require("./SocketRoom"));
+const ws_1 = __importDefault(require("ws"));
 const S_Join = 'join';
 const S_Level = 'level';
 class default_1 {
@@ -12,6 +13,11 @@ class default_1 {
         this.roomIds = {};
     }
     send(msg) {
+        let ws = this.ws;
+        console.log('ws.readyState', ws.readyState, this.uuid);
+        if (ws.readyState === ws_1.default.OPEN) {
+            console.log('is open');
+        }
         this.ws.send(JSON.stringify(msg));
     }
     getUuid() {
@@ -37,6 +43,7 @@ class default_1 {
         });
         // 监听关闭事件
         ws.on('close', () => {
+            console.log('------------------ on close------------------------');
             this.onClose();
         });
     }
@@ -61,7 +68,7 @@ class default_1 {
     }
     onClose() {
         for (let e in this.roomIds) {
-            this.levelRoom(this.roomIds[e]);
+            this.levelRoom(e);
         }
     }
     getRoomIdArray() {

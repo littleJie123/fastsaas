@@ -6,6 +6,7 @@ export default class {
       
       let processor = new clazz;
       processor.onConnect(ws);
+     
     });
   }
   
