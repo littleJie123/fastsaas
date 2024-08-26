@@ -14,11 +14,9 @@ class default_1 {
     }
     send(msg) {
         let ws = this.ws;
-        console.log('ws.readyState', ws.readyState, this.uuid);
         if (ws.readyState === ws_1.default.OPEN) {
-            console.log('is open');
+            this.ws.send(JSON.stringify(msg));
         }
-        this.ws.send(JSON.stringify(msg));
     }
     getUuid() {
         return this.uuid;
