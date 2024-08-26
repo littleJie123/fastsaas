@@ -16,11 +16,10 @@ export default abstract class {
   send(msg: ISocketEvent) {
     let ws = this.ws;
 
-    console.log('ws.readyState',ws.readyState,this.uuid);
     if (ws.readyState === WebSocket.OPEN) {
-      console.log('is open');
+      this.ws.send(JSON.stringify(msg));
     }
-    this.ws.send(JSON.stringify(msg));
+    
   }
   getUuid():string{
     return this.uuid;
