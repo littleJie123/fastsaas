@@ -11,16 +11,30 @@ export default abstract class BaseInterceptor{
    */
   protected isValid(req:Request):boolean{
     let path:string = req.path;
-    let ret = path.startsWith(this.getPath());
+    let paths = this.getPaths();
+
+    let ret =false;
+    for(let strPath of paths){
+      if(path.startsWith(strPath)){
+        ret = true;
+        break;
+      }
+    }
     if(this.isNot()){
       ret = !ret;
     }
     return ret;
   }
+
+  protected getPaths():string[]{
+    return [this.getPath()]
+  }
   /**
    * 匹配的路径
    */
-  protected abstract getPath():string;
+  protected getPath():string{
+    return null;
+  };
   protected  isNot():boolean{
     return false;
   }

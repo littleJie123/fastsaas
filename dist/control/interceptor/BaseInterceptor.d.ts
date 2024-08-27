@@ -9,10 +9,11 @@ export default abstract class BaseInterceptor {
      * @returns
      */
     protected isValid(req: Request): boolean;
+    protected getPaths(): string[];
     /**
      * 匹配的路径
      */
-    protected abstract getPath(): string;
+    protected getPath(): string;
     protected isNot(): boolean;
     protected abstract doOnBefore(req: Request, resp: Response, param?: any): Promise<void>;
     /**
