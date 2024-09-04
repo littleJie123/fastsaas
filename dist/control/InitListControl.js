@@ -35,7 +35,10 @@ class InitListControl extends ListControl_1.default {
      * @param list
      */
     async _needInit(list) {
-        return list.length == 0;
+        return list.length == 0 && !(await this.hasInited());
+    }
+    async hasInited() {
+        return false;
     }
 }
 exports.default = InitListControl;

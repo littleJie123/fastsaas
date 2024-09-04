@@ -136,6 +136,15 @@ class Dao {
         return obj;
     }
     /**
+     * 导入一个数组,和addArray的区别在于，主键会被插入
+     * @param list
+     */
+    async importArray(list) {
+        if (list != null && list.length > 0) {
+            await this._execute('importArray', lodash_1.default.cloneDeep(list));
+        }
+    }
+    /**
      * @description 增加一组数据
      * @param arr objectp[]
      */

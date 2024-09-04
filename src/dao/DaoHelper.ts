@@ -1,7 +1,13 @@
-import { ArrayUtil, BaseCdt, Context, Dao, Query, Searcher } from "../fastsaas";
-
+import path from "path";
+import { ArrayUtil, BaseCdt, Context, Dao, DateUtil, Query, Searcher } from "../fastsaas";
+import fs from 'fs';
 type nameMap = {
   [name:string]:any
+}
+
+interface ISchCdt{
+  cdt?:any;
+  sql?:string;
 }
 /**
  * 一个dao的工具类，通过反射机制查询各种数据，主要给单元测试用
@@ -166,4 +172,74 @@ export default class DaoHelper{
   }
 
 
+
+  /**
+   * 导出json
+   * @param tableName 
+   * @param schCdt 
+   * @param fileName 
+   */
+  async exportJson(tableName:string,schCdt:ISchCdt,fileName:string) {
+    
+    let list = await this.findBySchCdt(tableName,schCdt);
+    //写入文件，没有文件则新增一个
+    if(!fs.existsSync(fileName)){
+      //写一段代码，如果上述目录不存在则创建目录
+      let dir = path.dirname(fileName);
+      if(!fs.existsSync(dir)){
+        fs.mkdirSync(dir, { recursive: true });
+      }
+    }
+    fs.writeFileSync(fileName,JSON.stringify({list,schCdt},null,2));
+  }
+  protected async findBySchCdt(tableName:string,schCdt: ISchCdt) {
+    let dao = this.getDao(tableName );
+    let retList:any[];
+    if(schCdt.sql == null){
+      retList = await dao.find(schCdt.cdt);
+    }else{
+      retList = await dao.executeSql(schCdt.sql);
+      retList = dao.changeDbArray2Pojo(retList);
+    }
+    for(let row of retList){
+      for(let e in row){
+        if(row[e] instanceof Date){
+          row[e] = DateUtil.formatDate(row[e]);
+        }
+      }
+    }
+    return retList;
+  }
+  /**
+   * 导入json
+   * @param tableName 
+   * @param fileName 
+   */
+  async importJson(tableName:string,fileName:string) {
+    let data = fs.readFileSync(fileName,'utf8');
+    let obj = JSON.parse(data);
+    let list = obj.list;
+    let schCdt = obj.schCdt;
+    let dao = this.getDao(tableName);
+    let self = this;
+    let pkCol = `${tableName}Id`;
+    await dao.onlyArray({
+      mapFun:pkCol,
+      array:list,
+      async finds(){
+        let dbList = await self.findBySchCdt(tableName,schCdt);
+        let notIds = ArrayUtil.notInByKey(list,dbList,pkCol);
+        dbList.push(
+          ... (await dao.findByIds(ArrayUtil.toArray(notIds,pkCol)))
+        )
+        return dbList;
+      },
+      async adds(list){
+        await dao.importArray(list);
+        return list;
+      },
+      needDel:true,
+      needUpdate:true
+    })
+  }
 }

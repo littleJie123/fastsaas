@@ -10,6 +10,7 @@ import FindCntSql from '../builder/imp/sql/FindCntSql';
 import FindOneSql from '../builder/imp/sql/FindOneSql';
 import FindByIdSql from '../builder/imp/sql/FindByIdSql';
 import { DelByQuery } from '../builder/imp/sql';
+import ImportArraySql from '../builder/imp/sql/ImportArraySql';
 export default abstract class SqlDao<Pojo = any> extends Dao<Pojo> {
     protected _initMap(): {
         add: typeof AddSql;
@@ -23,5 +24,6 @@ export default abstract class SqlDao<Pojo = any> extends Dao<Pojo> {
         findOne: typeof FindOneSql;
         findById: typeof FindByIdSql;
         delByQuery: typeof DelByQuery;
+        importArray: typeof ImportArraySql;
     };
 }

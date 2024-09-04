@@ -13,4 +13,5 @@ export default abstract class InitListControl extends ListControl {
      * @param list
      */
     protected _needInit(list: any): Promise<boolean>;
+    protected hasInited(): Promise<boolean>;
 }

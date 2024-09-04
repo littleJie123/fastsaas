@@ -25,7 +25,7 @@ class Hat extends BaseHat_1.default {
         if (row.name != null)
             return 'name';
         else
-            return this.getKey() + '_name';
+            return this.getKey() + 'Name';
     }
     /**
  * 返回给主表的名称

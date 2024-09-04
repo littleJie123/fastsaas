@@ -1,6 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const path_1 = __importDefault(require("path"));
 const fastsaas_1 = require("../fastsaas");
+const fs_1 = __importDefault(require("fs"));
 class DaoHelper {
     constructor(opt) {
         this.nameMaps = {};
@@ -144,6 +149,73 @@ class DaoHelper {
     }
     getDao(key) {
         return this.opt.context.get(key + "Dao");
+    }
+    /**
+     * 导出json
+     * @param tableName
+     * @param schCdt
+     * @param fileName
+     */
+    async exportJson(tableName, schCdt, fileName) {
+        let list = await this.findBySchCdt(tableName, schCdt);
+        //写入文件，没有文件则新增一个
+        if (!fs_1.default.existsSync(fileName)) {
+            //写一段代码，如果上述目录不存在则创建目录
+            let dir = path_1.default.dirname(fileName);
+            if (!fs_1.default.existsSync(dir)) {
+                fs_1.default.mkdirSync(dir, { recursive: true });
+            }
+        }
+        fs_1.default.writeFileSync(fileName, JSON.stringify({ list, schCdt }, null, 2));
+    }
+    async findBySchCdt(tableName, schCdt) {
+        let dao = this.getDao(tableName);
+        let retList;
+        if (schCdt.sql == null) {
+            retList = await dao.find(schCdt.cdt);
+        }
+        else {
+            retList = await dao.executeSql(schCdt.sql);
+            retList = dao.changeDbArray2Pojo(retList);
+        }
+        for (let row of retList) {
+            for (let e in row) {
+                if (row[e] instanceof Date) {
+                    row[e] = fastsaas_1.DateUtil.formatDate(row[e]);
+                }
+            }
+        }
+        return retList;
+    }
+    /**
+     * 导入json
+     * @param tableName
+     * @param fileName
+     */
+    async importJson(tableName, fileName) {
+        let data = fs_1.default.readFileSync(fileName, 'utf8');
+        let obj = JSON.parse(data);
+        let list = obj.list;
+        let schCdt = obj.schCdt;
+        let dao = this.getDao(tableName);
+        let self = this;
+        let pkCol = `${tableName}Id`;
+        await dao.onlyArray({
+            mapFun: pkCol,
+            array: list,
+            async finds() {
+                let dbList = await self.findBySchCdt(tableName, schCdt);
+                let notIds = fastsaas_1.ArrayUtil.notInByKey(list, dbList, pkCol);
+                dbList.push(...(await dao.findByIds(fastsaas_1.ArrayUtil.toArray(notIds, pkCol))));
+                return dbList;
+            },
+            async adds(list) {
+                await dao.importArray(list);
+                return list;
+            },
+            needDel: true,
+            needUpdate: true
+        });
     }
 }
 exports.default = DaoHelper;

@@ -15,6 +15,7 @@ const FindCntSql_1 = __importDefault(require("../builder/imp/sql/FindCntSql"));
 const FindOneSql_1 = __importDefault(require("../builder/imp/sql/FindOneSql"));
 const FindByIdSql_1 = __importDefault(require("../builder/imp/sql/FindByIdSql"));
 const sql_1 = require("../builder/imp/sql");
+const ImportArraySql_1 = __importDefault(require("../builder/imp/sql/ImportArraySql"));
 class SqlDao extends Dao_1.default {
     _initMap() {
         return {
@@ -28,7 +29,8 @@ class SqlDao extends Dao_1.default {
             findCnt: FindCntSql_1.default,
             findOne: FindOneSql_1.default,
             findById: FindByIdSql_1.default,
-            delByQuery: sql_1.DelByQuery
+            delByQuery: sql_1.DelByQuery,
+            importArray: ImportArraySql_1.default
         };
     }
 }

@@ -24,8 +24,17 @@ export interface OnlyArrayIntface<Pojo = any> {
      * 匹配的条件
      */
     mapFun: Function | string | Array<string>;
+    /**
+     数据库的查询条件，根据条件查出对比数据
+    */
     query?: any;
+    /**
+     * 查询方法，async 返回查询数组, 比 query 优先级高, 二者存一即可
+     */
     finds?: Function;
+    /**
+     *
+     */
     sortFun?: sortFun;
     /**
      * 判断更新的函数

@@ -12,6 +12,8 @@ import { Sql } from './sql';
 import IDaoOpt from '../inf/IDaoOpt';
 
 export default abstract class Dao<Pojo = any> {
+  
+ 
   protected _opt: DaoOpt;
   protected _map: object;
   protected _context:Context;
@@ -31,6 +33,7 @@ export default abstract class Dao<Pojo = any> {
     return await this.updateArray(list,data,whereCdt);
   }
 
+  
   /**
    * 根据一个查询条件，进行删除
    * @param cdt 
@@ -148,7 +151,15 @@ export default abstract class Dao<Pojo = any> {
     }
     return obj
   }
-
+  /**
+   * 导入一个数组,和addArray的区别在于，主键会被插入
+   * @param list 
+   */
+  async importArray(list: Pojo[]) {
+    if(list !=null && list.length > 0){
+      await this._execute('importArray', _.cloneDeep(list))
+    }
+  }
   /**
    * @description 增加一组数据
    * @param arr objectp[]

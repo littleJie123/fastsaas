@@ -66,6 +66,11 @@ export default abstract class Dao<Pojo = any> {
      */
     add(obj: Pojo): Promise<Pojo>;
     /**
+     * 导入一个数组,和addArray的区别在于，主键会被插入
+     * @param list
+     */
+    importArray(list: Pojo[]): Promise<void>;
+    /**
      * @description 增加一组数据
      * @param arr objectp[]
      */

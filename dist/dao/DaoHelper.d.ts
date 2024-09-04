@@ -1,4 +1,8 @@
 import { Context } from "../fastsaas";
+interface ISchCdt {
+    cdt?: any;
+    sql?: string;
+}
 /**
  * 一个dao的工具类，通过反射机制查询各种数据，主要给单元测试用
  */
@@ -52,5 +56,19 @@ export default class DaoHelper {
     private getByDb;
     find(key: string, query: any): Promise<any[]>;
     private getDao;
+    /**
+     * 导出json
+     * @param tableName
+     * @param schCdt
+     * @param fileName
+     */
+    exportJson(tableName: string, schCdt: ISchCdt, fileName: string): Promise<void>;
+    protected findBySchCdt(tableName: string, schCdt: ISchCdt): Promise<any[]>;
+    /**
+     * 导入json
+     * @param tableName
+     * @param fileName
+     */
+    importJson(tableName: string, fileName: string): Promise<void>;
 }
 export {};
