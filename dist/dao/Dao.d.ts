@@ -11,6 +11,12 @@ export default abstract class Dao<Pojo = any> {
     protected _map: object;
     protected _context: Context;
     /**
+     * 根据id更新cdt中的数据，updateArray的语法糖
+     * @param pojos
+     * @param cdt
+     */
+    updateByIds(pojos: Pojo[], cdt: any): Promise<number>;
+    /**
      * 根据一个查询条件，进行更新
      * @param whereCdt 查询条件
      * @param data  //更新数据

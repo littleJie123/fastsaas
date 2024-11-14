@@ -3,7 +3,7 @@ var FileUtil = {
   /*
   遍历目录并执行某函数
   */
-  each: function (src: string, fun: Function, checkFun?: Function): void {
+  each: function (src: string, fun: (str:string)=>void, checkFun?: Function): void {
     if (src == null || fun == null) return
     if (checkFun == null) {
       checkFun = function (path) {

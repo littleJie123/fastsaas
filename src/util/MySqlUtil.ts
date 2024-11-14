@@ -7,6 +7,15 @@ import CaseSql from "./imp/CaseSql";
 import { StrUtil } from "./StrUtil";
 
 export default class{
+
+  static dayCdt(colName:string,strDay:string):BaseCdt{
+    let day = DateUtil.parse(strDay);
+    let afterDay = DateUtil.afterDay(day,1);
+    let andCdt = new AndCdt();
+    andCdt.bigEq(colName,day);
+    andCdt.less(colName,afterDay);
+    return andCdt;
+  }
   /**
    * 得到某个字段的月份时间
    */

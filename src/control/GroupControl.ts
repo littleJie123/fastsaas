@@ -30,14 +30,29 @@ export default abstract class GroupControl extends ListControl {
    * 默认分页数
    */
   protected acqDefPageSize() {
+    if(this._needPager()){
+      return 1500;
+    }
     return 0
   }
-
+  /**
+   * 是否设置数据库排序
+   * @returns 
+   */
   protected _needOrder(): boolean {
-    return false;
+    //通过first进行拉取
+    return this._param._first != null;
   }
   /**
-   * 页面排序
+   * 是否设置数据库排序
+   * @returns 
+   */
+  protected _needPager():boolean{
+    //通过first进行拉取
+    return this._param._first != null;
+  }
+  /**
+   * 内存排序
    * @param list 
    */
   protected _pageOrder(list) {
@@ -156,13 +171,12 @@ export default abstract class GroupControl extends ListControl {
 
 
       map.list = await this._filterByArrayCdt(map.list);
-      if (this._onlySch)
-        return map;
-      this._pageOrder(map.list)
-      await this.schCnt(map, query)
+      if (!this._onlySch){
+        this._pageOrder(map.list)
+        await this.schCnt(map, query)
 
-      this.slice(map)
-
+        this.slice(map)
+      }
       if (this._processPageList) {
         let processedList = await this._processPageList(map.list)
         if (processedList != null) {
@@ -179,12 +193,20 @@ export default abstract class GroupControl extends ListControl {
    * @param query 
    */
   protected async schCnt(map, query) {
-    map.totalElements = map.list.length
+    if(!this.isOnlySch()){
+      map.totalElements = map.list.length
+    }
   }
+  /**
+   * 内存中分页
+   * @param map 
+   */
   slice(map) {
-    var pager = this.acqPager()
-    if (pager != null) {
-      map.list = map.list.slice(pager.first, pager.last)
+    if(!this._needPager()){
+      var pager = this.acqPager()
+      if (pager != null) {
+        map.list = map.list.slice(pager.first, pager.last)
+      }
     }
   }
   acqPager() {
@@ -220,7 +242,9 @@ export default abstract class GroupControl extends ListControl {
    * @param query 
    */
   protected _setPage(query: Query) {
-
+    if(this._needPager()){
+      super._setPage(query);
+    }
   }
 
 }

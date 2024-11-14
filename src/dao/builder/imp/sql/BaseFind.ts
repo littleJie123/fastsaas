@@ -91,10 +91,12 @@ export default abstract class BaseFind extends SqlBuilder{
    */
   protected _buildPage(sql:Sql,query:Query):Sql{
     let pager = query.getPager();
-    
-    if (pager == null) return sql
-    if (!pager.rp) return sql
-    var array = []
+    if (pager == null) {
+      return sql
+    }
+    if (!pager.rp) {
+      return sql
+    }
     var first = pager.first
     if (first == null || isNaN(first)) first = 0
 

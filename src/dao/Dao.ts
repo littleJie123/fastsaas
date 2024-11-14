@@ -18,6 +18,20 @@ export default abstract class Dao<Pojo = any> {
   protected _map: object;
   protected _context:Context;
 
+
+  /**
+   * 根据id更新cdt中的数据，updateArray的语法糖
+   * @param pojos 
+   * @param cdt 
+   */
+  async updateByIds(pojos:Pojo[],cdt:any){
+    let idCol = this._opt.acqPojoFirstId();
+    let datas:any[] = pojos.map(pojo=>({
+      [idCol]:pojo[idCol]
+    }))
+    return this.updateArray(datas,cdt);
+
+  }
   
   /**
    * 根据一个查询条件，进行更新

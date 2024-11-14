@@ -11,7 +11,7 @@ export default abstract class extends BaseOpControl {
   protected needCheckName() {
     return false;
   }
-  async doExecute() {
+  protected async doExecute() {
 
     let pk = await this.getPkData();
     let num:number = 1;

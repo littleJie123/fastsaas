@@ -91,6 +91,13 @@ export default abstract class ListControl extends Control {
   protected acqCol(): Array<string> {
     return null;
   }
+
+  protected isOnlySch(){
+    if(this._onlySch){
+      return true;
+    }
+    return this._param._first != null;
+  }
   /**
    * 是否需要排序
    */
@@ -160,6 +167,7 @@ export default abstract class ListControl extends Control {
   protected _initPager() {
     var param = this._param
     if (param.pageSize == null) {
+      
       param.pageSize = this.acqDefPageSize()
     }
   }
@@ -173,12 +181,13 @@ export default abstract class ListControl extends Control {
    * 设置分页
    * @param query 
    */
-  protected _setPage(query: Query) {
+  protected _setPage(query: Query):void {
     if (!this.isDownload()) {
       var param = this._param
-      if (param.pageSize != null)
+      if (param.pageSize != null){
         query.size(param.pageSize)
-      if (param._first != null) {
+      }
+      if (param._first != null) { 
         query.first(param._first)
       } else {
 
@@ -212,8 +221,10 @@ export default abstract class ListControl extends Control {
       query.col(col)
     }
     if (this._needOrder()) {
+      //从参数中设置排序
       query.order(param.orderBy, param.desc)
     }
+    //设置预定于的排序条件
     await this.addOrder(query)
     await this.addCdt(query);
 
@@ -368,11 +379,9 @@ export default abstract class ListControl extends Control {
       } else {
         map.list = []
       }
-      if (!this._onlySch) {
+      if (!this.isOnlySch()) {
         await this.schCnt(map, query)
-      } else {
-        return map;
-      }
+      } 
       this._calPager(map)
       return map
     }
@@ -399,10 +408,9 @@ export default abstract class ListControl extends Control {
    * @param map 
    */
   protected _calPager(map) {
-    if (map.totalElements == null || map.list == null)
+    if ( map.list == null){
       return;
-
-    let param = this._param;
+    }
     map.content = this.onlyCols(map.list)
     
     delete map.list;

@@ -11,6 +11,18 @@ const ArrayUtil_1 = require("./../util/ArrayUtil");
 const Context_1 = __importDefault(require("./../context/Context"));
 class Dao {
     /**
+     * 根据id更新cdt中的数据，updateArray的语法糖
+     * @param pojos
+     * @param cdt
+     */
+    async updateByIds(pojos, cdt) {
+        let idCol = this._opt.acqPojoFirstId();
+        let datas = pojos.map(pojo => ({
+            [idCol]: pojo[idCol]
+        }));
+        return this.updateArray(datas, cdt);
+    }
+    /**
      * 根据一个查询条件，进行更新
      * @param whereCdt 查询条件
      * @param data  //更新数据

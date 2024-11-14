@@ -4,6 +4,7 @@
 import { BaseCdt } from "../fastsaas";
 import CaseSql from "./imp/CaseSql";
 export default class {
+    static dayCdt(colName: string, strDay: string): BaseCdt;
     /**
      * 得到某个字段的月份时间
      */

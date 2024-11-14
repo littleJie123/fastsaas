@@ -70,6 +70,7 @@ export default abstract class ListControl extends Control {
      返回查询字段
     */
     protected acqCol(): Array<string>;
+    protected isOnlySch(): boolean;
     /**
      * 是否需要排序
      */

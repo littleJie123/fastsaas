@@ -10,6 +10,14 @@ const fastsaas_1 = require("../fastsaas");
 const CaseSql_1 = __importDefault(require("./imp/CaseSql"));
 const StrUtil_1 = require("./StrUtil");
 class default_1 {
+    static dayCdt(colName, strDay) {
+        let day = fastsaas_1.DateUtil.parse(strDay);
+        let afterDay = fastsaas_1.DateUtil.afterDay(day, 1);
+        let andCdt = new fastsaas_1.AndCdt();
+        andCdt.bigEq(colName, day);
+        andCdt.less(colName, afterDay);
+        return andCdt;
+    }
     /**
      * 得到某个字段的月份时间
      */

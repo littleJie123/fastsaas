@@ -20,10 +20,19 @@ export default abstract class GroupControl extends ListControl {
     /**
      * 默认分页数
      */
-    protected acqDefPageSize(): number;
+    protected acqDefPageSize(): 0 | 1500;
+    /**
+     * 是否设置数据库排序
+     * @returns
+     */
     protected _needOrder(): boolean;
     /**
-     * 页面排序
+     * 是否设置数据库排序
+     * @returns
+     */
+    protected _needPager(): boolean;
+    /**
+     * 内存排序
      * @param list
      */
     protected _pageOrder(list: any): void;
@@ -47,6 +56,10 @@ export default abstract class GroupControl extends ListControl {
      * @param query
      */
     protected schCnt(map: any, query: any): Promise<void>;
+    /**
+     * 内存中分页
+     * @param map
+     */
     slice(map: any): void;
     acqPager(): {
         first: any;

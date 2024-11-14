@@ -28,13 +28,29 @@ class GroupControl extends ListControl_1.default {
      * 默认分页数
      */
     acqDefPageSize() {
+        if (this._needPager()) {
+            return 1500;
+        }
         return 0;
     }
+    /**
+     * 是否设置数据库排序
+     * @returns
+     */
     _needOrder() {
-        return false;
+        //通过first进行拉取
+        return this._param._first != null;
     }
     /**
-     * 页面排序
+     * 是否设置数据库排序
+     * @returns
+     */
+    _needPager() {
+        //通过first进行拉取
+        return this._param._first != null;
+    }
+    /**
+     * 内存排序
      * @param list
      */
     _pageOrder(list) {
@@ -137,11 +153,11 @@ class GroupControl extends ListControl_1.default {
                 map.list = processedList;
             }
             map.list = await this._filterByArrayCdt(map.list);
-            if (this._onlySch)
-                return map;
-            this._pageOrder(map.list);
-            await this.schCnt(map, query);
-            this.slice(map);
+            if (!this._onlySch) {
+                this._pageOrder(map.list);
+                await this.schCnt(map, query);
+                this.slice(map);
+            }
             if (this._processPageList) {
                 let processedList = await this._processPageList(map.list);
                 if (processedList != null) {
@@ -158,12 +174,20 @@ class GroupControl extends ListControl_1.default {
      * @param query
      */
     async schCnt(map, query) {
-        map.totalElements = map.list.length;
+        if (!this.isOnlySch()) {
+            map.totalElements = map.list.length;
+        }
     }
+    /**
+     * 内存中分页
+     * @param map
+     */
     slice(map) {
-        var pager = this.acqPager();
-        if (pager != null) {
-            map.list = map.list.slice(pager.first, pager.last);
+        if (!this._needPager()) {
+            var pager = this.acqPager();
+            if (pager != null) {
+                map.list = map.list.slice(pager.first, pager.last);
+            }
         }
     }
     acqPager() {
@@ -199,6 +223,9 @@ class GroupControl extends ListControl_1.default {
      * @param query
      */
     _setPage(query) {
+        if (this._needPager()) {
+            super._setPage(query);
+        }
     }
 }
 exports.default = GroupControl;

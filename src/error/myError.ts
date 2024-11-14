@@ -24,6 +24,7 @@ class MyError extends Error{
     get data():any{
         return this._opt.data;
     }
+   
 }
 export default function(opt){
 

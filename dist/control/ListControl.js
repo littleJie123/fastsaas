@@ -90,6 +90,12 @@ class ListControl extends Control_1.default {
     acqCol() {
         return null;
     }
+    isOnlySch() {
+        if (this._onlySch) {
+            return true;
+        }
+        return this._param._first != null;
+    }
     /**
      * 是否需要排序
      */
@@ -169,8 +175,9 @@ class ListControl extends Control_1.default {
     _setPage(query) {
         if (!this.isDownload()) {
             var param = this._param;
-            if (param.pageSize != null)
+            if (param.pageSize != null) {
                 query.size(param.pageSize);
+            }
             if (param._first != null) {
                 query.first(param._first);
             }
@@ -204,8 +211,10 @@ class ListControl extends Control_1.default {
             query.col(col);
         }
         if (this._needOrder()) {
+            //从参数中设置排序
             query.order(param.orderBy, param.desc);
         }
+        //设置预定于的排序条件
         await this.addOrder(query);
         await this.addCdt(query);
         await this.processSchCdt(query);
@@ -355,11 +364,8 @@ class ListControl extends Control_1.default {
             else {
                 map.list = [];
             }
-            if (!this._onlySch) {
+            if (!this.isOnlySch()) {
                 await this.schCnt(map, query);
-            }
-            else {
-                return map;
             }
             this._calPager(map);
             return map;
@@ -386,9 +392,9 @@ class ListControl extends Control_1.default {
      * @param map
      */
     _calPager(map) {
-        if (map.totalElements == null || map.list == null)
+        if (map.list == null) {
             return;
-        let param = this._param;
+        }
         map.content = this.onlyCols(map.list);
         delete map.list;
     }

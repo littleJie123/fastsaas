@@ -90,11 +90,12 @@ class BaseFind extends SqlBuilder_1.default {
      */
     _buildPage(sql, query) {
         let pager = query.getPager();
-        if (pager == null)
+        if (pager == null) {
             return sql;
-        if (!pager.rp)
+        }
+        if (!pager.rp) {
             return sql;
-        var array = [];
+        }
         var first = pager.first;
         if (first == null || isNaN(first))
             first = 0;
