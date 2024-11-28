@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class default_1 {
+class ImportorManager {
     constructor(opt) {
         this.opt = opt;
     }
@@ -56,4 +56,4 @@ class default_1 {
         return retArray;
     }
 }
-exports.default = default_1;
+exports.default = ImportorManager;

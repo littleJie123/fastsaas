@@ -13,7 +13,7 @@ interface ImportOpt {
      */
     noDomain?: boolean;
     /**
-     * 结果数据不需要拼
+     * 结果数据不需要拼,使用dao来进行导入的时候用
      */
     noJoin?: boolean;
     /**
@@ -33,7 +33,7 @@ interface ImportOpt {
 /**
  * 一个表的导入类
 */
-export default class {
+export default class Importor {
     opt: ImportOpt;
     constructor(opt: ImportOpt);
     /**

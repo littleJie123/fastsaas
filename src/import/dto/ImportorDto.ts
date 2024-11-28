@@ -7,5 +7,6 @@ interface ImportDto{
   name:any;
   error?:string;
   dbId?:number;
+  param?:any;
 }
 export default ImportDto;

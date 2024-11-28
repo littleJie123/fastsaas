@@ -8,7 +8,7 @@ import ImportorResult from "./dto/ImportorResult";
 interface ImportorManagerOpt {
     importors: Importor[];
 }
-export default class {
+export default class ImportorManager {
     private opt;
     constructor(opt: ImportorManagerOpt);
     process(context: Context, param: any, dataArray: any[]): Promise<ImportorResult>;

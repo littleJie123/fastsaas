@@ -13,4 +13,9 @@ export default class {
      * @param num
      */
     static isNum(num: any): boolean;
+    /**
+     * 是否含有小数
+     * @param num
+     */
+    static isDecimal(num: number): boolean;
 }

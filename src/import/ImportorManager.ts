@@ -11,7 +11,7 @@ interface ImportorManagerOpt{
 
 }
 
-export default class {
+export default class ImportorManager {
   private opt:ImportorManagerOpt;
   constructor(opt:ImportorManagerOpt){
     this.opt = opt;

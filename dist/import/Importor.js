@@ -4,7 +4,7 @@ const fastsaas_1 = require("../fastsaas");
 /**
  * 一个表的导入类
 */
-class default_1 {
+class Importor {
     constructor(opt) {
         this.opt = opt;
     }
@@ -251,4 +251,4 @@ class default_1 {
         return true;
     }
 }
-exports.default = default_1;
+exports.default = Importor;

@@ -51,4 +51,15 @@ export default class {
     return ((typeof num) == 'number') || (num instanceof Number)
   }
 
+  /**
+   * 是否含有小数
+   * @param num 
+   */
+  static isDecimal(num:number){
+
+    if(num == null){
+      return false;
+    }
+    return Math.floor(num) != num;
+  }
 }
