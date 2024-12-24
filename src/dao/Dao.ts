@@ -68,8 +68,9 @@ export default abstract class Dao<Pojo = any> {
   protected _checkNullCdt(cdt){
     if(cdt == null)
       
-    if(cdt.clazz == 'BaseCdt') //BaseCdt 没办法检测条件
+    if(cdt.clazz == 'BaseCdt' || cdt.class == 'Query'){ //BaseCdt 没办法检测条件
       return;
+    }
     let cnt = 0;
     for(var e in cdt){
       if(cdt[e]== null){
@@ -256,8 +257,10 @@ export default abstract class Dao<Pojo = any> {
    */
   async findData(query): Promise<any[]> {
 
-    const ret = await this._query('find', query)
-    return ret;
+    let executor = this._acqExecutor();
+    let builder = this._acqBuilder('find',this._opt.clone().removeColChange());
+    let sql = builder.build(query )
+    return await executor.query(sql);
   }
 
   /**
@@ -497,7 +500,7 @@ export default abstract class Dao<Pojo = any> {
   }
 
   /**
-   * 查询某一列
+   * 查询某一列，返回当前列的简单数据，没有结构体
    * @param query 
    * @param col 
    */
@@ -598,6 +601,19 @@ export default abstract class Dao<Pojo = any> {
   }
 
   /**
+   * 根据多个查询查找
+   * @param querys 
+   * @returns 
+   */
+  async findByQuerys(querys:Query[]):Promise<Pojo[]>{
+    let ret:Pojo[] = [];
+    for(let query of querys){
+      ret.push(... (await this.find(query)))
+    }
+    return ret;
+  }
+
+  /**
    * 返回sql的map
    * map 结构{key:class}
    */
@@ -677,8 +693,10 @@ export default abstract class Dao<Pojo = any> {
    * 返回
    * @param key 操作，类似add ,update
    */
-  protected _acqBuilder(key: string): Builder {
-    let opt = this._opt;
+  protected _acqBuilder(key: string,opt?:DaoOpt): Builder {
+    if(opt == null){
+      opt = this._opt
+    }
     let map = this._acqMap();
     let Clazz = map[key];
     if (Clazz == null)

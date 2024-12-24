@@ -24,8 +24,8 @@ class Sql {
     toSql(type = constant_1.sqlType.mysql, count) {
         count = count || { pgCount: 0 }; // 引用传递, 用来修改 pg 的占位符 $num
         let other = this._other.map((sql) => sql.toSql(type, count));
-        let str = this._sql + ' ' + other.join(' ');
-        return str;
+        let strs = [this._sql, other.join(' ')];
+        return strs.join(' ');
     }
     toVal() {
         let ret = [];
@@ -38,8 +38,9 @@ class Sql {
         return ret;
     }
     add(sql) {
-        if (sql == null)
+        if (sql == null) {
             return this;
+        }
         if (sql['clazz'] == 'Sql') {
             this._other.push(sql);
         }

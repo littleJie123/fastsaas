@@ -7,6 +7,7 @@ const ExecutorStatus_1 = __importDefault(require("./ExecutorStatus"));
 class NormalStatus extends ExecutorStatus_1.default {
     async execute(poolName, sql, values) {
         var pool = MysqlPoolFac_1.default.get(poolName);
+        let context = this._context;
         return new Promise(function (resolve, reject) {
             pool.query(sql, values, function (err, result) {
                 if (err) {

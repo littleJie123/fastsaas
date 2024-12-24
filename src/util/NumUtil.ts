@@ -4,7 +4,7 @@ export default class {
 
   }
   /**
-   * 保留几位小数
+   * 保留几位小数,默认2位
    * @param num 
    * @param n 
    * @returns 

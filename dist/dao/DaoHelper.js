@@ -37,8 +37,9 @@ class DaoHelper {
      * @param query
      */
     async findOne(key, query) {
-        let list = await this.find(key, query);
-        return list[0];
+        let dao = this.getDao(key);
+        let obj = await dao.findOne(query);
+        return obj;
     }
     /**
      * 增加数据
@@ -49,15 +50,45 @@ class DaoHelper {
         let dao = this.getDao(key);
         await dao.addArray(list);
     }
+    async update(key, obj) {
+        let dao = this.getDao(key);
+        await dao.update(obj);
+    }
     async findSum(key, col, cdt) {
-        let query = new fastsaas_1.Query();
+        let query = fastsaas_1.Query.parse(cdt);
         query.col(`sum(${col}) as cnt`);
-        query.addCdt(fastsaas_1.BaseCdt.parse(cdt));
+        // query.addCdt(BaseCdt.parse(cdt));
         let list = await this.getDao(key).findData(query);
         if (list.length == 0) {
             return 0;
         }
         return list[0].cnt;
+    }
+    async findSumByCols(key, cols, cdt) {
+        let query = new fastsaas_1.Query();
+        query.col(cols.map((col) => {
+            if (col.indexOf(' as ') == -1) {
+                return `sum(${col}) as ${col}`;
+            }
+            else {
+                return col;
+            }
+        }));
+        query.addCdt(fastsaas_1.BaseCdt.parse(cdt));
+        let list = await this.getDao(key).findData(query);
+        return list[0];
+    }
+    /**
+     * 根据条件进行更新
+     * @param cdt
+     * @param data
+     */
+    async updateByCdt(key, whereCdt, data) {
+        if (whereCdt == null || data == null) {
+            return;
+        }
+        let dao = this.getDao(key);
+        await dao.updateByCdt(whereCdt, data);
     }
     /**
      * 根据条件和表格进行删除

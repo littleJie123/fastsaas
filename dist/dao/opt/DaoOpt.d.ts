@@ -1,8 +1,14 @@
 import IDaoOpt from "../../inf/IDaoOpt";
 import ColChanger from "../colChanger/ColChanger";
 export default class DaoOpt {
-    _opt: IDaoOpt;
+    private _opt;
     constructor(opt: IDaoOpt);
+    clone(): DaoOpt;
+    /**
+     * 删除colchange
+     * @returns
+     */
+    removeColChange(): DaoOpt;
     /**
      * 将内存中的字段转成db的字段
      * @param pojoField  内存中的字段

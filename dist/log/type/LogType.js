@@ -16,10 +16,10 @@ class LogType {
         }
         return message;
     }
-    _stringify(any) {
+    _stringify(msg) {
         var ret = null;
         try {
-            ret = JSON.stringify(any);
+            ret = JSON.stringify(msg);
         }
         catch (e) {
             console.log(e);

@@ -53,8 +53,9 @@ class Dao {
      */
     _checkNullCdt(cdt) {
         if (cdt == null)
-            if (cdt.clazz == 'BaseCdt') //BaseCdt 没办法检测条件
+            if (cdt.clazz == 'BaseCdt' || cdt.class == 'Query') { //BaseCdt 没办法检测条件
                 return;
+            }
         let cnt = 0;
         for (var e in cdt) {
             if (cdt[e] == null) {
@@ -232,8 +233,10 @@ class Dao {
      * @returns
      */
     async findData(query) {
-        const ret = await this._query('find', query);
-        return ret;
+        let executor = this._acqExecutor();
+        let builder = this._acqBuilder('find', this._opt.clone().removeColChange());
+        let sql = builder.build(query);
+        return await executor.query(sql);
     }
     /**
      * 创建查询的sql
@@ -466,7 +469,7 @@ class Dao {
         return list.map(_data => _data[col]);
     }
     /**
-     * 查询某一列
+     * 查询某一列，返回当前列的简单数据，没有结构体
      * @param query
      * @param col
      */
@@ -557,6 +560,18 @@ class Dao {
         return ret;
     }
     /**
+     * 根据多个查询查找
+     * @param querys
+     * @returns
+     */
+    async findByQuerys(querys) {
+        let ret = [];
+        for (let query of querys) {
+            ret.push(...(await this.find(query)));
+        }
+        return ret;
+    }
+    /**
      * 返回sql的map
      * map 结构{key:class}
      */
@@ -621,8 +636,10 @@ class Dao {
      * 返回
      * @param key 操作，类似add ,update
      */
-    _acqBuilder(key) {
-        let opt = this._opt;
+    _acqBuilder(key, opt) {
+        if (opt == null) {
+            opt = this._opt;
+        }
         let map = this._acqMap();
         let Clazz = map[key];
         if (Clazz == null)

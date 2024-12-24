@@ -7,7 +7,8 @@
  * @LastEditTime : 2020-02-11 19:33:16
  */
 
-
+import IGeter from "./inf/IGeter"
+import JsonUtil from "./JsonUtil";
 interface GroupByParam {
 	list?: Array<any>, //数组
 	array?: Array<any>,
@@ -55,7 +56,7 @@ interface JoinOpt {
 从一个元素中取值
 也支持有function
 */
-function get(obj: object, key: Function | string | string[]) {
+function get(obj: object, key:IGeter) {
 	if (key == null)
 		return obj;
 	if (key instanceof Function) {
@@ -68,7 +69,7 @@ function get(obj: object, key: Function | string | string[]) {
 		}
 		return ArrayUtil.link(ret);
 	} else {
-		return obj[key];
+		return JsonUtil.getByKeys(obj,key);
 	}
 }
 
@@ -213,14 +214,14 @@ export class ArrayUtil {
 	 * @param obj 
 	 * @param keys 
 	 */
-	static get(obj, keys: string | Function | Array<string>) {
+	static get(obj, keys: IGeter) {
 		return get(obj, keys)
 
 	}
 	/**
 	 * 排序
 	 * @param array 排序数组
-	 * @param opts string|{order:'name',desc:'desc'}
+	 * @param opts string|{order:'name',desc:'desc'} 支持多级排序
 	 * 	
 	 * 
 	 */
@@ -329,7 +330,7 @@ export class ArrayUtil {
 	 对数组做group by操作
 opt:{
 	list:list, //数组
-	key:key, //分组的key
+	key:key, //分组的key 支持多级
 	fun:fun(list,e) // 处理函数
 }
 */

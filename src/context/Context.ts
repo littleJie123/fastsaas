@@ -16,10 +16,9 @@ export default class Context {
   private _componentId: number = 0;
 
   /**
-   * 夫节点
+   * 父亲节点
    */
   private _parent: Context;
-  private _initLog: boolean = false;
   /**
    * 放bean缓存
    */
@@ -313,9 +312,9 @@ export default class Context {
     if (category == null)
       category = 'server';
     let logger = new LogHelp();
-    logger.set({ context_id: this.getId(), session_id: this.sessionId })
-
-    logger.set({ category })
+    logger.setContextId(  this.getId())
+    logger.setSessionId(this.sessionId);
+    logger.setCategory( category )
     return logger;
   }
 
@@ -333,20 +332,6 @@ export default class Context {
     return this._id
   }
 
-  initLog(logConf) {
-    if (this._initLog)
-      return
-    this._initLog = true;
-    if (logConf) {
-      if (logConf.envName)
-        LogHelp.setEnvName(logConf.envName);
-      if (logConf.levels)
-        LogHelp.setLevels(logConf.levels)
-      if (logConf.projectName)
-        LogHelp.setProjectName(logConf.projectName)
-    }
-
-  }
 }
 /**
  * 日志配置

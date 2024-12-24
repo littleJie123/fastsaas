@@ -7,8 +7,12 @@
  * @LastEditors  : kaikai.hou
  * @LastEditTime : 2020-02-11 19:33:16
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArrayUtil = void 0;
+const JsonUtil_1 = __importDefault(require("./JsonUtil"));
 /**
 从一个元素中取值
 也支持有function
@@ -27,7 +31,7 @@ function get(obj, key) {
         return ArrayUtil.link(ret);
     }
     else {
-        return obj[key];
+        return JsonUtil_1.default.getByKeys(obj, key);
     }
 }
 class ArrayUtil {
@@ -170,7 +174,7 @@ class ArrayUtil {
     /**
      * 排序
      * @param array 排序数组
-     * @param opts string|{order:'name',desc:'desc'}
+     * @param opts string|{order:'name',desc:'desc'} 支持多级排序
      *
      *
      */
@@ -277,7 +281,7 @@ class ArrayUtil {
      对数组做group by操作
 opt:{
     list:list, //数组
-    key:key, //分组的key
+    key:key, //分组的key 支持多级
     fun:fun(list,e) // 处理函数
 }
 */

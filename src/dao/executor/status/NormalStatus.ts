@@ -3,9 +3,12 @@ import ExecutorStatus from './ExecutorStatus'
 export default class NormalStatus extends ExecutorStatus{
   async execute(poolName: any, sql: string, values: any[]) {
     var pool = MysqlPoolFac.get(poolName);
+    let context = this._context
     return new Promise(function (resolve, reject) {
+      
       pool.query(sql, values, function (err, result) {
         if (err) {
+          
           reject(err)
         } else {
           resolve(result)

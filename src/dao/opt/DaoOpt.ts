@@ -4,7 +4,7 @@ import ColChanger from "../colChanger/ColChanger";
 export default class DaoOpt{
 	
   
-  _opt:IDaoOpt;
+  private _opt:IDaoOpt;
   constructor(opt:IDaoOpt){
     
     if(opt==null)
@@ -17,6 +17,20 @@ export default class DaoOpt{
         opt.colChanger = new ColChanger(dbToPojoMap,Pojo)
     }
     this._opt = opt;
+  }
+
+  clone():DaoOpt{
+    return new DaoOpt({
+      ... this._opt
+    })
+  }
+  /**
+   * 删除colchange
+   * @returns 
+   */
+  removeColChange():DaoOpt{
+    this._opt.colChanger = null;
+    return this;
   }
 
   /**

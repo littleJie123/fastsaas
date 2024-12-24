@@ -18,6 +18,19 @@ class DaoOpt {
         }
         this._opt = opt;
     }
+    clone() {
+        return new DaoOpt({
+            ...this._opt
+        });
+    }
+    /**
+     * 删除colchange
+     * @returns
+     */
+    removeColChange() {
+        this._opt.colChanger = null;
+        return this;
+    }
     /**
      * 将内存中的字段转成db的字段
      * @param pojoField  内存中的字段

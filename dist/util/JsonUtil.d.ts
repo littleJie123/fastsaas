@@ -1,4 +1,8 @@
 declare class JsonUtil {
+    /**
+     * 为Pojo写的copy方法
+     */
+    static copyPojo(clazzName: string, srcPojo: any, targetPojo: any): void;
     static adds(obj: any, keys: Array<string>, param: any): any;
     /**
      * 和set 的区别，是支持用aaa.bbb.cc的格式表示多级

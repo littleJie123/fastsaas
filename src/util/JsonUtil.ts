@@ -35,6 +35,20 @@ function setKey(obj, key, param) {
   return param
 }
 class JsonUtil {
+
+  /**
+   * 为Pojo写的copy方法
+   */
+  static copyPojo(clazzName:string,srcPojo,targetPojo){
+    let pk = StrUtil.firstLower(clazzName)+'Id';
+    let notCols = [pk,'contextId','sysAddTime','sysModifyTime','addUser','modifyUser'];
+    for(let e in srcPojo){
+      if(!notCols.includes(e) && !e.startsWith('__')){
+        targetPojo[e] = srcPojo[e];
+      }
+    }
+  }
+
   static adds(obj, keys: Array<string>, param) {
     if (keys == null) { return }
     if (!(keys instanceof Array)) {
@@ -215,4 +229,5 @@ import JSONChanger from "./dto/JSONChanger";
 import IChanger from "./dto/IChanger";
 import ArrayJsonChanger from "./dto/ArrayJSONChanger";
 import { ArrayUtil } from "./ArrayUtil";
+import { StrUtil } from "./StrUtil";
 

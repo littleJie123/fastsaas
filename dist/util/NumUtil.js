@@ -5,7 +5,7 @@ class default_1 {
         return Math.abs(num1 - num2) < 0.000001;
     }
     /**
-     * 保留几位小数
+     * 保留几位小数,默认2位
      * @param num
      * @param n
      * @returns

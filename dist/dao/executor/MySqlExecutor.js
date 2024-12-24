@@ -15,7 +15,9 @@ class MySqlExecutor {
     }
     setContext(context) {
         this._context = context;
-        this._normalStatus;
+        if (this._normalStatus != null) {
+            this._normalStatus.setContext(context);
+        }
     }
     _printLog(...message) {
         if (this._context == null) {

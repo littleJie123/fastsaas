@@ -17,7 +17,6 @@ const AfterBuild = 'afterBuild'; //后处理函数
 class Context {
     constructor() {
         this._componentId = 0;
-        this._initLog = false;
         /**
          * 放bean缓存
          */
@@ -281,8 +280,9 @@ class Context {
         if (category == null)
             category = 'server';
         let logger = new LogHelp_1.default();
-        logger.set({ context_id: this.getId(), session_id: this.sessionId });
-        logger.set({ category });
+        logger.setContextId(this.getId());
+        logger.setSessionId(this.sessionId);
+        logger.setCategory(category);
         return logger;
     }
     getId() {
@@ -296,19 +296,6 @@ class Context {
     setId(context_id) {
         this._id = context_id;
         return this._id;
-    }
-    initLog(logConf) {
-        if (this._initLog)
-            return;
-        this._initLog = true;
-        if (logConf) {
-            if (logConf.envName)
-                LogHelp_1.default.setEnvName(logConf.envName);
-            if (logConf.levels)
-                LogHelp_1.default.setLevels(logConf.levels);
-            if (logConf.projectName)
-                LogHelp_1.default.setProjectName(logConf.projectName);
-        }
     }
 }
 exports.default = Context;

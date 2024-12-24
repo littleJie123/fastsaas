@@ -1,3 +1,4 @@
+import IGeter from "./inf/IGeter";
 interface GroupByParam {
     list?: Array<any>;
     array?: Array<any>;
@@ -73,11 +74,11 @@ export declare class ArrayUtil {
      * @param obj
      * @param keys
      */
-    static get(obj: any, keys: string | Function | Array<string>): any;
+    static get(obj: any, keys: IGeter): any;
     /**
      * 排序
      * @param array 排序数组
-     * @param opts string|{order:'name',desc:'desc'}
+     * @param opts string|{order:'name',desc:'desc'} 支持多级排序
      *
      *
      */
@@ -92,7 +93,7 @@ export declare class ArrayUtil {
      对数组做group by操作
 opt:{
     list:list, //数组
-    key:key, //分组的key
+    key:key, //分组的key 支持多级
     fun:fun(list,e) // 处理函数
 }
 */

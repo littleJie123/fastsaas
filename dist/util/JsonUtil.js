@@ -36,6 +36,18 @@ function setKey(obj, key, param) {
     return param;
 }
 class JsonUtil {
+    /**
+     * 为Pojo写的copy方法
+     */
+    static copyPojo(clazzName, srcPojo, targetPojo) {
+        let pk = StrUtil_1.StrUtil.firstLower(clazzName) + 'Id';
+        let notCols = [pk, 'contextId', 'sysAddTime', 'sysModifyTime', 'addUser', 'modifyUser'];
+        for (let e in srcPojo) {
+            if (!notCols.includes(e) && !e.startsWith('__')) {
+                targetPojo[e] = srcPojo[e];
+            }
+        }
+    }
     static adds(obj, keys, param) {
         if (keys == null) {
             return;
@@ -216,3 +228,4 @@ class JsonUtil {
 exports.default = JsonUtil;
 const ArrayJSONChanger_1 = __importDefault(require("./dto/ArrayJSONChanger"));
 const ArrayUtil_1 = require("./ArrayUtil");
+const StrUtil_1 = require("./StrUtil");

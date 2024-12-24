@@ -153,7 +153,7 @@ export default abstract class Dao<Pojo = any> {
        */
     protected _findCol(query: Query, col: string): Promise<any[]>;
     /**
-     * 查询某一列
+     * 查询某一列，返回当前列的简单数据，没有结构体
      * @param query
      * @param col
      */
@@ -188,6 +188,12 @@ export default abstract class Dao<Pojo = any> {
      * @param delId
      */
     protected _delOther(list: any[], sortFun?: (obj1?: Pojo, obj2?: Pojo) => number): Promise<any>;
+    /**
+     * 根据多个查询查找
+     * @param querys
+     * @returns
+     */
+    findByQuerys(querys: Query[]): Promise<Pojo[]>;
     /**
      * 返回sql的map
      * map 结构{key:class}
@@ -227,7 +233,7 @@ export default abstract class Dao<Pojo = any> {
      * 返回
      * @param key 操作，类似add ,update
      */
-    protected _acqBuilder(key: string): Builder;
+    protected _acqBuilder(key: string, opt?: DaoOpt): Builder;
     /**
      * 高阶函数，返回一个逻辑删除的批量操作
      */

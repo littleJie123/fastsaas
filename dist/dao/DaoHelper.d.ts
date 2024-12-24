@@ -27,7 +27,15 @@ export default class DaoHelper {
      * @param list
      */
     addArray(key: any, list: any[]): Promise<void>;
+    update(key: any, obj: any): Promise<void>;
     findSum(key: string, col: string, cdt: any): Promise<number>;
+    findSumByCols(key: string, cols: string[], cdt: any): Promise<any>;
+    /**
+     * 根据条件进行更新
+     * @param cdt
+     * @param data
+     */
+    updateByCdt(key: string, whereCdt: any, data: any): Promise<void>;
     /**
      * 根据条件和表格进行删除
      * @param key

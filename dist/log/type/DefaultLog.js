@@ -3,51 +3,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fastsaas_1 = require("../../fastsaas");
 const LogType_1 = __importDefault(require("./LogType"));
 class DefaultLog extends LogType_1.default {
-    printObj(log, obj, msg) {
-        var levelMap = log.getLevelMap();
-        var level = log.getLevel();
-        if (level == null
-            || levelMap == null
-            || levelMap[level.toLowerCase()]
-            || level == 'FOREVER') {
-            var otherOpt = log.getOther();
-            otherOpt.message = msg;
-            if (obj != null) {
-                for (let e in obj) {
-                    otherOpt[e] = obj[e];
-                }
-            }
-            otherOpt.timestamp = new Date().getTime();
-            console.log(this._stringify(otherOpt));
+    print(opt) {
+        let log = fastsaas_1.ConfigFac.get('log');
+        let level = opt.level;
+        let needPrint = true;
+        if (level != null && (log === null || log === void 0 ? void 0 : log.logs) != null) {
+            let logs = log.logs;
+            needPrint = logs.includes(level);
         }
-    }
-    print(log, list, opt) {
-        if (list == null || list.length == 0)
-            return;
-        var levelMap = log.getLevelMap();
-        var level = log.getLevel();
-        if (level == null
-            || levelMap == null
-            || levelMap[level.toLowerCase()]
-            || level == 'FOREVER') {
-            var otherOpt = log.getOther();
-            if (opt != null) {
-                for (let e in opt) {
-                    otherOpt[e] = opt[e];
-                }
-            }
-            var first = list[0];
-            if (!(first instanceof Error)) {
-                otherOpt.message = this._parseMsg(list);
-            }
-            else {
-                otherOpt.message = first.message;
-                otherOpt.stack = first.stack;
-            }
-            otherOpt.timestamp = new Date().getTime();
-            console.log(this._stringify(otherOpt));
+        if (needPrint) {
+            console.log(JSON.stringify(opt));
         }
     }
 }

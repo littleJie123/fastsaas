@@ -10,10 +10,9 @@ import LogHelp from "../log/LogHelp";
 export default class Context {
     private _componentId;
     /**
-     * 夫节点
+     * 父亲节点
      */
     private _parent;
-    private _initLog;
     /**
      * 放bean缓存
      */
@@ -84,5 +83,4 @@ export default class Context {
     getLogger(category?: string): LogHelp;
     getId(): number;
     setId(context_id: number): number;
-    initLog(logConf: any): void;
 }

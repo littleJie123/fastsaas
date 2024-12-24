@@ -11,7 +11,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Control_1 = __importDefault(require("./Control"));
 const Bean_1 = __importDefault(require("./../context/decorator/Bean"));
-const LogHelp_1 = __importDefault(require("./../log/LogHelp"));
 /**
  * redis缓存control
  */
@@ -45,8 +44,11 @@ class RedisCacheControl extends Control_1.default {
      * @private
      */
     logHitInfo(other) {
-        let logger = new LogHelp_1.default();
-        logger.setCategory("redisCache").set({ other: other }).info(this.getMethodName());
+        let logger = this.getContext().getLogger("redisCache");
+        logger.infoObj({
+            name: this.getMethodName(),
+            other: other
+        });
     }
     /**
      * 生成redis的key

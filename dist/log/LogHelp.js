@@ -1,145 +1,72 @@
 "use strict";
-/**
- * 打印日志
- */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 class LogHelp {
+    setSessionId(sessionId) {
+        this._opt.session_id = sessionId;
+    }
     constructor(opt) {
-        if (opt != null)
-            this._opt = opt;
-        else
-            this._opt = {};
-        if (this._opt.context_id == null) {
-            let now = new Date().getTime();
-            let random = Math.floor(Math.random() * 1000);
-            this._opt.context_id = now * 1000 + random;
-        }
-    }
-    getProjectName() {
-        return LogHelp._projectName;
-    }
-    set(opt) {
-        if (this._opt == null)
-            this._opt = {};
         if (opt != null) {
-            for (var e in opt) {
-                this._opt[e] = opt[e];
-            }
+            this._opt = opt;
         }
-        return this;
-    }
-    getLevelMap() {
-        return LogHelp.levelMap;
-    }
-    info(...message) {
-        this.setLevel('INFO').print(message);
-    }
-    infoObj(obj, message) {
-        this.setLevel('INFO').printObj(obj, message);
-    }
-    forever(opt) {
-        this.setLevel('FOREVER').print(' ', opt);
-    }
-    print(list, obj) {
-        var logtype = this._acqLogType();
-        logtype.print(this, list, obj);
-    }
-    printObj(obj, message) {
-        var logtype = this._acqLogType();
-        logtype.printObj(this, obj, message);
-    }
-    getLevel() {
-        return this._level;
-    }
-    /**
-     * 每次一个新的对象，
-     * 发挥opt的内容
-     */
-    getOther() {
-        var result = {};
-        var opt = this._opt;
-        for (var e in opt) {
-            result[e] = opt[e];
+        else {
+            this._opt = {};
         }
-        if (result['other'])
-            result['other'] = JSON.stringify(result['other']);
-        result['level'] = this._level;
-        return result;
     }
-    _acqLogType() {
-        if (LogHelp.envName == 'local' || LogHelp.envName == null)
-            return new LocalLog_1.default();
-        return new DefaultLog_1.default();
-    }
-    setLevel(level) {
-        this._level = level;
-        return this;
+    setContextId(contextId) {
+        this._opt.context_id = contextId;
     }
     setCategory(category) {
         this._opt.category = category;
-        return this;
     }
-    error(...message) {
-        this.setLevel('ERROR').print(message);
-    }
-    debug(...message) {
-        this.setLevel('DEBUG').print(message);
-    }
-    red(...message) {
-        this.setLevel('red').print(message);
-    }
-    green(...message) {
-        this.setLevel('green').print(message);
-    }
-    yellow(...message) {
-        this.setLevel('yellow').print(message);
+    infoObj(obj) {
+        this.print(obj, 'INFO');
     }
     ding(...message) {
-        this.setLevel('DING').print(message);
+        this.print(this.changeMessageToObj(message), 'DING');
     }
-    /**
-     * 创建一个loghelp
-     * @param req
-     * @param opt
-     */
-    static buildLogger(req, opt) {
-        if (opt == null)
-            opt = {};
-        let headers = req.headers;
-        let sessionId = null;
-        if (headers != null && headers.contextId != null) {
-            req._context_id = headers.contextId;
-            sessionId = headers.sessionId || headers.session_id;
+    info(...message) {
+        this.print(this.changeMessageToObj(message), 'INFO');
+    }
+    changeMessageToObj(message) {
+        return {
+            message: message.length == 1 ? message[0] : message,
+        };
+    }
+    getOpt() {
+        var _a;
+        if (this._opt.name == null) {
+            let base = fastsaas_1.ConfigFac.get('base');
+            let name = (_a = base.name) !== null && _a !== void 0 ? _a : '';
+            this._opt.name = name;
         }
-        if (req._context_id == null) {
-            let now = new Date().getTime();
-            let random = Math.floor(Math.random() * 1000);
-            let _id = now * 1000 + random;
-            req._context_id = _id;
+        return this._opt;
+    }
+    print(obj, level) {
+        var logtype = this._acqLogType();
+        logtype.print({
+            ...obj,
+            ...this.getOpt(),
+            level
+        });
+    }
+    _acqLogType() {
+        let base = fastsaas_1.ConfigFac.get('base');
+        if (base.envName == 'local' || base.envName == null) {
+            return new LocalLog_1.default();
         }
-        opt.context_id = req._context_id;
-        opt.session_id = sessionId;
-        return new LogHelp(opt);
+        return new DefaultLog_1.default();
     }
-    static setProjectName(name) {
-        LogHelp._projectName = name;
+    error(...message) {
+        this.print(this.changeMessageToObj(message), 'ERROR');
     }
-    static setLevels(array) {
-        if (array != null) {
-            var obj = {};
-            for (var key of array) {
-                obj[key.toLowerCase()] = true;
-            }
-            LogHelp.levelMap = obj;
-        }
-    }
-    static setEnvName(envName) {
-        LogHelp.envName = envName;
+    debug(...message) {
+        this.print(this.changeMessageToObj(message), 'DEBUG');
     }
 }
 exports.default = LogHelp;
 const DefaultLog_1 = __importDefault(require("./type/DefaultLog"));
 const LocalLog_1 = __importDefault(require("./type/LocalLog"));
+const fastsaas_1 = require("../fastsaas");

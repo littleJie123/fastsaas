@@ -1,68 +1,49 @@
-import LogType from './LogType'
-import GetLevel from './GetLevel';
+import { ConfigFac } from '../../fastsaas';
+import LogType from './LogType' 
 
 var colorMap = {
-    red:{begin:'[31m',end:"[m"},
-    green:{begin:"[32m",end:"[m"},
-    yellow:{begin:"[33m",end:"[m"}
+  red: { begin: '[31m', end: "[m" },
+  green: { begin: "[32m", end: "[m" },
+  yellow: { begin: "[33m", end: "[m" }
 }
-export default class LocalLog extends LogType{
-    printObj(log:GetLevel,obj:any,msg?:string){
-   
-        var array = this._buildMsgArray(log,[msg])
-        if(obj){
-            array.push(JSON.stringify(obj))
-        }
-        console.log.apply(null,array); 
-    }
-    print(log: GetLevel, message: Array<any>,opt) {
-        var level = log.getLevel();
-        var obj = colorMap[level]
-        this._printCommond(obj,'begin');
-        var array = this._buildMsgArray(log,message)
-        if(opt!= null){
-            try{
-                array.push(JSON.stringify(opt))
-            }catch(e){
-                console.error(e)
-            }
-        }
-        console.log.apply(null,array);
-        this._printCommond(obj,'end');
+export default class LocalLog extends LogType {
+  print(obj: any) {
+    let log = ConfigFac.get('log');
+    let category = obj.category;
+    let needPrint = true;
+    if(log?.category !=null && category != null ){
+      let categorys:string[] = log.category;
+      needPrint = categorys.includes(category); 
     }
 
-    private _buildMsgArray(log: GetLevel,message: Array<any>){
-        var first = message[0];
-        
-        if(first instanceof Error){
-            var str =`
-${first.message}
-${first.stack}
-`;          
-            message =[str];
+    if(!needPrint){
+      return;
+    }
+    let message = obj.message; 
+    let strArray:any[] = [`[${category},${obj.level}]:`]
+    if(message == null){
+      strArray.push(JSON.stringify({
+        ... obj,
+        category:null,
+        level:null
+      }))
+    }else{
+      if(message instanceof Array){
+        strArray.push(message.join('\r\n'));
+      }else{
+        if(message instanceof Error){
+          console.log('------------------')
+          strArray.push(message.stack);
+        }else{
+          strArray.push(message);
         }
-        var level = log.getLevel();
-        var array = [level,':'].concat(message)
-        var other = log.getOther();
-        if(other.url)
-            array.push(other.url);
-        return array;
+      }
     }
 
-    private _printCommond(obj:any,key:string){
-        if(obj == null)
-            return;
-        var array = [0o33];
-        var str:string = obj[key];
-        if(str == null)
-            return;
-        for(var i=0;i<str.length;i++){
-            array.push(str.charCodeAt(i));
-        }
-        var buffer = Buffer.from(array);
-        console.log(buffer.toString());
-        
-
-    }
+    console.log(strArray.join(" "));
     
+  }
+  
+ 
+
 }

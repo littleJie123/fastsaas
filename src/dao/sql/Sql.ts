@@ -6,11 +6,11 @@ import { sqlType } from '../.././constant'
 import ColChanger from '../colChanger/ColChanger';
 
 export default class Sql implements ISql{
-  private _sql:String = '';
+  private _sql:string = '';
   private _val:Array<object> = [];
   private _other:Array<Sql> = []; 
   clazz:string = 'Sql';
-  constructor(sql?:String,val?:any){
+  constructor(sql?:string,val?:any){
     if(sql !=null && sql != undefined)
       this._sql = sql;
     if(val != null && val != undefined){
@@ -29,8 +29,8 @@ export default class Sql implements ISql{
   toSql(type: string = sqlType.mysql, count?: object):string{
     count = count || { pgCount: 0 } // 引用传递, 用来修改 pg 的占位符 $num
     let other = this._other.map((sql)=> sql.toSql(type, count));
-    let str = this._sql + ' ' + other.join(' ');
-    return str;
+    let strs:string[] = [this._sql , other.join(' ')];
+    return strs.join(' ');
   }
 
   toVal():Array<object>{
@@ -44,8 +44,9 @@ export default class Sql implements ISql{
   }
 
   add(sql:Sql|String|string):Sql{
-    if(sql == null)
+    if(sql == null){
       return this;
+    }
     if(sql['clazz'] == 'Sql'){
       this._other.push(<Sql>sql)
     }else{

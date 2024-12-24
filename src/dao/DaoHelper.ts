@@ -48,8 +48,9 @@ export default class DaoHelper{
    * @param query 
    */
   async findOne(key:string,query:any){
-    let list = await this.find(key,query);
-    return list[0];
+    let dao = this.getDao(key);
+    let obj = await dao.findOne(query);
+    return obj;
   }
   /**
    * 增加数据
@@ -60,10 +61,15 @@ export default class DaoHelper{
     let dao = this.getDao(key);
     await dao.addArray(list);
   }
+
+  async  update(key,obj:any){
+    let dao = this.getDao(key);
+    await dao.update(obj)
+  }
   async findSum(key:string,col:string,cdt):Promise<number>{
-    let query = new Query();
+    let query = Query.parse(cdt)
     query.col(`sum(${col}) as cnt`);
-    query.addCdt(BaseCdt.parse(cdt));
+   // query.addCdt(BaseCdt.parse(cdt));
     let list = await this.getDao(key).findData(query);
     if(list.length == 0){
       return 0;
@@ -71,6 +77,37 @@ export default class DaoHelper{
     return list[0].cnt;
 
   }
+
+  async findSumByCols(key:string,cols:string[],cdt):Promise<any>{
+    let query = new Query();
+
+    query.col(cols.map((col:string)=>{
+      if(col.indexOf(' as ') == -1){
+        return `sum(${col}) as ${col}`
+      }else{
+        return col;
+      }
+    }));
+    query.addCdt(BaseCdt.parse(cdt));
+    let list = await this.getDao(key).findData(query);
+    
+    return list[0];
+
+  }
+  
+  /**
+   * 根据条件进行更新
+   * @param cdt 
+   * @param data 
+   */
+  async updateByCdt(key:string,whereCdt,data){
+    if(whereCdt == null || data == null){
+      return;
+    } 
+    let dao = this.getDao(key);
+    await dao.updateByCdt(whereCdt,data)
+  }
+
   /**
    * 根据条件和表格进行删除
    * @param key 
