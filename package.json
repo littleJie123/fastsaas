@@ -1,6 +1,6 @@
 {
     "name": "fastsaas",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "fastsaas",
     "main": "dist/fastsaas.js",
     "scripts": {
