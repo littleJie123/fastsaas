@@ -7,6 +7,7 @@ export declare class DateUtil {
      */
     static parse(str: any): Date;
     static formatList(list: Array<any>, col: any): void;
+    static formatDateList(list: any[], col: any): void;
     static format(date: any): string;
     static formatDate(date: any): string;
     private static formatNum;

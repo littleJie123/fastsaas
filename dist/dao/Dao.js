@@ -711,5 +711,8 @@ class Dao {
             return datas;
         }
     }
+    getColChanger() {
+        return this._opt.getColChanger();
+    }
 }
 exports.default = Dao;

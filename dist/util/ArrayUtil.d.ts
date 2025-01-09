@@ -1,4 +1,7 @@
 import IGeter from "./inf/IGeter";
+interface ICompare {
+    compare(obj: any): number;
+}
 interface GroupByParam {
     list?: Array<any>;
     array?: Array<any>;
@@ -294,5 +297,6 @@ opt:{
      * @param key
      */
     static onlyKeys(list: any[], key: any): any[];
+    static sort(array: ICompare[], desc?: boolean): void;
 }
 export {};

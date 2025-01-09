@@ -9,6 +9,9 @@
 
 import IGeter from "./inf/IGeter"
 import JsonUtil from "./JsonUtil";
+interface ICompare {
+	compare(obj:any):number;
+}
 interface GroupByParam {
 	list?: Array<any>, //数组
 	array?: Array<any>,
@@ -1130,6 +1133,17 @@ opt:{
 			array.push(obj)
 		}
 		return array;
+	}
+
+
+	static sort(array:ICompare[],desc?:boolean){
+		array.sort(function(o1,o2){
+			let ret =  o1.compare(o2);
+			if(desc){
+				ret = ret * (-1);
+			}
+			return ret;
+		})
 	}
 
 }

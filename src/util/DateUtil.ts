@@ -75,6 +75,23 @@ export class DateUtil {
       }
     }
   }
+
+  static formatDateList(list: any[], col){
+    if (col == null) {
+      col = 'gmt_create'
+    }
+    if (!(col instanceof Array)) {
+      col = [col];
+    }
+    for (var i = 0; i < list.length; i++) {
+      var data = list[i]
+      for (var key of col) {
+        if (data[key] != null) {
+          data[key] = DateUtil.formatDate(data[key])
+        }
+      }
+    }
+  }
   static format(date): string {
     if (date.getFullYear == null) {
       return date

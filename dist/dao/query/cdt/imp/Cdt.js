@@ -43,10 +43,28 @@ class Cdt extends BaseCdt_1.default {
         }
         const _sql = new sql_1.Sql();
         let col = this.col;
-        _sql.add(new sql_1.ColSql(this.changeCol(col, colChanger)));
+        let bracketIndex = col.indexOf(col);
+        if (bracketIndex == -1) {
+            _sql.add(new sql_1.ColSql(this.changeCol(col, colChanger)));
+        }
+        else {
+            //_sql.add(new ColSql(this.hasBracket(col,colChanger)))
+            if (colChanger == null) {
+                _sql.add(col);
+            }
+            else {
+                _sql.add(colChanger.changeSql(col));
+            }
+        }
         _sql.add(this.op);
         _sql.add(new sql_1.ValSql(this.val));
         return _sql;
+    }
+    hasBracket(col, colChanger) {
+        if (colChanger == null) {
+            return col;
+        }
+        let begin = col.indexOf;
     }
     isHit(obj) {
         var val = obj[this.col];

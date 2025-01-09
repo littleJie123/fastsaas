@@ -11,5 +11,6 @@ export default class Cdt extends BaseCdt {
     getOp(): string;
     getVal(): any;
     toSql(colChanger?: ColChanger): Sql;
+    private hasBracket;
     isHit(obj: any): any;
 }

@@ -48,11 +48,28 @@ export default class Cdt extends BaseCdt {
     }
     const _sql: Sql = new Sql()
     let col = this.col;
-    _sql.add(new ColSql(this.changeCol(col,colChanger)))
+    let bracketIndex = col.indexOf(col)
+    if(bracketIndex == -1){
+      _sql.add(new ColSql(this.changeCol(col,colChanger)))
+    }else{
+      //_sql.add(new ColSql(this.hasBracket(col,colChanger)))
+      if(colChanger==null){
+        _sql.add(col)
+      }else{
+        _sql.add(colChanger.changeSql(col))
+      }
+    }
     _sql.add(this.op)
 
     _sql.add(new ValSql(this.val))
     return _sql
+  }
+
+  private hasBracket(col:string,colChanger:ColChanger){
+    if(colChanger == null){
+      return col;
+    }
+    let begin = col.indexOf
   }
   isHit(obj) {
     var val = obj[this.col]

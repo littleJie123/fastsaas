@@ -255,4 +255,5 @@ export default abstract class Dao<Pojo = any> {
      * @param data
      */
     changeDbArray2Pojo(datas: any[]): Pojo[];
+    getColChanger(): import("./colChanger/ColChanger").default;
 }

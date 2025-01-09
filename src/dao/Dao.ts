@@ -780,4 +780,8 @@ export default abstract class Dao<Pojo = any> {
       return datas;
     }
   }
+
+  getColChanger(){
+    return this._opt.getColChanger();
+  }
 }

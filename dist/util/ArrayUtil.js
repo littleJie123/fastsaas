@@ -1056,5 +1056,14 @@ opt:{
         }
         return array;
     }
+    static sort(array, desc) {
+        array.sort(function (o1, o2) {
+            let ret = o1.compare(o2);
+            if (desc) {
+                ret = ret * (-1);
+            }
+            return ret;
+        });
+    }
 }
 exports.ArrayUtil = ArrayUtil;

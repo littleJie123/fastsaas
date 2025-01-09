@@ -113,7 +113,7 @@ class Control {
             let url = req.baseUrl + req.url;
             this._printLog({
                 url,
-                message: JSON.stringify(this._param)
+                param: JSON.stringify(this._param)
             });
         }
         catch (e) {
