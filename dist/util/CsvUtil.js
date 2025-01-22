@@ -7,6 +7,7 @@ const ArrayUtil_1 = require("./ArrayUtil");
 const fs_1 = __importDefault(require("fs"));
 const readline_1 = __importDefault(require("readline"));
 const StrUtil_1 = require("./StrUtil");
+const JsonUtil_1 = __importDefault(require("./JsonUtil"));
 function parseStr(str) {
     return StrUtil_1.StrUtil.replace(str, '""', '"');
 }
@@ -124,7 +125,14 @@ class default_1 {
             let row = datas[i];
             let dataArray = [];
             for (let col of cols) {
-                dataArray.push(row[col.dataIndex]);
+                if (col.dataIndex != null) {
+                    dataArray.push(JsonUtil_1.default.getByKeys(row, col.dataIndex));
+                }
+                else {
+                    if (col.fun != null) {
+                        dataArray.push(col.fun(row));
+                    }
+                }
             }
             array.push(this._attachArray(dataArray));
         }

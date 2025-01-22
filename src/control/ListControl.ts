@@ -1,16 +1,14 @@
 import { ArrayUtil } from './../util/ArrayUtil';
-import CsvUtil from './../util/CsvUtil';
+import CsvUtil, { CsvCol } from './../util/CsvUtil';
 import Cdt from './../dao/query/cdt/imp/Cdt';
 import Query from './../dao/query/Query';
 import BaseCdt from './../dao/query/cdt/BaseCdt';
 import Dao from './../dao/Dao';
 import Control from "./Control";
 import { JsonUtil } from '../fastsaas';
-interface Col {
-  title: string;
-  dataIndex: string;
-}
+
 /**
+ * 参数__download不为空，则转为下载 
  * 查询（不包括group by）的控制类
  */
 export default abstract class ListControl extends Control {
@@ -352,7 +350,7 @@ export default abstract class ListControl extends Control {
     return this._param.__download != null;
   }
 
-  protected getDownloadCols(): Col[] {
+  protected getDownloadCols(): CsvCol[] {
     return []
   }
 
@@ -389,6 +387,7 @@ export default abstract class ListControl extends Control {
   }
   protected _sendResp(resp, ret) {
     if (this.isDownload()) {
+      console.log("'attachment; filename=' + this.getDownloadFileName()",'attachment; filename=' + this.getDownloadFileName());
       resp.set({
         'Content-Type': 'application/octet-stream',
         'Content-Disposition': 'attachment; filename=' + this.getDownloadFileName(),

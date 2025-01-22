@@ -10,6 +10,7 @@ const Query_1 = __importDefault(require("./../dao/query/Query"));
 const Control_1 = __importDefault(require("./Control"));
 const fastsaas_1 = require("../fastsaas");
 /**
+ * 参数__download不为空，则转为下载
  * 查询（不包括group by）的控制类
  */
 class ListControl extends Control_1.default {
@@ -373,6 +374,7 @@ class ListControl extends Control_1.default {
     }
     _sendResp(resp, ret) {
         if (this.isDownload()) {
+            console.log("'attachment; filename=' + this.getDownloadFileName()", 'attachment; filename=' + this.getDownloadFileName());
             resp.set({
                 'Content-Type': 'application/octet-stream',
                 'Content-Disposition': 'attachment; filename=' + this.getDownloadFileName(),

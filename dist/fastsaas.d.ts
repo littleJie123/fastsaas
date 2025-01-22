@@ -244,7 +244,7 @@ export { default as BufferUtil } from './util/BufferUtil';
 export { default as ClazzUtil } from './util/ClazzUtil';
 export { default as CookUtil } from './util/CookUtil';
 export { default as createHumps } from './util/createHumps';
-export { default as CsvUtil } from './util/CsvUtil';
+export { default as CsvUtil, CsvCol } from './util/CsvUtil';
 export { default as DaoUtil } from './util/DaoUtil';
 export { default as dateConvert } from './util/dateConvert';
 export { DateUtil } from './util/DateUtil';

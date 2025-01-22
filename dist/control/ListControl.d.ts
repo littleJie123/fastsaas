@@ -1,14 +1,12 @@
 /// <reference types="node" />
+import { CsvCol } from './../util/CsvUtil';
 import Cdt from './../dao/query/cdt/imp/Cdt';
 import Query from './../dao/query/Query';
 import BaseCdt from './../dao/query/cdt/BaseCdt';
 import Dao from './../dao/Dao';
 import Control from "./Control";
-interface Col {
-    title: string;
-    dataIndex: string;
-}
 /**
+ * 参数__download不为空，则转为下载
  * 查询（不包括group by）的控制类
  */
 export default abstract class ListControl extends Control {
@@ -139,7 +137,7 @@ export default abstract class ListControl extends Control {
      * 判断当前请求是否下载
      */
     protected isDownload(): boolean;
-    protected getDownloadCols(): Col[];
+    protected getDownloadCols(): CsvCol[];
     protected download(): Promise<Buffer>;
     protected buildDownloadBuffer(list: any[]): Buffer;
     protected doExecute(): Promise<any>;
@@ -153,4 +151,3 @@ export default abstract class ListControl extends Control {
     protected getOnlyCols(): string[];
     protected onlyCols(list: any[]): any[];
 }
-export {};

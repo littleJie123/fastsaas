@@ -15,6 +15,7 @@ export default abstract class GroupControl extends ListControl {
   protected _arrayCdt: Array<string>;
   /**
    * group 字段
+   * _orderArray 设置排序
    */
   protected acqGroup(): Array<string> {
     return null

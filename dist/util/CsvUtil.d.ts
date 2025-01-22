@@ -1,7 +1,8 @@
 /// <reference types="node" />
-interface Col {
+export interface CsvCol {
     title: string;
-    dataIndex: string;
+    dataIndex?: string;
+    fun?(data: any): string;
 }
 export default class {
     static parseFromFile(filePath: string): Promise<any[]>;
@@ -23,7 +24,6 @@ export default class {
      * @param cols
      * @returns
      */
-    static toBuffer(datas: any[], cols: Col[]): Buffer;
+    static toBuffer(datas: any[], cols: CsvCol[]): Buffer;
     private static _attachArray;
 }
-export {};
