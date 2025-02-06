@@ -13,6 +13,7 @@ const Query_1 = __importDefault(require("./../dao/query/Query"));
 class GroupControl extends ListControl_1.default {
     /**
      * group 字段
+     * _orderArray 设置排序
      */
     acqGroup() {
         return null;

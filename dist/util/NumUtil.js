@@ -1,6 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class default_1 {
+    static add(...nums) {
+        let cnt = 0;
+        if (nums) {
+            for (let num of nums) {
+                if (num != null) {
+                    cnt += num;
+                }
+            }
+        }
+        return cnt;
+    }
     static isEq(num1, num2) {
         return Math.abs(num1 - num2) < 0.000001;
     }

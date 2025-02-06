@@ -1,4 +1,16 @@
 export default class {
+
+  static add(... nums:number[]){
+    let cnt = 0;
+    if(nums){
+      for(let num of nums){
+        if(num != null){
+          cnt += num;
+        }
+      }
+    }
+    return cnt;
+  }
   static isEq(num1: number, num2: number): boolean {
     return Math.abs(num1 - num2) < 0.000001
 

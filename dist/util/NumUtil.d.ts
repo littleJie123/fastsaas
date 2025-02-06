@@ -1,4 +1,5 @@
 export default class {
+    static add(...nums: number[]): number;
     static isEq(num1: number, num2: number): boolean;
     /**
      * 保留几位小数,默认2位
