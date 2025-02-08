@@ -53,11 +53,11 @@ export default abstract class Searcher<Pojo = any> {
     let opt:any = {
       col: this.getIdKey()
     }
-    if(this.getIsDel()){
-      opt.otherCdt = {
-        isDel:0
-      }
-    }
+    // if(this.getIsDel()){
+    //   opt.otherCdt = {
+    //     isDel:0
+    //   }
+    // }
     this.reg('getById', new Inquiry(opt));
     this.init(context);
 

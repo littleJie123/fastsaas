@@ -34,11 +34,11 @@ class Searcher {
         let opt = {
             col: this.getIdKey()
         };
-        if (this.getIsDel()) {
-            opt.otherCdt = {
-                isDel: 0
-            };
-        }
+        // if(this.getIsDel()){
+        //   opt.otherCdt = {
+        //     isDel:0
+        //   }
+        // }
         this.reg('getById', new Inquiry_1.default(opt));
         this.init(context);
         var map = this._map;
