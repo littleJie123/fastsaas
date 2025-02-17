@@ -1,6 +1,7 @@
 import IGeter from "./inf/IGeter";
 interface ICompare {
-    compare(obj: any): number;
+    compare?(obj: any): number;
+    getSortValue?(): number;
 }
 interface GroupByParam {
     list?: Array<any>;

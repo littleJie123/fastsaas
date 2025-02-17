@@ -70,4 +70,10 @@ export declare class BeanUtil {
      */
     static parseJsonFromParam(obj: any, ...params: any[]): any;
     static changeVal(val: any, ...params: any[]): any;
+    /**
+     * 将obj的其他列删除，只剩下指定的列
+     * @param obj
+     * @param cols
+     */
+    static onlyCols(obj: any, cols: string[]): any;
 }

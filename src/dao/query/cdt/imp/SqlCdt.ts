@@ -1,3 +1,4 @@
+import { StrUtil } from "../../../../fastsaas";
 import ColChanger from "../../../colChanger/ColChanger";
 import { Sql } from "../../../sql";
 import BaseCdt from "../BaseCdt";
@@ -8,10 +9,16 @@ import BaseCdt from "../BaseCdt";
 export default class extends BaseCdt{
   private sql:string;
   private val:any;
-  constructor(sql:string,val?){
+  constructor(sql:string|Sql,val?){
     super()
-    this.sql = sql;
-    this.val = val;
+    if(StrUtil.isStr(sql)){
+      this.sql = sql as string;
+      this.val = val;
+    }else{
+      let s = sql as Sql;
+      this.sql = s.toSql();
+      this.val = s.toVal();
+    }
   }
   toSql(colChanger:ColChanger): Sql {
     let sql = this.sql;

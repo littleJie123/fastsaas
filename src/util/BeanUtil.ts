@@ -426,4 +426,18 @@ export class BeanUtil {
     return val;
   }
 
+  /**
+   * 将obj的其他列删除，只剩下指定的列
+   * @param obj 
+   * @param cols 
+   */
+  static onlyCols(obj:any,cols:string[]):any{
+    for(let e in obj){
+      if(!cols.includes(e)){
+        delete obj[e]
+      }
+    }
+    return obj;
+  }
+
 }

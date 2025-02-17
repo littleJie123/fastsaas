@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fastsaas_1 = require("../../../../fastsaas");
 const sql_1 = require("../../../sql");
 const BaseCdt_1 = __importDefault(require("../BaseCdt"));
 /**
@@ -12,15 +11,8 @@ const BaseCdt_1 = __importDefault(require("../BaseCdt"));
 class default_1 extends BaseCdt_1.default {
     constructor(sql, val) {
         super();
-        if (fastsaas_1.StrUtil.isStr(sql)) {
-            this.sql = sql;
-            this.val = val;
-        }
-        else {
-            let s = sql;
-            this.sql = s.toSql();
-            this.val = s.toVal();
-        }
+        this.sql = sql;
+        this.val = val;
     }
     toSql(colChanger) {
         let sql = this.sql;

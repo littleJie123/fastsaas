@@ -7,7 +7,7 @@ import BaseCdt from "../BaseCdt";
 export default class extends BaseCdt {
     private sql;
     private val;
-    constructor(sql: string | Sql, val?: any);
+    constructor(sql: string, val?: any);
     toSql(colChanger: ColChanger): Sql;
     isHit(row: any): boolean;
     toEs(): void;

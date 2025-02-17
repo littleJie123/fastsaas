@@ -1058,7 +1058,15 @@ opt:{
     }
     static sort(array, desc) {
         array.sort(function (o1, o2) {
-            let ret = o1.compare(o2);
+            let ret = 0;
+            if (o1.compare) {
+                ret = o1.compare(o2);
+            }
+            else {
+                if (o1.getSortValue && o2.getSortValue) {
+                    ret = o1.getSortValue() - o2.getSortValue();
+                }
+            }
             if (desc) {
                 ret = ret * (-1);
             }

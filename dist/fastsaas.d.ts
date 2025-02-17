@@ -281,3 +281,4 @@ export { default as IGeter } from './util/inf/IGeter';
 export { default as Reducer } from './mapperReducer/Reducer';
 export { default as Mapper } from './mapperReducer/Mapper';
 export { default as PojoChanger } from './mapperReducer/PojoChanger';
+export { default as BatchRunner } from './batchRun/BatchRunner';
