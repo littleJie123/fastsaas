@@ -1,5 +1,3 @@
-/// <reference types="node" />
-/// <reference types="node" />
 /**
 httpEntry 的 父亲类
 */

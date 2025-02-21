@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { CsvCol } from './../util/CsvUtil';
 import Cdt from './../dao/query/cdt/imp/Cdt';
 import Query from './../dao/query/Query';

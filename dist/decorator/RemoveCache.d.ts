@@ -5,7 +5,9 @@ import Searcher from './../searcher/Searcher';
 interface RemoveCacheOpt {
     cacheNames: string[];
 }
-export default function (opt: RemoveCacheOpt): <T extends new (...args: any[]) => {}>(constructor: T) => {
+export default function (opt: RemoveCacheOpt): <T extends {
+    new (...args: any[]): {};
+}>(constructor: T) => {
     new (...args: any[]): {
         _searcher: Searcher;
         _getSearcher(): Searcher<any>;

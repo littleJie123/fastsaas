@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import Wiget from './../../../bus/Wiget';
 import Buffers from './../../../buffers/Buffers';
 export default class UploadWiget extends Wiget {
@@ -10,7 +9,7 @@ export default class UploadWiget extends Wiget {
     addBuffer(buffer: Buffer | string): void;
     _onBind(): void;
     isFile(): boolean;
-    getValue(): string | Buffer;
+    getValue(): Buffer | string;
     askFile(event: any): void;
     askParam(event: any): any;
     add(line: any): void;

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
 const path_1 = __importDefault(require("path"));
 const FileContext_1 = __importDefault(require("../context/FileContext"));
 const ConfigFac_1 = __importDefault(require("../config/ConfigFac"));
@@ -20,4 +21,3 @@ function init() {
 function default_1() {
     return init();
 }
-exports.default = default_1;

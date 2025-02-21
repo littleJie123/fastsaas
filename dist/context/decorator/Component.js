@@ -3,6 +3,7 @@
  * 在上下文注册builder
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
 function default_1(componentId, beanId, single) {
     if (beanId == null)
         beanId = '';
@@ -20,4 +21,3 @@ function default_1(componentId, beanId, single) {
             _a;
     };
 }
-exports.default = default_1;

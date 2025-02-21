@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { Context } from "vm";
 import { Cdt } from "../dao/query/cdt/imp";
 interface Opt {

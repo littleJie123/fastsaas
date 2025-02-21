@@ -1,5 +1,3 @@
-/// <reference types="node" />
-/// <reference types="node" />
 import { Stream } from "stream";
 /**
  * 一个缓冲的类
@@ -15,7 +13,7 @@ export default class Buffers {
      * 将数据读出来，n表示数量
      * @param n 数量
      */
-    readTo(n?: number): "" | Buffer;
+    readTo(n?: number): Buffer;
     acqBuffers(): Buffer[];
     /**
      * 增加一个buffer

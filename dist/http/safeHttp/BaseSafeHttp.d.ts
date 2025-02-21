@@ -1,5 +1,3 @@
-/// <reference types="node" />
-/// <reference types="node" />
 import http from 'http';
 import https from 'https';
 import SafeHttpResult from '../SafeHttpResult';
@@ -19,7 +17,7 @@ export default class BaseSafeHttp {
      * @returns
      */
     protected isHttp(url: URL): boolean;
-    protected acqClient(url: URL): typeof https | typeof http;
+    protected acqClient(url: URL): typeof http | typeof https;
     /**
      * 将参数 转成 body，默认用json格式
      * @param params

@@ -20,17 +20,17 @@ export default class {
      * 是否重音符
      * @param c
      */
-    static isDiacritic(c: string): boolean;
+    static isDiacritic(c: string): c is "`";
     /**
      * 单引号
      * @param c
      * @returns
      */
-    static isSingleQuote(c: string): boolean;
+    static isSingleQuote(c: string): c is "'";
     /**
      * 单引号
      * @param c
      * @returns
      */
-    static isDoubleQuote(c: string): boolean;
+    static isDoubleQuote(c: string): c is "'";
 }

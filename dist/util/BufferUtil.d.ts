@@ -1,5 +1,3 @@
-/// <reference types="node" />
-/// <reference types="node" />
 import { Readable, Writable } from "stream";
 /**
  * 处理buffer的信息

@@ -1,4 +1,3 @@
-/// <reference types="node" />
 export default class UploadFile {
     _opt: any;
     constructor(opt: any);

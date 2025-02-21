@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
 const StrUtil_1 = require("./../util/StrUtil");
 const Inquiry_1 = __importDefault(require("./../searcher/inquiry/imp/Inquiry"));
 const KeysInquiry_1 = __importDefault(require("./../searcher/inquiry/imp/KeysInquiry"));
@@ -66,4 +67,3 @@ function default_1(opt) {
         };
     };
 }
-exports.default = default_1;

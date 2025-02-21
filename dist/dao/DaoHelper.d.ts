@@ -14,13 +14,20 @@ export default class DaoHelper {
     private nameMaps;
     constructor(opt: DaoHelperOpt);
     insertByNames(key: string, names: string[]): Promise<void>;
+    /**
+     * 查找数量，col可以填空
+     * @param key
+     * @param col
+     * @param cdt
+     * @returns
+     */
     findCount(key: string, col: string | null, cdt: any): Promise<any>;
     /**
      * 找到一个
      * @param key
-     * @param query
+     * @param paramQuery
      */
-    findOne(key: string, query: any): Promise<any>;
+    findOne(key: string, paramQuery: any, cols?: string[]): Promise<any>;
     /**
      * 增加数据
      * @param key

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = buildParam;
 const humpUnderline_1 = __importDefault(require("../../util/humpUnderline"));
 function buildParam(params) {
     const goesTohumpOpen = params.goesTohumpOpen;
@@ -47,4 +48,3 @@ function buildParam(params) {
         next();
     };
 }
-exports.default = buildParam;

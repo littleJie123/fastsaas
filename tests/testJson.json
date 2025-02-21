@@ -1,0 +1,4109 @@
+{
+  "result": {
+    "totalElements": 172,
+    "content": [
+      {
+        "materialId": 2973,
+        "name": "72度",
+        "pinyin": "72du",
+        "firstPinyin": "72d",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          },
+          {
+            "unitsId": 5,
+            "fee": 10,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "lastInventory": {
+          "cnt": 15010,
+          "buyUnitFee": 53,
+          "userName": "无名",
+          "data": "2025-02-15"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 127,
+          "stockUnitsId": 18,
+          "price": 10,
+          "moc": 0,
+          "supplierId": 71
+        },
+        "img": [
+          {
+            "imgUploadId": 99,
+            "url": "http://chaifeng.oss-cn-hangzhou.aliyuncs.com/1cf124c0-19a2-4645-8b46-aa0bf2c0dfef.png",
+            "warehouseGroupId": 82,
+            "isDel": 0,
+            "contextId": 1735030622528916,
+            "sysAddTime": "2024-12-24T08:56:58.000Z",
+            "sysModifyTime": "2024-12-24T08:57:03.000Z",
+            "width": 42,
+            "height": 42,
+            "tableName": "material",
+            "tableId": 2973,
+            "sort": 0
+          }
+        ],
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3606,
+        "name": "一品鲜酱",
+        "pinyin": "yipinxianjiangyou（donggu）",
+        "firstPinyin": "ypxjy（dg）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 72,
+          "name": "北京昆泰供应链管理公司",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 164,
+          "stockUnitsId": 18,
+          "price": 20,
+          "moc": 0,
+          "supplierId": 72
+        },
+        "sysAddTime": "2025-02-05 16:00:24"
+      },
+      {
+        "materialId": 2974,
+        "name": "一品鲜酱油（东古）",
+        "pinyin": "yipinxianjiangyou（donggu）",
+        "firstPinyin": "ypxjy（dg）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "lastInventory": {
+          "cnt": 2500,
+          "buyUnitFee": 53,
+          "userName": "小杰2",
+          "data": "2024-12-11"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 131,
+          "stockUnitsId": 18,
+          "price": 7,
+          "moc": 0,
+          "supplierId": 71
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2975,
+        "name": "上海白醋（天鱼宝鼎）",
+        "pinyin": "shanghaibaicu（tianyubaoding）",
+        "firstPinyin": "shbc（tybd）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 135,
+          "stockUnitsId": 18,
+          "price": 5,
+          "moc": 0,
+          "supplierId": 71
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2976,
+        "name": "上等蚝油（海天）",
+        "pinyin": "shangdenghaoyou（haitian）",
+        "firstPinyin": "sdhy（ht）",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          },
+          {
+            "unitsId": 20,
+            "fee": 6,
+            "name": "桶"
+          },
+          {
+            "unitsId": 22,
+            "fee": 2,
+            "name": "件"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 73,
+          "name": "北京福运顺通",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 133,
+          "stockUnitsId": 22,
+          "price": 13,
+          "moc": 0,
+          "supplierId": 73
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2977,
+        "name": "丘北干辣椒",
+        "pinyin": "qiubeiganlajiao",
+        "firstPinyin": "qbglj",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 72,
+          "name": "北京昆泰供应链管理公司",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 159,
+          "stockUnitsId": 16,
+          "price": 12,
+          "moc": 0,
+          "supplierId": 72
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2978,
+        "name": "丘北干辣椒(粗面）",
+        "pinyin": "qiubeiganlajiao(cumian）",
+        "firstPinyin": "qbglj(cm）",
+        "buyUnit": [
+          {
+            "unitsId": 16,
+            "fee": 1,
+            "name": "包"
+          }
+        ],
+        "unitsId": 16,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 72,
+          "name": "北京昆泰供应链管理公司",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 160,
+          "stockUnitsId": 16,
+          "price": 4,
+          "moc": 0,
+          "supplierId": 72
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2979,
+        "name": "丘北干辣椒(细面）",
+        "pinyin": "qiubeiganlajiao(ximian）",
+        "firstPinyin": "qbglj(xm）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 73,
+          "name": "北京福运顺通",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 161,
+          "stockUnitsId": 16,
+          "price": 0,
+          "moc": 0,
+          "supplierId": 73
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2980,
+        "name": "乳扇",
+        "pinyin": "rushan",
+        "firstPinyin": "rs",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2981,
+        "name": "乳饼",
+        "pinyin": "rubing",
+        "firstPinyin": "rb",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2982,
+        "name": "八角",
+        "pinyin": "bajiao",
+        "firstPinyin": "bj",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 1000,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2983,
+        "name": "冈榔片",
+        "pinyin": "ganglangpian",
+        "firstPinyin": "glp",
+        "buyUnit": [
+          {
+            "unitsId": 16,
+            "fee": 1,
+            "name": "包"
+          }
+        ],
+        "unitsId": 16,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 158,
+          "stockUnitsId": 16,
+          "price": 10,
+          "moc": 0,
+          "supplierId": 71
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2984,
+        "name": "冰粉",
+        "pinyin": "bingfen",
+        "firstPinyin": "bf",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2985,
+        "name": "冷冻包浆豆腐",
+        "pinyin": "lengdongbaojiangdoufu",
+        "firstPinyin": "ldbjdf",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2986,
+        "name": "冷冻去骨牛腩（巴西，2015厂，抄码）",
+        "pinyin": "lengdongquguniunan（baxi，2015chang，chaoma）",
+        "firstPinyin": "ldqgnn（bx，2015c，cm）",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2987,
+        "name": "净山药（去皮，Z）",
+        "pinyin": "jingshanyao（qupi，Z）",
+        "firstPinyin": "jsy（qp，Z）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 2500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2988,
+        "name": "净香葱（直径0.4-0.7CM）",
+        "pinyin": "jingxiangcong（zhijing0.4-0.7CM）",
+        "firstPinyin": "jxc（zj0.4-0.7CM）",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2989,
+        "name": "包浆豆腐",
+        "pinyin": "baojiangdoufu",
+        "firstPinyin": "bjdf",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 18,
+            "fee": 480,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2990,
+        "name": "北豆腐（白玉）",
+        "pinyin": "beidoufu（baiyu）",
+        "firstPinyin": "bdf（by）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 21,
+            "fee": 385,
+            "name": "盒"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2991,
+        "name": "北风菌",
+        "pinyin": "beifengjun",
+        "firstPinyin": "bfj",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2992,
+        "name": "单山蘸水",
+        "pinyin": "danshanzhanshui",
+        "firstPinyin": "dszs",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2993,
+        "name": "印象葡萄甜白",
+        "pinyin": "yinxiangputaotianbai",
+        "firstPinyin": "yxpttb",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 750,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2994,
+        "name": "压榨原香纯菜籽油（香太）",
+        "pinyin": "yazhayuanxiangchuncaiziyou（xiangtai）",
+        "firstPinyin": "yzyxcczy（xt）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 20,
+            "fee": 4500,
+            "name": "桶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2995,
+        "name": "去皮腿肉（三融）",
+        "pinyin": "qupituirou（sanrong）",
+        "firstPinyin": "qptr（sr）",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 2,
+            "name": "包"
+          },
+          {
+            "unitsId": 22,
+            "fee": 6,
+            "name": "件"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2996,
+        "name": "去骨鸡脚（泡）",
+        "pinyin": "qugujijiao（pao）",
+        "firstPinyin": "qgjj（p）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 23,
+            "fee": 720,
+            "name": "个"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3557,
+        "name": "可乐",
+        "pinyin": "kele",
+        "firstPinyin": "kl",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          },
+          {
+            "unitsId": 5,
+            "fee": 12,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2025-01-06 19:45:53"
+      },
+      {
+        "materialId": 2997,
+        "name": "圆白菜",
+        "pinyin": "yuanbaicai",
+        "firstPinyin": "ybc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2998,
+        "name": "土豆",
+        "pinyin": "tudou",
+        "firstPinyin": "td",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 2999,
+        "name": "土豆（去皮，Z）",
+        "pinyin": "tudou（qupi，Z）",
+        "firstPinyin": "td（qp，Z）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 2500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3000,
+        "name": "大芫荽",
+        "pinyin": "dayuansui",
+        "firstPinyin": "dys",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3001,
+        "name": "大葱",
+        "pinyin": "dacong",
+        "firstPinyin": "dc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3556,
+        "name": "大蒜",
+        "pinyin": "dasuan",
+        "firstPinyin": "ds",
+        "buyUnit": [
+          {
+            "unitsId": 1,
+            "fee": 1,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 1,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2025-01-06 19:45:53"
+      },
+      {
+        "materialId": 3002,
+        "name": "大蒜(去皮蒜)",
+        "pinyin": "dasuan(qupisuan)",
+        "firstPinyin": "ds(qps)",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3003,
+        "name": "大豆油（元宝）",
+        "pinyin": "dadouyou（yuanbao）",
+        "firstPinyin": "ddy（yb）",
+        "buyUnit": [
+          {
+            "unitsId": 55,
+            "fee": 1,
+            "name": "升"
+          },
+          {
+            "unitsId": 20,
+            "fee": 10,
+            "name": "桶"
+          }
+        ],
+        "unitsId": 55,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3004,
+        "name": "大香菜",
+        "pinyin": "daxiangcai",
+        "firstPinyin": "dxc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3005,
+        "name": "姜饼瓜",
+        "pinyin": "jiangbinggua",
+        "firstPinyin": "jbg",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3568,
+        "name": "小悠",
+        "pinyin": "xiaoyou",
+        "firstPinyin": "xy",
+        "buyUnit": [
+          {
+            "unitsId": 1,
+            "fee": 1,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 1,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 141,
+          "stockUnitsId": 1,
+          "price": 0,
+          "moc": 0,
+          "supplierId": 71
+        },
+        "sysAddTime": "2025-01-07 11:16:30"
+      },
+      {
+        "materialId": 3576,
+        "name": "小悠1",
+        "pinyin": "xiaoyou1",
+        "firstPinyin": "xy1",
+        "buyUnit": [
+          {
+            "unitsId": 1,
+            "fee": 1,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 1,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 87,
+          "name": "小李供应商",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 138,
+          "stockUnitsId": 1,
+          "price": 10,
+          "moc": 0,
+          "supplierId": 87
+        },
+        "sysAddTime": "2025-01-07 11:26:59"
+      },
+      {
+        "materialId": 3006,
+        "name": "小米辣",
+        "pinyin": "xiaomila",
+        "firstPinyin": "xml",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3569,
+        "name": "小翕",
+        "pinyin": "xiaoxi",
+        "firstPinyin": "xx",
+        "buyUnit": [
+          {
+            "unitsId": 5,
+            "fee": 1,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 5,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 87,
+          "name": "小李供应商",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 140,
+          "stockUnitsId": 5,
+          "price": 0,
+          "moc": 0,
+          "supplierId": 87
+        },
+        "sysAddTime": "2025-01-07 11:16:30"
+      },
+      {
+        "materialId": 3577,
+        "name": "小翕1",
+        "pinyin": "xiaoxi1",
+        "firstPinyin": "xx1",
+        "buyUnit": [
+          {
+            "unitsId": 5,
+            "fee": 1,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 5,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2025-01-07 11:26:59"
+      },
+      {
+        "materialId": 3579,
+        "name": "小翕2",
+        "pinyin": "xiaoxi1",
+        "firstPinyin": "xx1",
+        "buyUnit": [
+          {
+            "unitsId": 5,
+            "fee": 1,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 5,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2025-01-07 11:27:22"
+      },
+      {
+        "materialId": 3007,
+        "name": "小菠菜",
+        "pinyin": "xiaobocai",
+        "firstPinyin": "xbc",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3008,
+        "name": "小葱",
+        "pinyin": "xiaocong",
+        "firstPinyin": "xc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3009,
+        "name": "小青菜（菜心）",
+        "pinyin": "xiaoqingcai（caixin）",
+        "firstPinyin": "xqc（cx）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3010,
+        "name": "山楂片(散装)",
+        "pinyin": "shanzhapian(sanzhuang)",
+        "firstPinyin": "szp(sz)",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3011,
+        "name": "带皮去骨腿肉（三融）",
+        "pinyin": "daipiqugutuirou（sanrong）",
+        "firstPinyin": "dpqgtr（sr）",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 2,
+            "name": "包"
+          },
+          {
+            "unitsId": 22,
+            "fee": 6,
+            "name": "件"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3012,
+        "name": "干红花椒",
+        "pinyin": "ganhonghuajiao",
+        "firstPinyin": "ghhj",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 1000,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3013,
+        "name": "干面包",
+        "pinyin": "ganmianbao",
+        "firstPinyin": "gmb",
+        "buyUnit": [
+          {
+            "unitsId": 15,
+            "fee": 1,
+            "name": "袋"
+          }
+        ],
+        "unitsId": 15,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3014,
+        "name": "料酒（永丰）",
+        "pinyin": "liaojiu（yongfeng）",
+        "firstPinyin": "lj（yf）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          },
+          {
+            "unitsId": 22,
+            "fee": 12,
+            "name": "件"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3015,
+        "name": "木姜油（幺麻子）",
+        "pinyin": "mujiangyou（yaomazi）",
+        "firstPinyin": "mjy（ymz）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 250,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3016,
+        "name": "木耳",
+        "pinyin": "muer",
+        "firstPinyin": "me",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3017,
+        "name": "杏仁片",
+        "pinyin": "xingrenpian",
+        "firstPinyin": "xrp",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3018,
+        "name": "杏鲍菇",
+        "pinyin": "xingbaogu",
+        "firstPinyin": "xbg",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3019,
+        "name": "杨梅冷冻",
+        "pinyin": "yangmeilengdong",
+        "firstPinyin": "ymld",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3020,
+        "name": "果糖糖浆",
+        "pinyin": "guotangtangjiang",
+        "firstPinyin": "gttj",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 20,
+            "fee": 2500,
+            "name": "桶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3021,
+        "name": "柿子果浆",
+        "pinyin": "shiziguojiang",
+        "firstPinyin": "szgj",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3022,
+        "name": "树番茄",
+        "pinyin": "shufanqie",
+        "firstPinyin": "sfq",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3023,
+        "name": "桂皮",
+        "pinyin": "guipi",
+        "firstPinyin": "gp",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3024,
+        "name": "椰乳",
+        "pinyin": "yeru",
+        "firstPinyin": "yr",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          },
+          {
+            "unitsId": 5,
+            "fee": 10,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3025,
+        "name": "椰子脆块",
+        "pinyin": "yezicuikuai",
+        "firstPinyin": "yzck",
+        "buyUnit": [
+          {
+            "unitsId": 5,
+            "fee": 1,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 5,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3026,
+        "name": "椰片",
+        "pinyin": "yepian",
+        "firstPinyin": "yp",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 15,
+            "fee": 500,
+            "name": "袋"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3027,
+        "name": "椰肉",
+        "pinyin": "yerou",
+        "firstPinyin": "yr",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          },
+          {
+            "unitsId": 5,
+            "fee": 10,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3611,
+        "name": "没有价格1",
+        "pinyin": "meiyoujiage1",
+        "firstPinyin": "myjg1",
+        "buyUnit": [
+          {
+            "unitsId": 16,
+            "fee": 1,
+            "name": "包"
+          }
+        ],
+        "unitsId": 16,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 165,
+          "stockUnitsId": 16,
+          "price": 0,
+          "moc": 0,
+          "supplierId": 71
+        },
+        "sysAddTime": "2025-02-06 17:59:16"
+      },
+      {
+        "materialId": 3612,
+        "name": "没有价格2",
+        "pinyin": "meiyoujiage2",
+        "firstPinyin": "myjg2",
+        "buyUnit": [
+          {
+            "unitsId": 16,
+            "fee": 1,
+            "name": "包"
+          }
+        ],
+        "unitsId": 16,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 166,
+          "stockUnitsId": 16,
+          "price": 0,
+          "moc": 0,
+          "supplierId": 71
+        },
+        "sysAddTime": "2025-02-06 17:59:34"
+      },
+      {
+        "materialId": 3028,
+        "name": "油条",
+        "pinyin": "youtiao",
+        "firstPinyin": "yt",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3029,
+        "name": "油焖鸡",
+        "pinyin": "youmenji",
+        "firstPinyin": "ymj",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 5,
+            "fee": 13020,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3030,
+        "name": "泰润新平酸菜",
+        "pinyin": "tairunxinpingsuancai",
+        "firstPinyin": "trxpsc",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3031,
+        "name": "泰香Q卷",
+        "pinyin": "taixiangQjuan",
+        "firstPinyin": "txQj",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3032,
+        "name": "洋葱",
+        "pinyin": "yangcong",
+        "firstPinyin": "yc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3127,
+        "name": "测试",
+        "pinyin": "ceshi",
+        "firstPinyin": "cs",
+        "buyUnit": [
+          {
+            "unitsId": 62,
+            "fee": 1,
+            "name": "鸡"
+          },
+          {
+            "unitsId": 38,
+            "fee": 20,
+            "name": "狗"
+          },
+          {
+            "unitsId": 44,
+            "fee": 10,
+            "name": "猫"
+          }
+        ],
+        "unitsId": 62,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 72,
+          "name": "北京昆泰供应链管理公司",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 130,
+          "stockUnitsId": 62,
+          "price": 1,
+          "moc": 0,
+          "supplierId": 72
+        },
+        "sysAddTime": "2024-11-29 18:32:04"
+      },
+      {
+        "materialId": 3605,
+        "name": "测试供应商",
+        "pinyin": "ceshigongyingshang",
+        "firstPinyin": "csgys",
+        "buyUnit": [
+          {
+            "unitsId": 16,
+            "fee": 1,
+            "name": "包"
+          }
+        ],
+        "unitsId": 16,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "supplier": {
+          "supplierId": 97,
+          "name": "新建的供应商",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 157,
+          "stockUnitsId": 16,
+          "price": 2,
+          "moc": 0,
+          "supplierId": 97
+        },
+        "sysAddTime": "2025-01-20 17:56:51"
+      },
+      {
+        "materialId": 3126,
+        "name": "测试物料",
+        "pinyin": "ceshiwuliao",
+        "firstPinyin": "cswl",
+        "buyUnit": [
+          {
+            "unitsId": 16,
+            "fee": 1,
+            "name": "包"
+          }
+        ],
+        "unitsId": 16,
+        "category": {
+          "categoryId": 161,
+          "name": "水果"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 126,
+          "stockUnitsId": 16,
+          "price": 10,
+          "moc": 0,
+          "supplierId": 71
+        },
+        "img": [
+          {
+            "imgUploadId": 96,
+            "url": "http://chaifeng.oss-cn-hangzhou.aliyuncs.com/e3a92420-58b6-4f37-be3f-cf507c2a77aa.png",
+            "warehouseGroupId": 82,
+            "isDel": 0,
+            "contextId": 1732783422046338,
+            "sysAddTime": "2024-11-28T08:43:25.000Z",
+            "sysModifyTime": "2024-11-28T08:43:42.000Z",
+            "width": 42,
+            "height": 42,
+            "tableName": "material",
+            "tableId": 3126,
+            "sort": 0
+          }
+        ],
+        "sysAddTime": "2024-11-28 16:43:42"
+      },
+      {
+        "materialId": 3608,
+        "name": "测试物料1",
+        "pinyin": "ceshiwuliao1",
+        "firstPinyin": "cswl1",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 16,
+            "fee": 100,
+            "name": "包"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "lastInventory": {
+          "cnt": 4,
+          "buyUnitFee": 16,
+          "userName": "无名",
+          "data": "2025-02-05"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 163,
+          "stockUnitsId": 16,
+          "price": 12,
+          "moc": 0,
+          "supplierId": 71
+        },
+        "sysAddTime": "2025-02-05 16:19:16"
+      },
+      {
+        "materialId": 3033,
+        "name": "浓缩鸡汁（家乐）",
+        "pinyin": "nongsuojizhi（jiale）",
+        "firstPinyin": "nsjz（jl）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 18,
+            "fee": 1000,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3034,
+        "name": "海鲈鱼（浔味堂 小）",
+        "pinyin": "hailuyu（xunweitang xiao）",
+        "firstPinyin": "hly（xwt x）",
+        "buyUnit": [
+          {
+            "unitsId": 24,
+            "fee": 1,
+            "name": "条"
+          },
+          {
+            "unitsId": 5,
+            "fee": 28,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 24,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3035,
+        "name": "海鲈鱼（浔味堂）",
+        "pinyin": "hailuyu（xunweitang）",
+        "firstPinyin": "hly（xwt）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 24,
+            "fee": 500,
+            "name": "条"
+          },
+          {
+            "unitsId": 22,
+            "fee": 30,
+            "name": "件"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3036,
+        "name": "液体红糖",
+        "pinyin": "yetihongtang",
+        "firstPinyin": "ytht",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 18,
+            "fee": 2500,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3037,
+        "name": "滇碗香米线(1.4)",
+        "pinyin": "dianwanxiangmixian(1.4)",
+        "firstPinyin": "dwxmx(1.4)",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 18,
+            "fee": 310,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3038,
+        "name": "炼乳（熊猫）",
+        "pinyin": "lianru（xiongmao）",
+        "firstPinyin": "lr（xm）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 60,
+            "fee": 350,
+            "name": "听"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3039,
+        "name": "熟白芝麻",
+        "pinyin": "shubaizhima",
+        "firstPinyin": "sbzm",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3560,
+        "name": "牛奶",
+        "pinyin": "niunai",
+        "firstPinyin": "nn",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2025-01-06 19:45:53"
+      },
+      {
+        "materialId": 3566,
+        "name": "牛奶3",
+        "pinyin": "niunai",
+        "firstPinyin": "nn",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2025-01-07 11:10:43"
+      },
+      {
+        "materialId": 3040,
+        "name": "牟定油卤腐",
+        "pinyin": "moudingyoulufu",
+        "firstPinyin": "mdylf",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3041,
+        "name": "独头蒜",
+        "pinyin": "dutousuan",
+        "firstPinyin": "dts",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3042,
+        "name": "猪油",
+        "pinyin": "zhuyou",
+        "firstPinyin": "zy",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3043,
+        "name": "猪肉沫",
+        "pinyin": "zhuroumo",
+        "firstPinyin": "zrm",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3044,
+        "name": "玉米淀粉（林源）",
+        "pinyin": "yumidianfen（linyuan）",
+        "firstPinyin": "ymdf（ly）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3045,
+        "name": "甜辣酱（潘泰诺华星）",
+        "pinyin": "tianlajiang（pantainuohuaxing）",
+        "firstPinyin": "tlj（ptnhx）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 730,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3046,
+        "name": "甜酱油",
+        "pinyin": "tianjiangyou",
+        "firstPinyin": "tjy",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3047,
+        "name": "生花生米（去皮）",
+        "pinyin": "shenghuashengmi（qupi）",
+        "firstPinyin": "shsm（qp）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 2500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3558,
+        "name": "番茄",
+        "pinyin": "fanqie",
+        "firstPinyin": "fq",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2025-01-06 19:45:53"
+      },
+      {
+        "materialId": 3559,
+        "name": "番茄1",
+        "pinyin": "fanqie1",
+        "firstPinyin": "fq1",
+        "buyUnit": [
+          {
+            "unitsId": 1,
+            "fee": 1,
+            "name": "斤"
+          },
+          {
+            "unitsId": 5,
+            "fee": 4,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 1,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2025-01-06 19:45:53"
+      },
+      {
+        "materialId": 3048,
+        "name": "番茄酸汤酱",
+        "pinyin": "fanqiesuantangjiang",
+        "firstPinyin": "fqstj",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3049,
+        "name": "白玉北豆腐",
+        "pinyin": "baiyubeidoufu",
+        "firstPinyin": "bybdf",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 21,
+            "fee": 400,
+            "name": "盒"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3050,
+        "name": "白砂糖（林源）",
+        "pinyin": "baishatang（linyuan）",
+        "firstPinyin": "bst（ly）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 15,
+            "fee": 400,
+            "name": "袋"
+          },
+          {
+            "unitsId": 22,
+            "fee": 50,
+            "name": "件"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3051,
+        "name": "白胡椒粉",
+        "pinyin": "baihujiaofen",
+        "firstPinyin": "bhjf",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 1000,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3052,
+        "name": "白胡椒粉（味好美）",
+        "pinyin": "baihujiaofen（weihaomei）",
+        "firstPinyin": "bhjf（whm）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 18,
+            "fee": 510,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3053,
+        "name": "白芹菜",
+        "pinyin": "baiqincai",
+        "firstPinyin": "bqc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3054,
+        "name": "白菜",
+        "pinyin": "baicai",
+        "firstPinyin": "bc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3055,
+        "name": "白葡萄汁",
+        "pinyin": "baiputaozhi",
+        "firstPinyin": "bptz",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 735,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3056,
+        "name": "石屏豆腐",
+        "pinyin": "shipingdoufu",
+        "firstPinyin": "spdf",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3057,
+        "name": "石屏豆腐豆丝",
+        "pinyin": "shipingdoufudousi",
+        "firstPinyin": "spdfds",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 15,
+            "fee": 300,
+            "name": "袋"
+          },
+          {
+            "unitsId": 5,
+            "fee": 20,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3058,
+        "name": "石榴果汁",
+        "pinyin": "shiliuguozhi",
+        "firstPinyin": "slgz",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3059,
+        "name": "石灰粉",
+        "pinyin": "shihuifen",
+        "firstPinyin": "shf",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3060,
+        "name": "精制食用盐25（中盐，碘18-33）",
+        "pinyin": "jingzhishiyongyan25（zhongyan，dian18-33）",
+        "firstPinyin": "jzsyy25（zy，d18-33）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 400,
+            "name": "包"
+          },
+          {
+            "unitsId": 22,
+            "fee": 50,
+            "name": "件"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3061,
+        "name": "紫米烧饵块",
+        "pinyin": "zimishaoerkuai",
+        "firstPinyin": "zmsek",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3062,
+        "name": "红尖椒",
+        "pinyin": "hongjianjiao",
+        "firstPinyin": "hjj",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3063,
+        "name": "红腰豆（百利）",
+        "pinyin": "hongyaodou（baili）",
+        "firstPinyin": "hyd（bl）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 18,
+            "fee": 432,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3064,
+        "name": "红葡萄汁",
+        "pinyin": "hongputaozhi",
+        "firstPinyin": "hptz",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 735,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3065,
+        "name": "红豆罐头",
+        "pinyin": "hongdouguantou",
+        "firstPinyin": "hdgt",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 61,
+            "fee": 950,
+            "name": "罐"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3066,
+        "name": "细米线",
+        "pinyin": "ximixian",
+        "firstPinyin": "xmx",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3067,
+        "name": "罗汉果（KG）",
+        "pinyin": "luohanguo（KG）",
+        "firstPinyin": "lhg（KG）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3068,
+        "name": "老抽（海天）",
+        "pinyin": "laochou（haitian）",
+        "firstPinyin": "lc（ht）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          },
+          {
+            "unitsId": 22,
+            "fee": 12,
+            "name": "件"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3069,
+        "name": "老母鸡切块",
+        "pinyin": "laomujiqiekuai",
+        "firstPinyin": "lmjqk",
+        "buyUnit": [
+          {
+            "unitsId": 5,
+            "fee": 1,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 5,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3070,
+        "name": "老醋（天立）",
+        "pinyin": "laocu（tianli）",
+        "firstPinyin": "lc（tl）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 18,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "lastInventory": {
+          "cnt": 10,
+          "buyUnitFee": 53,
+          "userName": "小杰2",
+          "data": "2024-12-10"
+        },
+        "supplier": {
+          "supplierId": 71,
+          "name": "小强2",
+          "moa": 0
+        },
+        "supplierMaterial": {
+          "supplierMaterialId": 132,
+          "stockUnitsId": 18,
+          "price": 7,
+          "moc": 1,
+          "supplierId": 71
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3071,
+        "name": "胡萝卜",
+        "pinyin": "huluobu",
+        "firstPinyin": "hlb",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3072,
+        "name": "芝麻香油（古币 ）-7",
+        "pinyin": "zhimaxiangyou（gubi ）-7",
+        "firstPinyin": "zmxy（gb ）-7",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 450,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3073,
+        "name": "芥菜",
+        "pinyin": "jiecai",
+        "firstPinyin": "jc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3074,
+        "name": "芭乐汁",
+        "pinyin": "balezhi",
+        "firstPinyin": "blz",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3075,
+        "name": "芭蕉叶",
+        "pinyin": "bajiaoye",
+        "firstPinyin": "bjy",
+        "buyUnit": [
+          {
+            "unitsId": 1,
+            "fee": 1,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 1,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3076,
+        "name": "花椒（A级）",
+        "pinyin": "huajiao（Aji）",
+        "firstPinyin": "hj（Aj）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3077,
+        "name": "草果",
+        "pinyin": "caoguo",
+        "firstPinyin": "cg",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3078,
+        "name": "草果（云南购进）",
+        "pinyin": "caoguo（yunnangoujin）",
+        "firstPinyin": "cg（yngj）",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3079,
+        "name": "荞麦面",
+        "pinyin": "qiaomaimian",
+        "firstPinyin": "qmm",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 15,
+            "fee": 480,
+            "name": "袋"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3080,
+        "name": "蒜苔",
+        "pinyin": "suantai",
+        "firstPinyin": "st",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3081,
+        "name": "蒸鱼豉油（李锦记）",
+        "pinyin": "zhengyuchiyou（lijinji）",
+        "firstPinyin": "zycy（ljj）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 410,
+            "name": "瓶"
+          },
+          {
+            "unitsId": 22,
+            "fee": 12,
+            "name": "件"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3082,
+        "name": "虾皮 ",
+        "pinyin": "xiapi ",
+        "firstPinyin": "xp ",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 15,
+            "fee": 1000,
+            "name": "袋"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3083,
+        "name": "蚕豆米",
+        "pinyin": "candoumi",
+        "firstPinyin": "cdm",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3084,
+        "name": "蝶泉牛奶（袋）",
+        "pinyin": "diequanniunai（dai）",
+        "firstPinyin": "dqnn（d）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 15,
+            "fee": 500,
+            "name": "袋"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3085,
+        "name": "西米",
+        "pinyin": "ximi",
+        "firstPinyin": "xm",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 250,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3086,
+        "name": "西米罐头",
+        "pinyin": "ximiguantou",
+        "firstPinyin": "xmgt",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 61,
+            "fee": 950,
+            "name": "罐"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3087,
+        "name": "西红柿",
+        "pinyin": "xihongshi",
+        "firstPinyin": "xhs",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3088,
+        "name": "西芹",
+        "pinyin": "xiqin",
+        "firstPinyin": "xq",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3089,
+        "name": "西葫芦",
+        "pinyin": "xihulu",
+        "firstPinyin": "xhl",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3090,
+        "name": "豆花布丁粉",
+        "pinyin": "douhuabudingfen",
+        "firstPinyin": "dhbdf",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3091,
+        "name": "豇豆",
+        "pinyin": "jiangdou",
+        "firstPinyin": "jd",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 15,
+            "fee": 500,
+            "name": "袋"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3092,
+        "name": "辣子鱼料",
+        "pinyin": "laziyuliao",
+        "firstPinyin": "lzyl",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3561,
+        "name": "辣椒",
+        "pinyin": "lajiao",
+        "firstPinyin": "lj",
+        "buyUnit": [
+          {
+            "unitsId": 1,
+            "fee": 1,
+            "name": "斤"
+          },
+          {
+            "unitsId": 15,
+            "fee": 10,
+            "name": "袋"
+          },
+          {
+            "unitsId": 16,
+            "fee": 1,
+            "name": "包"
+          }
+        ],
+        "unitsId": 1,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2025-01-06 19:45:53"
+      },
+      {
+        "materialId": 3093,
+        "name": "辣鲜露（家乐）",
+        "pinyin": "laxianlou（jiale）",
+        "firstPinyin": "lxl（jl）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 18,
+            "fee": 448,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3094,
+        "name": "迷迭香",
+        "pinyin": "midiexiang",
+        "firstPinyin": "mdx",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3095,
+        "name": "速冻调理斑点叉尾鮰鱼块（浔味堂）",
+        "pinyin": "sudongtiaolibandianchaweihuiyukuai（xunweitang）",
+        "firstPinyin": "sdtlbdcwhyk（xwt）",
+        "buyUnit": [
+          {
+            "unitsId": 22,
+            "fee": 1,
+            "name": "件"
+          }
+        ],
+        "unitsId": 22,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3096,
+        "name": "酱油（厨邦，特级生抽）",
+        "pinyin": "jiangyou（chubang，tejishengchou）",
+        "firstPinyin": "jy（cb，tjsc）",
+        "buyUnit": [
+          {
+            "unitsId": 18,
+            "fee": 1,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 18,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3097,
+        "name": "酸木瓜水",
+        "pinyin": "suanmuguashui",
+        "firstPinyin": "smgs",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3098,
+        "name": "酸萝卜",
+        "pinyin": "suanluobu",
+        "firstPinyin": "slb",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 15,
+            "fee": 500,
+            "name": "袋"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3099,
+        "name": "金针菇",
+        "pinyin": "jinzhengu",
+        "firstPinyin": "jzg",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3100,
+        "name": "锅巴土豆",
+        "pinyin": "guobatudou",
+        "firstPinyin": "gbtd",
+        "buyUnit": [],
+        "unitsId": 0,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3101,
+        "name": "长茄子",
+        "pinyin": "changqiezi",
+        "firstPinyin": "cqz",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3102,
+        "name": "雪花牛干巴",
+        "pinyin": "xuehuaniuganba",
+        "firstPinyin": "xhngb",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 18,
+            "fee": 320,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3103,
+        "name": "青木瓜",
+        "pinyin": "qingmugua",
+        "firstPinyin": "qmg",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3104,
+        "name": "青梅酒",
+        "pinyin": "qingmeijiu",
+        "firstPinyin": "qmj",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3105,
+        "name": "青笋",
+        "pinyin": "qingsun",
+        "firstPinyin": "qs",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3106,
+        "name": "青蒜",
+        "pinyin": "qingsuan",
+        "firstPinyin": "qs",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3107,
+        "name": "韭菜",
+        "pinyin": "jiucai",
+        "firstPinyin": "jc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3108,
+        "name": "韭菜（清洗）",
+        "pinyin": "jiucai（qingxi）",
+        "firstPinyin": "jc（qx）",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3109,
+        "name": "韭菜根",
+        "pinyin": "jiucaigen",
+        "firstPinyin": "jcg",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3110,
+        "name": "风花雪月啤酒",
+        "pinyin": "fenghuaxueyuepijiu",
+        "firstPinyin": "fhxypj",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 325,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3111,
+        "name": "风车生粉",
+        "pinyin": "fengcheshengfen",
+        "firstPinyin": "fcsf",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 5,
+            "name": "包"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3112,
+        "name": "香柳",
+        "pinyin": "xiangliu",
+        "firstPinyin": "xl",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3113,
+        "name": "香米饵块",
+        "pinyin": "xiangmierkuai",
+        "firstPinyin": "xmek",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          },
+          {
+            "unitsId": 15,
+            "fee": 25,
+            "name": "袋"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3114,
+        "name": "香茅草",
+        "pinyin": "xiangmaocao",
+        "firstPinyin": "xmc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3115,
+        "name": "香菜",
+        "pinyin": "xiangcai",
+        "firstPinyin": "xc",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3116,
+        "name": "香菜（去根、清洗）",
+        "pinyin": "xiangcai（qugen、qingxi）",
+        "firstPinyin": "xc（qg、qx）",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 500,
+            "name": "包"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3117,
+        "name": "鱼露（味露）",
+        "pinyin": "yulou（weilou）",
+        "firstPinyin": "yl（wl）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 700,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3118,
+        "name": "鲜味生抽（海天）",
+        "pinyin": "xianweishengchou（haitian）",
+        "firstPinyin": "xwsc（ht）",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 18,
+            "fee": 500,
+            "name": "瓶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3119,
+        "name": "鲜姜",
+        "pinyin": "xianjiang",
+        "firstPinyin": "xj",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3120,
+        "name": "鲜花饼",
+        "pinyin": "xianhuabing",
+        "firstPinyin": "xhb",
+        "buyUnit": [
+          {
+            "unitsId": 23,
+            "fee": 1,
+            "name": "个"
+          },
+          {
+            "unitsId": 5,
+            "fee": 208,
+            "name": "箱"
+          }
+        ],
+        "unitsId": 23,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3121,
+        "name": "鸡蛋",
+        "pinyin": "jidan",
+        "firstPinyin": "jd",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 186,
+          "name": "生鲜"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3122,
+        "name": "鸡豆",
+        "pinyin": "jidou",
+        "firstPinyin": "jd",
+        "buyUnit": [
+          {
+            "unitsId": 29,
+            "fee": 1,
+            "name": "克"
+          },
+          {
+            "unitsId": 1,
+            "fee": 500,
+            "name": "斤"
+          }
+        ],
+        "unitsId": 29,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3123,
+        "name": "黑胡椒碎（500G/包）",
+        "pinyin": "heihujiaosui（500G/bao）",
+        "firstPinyin": "hhjs（500G/b）",
+        "buyUnit": [
+          {
+            "unitsId": 16,
+            "fee": 1,
+            "name": "包"
+          }
+        ],
+        "unitsId": 16,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3124,
+        "name": "龙口粉丝（六六顺）",
+        "pinyin": "longkoufensi（liuliushun）",
+        "firstPinyin": "lkfs（lls）",
+        "buyUnit": [
+          {
+            "unitsId": 27,
+            "fee": 1,
+            "name": "千克"
+          },
+          {
+            "unitsId": 16,
+            "fee": 3,
+            "name": "包"
+          },
+          {
+            "unitsId": 22,
+            "fee": 5,
+            "name": "件"
+          }
+        ],
+        "unitsId": 27,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      },
+      {
+        "materialId": 3125,
+        "name": "龙门米醋",
+        "pinyin": "longmenmicu",
+        "firstPinyin": "lmmc",
+        "buyUnit": [
+          {
+            "unitsId": 53,
+            "fee": 1,
+            "name": "毫升"
+          },
+          {
+            "unitsId": 20,
+            "fee": 1750,
+            "name": "桶"
+          }
+        ],
+        "unitsId": 53,
+        "category": {
+          "categoryId": 160,
+          "name": "无分类"
+        },
+        "sysAddTime": "2024-11-28 16:31:02"
+      }
+    ]
+  }
+}

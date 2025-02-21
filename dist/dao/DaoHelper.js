@@ -19,6 +19,13 @@ class DaoHelper {
             this.saveToCache(key, data.name, data);
         }
     }
+    /**
+     * 查找数量，col可以填空
+     * @param key
+     * @param col
+     * @param cdt
+     * @returns
+     */
     async findCount(key, col, cdt) {
         let query = new fastsaas_1.Query();
         if (col == null) {
@@ -34,10 +41,14 @@ class DaoHelper {
     /**
      * 找到一个
      * @param key
-     * @param query
+     * @param paramQuery
      */
-    async findOne(key, query) {
+    async findOne(key, paramQuery, cols) {
         let dao = this.getDao(key);
+        let query = fastsaas_1.Query.parse(paramQuery);
+        if (cols) {
+            query.col(cols);
+        }
         let obj = await dao.findOne(query);
         return obj;
     }

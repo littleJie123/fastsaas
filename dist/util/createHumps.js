@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = createHumps;
 const lodash_1 = require("lodash");
 const fp_1 = require("lodash/fp");
 function createIteratee(converter, self) {
@@ -22,4 +23,3 @@ function createHumps(keyConverter) {
         return node;
     };
 }
-exports.default = createHumps;

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
 const ConfigFac_1 = __importDefault(require("../../config/ConfigFac"));
 const DateUtil_1 = require("../../util/DateUtil");
 const StrUtil_1 = require("../../util/StrUtil");
@@ -19,4 +20,3 @@ function default_1() {
         });
     };
 }
-exports.default = default_1;

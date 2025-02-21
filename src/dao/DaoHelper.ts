@@ -31,6 +31,13 @@ export default class DaoHelper{
     }
   }
 
+  /**
+   * 查找数量，col可以填空
+   * @param key 
+   * @param col 
+   * @param cdt 
+   * @returns 
+   */
   async findCount(key:string,col:string|null,cdt){
     let query = new Query();
     if(col == null){
@@ -45,10 +52,14 @@ export default class DaoHelper{
   /**
    * 找到一个
    * @param key 
-   * @param query 
+   * @param paramQuery 
    */
-  async findOne(key:string,query:any){
+  async findOne(key:string,paramQuery:any,cols?:string[]){
     let dao = this.getDao(key);
+    let query = Query.parse(paramQuery);
+    if(cols){
+      query.col(cols);
+    }
     let obj = await dao.findOne(query);
     return obj;
   }

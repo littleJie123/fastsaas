@@ -354,14 +354,14 @@ export default abstract class ListControl extends Control {
     return []
   }
 
-  protected async download() {
+  protected async download():Promise<Buffer> {
     this._param.pageSize = null;
     var query = await this.buildQuery()
     let list = await this.find(query);
     return this.buildDownloadBuffer(list);
   }
 
-  protected buildDownloadBuffer(list: any[]) {
+  protected buildDownloadBuffer(list: any[]):Buffer {
     return CsvUtil.toBuffer(list, this.getDownloadCols())
   }
   protected async doExecute(): Promise<any> {

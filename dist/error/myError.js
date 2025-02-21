@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
 class MyError extends Error {
     constructor(opt) {
         super();
@@ -20,4 +21,3 @@ class MyError extends Error {
 }
 function default_1(opt) {
 }
-exports.default = default_1;

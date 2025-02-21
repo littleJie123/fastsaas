@@ -20,13 +20,13 @@
     "license": "MIT",
     "devDependencies": {
         "@types/jest": "^24.9.0",
-        "@types/node": "^13.7.0",
+        "@types/node": "^22.13.4",
         "jest": "^24.9.0",
         "nodemon": "^2.0.2",
         "ts-jest": "^24.3.0",
         "ts-node": "^8.6.1",
         "tsconfig-paths": "^3.9.0",
-        "typescript": "^5.5.2"
+        "typescript": "^5.7.3"
     },
     "dependencies": {
         "cors": "^2.8.5",

@@ -21,7 +21,7 @@ class Buffers {
             n = this.size() - this._index;
         }
         if (n == 0)
-            return '';
+            return new Buffer(0);
         var retBuffer = new Buffer(n);
         var buffers = this._buffers;
         var bufferIndex = this._acqBufferIndex();

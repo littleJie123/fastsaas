@@ -19,7 +19,7 @@ class Content extends BaseUploadState_1.default {
     substring(buffer, begin, end) {
         var size = end - begin;
         if (size < 0)
-            return '';
+            return new Buffer(0);
         var ret = new Buffer(size);
         buffer.copy(ret, 0, begin, end);
         return ret;

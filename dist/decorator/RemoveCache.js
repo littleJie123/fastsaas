@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
 const ArrayUtil_1 = require("./../util/ArrayUtil");
 const BeanUtil_1 = require("./../util/BeanUtil");
 function default_1(opt) {
@@ -136,4 +137,3 @@ function default_1(opt) {
         };
     };
 }
-exports.default = default_1;

@@ -16,7 +16,9 @@ interface LogicDelOpt {
     col?: string;
     mode?: DelMode;
 }
-export default function (opt?: LogicDelOpt): <T extends new (...args: any[]) => {}>(constructor: T) => {
+export default function (opt?: LogicDelOpt): <T extends {
+    new (...args: any[]): {};
+}>(constructor: T) => {
     new (...args: any[]): {
         _delMode: DelMode;
         setDelMode(mode: DelMode): void;

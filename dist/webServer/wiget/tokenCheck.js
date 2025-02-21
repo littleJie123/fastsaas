@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = tokenCheck;
 const ArrayUtil_1 = require("../../util/ArrayUtil");
 const JwtToken_1 = __importDefault(require("./JwtToken"));
 const lodash_findindex_1 = __importDefault(require("lodash.findindex"));
@@ -112,4 +113,3 @@ function tokenCheck(params) {
         }
     };
 }
-exports.default = tokenCheck;

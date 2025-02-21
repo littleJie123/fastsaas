@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
 function default_1(keys) {
     return function classDecorator(constructor) {
         return class extends constructor {
@@ -19,4 +20,3 @@ function default_1(keys) {
         };
     };
 }
-exports.default = default_1;

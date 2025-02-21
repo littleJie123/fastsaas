@@ -1,4 +1,3 @@
-/// <reference types="node" />
 export interface CsvCol {
     title: string;
     dataIndex?: string;
