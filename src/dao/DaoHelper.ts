@@ -73,6 +73,17 @@ export default class DaoHelper{
     await dao.addArray(list);
   }
 
+
+  /**
+   * 更新数组
+   * @param key 
+   * @param list 
+   */
+  async  updateArray(key,list:any[],other?:any,where?:any){
+    let dao = this.getDao(key);
+    await dao.updateArray(list,other,where);
+  }
+
   async  update(key,obj:any){
     let dao = this.getDao(key);
     await dao.update(obj)

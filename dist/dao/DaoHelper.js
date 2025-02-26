@@ -61,6 +61,15 @@ class DaoHelper {
         let dao = this.getDao(key);
         await dao.addArray(list);
     }
+    /**
+     * 更新数组
+     * @param key
+     * @param list
+     */
+    async updateArray(key, list, other, where) {
+        let dao = this.getDao(key);
+        await dao.updateArray(list, other, where);
+    }
     async update(key, obj) {
         let dao = this.getDao(key);
         await dao.update(obj);
