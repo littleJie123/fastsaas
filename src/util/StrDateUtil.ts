@@ -14,4 +14,8 @@ export default class{
     }
     return DateUtil.format(date);
   }
+
+  static getToday():string{
+    return DateUtil.format(new Date());
+  }
 }

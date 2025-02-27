@@ -52,16 +52,17 @@ class Dao {
      * @returns
      */
     _checkNullCdt(cdt) {
-        if (cdt == null)
-            if (cdt.clazz == 'BaseCdt' || cdt.class == 'Query') { //BaseCdt 没办法检测条件
-                return;
-            }
+        if (cdt == null) {
+            throw new Error('条件不能为空');
+        }
+        if (cdt.clazz == 'BaseCdt' || cdt.clazz == 'Query') { //BaseCdt 没办法检测条件
+            throw new Error('条件只能传结构体');
+        }
         let cnt = 0;
         for (var e in cdt) {
-            if (cdt[e] == null) {
-                throw new Error(`条件的${e}为空`);
+            if (cdt[e] != null) {
+                cnt++;
             }
-            cnt++;
         }
         if (cnt == 0)
             throw new Error('不能传空的条件');

@@ -108,7 +108,17 @@ class DaoHelper {
             return;
         }
         let dao = this.getDao(key);
-        await dao.updateByCdt(whereCdt, data);
+        let list = await dao.find(whereCdt);
+        let array = [];
+        for (let obj of list) {
+            let newObj = {
+                [key + 'Id']: obj[key + 'Id'],
+                ...data
+            };
+            array.push(newObj);
+        }
+        await dao.updateArray(array);
+        //await dao.updateByCdt(whereCdt,data)
     }
     /**
      * 根据条件和表格进行删除
@@ -117,7 +127,9 @@ class DaoHelper {
      */
     async delByCdt(key, query) {
         let dao = this.getDao(key);
-        await dao.delByCdt(query);
+        //await dao.delByCdt(query);
+        let list = await dao.find(query);
+        await dao.delArray(list);
     }
     /**
      * 根据name进行查询并且放入缓存

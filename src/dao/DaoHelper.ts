@@ -127,7 +127,17 @@ export default class DaoHelper{
       return;
     } 
     let dao = this.getDao(key);
-    await dao.updateByCdt(whereCdt,data)
+    let list = await dao.find(whereCdt);
+    let array = [];
+    for(let obj of list){
+      let newObj = {
+        [key+'Id']:obj[key+'Id'],
+        ...data
+      };
+      array.push(newObj);
+    }
+    await dao.updateArray(array)
+    //await dao.updateByCdt(whereCdt,data)
   }
 
   /**
@@ -137,7 +147,9 @@ export default class DaoHelper{
    */
   async delByCdt(key:string,query:any){
     let dao = this.getDao(key);
-    await dao.delByCdt(query);
+    //await dao.delByCdt(query);
+    let list = await dao.find(query);
+    await dao.delArray(list);
   }
 
   /**

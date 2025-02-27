@@ -15,5 +15,8 @@ class default_1 {
         }
         return DateUtil_1.DateUtil.format(date);
     }
+    static getToday() {
+        return DateUtil_1.DateUtil.format(new Date());
+    }
 }
 exports.default = default_1;
