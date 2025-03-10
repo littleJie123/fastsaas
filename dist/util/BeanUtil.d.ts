@@ -66,7 +66,7 @@ export declare class BeanUtil {
     /**
      * 将一个简单的结构（只有一层）转化
      * @param obj {"姓名":"${name}","年龄":"${age}""}
-     * @param params {name:"方法",age:12}
+     * @param params {name1:"方法",age:12}
      */
     static parseJsonFromParam(obj: any, ...params: any[]): any;
     static changeVal(val: any, ...params: any[]): any;

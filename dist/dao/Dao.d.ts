@@ -144,6 +144,11 @@ export default abstract class Dao<Pojo = any> {
      * @col 单独列, distinct 数据
      */
     findByIds(ids: Array<string | number>, key?: string, col?: string): Promise<Pojo[]>;
+    /**
+     *
+     * @param opt
+     * @returns
+     */
     onlyArray(opt: OnlyArrayIntface<Pojo>): Promise<Pojo[]>;
     /**
        * 只查询某一列 distinct col

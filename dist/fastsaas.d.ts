@@ -282,3 +282,7 @@ export { default as Reducer } from './mapperReducer/Reducer';
 export { default as Mapper } from './mapperReducer/Mapper';
 export { default as PojoChanger } from './mapperReducer/PojoChanger';
 export { default as BatchRunner } from './batchRun/BatchRunner';
+export { default as DataBuilder } from './dataBuilder/DataBuilder';
+export { default as DataBuilderObj } from './dataBuilder/DataBuilderObj';
+export { default as MultiBuilder } from './dataBuilder/imp/MultiBuilder';
+export { default as UrlBuilder } from './dataBuilder/imp/UrlBuilder';

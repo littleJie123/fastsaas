@@ -69,5 +69,13 @@ export interface OnlyArrayIntface<Pojo = any> {
     afterFun?: Function;
     noLastFind?: boolean;
     noDel?: boolean;
+    /**
+     * 查询出来的结果会和array对比，将数据库的id传给array中的数组
+     */
+    needFindId?: boolean;
+    /**
+     * 去重,会试用mapFun 对array的参数进行去重
+     */
+    needDistinct?: boolean;
 }
 export {};

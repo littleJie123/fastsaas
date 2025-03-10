@@ -37,6 +37,7 @@ export default class ImportorManager {
       }
       let noRuned = true;
       let nextArray = [];
+      console.log('imports',imports);
       for(let importor of imports){
         if(importor.isReady(datas)){
           await importor.process(context,param,datas);

@@ -297,6 +297,11 @@ class Dao {
         let ret = await this.find(query);
         return ret;
     }
+    /**
+     *
+     * @param opt
+     * @returns
+     */
     async onlyArray(opt) {
         if (!opt || typeof opt != 'object')
             throw new Error('OnlyArray: need a object');
@@ -321,11 +326,14 @@ class Dao {
         if (array == null && opt.data != null) {
             array = [opt.data];
         }
+        let allDatas = array; //记录一下所有的数据，后续查询出来设置id用
+        if (array != null && opt.needDistinct) {
+            array = ArrayUtil_1.ArrayUtil.distinctByKey(array, mapFun);
+        }
         if (array == null) {
-            //throw new Error(this.acq('tableName') + ' 更新的数据为空');
             return [];
         }
-        var arrayMap = ArrayUtil_1.ArrayUtil.toMapByKey(array, mapFun);
+        let arrayMap = ArrayUtil_1.ArrayUtil.toMapByKey(array, mapFun);
         let listMap = ArrayUtil_1.ArrayUtil.toMapArray(list, mapFun);
         let hasDelData = false;
         for (let e in listMap) {
@@ -405,6 +413,15 @@ class Dao {
             needUpdate.length == 0 &&
             !hasDelData &&
             delArray.length == 0) {
+            if (opt.needFindId) {
+                for (let data of allDatas) {
+                    let key = ArrayUtil_1.ArrayUtil.get(data, mapFun);
+                    let dbData = listMap[key];
+                    if (dbData != null) {
+                        data[idCol] = dbData[idCol];
+                    }
+                }
+            }
             return list;
         }
         let addedArray = null;
@@ -425,8 +442,8 @@ class Dao {
         }
         if (!opt.noLastFind) {
             list = await find(opt);
-            var arrayMap = ArrayUtil_1.ArrayUtil.toMapArray(list, mapFun);
-            var ret = [];
+            let arrayMap = ArrayUtil_1.ArrayUtil.toMapArray(list, mapFun);
+            let ret = [];
             for (let e in arrayMap) {
                 var mapArray = arrayMap[e];
                 if (mapArray.length == 1) {
@@ -436,6 +453,15 @@ class Dao {
                     mapArray.sort(sortFun);
                     ret.push(mapArray[0]);
                     ArrayUtil_1.ArrayUtil.addAll(needDel, mapArray.slice(1));
+                }
+            }
+            if (opt.needFindId) {
+                for (let data of allDatas) {
+                    let key = ArrayUtil_1.ArrayUtil.get(data, mapFun);
+                    let dbData = arrayMap[key];
+                    if (dbData != null) {
+                        data[idCol] = dbData[0][idCol];
+                    }
                 }
             }
             if (!opt.noDel) {

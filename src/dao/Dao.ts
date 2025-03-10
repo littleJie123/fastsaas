@@ -321,6 +321,11 @@ export default abstract class Dao<Pojo = any> {
     return ret
   }
 
+  /**
+   * 
+   * @param opt 
+   * @returns 
+   */
   async onlyArray (opt: OnlyArrayIntface<Pojo>): Promise<Pojo[]> {
     if (!opt || typeof opt != 'object') throw new Error('OnlyArray: need a object')
     if (!opt.query && !opt.finds) throw new Error('OnlyArray: choose one from query and finds')
@@ -348,11 +353,14 @@ export default abstract class Dao<Pojo = any> {
     if(array == null && opt.data  != null){
       array = [opt.data];
     }
+    let allDatas = array; //记录一下所有的数据，后续查询出来设置id用
+    if(array != null && opt.needDistinct){
+      array = ArrayUtil.distinctByKey(array,mapFun);
+    }
 		if (array == null  ) {
-			//throw new Error(this.acq('tableName') + ' 更新的数据为空');
 			return [];
 		}
-		var arrayMap = ArrayUtil.toMapByKey(array, mapFun)
+		let arrayMap = ArrayUtil.toMapByKey(array, mapFun)
 		let listMap = ArrayUtil.toMapArray(list, mapFun)
 		let hasDelData = false;
 		for (let e in listMap) {
@@ -436,6 +444,15 @@ export default abstract class Dao<Pojo = any> {
 			needUpdate.length == 0 &&
 			!hasDelData &&
 			delArray.length == 0) {
+      if (opt.needFindId) {
+				for (let data of allDatas) {
+					let key = ArrayUtil.get(data,mapFun);
+					let dbData = listMap[key];
+					if (dbData != null) {
+						data[idCol] = dbData[idCol];
+					}
+				}
+			}
 			return list
     }
     let addedArray = null
@@ -455,8 +472,8 @@ export default abstract class Dao<Pojo = any> {
 		}
 		if (!opt.noLastFind) {
 			list = await find(opt);
-			var arrayMap = ArrayUtil.toMapArray(list, mapFun)
-			var ret = []
+			let arrayMap = ArrayUtil.toMapArray(list, mapFun)
+			let ret = []
 			for (let e in arrayMap) {
 				var mapArray = arrayMap[e]
 				if (mapArray.length == 1) {
@@ -467,7 +484,17 @@ export default abstract class Dao<Pojo = any> {
 					ret.push(mapArray[0])
 					ArrayUtil.addAll(needDel, mapArray.slice(1))
 				}
+        
 			}
+      if(opt.needFindId){
+        for(let data of allDatas){
+          let key = ArrayUtil.get(data,mapFun);
+          let dbData = arrayMap[key];
+          if(dbData != null){
+            data[idCol] = dbData[0][idCol];
+          }
+        }
+      }
 			if (!opt.noDel){
         if(addedArray != null){
           let delAddArray = ArrayUtil.andByKey(addedArray,delArray,idCol);
