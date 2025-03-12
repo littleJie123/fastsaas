@@ -5,6 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseOpControl_1 = __importDefault(require("./BaseOpControl"));
 class default_1 extends BaseOpControl_1.default {
+    /**
+     * 默认false，也就是逻辑删除
+     * @returns
+     */
     needDel() {
         return false;
     }
