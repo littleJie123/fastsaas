@@ -200,6 +200,18 @@ class Dao {
         const res = await this._execute('updateArray', array, { other, whereObj });
         return res.affectedRows;
     }
+    async updateArrayWithCols(array, cols, other, whereObj) {
+        const idName = this._opt.acqPojoFirstId();
+        let updateDatas = array.map(row => {
+            let ret = {};
+            cols.forEach(col => {
+                ret[col] = row[col];
+            });
+            ret[idName] = row[idName];
+            return ret;
+        });
+        await this.updateArray(updateDatas, other, whereObj);
+    }
     /**
      *删除一条数据
      * @param obj 删除的数据

@@ -219,6 +219,19 @@ export default abstract class Dao<Pojo = any> {
     return res.affectedRows
   }
 
+  async updateArrayWithCols(array:Pojo[],cols:string[], other?: object,whereObj?:any){
+    const idName = this._opt.acqPojoFirstId()
+    let updateDatas = array.map(row=>{
+      let ret:any = {};
+      cols.forEach(col=>{
+        ret[col] = row[col];
+      })
+      ret[idName] = row[idName];
+      return ret;
+    })
+    await this.updateArray(updateDatas,other,whereObj);
+  }
+
   /**
    *删除一条数据 
    * @param obj 删除的数据

@@ -94,6 +94,7 @@ export default abstract class Dao<Pojo = any> {
      * @param array
      */
     updateArray(array: Pojo[], other?: object, whereObj?: any): Promise<number>;
+    updateArrayWithCols(array: Pojo[], cols: string[], other?: object, whereObj?: any): Promise<void>;
     /**
      *删除一条数据
      * @param obj 删除的数据
