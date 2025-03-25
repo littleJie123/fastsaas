@@ -1,4 +1,18 @@
 export default class {
+    /**
+     * 计算两个数的最大公约数
+     * @param a 第一个数
+     * @param b 第二个数
+     * @returns 最大公约数
+     */
+    static gcd(a: number, b: number): number;
+    /**
+     * 计算两个数的最小公倍数
+     * @param a 第一个数
+     * @param b 第二个数
+     * @returns 最小公倍数
+     */
+    static lcm(a: number, b: number): number;
     static add(...nums: number[]): number;
     static isEq(num1: number, num2: number): boolean;
     /**

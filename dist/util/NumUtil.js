@@ -1,6 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class default_1 {
+    /**
+     * 计算两个数的最大公约数
+     * @param a 第一个数
+     * @param b 第二个数
+     * @returns 最大公约数
+     */
+    static gcd(a, b) {
+        // 使用辗转相除法
+        a = Math.abs(a);
+        b = Math.abs(b);
+        while (b !== 0) {
+            let temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+    /**
+     * 计算两个数的最小公倍数
+     * @param a 第一个数
+     * @param b 第二个数
+     * @returns 最小公倍数
+     */
+    static lcm(a, b) {
+        // 最小公倍数 = 两数之积 / 最大公约数
+        return Math.abs(a * b) / this.gcd(a, b);
+    }
     static add(...nums) {
         let cnt = 0;
         if (nums) {
