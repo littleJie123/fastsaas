@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 const fastsaas_1 = require("../fastsaas");
 const fs_1 = __importDefault(require("fs"));
+const DataCompare_1 = __importDefault(require("./DataCompare"));
 class DaoHelper {
     constructor(opt) {
         this.nameMaps = {};
@@ -220,6 +221,7 @@ class DaoHelper {
      * @param fileName
      */
     async exportJson(tableName, schCdt, fileName) {
+        this.backupFile(fileName);
         let list = await this.findBySchCdt(tableName, schCdt);
         //写入文件，没有文件则新增一个
         if (!fs_1.default.existsSync(fileName)) {
@@ -230,6 +232,34 @@ class DaoHelper {
             }
         }
         fs_1.default.writeFileSync(fileName, JSON.stringify({ list, schCdt }, null, 2));
+        return { list, schCdt };
+    }
+    /**
+     * 备份文件
+     * @param fileName
+     */
+    backupFile(fileName) {
+        if (fs_1.default.existsSync(fileName)) {
+            let backupSuffix = 1;
+            let backupPath = this.buildBackPath(fileName, backupSuffix);
+            // 查找可用的备份编号
+            while (fs_1.default.existsSync(backupPath)) {
+                backupSuffix++;
+                backupPath = this.buildBackPath(fileName, backupSuffix);
+            }
+            // 执行文件重命名
+            fs_1.default.renameSync(fileName, backupPath);
+            console.log(`已备份旧文件：${backupPath}`);
+        }
+    }
+    buildBackPath(fileName, backupSuffix) {
+        let index = fileName.lastIndexOf('.');
+        if (index == -1) {
+            index = fileName.length;
+        }
+        let suffix = fileName.substring(index);
+        let backupPath = `${fileName.substring(0, index)}.${backupSuffix}${suffix}`;
+        return backupPath;
     }
     async findBySchCdt(tableName, schCdt) {
         let dao = this.getDao(tableName);
@@ -262,7 +292,7 @@ class DaoHelper {
         let schCdt = obj.schCdt;
         let dao = this.getDao(tableName);
         let self = this;
-        let pkCol = `${tableName}Id`;
+        let pkCol = fastsaas_1.StrUtil.changeUnderStringToCamel(`${tableName}Id`);
         await dao.onlyArray({
             mapFun: pkCol,
             array: list,
@@ -279,6 +309,14 @@ class DaoHelper {
             needDel: true,
             needUpdate: true
         });
+    }
+    /**
+     * 在测试开始前执行
+     */
+    async before(tableName, cdt) {
+        let compare = new DataCompare_1.default(this, tableName, cdt);
+        await compare.before();
+        return compare;
     }
 }
 exports.default = DaoHelper;

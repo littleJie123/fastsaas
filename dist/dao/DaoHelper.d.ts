@@ -1,7 +1,12 @@
-import { Context } from "../fastsaas";
+import { Context, IDaoHelper } from "../fastsaas";
+import DataCompare from "./DataCompare";
 interface ISchCdt {
     cdt?: any;
     sql?: string;
+}
+interface ExportResult {
+    list: any[];
+    schCdt: ISchCdt;
 }
 /**
  * 一个dao的工具类，通过反射机制查询各种数据，主要给单元测试用
@@ -9,7 +14,7 @@ interface ISchCdt {
 interface DaoHelperOpt {
     context: Context;
 }
-export default class DaoHelper {
+export default class DaoHelper implements IDaoHelper {
     private opt;
     private nameMaps;
     constructor(opt: DaoHelperOpt);
@@ -83,7 +88,13 @@ export default class DaoHelper {
      * @param schCdt
      * @param fileName
      */
-    exportJson(tableName: string, schCdt: ISchCdt, fileName: string): Promise<void>;
+    exportJson(tableName: string, schCdt: ISchCdt, fileName: string): Promise<ExportResult>;
+    /**
+     * 备份文件
+     * @param fileName
+     */
+    private backupFile;
+    private buildBackPath;
     protected findBySchCdt(tableName: string, schCdt: ISchCdt): Promise<any[]>;
     /**
      * 导入json
@@ -91,5 +102,9 @@ export default class DaoHelper {
      * @param fileName
      */
     importJson(tableName: string, fileName: string): Promise<void>;
+    /**
+     * 在测试开始前执行
+     */
+    before<Pojo = any>(tableName: any, cdt: any): Promise<DataCompare<Pojo>>;
 }
 export {};

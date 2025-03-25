@@ -1,5 +1,7 @@
 export { default as MySqlUtil } from './util/MySqlUtil';
 export { default as DaoHelper } from './dao/DaoHelper';
+export { default as DataCompare } from './dao/DataCompare';
+export { default as IDaoHelper } from './dao/IDaoHelper';
 export { default as ImportorInf } from './import/ImportorInf';
 export { default as ImportorManager } from './import/ImportorManager';
 export { default as ImportorObj } from './import/dto/ImportorObj';

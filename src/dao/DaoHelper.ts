@@ -1,6 +1,7 @@
 import path from "path";
-import { ArrayUtil, BaseCdt, Context, Dao, DateUtil, Query, Searcher } from "../fastsaas";
+import { ArrayUtil, BaseCdt, Context, Dao, DateUtil, IDaoHelper, Query, Searcher, StrUtil } from "../fastsaas";
 import fs from 'fs';
+import DataCompare from "./DataCompare";
 type nameMap = {
   [name:string]:any
 }
@@ -9,13 +10,17 @@ interface ISchCdt{
   cdt?:any;
   sql?:string;
 }
+interface ExportResult{
+  list:any[];
+  schCdt:ISchCdt;
+}
 /**
  * 一个dao的工具类，通过反射机制查询各种数据，主要给单元测试用
  */
 interface DaoHelperOpt{
   context:Context
 }
-export default class DaoHelper{
+export default class DaoHelper implements IDaoHelper{
   private opt:DaoHelperOpt;
   private nameMaps:{[key:string]:nameMap} = {};
   constructor(opt:DaoHelperOpt){
@@ -250,7 +255,8 @@ export default class DaoHelper{
    * @param schCdt 
    * @param fileName 
    */
-  async exportJson(tableName:string,schCdt:ISchCdt,fileName:string) {
+  async exportJson(tableName:string,schCdt:ISchCdt,fileName:string):Promise<ExportResult> {
+    this.backupFile(fileName);
     
     let list = await this.findBySchCdt(tableName,schCdt);
     //写入文件，没有文件则新增一个
@@ -262,6 +268,37 @@ export default class DaoHelper{
       }
     }
     fs.writeFileSync(fileName,JSON.stringify({list,schCdt},null,2));
+    return {list,schCdt};
+  }
+
+  /**
+   * 备份文件
+   * @param fileName 
+   */
+  private backupFile(fileName: string) {
+    if (fs.existsSync(fileName)) {
+      let backupSuffix = 1;
+      let backupPath = this.buildBackPath(fileName, backupSuffix);
+      
+      // 查找可用的备份编号
+      while (fs.existsSync(backupPath)) {
+        backupSuffix++;
+        backupPath = this.buildBackPath(fileName, backupSuffix);
+      }
+      
+      // 执行文件重命名
+      fs.renameSync(fileName, backupPath);
+      console.log(`已备份旧文件：${backupPath}`);
+    }
+  }
+  private buildBackPath(fileName: string, backupSuffix: number): any {
+    let index = fileName.lastIndexOf('.');
+    if(index == -1){
+      index = fileName.length;
+    }
+    let suffix = fileName.substring(index);
+    let backupPath = `${fileName.substring(0, index)}.${backupSuffix}${suffix}`;
+    return backupPath;
   }
   protected async findBySchCdt(tableName:string,schCdt: ISchCdt) {
     let dao = this.getDao(tableName );
@@ -293,7 +330,7 @@ export default class DaoHelper{
     let schCdt = obj.schCdt;
     let dao = this.getDao(tableName);
     let self = this;
-    let pkCol = `${tableName}Id`;
+    let pkCol = StrUtil.changeUnderStringToCamel( `${tableName}Id`);
     await dao.onlyArray({
       mapFun:pkCol,
       array:list,
@@ -312,5 +349,14 @@ export default class DaoHelper{
       needDel:true,
       needUpdate:true
     })
+  }
+
+  /**
+   * 在测试开始前执行
+   */
+  async before<Pojo=any>(tableName,cdt:any):Promise<DataCompare<Pojo>>{
+    let compare = new DataCompare(this,tableName,cdt);
+    await compare.before();
+    return compare;
   }
 }
