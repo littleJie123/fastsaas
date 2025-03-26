@@ -1,4 +1,10 @@
 import IGeter from "./inf/IGeter";
+type OrderItemParam = string | ArrayOrderItem | ArrayOrderItem[];
+export default OrderItemParam;
+export interface ArrayOrderItem {
+    order: IGeter;
+    desc?: 'desc' | 'asc';
+}
 interface ICompare {
     compare?(obj: any): number;
     getSortValue?(): number;
@@ -82,11 +88,11 @@ export declare class ArrayUtil {
     /**
      * 排序
      * @param array 排序数组
-     * @param opts string|{order:'name',desc:'desc'} 支持多级排序
+     * @param param string|{order:'name',desc:'desc'} 支持多级排序
      *
      *
      */
-    static order(array: any, opts: any): Array<any>;
+    static order(array: any[], param: OrderItemParam): Array<any>;
     /**
      *
      * @param opt
@@ -300,4 +306,3 @@ opt:{
     static onlyKeys(list: any[], key: any): any[];
     static sort(array: ICompare[], desc?: boolean): void;
 }
-export {};

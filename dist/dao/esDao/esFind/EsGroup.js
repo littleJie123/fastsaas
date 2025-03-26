@@ -123,14 +123,15 @@ class default_1 extends BaseEsFind_1.default {
                 array.push(data);
             }
         }
-        var orders = query.getOrders();
-        if (orders != null && orders.length > 0) {
-            orders = ArrayUtil_1.ArrayUtil.parse(orders, data => {
-                return {
-                    order: data.col,
-                    desc: data.desc
-                };
-            });
+        var orderItems = query.getOrders();
+        let orders = [];
+        if (orderItems != null && orderItems.length > 0) {
+            for (var order of orderItems) {
+                orders.push({
+                    order: order.getCol(),
+                    desc: order.getDesc()
+                });
+            }
             array = ArrayUtil_1.ArrayUtil.order(array, orders);
         }
         return array;

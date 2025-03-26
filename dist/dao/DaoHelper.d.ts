@@ -4,8 +4,8 @@ interface ISchCdt {
     cdt?: any;
     sql?: string;
 }
-interface ExportResult {
-    list: any[];
+interface ExportResult<Pojo = any> {
+    list: Pojo[];
     schCdt: ISchCdt;
 }
 /**
@@ -88,7 +88,7 @@ export default class DaoHelper implements IDaoHelper {
      * @param schCdt
      * @param fileName
      */
-    exportJson(tableName: string, schCdt: ISchCdt, fileName: string): Promise<ExportResult>;
+    exportJson<Pojo = any>(tableName: string, schCdt: ISchCdt, fileName: string): Promise<ExportResult<Pojo>>;
     /**
      * 备份文件
      * @param fileName

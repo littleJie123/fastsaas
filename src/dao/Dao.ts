@@ -206,6 +206,8 @@ export default abstract class Dao<Pojo = any> {
     return ret.affectedRows;
   };
 
+ 
+
   /**
    * 更新一个数组
    * @param array

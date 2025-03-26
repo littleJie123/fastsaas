@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArrayUtil = void 0;
 const JsonUtil_1 = __importDefault(require("./JsonUtil"));
+const StrUtil_1 = require("./StrUtil");
 /**
 从一个元素中取值
 也支持有function
@@ -26,7 +27,7 @@ function get(obj, key) {
     var ret = [];
     if (key instanceof Array) {
         for (var k of key) {
-            ret.push(obj[k]);
+            ret.push(JsonUtil_1.default.getByKeys(obj, k));
         }
         return ArrayUtil.link(ret);
     }
@@ -174,24 +175,27 @@ class ArrayUtil {
     /**
      * 排序
      * @param array 排序数组
-     * @param opts string|{order:'name',desc:'desc'} 支持多级排序
+     * @param param string|{order:'name',desc:'desc'} 支持多级排序
      *
      *
      */
-    static order(array, opts) {
-        if (!(opts instanceof Array)) {
-            if (opts.order == null) {
-                opts = {
-                    order: opts
-                };
+    static order(array, param) {
+        let opts;
+        if (!(param instanceof Array)) {
+            if (StrUtil_1.StrUtil.isStr(param)) {
+                opts = [{
+                        order: param
+                    }];
             }
-            opts = [opts];
+            else {
+                opts = [param];
+            }
+        }
+        else {
+            opts = param;
         }
         function sort(obj1, obj2) {
             function createFun(opt) {
-                if (opt.fun) {
-                    return opt.fun;
-                }
                 return function (obj1, obj2) {
                     var order = opt.order;
                     var desc = opt.desc;
@@ -235,6 +239,7 @@ class ArrayUtil {
                 }
             }
         }
+        console.log('--------------------------');
         array.sort(sort);
         return array;
     }

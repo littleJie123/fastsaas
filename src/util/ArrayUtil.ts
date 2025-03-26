@@ -9,6 +9,13 @@
 
 import IGeter from "./inf/IGeter"
 import JsonUtil from "./JsonUtil";
+import { StrUtil } from "./StrUtil";
+type OrderItemParam = string | ArrayOrderItem | ArrayOrderItem[];
+export default OrderItemParam;
+export interface ArrayOrderItem{
+  order:IGeter;
+  desc?:'desc'|'asc'
+}
 interface ICompare {
 	compare?(obj:any):number;
 	getSortValue?():number;
@@ -69,7 +76,7 @@ function get(obj: object, key:IGeter) {
 	var ret = []
 	if (key instanceof Array) {
 		for (var k of key) {
-			ret.push(obj[k])
+			ret.push(JsonUtil.getByKeys(obj,k))
 		}
 		return ArrayUtil.link(ret);
 	} else {
@@ -225,25 +232,27 @@ export class ArrayUtil {
 	/**
 	 * 排序
 	 * @param array 排序数组
-	 * @param opts string|{order:'name',desc:'desc'} 支持多级排序
+	 * @param param string|{order:'name',desc:'desc'} 支持多级排序
 	 * 	
 	 * 
 	 */
-	static order(array, opts: any): Array<any> {
-		if (!(opts instanceof Array)) {
-			if (opts.order == null) {
-				opts = {
-					order: opts
-				}
-			}
-			opts = [opts]
-		}
+	static order(array:any[], param: OrderItemParam): Array<any> {
+		let opts:ArrayOrderItem[] ;
+    if (!(param instanceof Array)) {
+      if(StrUtil.isStr(param)){
+        opts = [{
+          order:param as string
+        }]
+      }else{
+        opts = [param as ArrayOrderItem]
+      }
+    }else{
+      opts = param;
+    }
 
 		function sort(obj1, obj2) {
-			function createFun(opt) {
-				if (opt.fun) {
-					return opt.fun
-				}
+			function createFun(opt:ArrayOrderItem) {
+				 
 				return function (obj1, obj2) {
 					var order = opt.order
 					var desc = opt.desc
@@ -288,6 +297,7 @@ export class ArrayUtil {
 				}
 			}
 		}
+		console.log('--------------------------');
 		array.sort(sort)
 		return array
 	}

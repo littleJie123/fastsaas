@@ -10,8 +10,8 @@ interface ISchCdt{
   cdt?:any;
   sql?:string;
 }
-interface ExportResult{
-  list:any[];
+interface ExportResult<Pojo = any>{
+  list:Pojo[];
   schCdt:ISchCdt;
 }
 /**
@@ -255,7 +255,7 @@ export default class DaoHelper implements IDaoHelper{
    * @param schCdt 
    * @param fileName 
    */
-  async exportJson(tableName:string,schCdt:ISchCdt,fileName:string):Promise<ExportResult> {
+  async exportJson<Pojo = any>(tableName:string,schCdt:ISchCdt,fileName:string):Promise<ExportResult<Pojo>> {
     this.backupFile(fileName);
     
     let list = await this.findBySchCdt(tableName,schCdt);
