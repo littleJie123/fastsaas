@@ -1,4 +1,4 @@
-import { BeanUtil, HttpUtil, StrUtil } from "../../fastsaas";
+import {  HttpUtil, JsonUtil, StrUtil } from "../../fastsaas";
 import DataBuilder, { DataBuilderOpt, IDataBuilder } from "../DataBuilder";
 export interface UrlBuilderOpt<Param=any,Result=any> extends DataBuilderOpt<Param,Result>{
   parseHttpParam?(httpParam:any,result: Result):Promise<any>;
@@ -30,19 +30,20 @@ export default class UrlBuilder<Param=any,Result=any> extends DataBuilder<Param,
     super();
     this.url = url;  
     this.httpParam = httpParam;
-    this.method = method;
+    this.method = method ?? 'POST';
   }
   protected async doRun(param: Param, result: Result): Promise<Result> {
     let datas = this.buildDataBuilderObj(param,result);
     let url = StrUtil.format(this.url,datas);
     let httpParam =await this.parseHttpParam (result);
-    httpParam = BeanUtil.parseJsonFromParam(httpParam,datas);
+    httpParam = JsonUtil.parseJson(httpParam,datas);
     let resultData = null;
     if(this.method != null && this.method.toLowerCase() =='post'){
-      resultData = HttpUtil.post(url,httpParam)
+      resultData = await HttpUtil.post(url,httpParam)
     }else{
-      resultData = HttpUtil.get(url,httpParam)
+      resultData =await HttpUtil.get(url,httpParam)
     }
+    console.log('resultData',JSON.stringify(resultData));
     return resultData
   }
 

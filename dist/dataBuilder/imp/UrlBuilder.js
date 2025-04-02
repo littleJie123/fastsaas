@@ -29,20 +29,21 @@ class UrlBuilder extends DataBuilder_1.default {
         super();
         this.url = url;
         this.httpParam = httpParam;
-        this.method = method;
+        this.method = method !== null && method !== void 0 ? method : 'POST';
     }
     async doRun(param, result) {
         let datas = this.buildDataBuilderObj(param, result);
         let url = fastsaas_1.StrUtil.format(this.url, datas);
         let httpParam = await this.parseHttpParam(result);
-        httpParam = fastsaas_1.BeanUtil.parseJsonFromParam(httpParam, datas);
+        httpParam = fastsaas_1.JsonUtil.parseJson(httpParam, datas);
         let resultData = null;
         if (this.method != null && this.method.toLowerCase() == 'post') {
-            resultData = fastsaas_1.HttpUtil.post(url, httpParam);
+            resultData = await fastsaas_1.HttpUtil.post(url, httpParam);
         }
         else {
-            resultData = fastsaas_1.HttpUtil.get(url, httpParam);
+            resultData = await fastsaas_1.HttpUtil.get(url, httpParam);
         }
+        console.log('resultData', JSON.stringify(resultData));
         return resultData;
     }
 }

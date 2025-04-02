@@ -36,6 +36,58 @@ function setKey(obj, key, param) {
     return param;
 }
 class JsonUtil {
+    static parseJson(json, opt) {
+        if (json == null || opt == null) {
+            return json;
+        }
+        if (json instanceof Array) {
+            let array = [];
+            for (let e of json) {
+                array.push(this.changeVal(e, opt));
+            }
+            return array;
+        }
+        else {
+            let ret = {};
+            for (let e in json) {
+                ret[e] = this.changeVal(json[e], opt);
+            }
+            return ret;
+        }
+    }
+    static changeVal(val, opt) {
+        if (val instanceof Array) {
+            let array = [];
+            for (let e of val) {
+                array.push(this.changeVal(e, opt));
+            }
+            return array;
+        }
+        if (NumUtil_1.default.isNum(val)) {
+            return val;
+        }
+        if (val instanceof Date) {
+            return val;
+        }
+        if (StrUtil_1.StrUtil.isStr(val)) {
+            return this.parseStr(val, opt);
+        }
+        let ret = {};
+        for (let e in val) {
+            ret[e] = this.changeVal(val[e], opt);
+        }
+        return ret;
+    }
+    static parseStr(val, opt) {
+        if (val.startsWith('${') && val.endsWith('}')) {
+            let key = val.substring(2, val.length - 1);
+            key = key.trim();
+            return this.getByKeys(opt, key);
+        }
+        else {
+            return val;
+        }
+    }
     /**
      * 为Pojo写的copy方法
      */
@@ -229,3 +281,4 @@ exports.default = JsonUtil;
 const ArrayJSONChanger_1 = __importDefault(require("./dto/ArrayJSONChanger"));
 const ArrayUtil_1 = require("./ArrayUtil");
 const StrUtil_1 = require("./StrUtil");
+const NumUtil_1 = __importDefault(require("./NumUtil"));

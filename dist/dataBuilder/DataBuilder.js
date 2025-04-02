@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class DataBuilder {
+    setRunner(runner) {
+        this.runner = runner;
+    }
     setContext(context) {
         this.context = context;
         return this;
@@ -10,7 +13,10 @@ class DataBuilder {
         return this;
     }
     async run(param, result) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
+        if (this.runner == null) {
+            this.runner = {};
+        }
         if (param == null) {
             param = (_a = this.opt) === null || _a === void 0 ? void 0 : _a.defParam;
         }
@@ -28,12 +34,24 @@ class DataBuilder {
         if ((_c = this.opt) === null || _c === void 0 ? void 0 : _c.pareseResult) {
             result = await this.opt.pareseResult(result);
         }
+        if (((_d = this.opt) === null || _d === void 0 ? void 0 : _d.buildRunner) && this.runner) {
+            let runner = await this.opt.buildRunner(result);
+            console.log('runner', runner);
+            if (runner != null) {
+                for (let key in runner) {
+                    console.log('runner', key, runner[key]);
+                    this.runner[key] = runner[key];
+                }
+            }
+        }
+        console.log(this.runner, 'this.runner');
         return result;
     }
     buildDataBuilderObj(param, result) {
         return {
             param,
-            result
+            result,
+            runner: this.runner,
         };
     }
 }

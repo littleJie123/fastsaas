@@ -19,6 +19,9 @@ class MultiBuilder extends DataBuilder_1.default {
                 if (this.context && builder.setContext) {
                     builder.setContext(this.context);
                 }
+                if (builder.setRunner) {
+                    builder.setRunner(this.runner);
+                }
                 console.log(`*********开始运行：${builder.getName()}**********`);
                 result = await builder.run(param, result);
                 console.log(`-------结束运行：${builder.getName()}--------`);

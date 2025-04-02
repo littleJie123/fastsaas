@@ -1,4 +1,7 @@
 declare class JsonUtil {
+    static parseJson(json: any, opt: any): any;
+    private static changeVal;
+    private static parseStr;
     /**
      * 为Pojo写的copy方法
      */

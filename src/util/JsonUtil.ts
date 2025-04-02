@@ -36,6 +36,59 @@ function setKey(obj, key, param) {
 }
 class JsonUtil {
 
+  static parseJson(json:any,opt:any){
+    if(json == null || opt == null){
+      return json;
+    }
+    if(json instanceof Array){
+      let array:any[] = [];
+      for(let e of json){
+        array.push(this.changeVal(e,opt))
+      }
+      return array;
+    }else{
+      let ret = {};
+      for(let e in json){
+        ret[e] = this.changeVal(json[e],opt)
+      }
+      return ret;
+    }
+  }
+
+  private static changeVal(val:any,opt:any){
+    if(val instanceof Array){
+      let array:any[] = [];
+      for(let e of val){
+        array.push(this.changeVal(e,opt))
+      }
+      return array;
+    } 
+    if(NumUtil.isNum(val)){
+      return val;
+    }
+    if(val instanceof Date){
+      return val;
+    }
+    if(StrUtil.isStr(val)){
+      return this.parseStr(val,opt);
+    }
+    let ret = {};
+    for(let e in val){
+      ret[e] = this.changeVal(val[e],opt)
+    }
+    return ret;
+
+  }
+  private static parseStr(val:string,opt:any){
+    if(val.startsWith('${') && val.endsWith('}')){
+      let key = val.substring(2,val.length - 1);
+      key = key.trim();
+
+      return this.getByKeys(opt,key);
+    }else{
+      return val;
+    }
+  }
   /**
    * 为Pojo写的copy方法
    */
@@ -230,4 +283,5 @@ import IChanger from "./dto/IChanger";
 import ArrayJsonChanger from "./dto/ArrayJSONChanger";
 import { ArrayUtil } from "./ArrayUtil";
 import { StrUtil } from "./StrUtil";
+import NumUtil from "./NumUtil";
 

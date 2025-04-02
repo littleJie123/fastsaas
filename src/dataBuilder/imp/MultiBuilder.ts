@@ -10,12 +10,15 @@ export default class MultiBuilder<Param=any,Result = any> extends DataBuilder<Pa
     return 'MultiBuilder';
   }
   async doRun(param:Param,result?:Result):Promise<Result>{
- 
+    
     let builders = this.builders;
     try{
       for(let builder of builders){
         if(this.context && builder.setContext){
           builder.setContext(this.context);
+        }
+        if(builder.setRunner){
+          builder.setRunner(this.runner);
         }
         console.log(`*********开始运行：${builder.getName()}**********`)
         result = await builder.run(param,result);
