@@ -69,6 +69,11 @@ export declare class BeanUtil {
      * @param params {name1:"方法",age:12}
      */
     static parseJsonFromParam(obj: any, ...params: any[]): any;
+    static pick(row: any, cols: string[]): any;
+    /**
+     * 从list中挑选出指定的列
+     */
+    static pickList(list: any[], cols: string[]): any[];
     static changeVal(val: any, ...params: any[]): any;
     /**
      * 将obj的其他列删除，只剩下指定的列

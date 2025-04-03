@@ -3,6 +3,11 @@ export default abstract class Searcher<Pojo = any> {
     protected _map: {};
     protected _context: Context;
     /**
+     * 传入的id中是否有0
+     * @returns
+     */
+    protected hasZeroId(): boolean;
+    /**
      * 出事化，注册inquiry
      * @param context
      */
@@ -41,13 +46,14 @@ export default abstract class Searcher<Pojo = any> {
      * 根据ids 列表查询多条记录
      * @param array
      */
-    findByIds(array: Array<any>, col?: string): Promise<Pojo[]>;
+    findByIds(idArray: Array<any>, col?: string): Promise<Pojo[]>;
     /**
      * 从缓存中拿
      * @param array
      * @param col
      */
     findByIdsFromCache(array: any, col?: string): any[];
+    buildWithZeroId(): Pojo;
     getById(id: any): Promise<Pojo>;
     /**
      * 从缓存中拿

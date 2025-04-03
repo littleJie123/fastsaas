@@ -29,7 +29,12 @@ export default abstract class extends BaseOpControl {
     if(num == 0){
       throw new Error('数据不合法');
     }
+    await this.onDel(pk);
     return pk;
+  }
+
+  protected async onDel(pk:any):Promise<void>{
+
   }
 }
 

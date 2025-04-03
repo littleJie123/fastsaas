@@ -373,6 +373,27 @@ class BeanUtil {
         }
         return obj;
     }
+    static pick(row, cols) {
+        let retRow = {};
+        for (let col of cols) {
+            retRow[col] = row[col];
+        }
+        return retRow;
+    }
+    /**
+     * 从list中挑选出指定的列
+     */
+    static pickList(list, cols) {
+        let retList = [];
+        for (let row of list) {
+            let retRow = {};
+            for (let col of cols) {
+                retRow[col] = row[col];
+            }
+            retList.push(retRow);
+        }
+        return retList;
+    }
     static changeVal(val, ...params) {
         if (params == null || params.length == 0 || val == null)
             return val;

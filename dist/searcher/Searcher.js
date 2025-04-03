@@ -7,6 +7,13 @@ class Searcher {
     constructor() {
         this._map = {};
     }
+    /**
+     * 传入的id中是否有0
+     * @returns
+     */
+    hasZeroId() {
+        return false;
+    }
     setContext(context) {
         this._context = context;
     }
@@ -105,9 +112,19 @@ class Searcher {
      * 根据ids 列表查询多条记录
      * @param array
      */
-    async findByIds(array, col) {
+    async findByIds(idArray, col) {
         var inquiry = this.get('getById');
-        return await inquiry.find(array, col);
+        let array = idArray;
+        if (this.hasZeroId()) {
+            array = idArray.filter(e => e != 0);
+        }
+        let ret = await inquiry.find(array, col);
+        if (this.hasZeroId()) {
+            if (idArray.filter(e => e == 0).length > 0) {
+                ret.push(this.buildWithZeroId());
+            }
+        }
+        return ret;
     }
     /**
      * 从缓存中拿
@@ -118,9 +135,16 @@ class Searcher {
         var inquiry = this.get('getById');
         return inquiry.acqDataFromCache(array, col);
     }
+    buildWithZeroId() {
+        return null;
+    }
     async getById(id) {
-        if (id == null)
+        if (id == null) {
             return null;
+        }
+        if (this.hasZeroId() && id == 0) {
+            return this.buildWithZeroId();
+        }
         var list = await this.findByIds([id]);
         return list[0];
     }

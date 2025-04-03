@@ -9,4 +9,5 @@ export default abstract class extends BaseOpControl {
     protected doExecute(): Promise<{
         [x: string]: any;
     }>;
+    protected onDel(pk: any): Promise<void>;
 }

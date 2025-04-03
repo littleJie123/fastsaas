@@ -3,6 +3,7 @@ import Bean from './../context/decorator/Bean';
 
 import Control from './Control';
 import RepeatChecker from '../checker/RepeatChecker';
+import { StrUtil } from '../fastsaas';
 /**
  * 基本操作的对象
  */
@@ -37,7 +38,10 @@ export default abstract class extends Control {
   };
 
   getPkCol() {
-    return this.getTableName() + 'Id'
+    let ret =  this.getTableName() + 'Id'
+    ret = StrUtil.changeUnderStringToCamel(ret);
+    ret = StrUtil.firstLower(ret);
+    return ret;
   }
   protected async getPkData() {
     let pk = this.getPkCol();

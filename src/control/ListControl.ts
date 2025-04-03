@@ -80,7 +80,7 @@ export default abstract class ListControl extends Control {
    * 对查询结果的后处理
    * @param list 
    */
-  protected async _processList(list: Array<any>): Promise<any[]> {
+  protected async _processList(list: any[]): Promise<any[]> {
     return list;
   }
   /**

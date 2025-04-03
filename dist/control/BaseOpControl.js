@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Bean_1 = __importDefault(require("./../context/decorator/Bean"));
 const Control_1 = __importDefault(require("./Control"));
 const RepeatChecker_1 = __importDefault(require("../checker/RepeatChecker"));
+const fastsaas_1 = require("../fastsaas");
 /**
  * 基本操作的对象
  */
@@ -37,7 +38,10 @@ class default_1 extends Control_1.default {
     }
     ;
     getPkCol() {
-        return this.getTableName() + 'Id';
+        let ret = this.getTableName() + 'Id';
+        ret = fastsaas_1.StrUtil.changeUnderStringToCamel(ret);
+        ret = fastsaas_1.StrUtil.firstLower(ret);
+        return ret;
     }
     async getPkData() {
         let pk = this.getPkCol();

@@ -8,6 +8,13 @@ export default abstract class Searcher<Pojo = any> {
   protected _context: Context;
 
 
+  /**
+   * 传入的id中是否有0
+   * @returns 
+   */
+  protected hasZeroId():boolean{
+    return false;
+  }
 
   /**
    * 出事化，注册inquiry
@@ -132,9 +139,19 @@ export default abstract class Searcher<Pojo = any> {
    * 根据ids 列表查询多条记录
    * @param array 
    */
-  async findByIds(array: Array<any>, col?: string): Promise<Pojo[]> {
+  async findByIds(idArray: Array<any>, col?: string): Promise<Pojo[]> {
     var inquiry = this.get('getById')
-    return await inquiry.find(array, col)
+    let array = idArray;
+    if(this.hasZeroId()){
+      array = idArray.filter(e=>e!=0);
+    }
+    let ret = await inquiry.find(array, col)
+    if(this.hasZeroId()){
+      if(idArray.filter(e=>e==0).length > 0){
+        ret.push(this.buildWithZeroId());
+      }
+    }
+    return ret;
   }
   /**
    * 从缓存中拿
@@ -146,9 +163,17 @@ export default abstract class Searcher<Pojo = any> {
     return inquiry.acqDataFromCache(array, col)
   }
 
+  buildWithZeroId():Pojo{
+    return null;
+  }
+
   async getById(id): Promise<Pojo> {
-    if (id == null)
+    if (id == null){
       return null;
+    }
+    if(this.hasZeroId() && id == 0){
+      return this.buildWithZeroId();
+    }
 
     var list = await this.findByIds([id])
     return list[0]
@@ -173,5 +198,6 @@ import Inquiry from './inquiry/imp/Inquiry'
 import BaseInquiry from './inquiry/BaseInquiry'
 import BaseCache from './inquiry/cache/BaseCache';
 import Dao from './../dao/Dao';
+import e from 'cors';
 
 

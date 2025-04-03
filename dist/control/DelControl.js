@@ -30,7 +30,10 @@ class default_1 extends BaseOpControl_1.default {
         if (num == 0) {
             throw new Error('数据不合法');
         }
+        await this.onDel(pk);
         return pk;
+    }
+    async onDel(pk) {
     }
 }
 exports.default = default_1;

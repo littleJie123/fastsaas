@@ -62,7 +62,7 @@ export default abstract class ListControl extends Control {
      * 对查询结果的后处理
      * @param list
      */
-    protected _processList(list: Array<any>): Promise<any[]>;
+    protected _processList(list: any[]): Promise<any[]>;
     /**
      返回查询字段
     */
