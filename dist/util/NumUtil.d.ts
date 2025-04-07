@@ -1,5 +1,12 @@
 export default class {
     /**
+     * 能否整除
+     * @param num1
+     * @param num2
+     * @returns
+     */
+    static isDivisible(num1: number, num2: number): boolean;
+    /**
      * 计算两个数的最大公约数
      * @param a 第一个数
      * @param b 第二个数

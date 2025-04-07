@@ -1,5 +1,21 @@
 export default class {
   /**
+   * 能否整除
+   * @param num1 
+   * @param num2 
+   * @returns 
+   */
+  static isDivisible(num1: number, num2: number): boolean {
+    if (num1 == null || num2 == null) {
+      return false;
+    }
+    if (num2 == 0) {
+      return false;
+    }
+    return Math.floor(num1 * 10000) % num2 == 0;
+
+  }
+  /**
    * 计算两个数的最大公约数
    * @param a 第一个数
    * @param b 第二个数
@@ -61,9 +77,10 @@ export default class {
     }
     num = num * x;
     let ret = Math.floor(num);
-    if (Math.abs((num - (ret + 1))) < 0.01)
+    if (Math.abs((num - (ret + 1))) < 0.01){
       ret = ret + 1;
 
+    }
     return ret / x;
   }
   static format(num: number, len: number): string {
