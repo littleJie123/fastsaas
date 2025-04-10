@@ -1,6 +1,6 @@
 import { Context, IDaoHelper } from "../fastsaas";
 import DataCompare from "./DataCompare";
-interface ISchCdt {
+export interface ISchCdt {
     cdt?: any;
     sql?: string;
 }
@@ -93,15 +93,22 @@ export default class DaoHelper implements IDaoHelper {
      * 备份文件
      * @param fileName
      */
-    private backupFile;
+    backupFile(fileName: string): void;
     private buildBackPath;
-    protected findBySchCdt(tableName: string, schCdt: ISchCdt): Promise<any[]>;
+    /**
+     * 根据表格和查询条件进行查询
+     * @param tableName
+     * @param schCdt
+     * @returns
+     */
+    findBySchCdt(tableName: string, schCdt: ISchCdt): Promise<any[]>;
     /**
      * 导入json
      * @param tableName
      * @param fileName
      */
     importJson(tableName: string, fileName: string): Promise<void>;
+    importJsonData(tableName: string, obj: any): Promise<void>;
     /**
      * 在测试开始前执行
      */

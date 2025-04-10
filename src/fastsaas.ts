@@ -3,6 +3,9 @@ export { default as MySqlUtil } from './util/MySqlUtil'
 export { default as DaoHelper } from './dao/DaoHelper';
 export { default as DataCompare } from './dao/DataCompare';
 export {default as IDaoHelper} from './dao/IDaoHelper';
+export {default as DataBakup} from './dao/DataBakup';
+export { TableBackUp } from './dao/DataBakup';
+
 
 export { default as ImportorInf } from './import/ImportorInf';
 export { default as ImportorManager } from './import/ImportorManager';
@@ -210,6 +213,7 @@ export { default as GroupHat } from './hat/imp/GroupHat';
 export { default as Hat } from './hat/imp/Hat';
 export { default as PojoHat } from './hat/imp/PojoHat';
 export { default as SearcherHat } from './hat/imp/SearcherHat';
+export {default as MapNameHat} from './hat/imp/MapNameHat';
 
 export { default as BaseHttpEntry } from './http/BaseHttpEntry';
 export { default as BaseBodyParser } from './http/bodyParser/BaseBodyParser';
@@ -279,6 +283,7 @@ export { default as TransManager } from './tans/TransManager';
 
 
 export { ArrayUtil } from './util/ArrayUtil';
+export { default as DownloadUtil} from './util/DownloadUtil';
 export { BeanUtil } from './util/BeanUtil';
 export { default as BufferUtil } from './util/BufferUtil';
 export { default as ClazzUtil } from './util/ClazzUtil';
@@ -332,3 +337,5 @@ export { default as DataBuilder } from './dataBuilder/DataBuilder';
 export { default as DataBuilderObj } from './dataBuilder/DataBuilderObj';
 export { default as MultiBuilder } from './dataBuilder/imp/MultiBuilder';
 export { default as UrlBuilder } from './dataBuilder/imp/UrlBuilder';
+
+

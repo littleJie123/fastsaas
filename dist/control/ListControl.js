@@ -374,7 +374,6 @@ class ListControl extends Control_1.default {
     }
     _sendResp(resp, ret) {
         if (this.isDownload()) {
-            console.log("'attachment; filename=' + this.getDownloadFileName()", 'attachment; filename=' + this.getDownloadFileName());
             resp.set({
                 'Content-Type': 'application/octet-stream',
                 'Content-Disposition': 'attachment; filename=' + this.getDownloadFileName(),

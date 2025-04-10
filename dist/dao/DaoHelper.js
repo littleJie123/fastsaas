@@ -261,6 +261,12 @@ class DaoHelper {
         let backupPath = `${fileName.substring(0, index)}.${backupSuffix}${suffix}`;
         return backupPath;
     }
+    /**
+     * 根据表格和查询条件进行查询
+     * @param tableName
+     * @param schCdt
+     * @returns
+     */
     async findBySchCdt(tableName, schCdt) {
         let dao = this.getDao(tableName);
         let retList;
@@ -287,7 +293,9 @@ class DaoHelper {
      */
     async importJson(tableName, fileName) {
         let data = fs_1.default.readFileSync(fileName, 'utf8');
-        let obj = JSON.parse(data);
+        await this.importJsonData(tableName, JSON.parse(data));
+    }
+    async importJsonData(tableName, obj) {
         let list = obj.list;
         let schCdt = obj.schCdt;
         let dao = this.getDao(tableName);

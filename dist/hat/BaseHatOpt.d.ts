@@ -1,4 +1,9 @@
 import { Context } from "../fastsaas";
+/**
+ * 主表：内存中的数据，data为前缀
+ * 分表：数据库中的数据，hat为前缀
+ *
+ */
 interface BaseHatOpt {
     context: Context;
     /**

@@ -6,7 +6,7 @@ type nameMap = {
   [name:string]:any
 }
 
-interface ISchCdt{
+export interface ISchCdt{
   cdt?:any;
   sql?:string;
 }
@@ -275,7 +275,7 @@ export default class DaoHelper implements IDaoHelper{
    * 备份文件
    * @param fileName 
    */
-  private backupFile(fileName: string) {
+  backupFile(fileName: string) {
     if (fs.existsSync(fileName)) {
       let backupSuffix = 1;
       let backupPath = this.buildBackPath(fileName, backupSuffix);
@@ -300,7 +300,13 @@ export default class DaoHelper implements IDaoHelper{
     let backupPath = `${fileName.substring(0, index)}.${backupSuffix}${suffix}`;
     return backupPath;
   }
-  protected async findBySchCdt(tableName:string,schCdt: ISchCdt) {
+  /**
+   * 根据表格和查询条件进行查询
+   * @param tableName 
+   * @param schCdt 
+   * @returns 
+   */
+  async findBySchCdt(tableName:string,schCdt: ISchCdt) {
     let dao = this.getDao(tableName );
     let retList:any[];
     if(schCdt.sql == null){
@@ -325,7 +331,10 @@ export default class DaoHelper implements IDaoHelper{
    */
   async importJson(tableName:string,fileName:string) {
     let data = fs.readFileSync(fileName,'utf8');
-    let obj = JSON.parse(data);
+    await this.importJsonData(tableName,JSON.parse(data));
+  }
+
+  async importJsonData(tableName:string,obj:any) { 
     let list = obj.list;
     let schCdt = obj.schCdt;
     let dao = this.getDao(tableName);
