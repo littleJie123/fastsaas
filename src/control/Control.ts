@@ -174,8 +174,9 @@ export default class Control<Param = any, Result = any> {
       this._sendResp(resp, ret);
       this._printEndLog(new Date().getTime() - begin.getTime());
     } catch (e) {
-      this._sendError(resp, e);
       this._printErrorLog(e);
+      this._sendError(resp, e);
+      
     }
 
   }

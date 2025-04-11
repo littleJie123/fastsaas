@@ -779,14 +779,14 @@ opt:{
             var keyValue = get(data2, key2);
             var data1 = map[keyValue];
             if (data1 != null) {
-                var row = fun(data1, data2);
+                let row = fun(data1, data2);
                 if (row != null) {
                     ret.push(row);
                 }
             }
             else {
                 if (onlyTwo != null) {
-                    var row = onlyTwo(data2);
+                    let row = onlyTwo(data2);
                     if (row != null) {
                         ret.push(row);
                     }
@@ -800,7 +800,7 @@ opt:{
                 var keyValue = get(data1, key);
                 var data2 = map2[keyValue];
                 if (data2 == null) {
-                    var row = onlyOne(data1);
+                    let row = onlyOne(data1);
                     if (row != null) {
                         ret.push(row);
                     }
@@ -865,7 +865,7 @@ opt:{
         var map2 = ArrayUtil.toMapArray(list2, key2);
         var ret = [];
         for (var e in map) {
-            var data = map[e];
+            let data = map[e];
             var array = map2[e];
             if (array != null) {
                 var row = fun(data, array);
@@ -881,7 +881,7 @@ opt:{
         if (opt.onlyTwo) {
             for (var e in map2) {
                 if (map[e] == null) {
-                    var row = opt.onlyTwo(map2[e]);
+                    let row = opt.onlyTwo(map2[e]);
                     ArrayUtil.addAll(ret, row);
                 }
             }
@@ -943,11 +943,11 @@ opt:{
             var array2 = map2[e];
             var array = map[e];
             if (array != null) {
-                ArrayUtil.addAll(ret, fun(array, array2, e));
+                ArrayUtil.addAll(ret, fun(array, array2));
             }
             else {
                 if (onlyTwo)
-                    ArrayUtil.addAll(ret, onlyTwo(array2, e));
+                    ArrayUtil.addAll(ret, onlyTwo(array2));
             }
         }
         if (onlyOne != null) {
@@ -955,7 +955,7 @@ opt:{
                 var array = map[e];
                 var array2 = map2[e];
                 if (array2 == null) {
-                    ArrayUtil.addAll(ret, onlyOne(array, e));
+                    ArrayUtil.addAll(ret, onlyOne(array));
                 }
             }
         }

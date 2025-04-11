@@ -149,8 +149,8 @@ class Control {
             this._printEndLog(new Date().getTime() - begin.getTime());
         }
         catch (e) {
-            this._sendError(resp, e);
             this._printErrorLog(e);
+            this._sendError(resp, e);
         }
     }
     _sendError(resp, e) {

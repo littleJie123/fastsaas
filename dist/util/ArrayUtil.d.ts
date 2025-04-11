@@ -21,14 +21,23 @@ interface AbsJoinParam {
     fun?: Function;
     keys?: Array<string>;
 }
-interface JoinOpt {
+type OnlyFun = (obj: any) => (any | null);
+type OnlyArrayFun = (obj: any) => (any | null);
+type JoinFunction = (ojb1: any, obj2: any) => any;
+type JoinArrayFunction = (ojb: any, array: any[]) => any;
+type JoinMultiFunction = (array1: any[], array2: any[]) => any;
+/**
+ * 数组的join
+ * @param opt
+ */
+interface JoinOpt<JoinFun, OnlyOneFun, OnlyTwoFun> {
     list: Array<any>;
     list2: Array<any>;
     /**
      * 两边都有的死后处理的函数
      * function(array1,array2,e)
      */
-    fun: Function;
+    fun: JoinFun;
     /**
      * 对应的key
      */
@@ -41,12 +50,12 @@ interface JoinOpt {
      * 只有数组1有的时候处理函数
      * function(array,e)
      */
-    onlyOne?: Function;
+    onlyOne?: OnlyOneFun;
     /**
      * 只有数组2有的时候处理函数
      * function(array,e)
      */
-    onlyTwo?: Function;
+    onlyTwo?: OnlyTwoFun;
 }
 export declare class ArrayUtil {
     /**
@@ -213,7 +222,7 @@ opt:{
 
 }
 */
-    static join(opt: JoinOpt): Array<any>;
+    static join(opt: JoinOpt<JoinFunction, OnlyFun, OnlyFun>): Array<any>;
     /**
     两个list进行map操作,
     joinArray 方法和join类似，
@@ -242,7 +251,7 @@ opt:{
 
     }
     */
-    static joinArray(opt: JoinOpt): any[];
+    static joinArray(opt: JoinOpt<JoinArrayFunction, OnlyFun, OnlyArrayFun>): any[];
     /**
     两个list进行join操作,
     类似数据库中inner join
@@ -268,7 +277,7 @@ opt:{
 
     }
     */
-    static joinMany(opt: JoinOpt): any[];
+    static joinMany(opt: JoinOpt<JoinMultiFunction, OnlyArrayFun, OnlyArrayFun>): any[];
     /**
      * 根据字段取得某个值的数组 并去重
      * @param array
