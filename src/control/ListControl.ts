@@ -7,11 +7,29 @@ import Dao from './../dao/Dao';
 import Control from "./Control";
 import { JsonUtil } from '../fastsaas';
 
+export interface ListParam {
+  _first?: number;
+  pageSize?: number;
+  pageNo?: number;
+  orderBy?: string;
+  desc?: 'desc'|'asc';
+  __download?: boolean;
+  [key: string]: any;
+}
+
+export interface ListResult {
+  content?: any[];
+  totalElements?: number;
+  first?:number;
+  pageSize?:number;
+  [key: string]: any;
+}
+
 /**
  * 参数__download不为空，则转为下载 
  * 查询（不包括group by）的控制类
  */
-export default abstract class ListControl extends Control {
+export default abstract class ListControl<Param extends ListParam = ListParam  > extends Control<Param> {
   /**
    * 开关，不需要查询条件
    */
@@ -19,7 +37,7 @@ export default abstract class ListControl extends Control {
   /**
    * 开关，不需要查询数量
    */
-  protected _onlySch: boolean = false;
+  protected _needCnt: boolean = false;
 
   /**
    * 增加排序字段
@@ -27,7 +45,7 @@ export default abstract class ListControl extends Control {
           col:'sort',desc:'desc'
       }]
    */
-  protected _orderArray: {col:string,desc:string}[] = null;
+  protected _orderArray: {order:string,desc?:'desc'|'asc'}[] = null;
   /*
   指定只有_schCols 才产生的查询条件
   */
@@ -71,8 +89,9 @@ export default abstract class ListControl extends Control {
    */
   protected getDao(): Dao {
     let tableName = this.getTableName();
-    if (tableName == null)
+    if (tableName == null){
       throw new Error('必须冲载getTableName');
+    }
     let context = this.getContext();
     return context.get(tableName + 'dao');
   };
@@ -90,8 +109,12 @@ export default abstract class ListControl extends Control {
     return null;
   }
 
-  protected isOnlySch(){
-    if(this._onlySch){
+  /**
+   * 是否需要搜索数量
+   * @returns 
+   */
+  protected needSchCnt():boolean{
+    if(this._needCnt){
       return true;
     }
     return this._param._first != null;
@@ -159,21 +182,16 @@ export default abstract class ListControl extends Control {
       return new Cdt(field, '%' + val + '%', 'like')
     }
   }
+ 
   /**
-   * 初始化分页信息
+   * 返回分页大小
    */
-  protected _initPager() {
+  protected getPageSize() {
     var param = this._param
     if (param.pageSize == null) {
-      
-      param.pageSize = this.acqDefPageSize()
+      return this.acqDefPageSize()
     }
-  }
-  /**
-   * 是否第一页为0
-   */
-  protected firstPageIsZero(): boolean {
-    return false;
+    return param.pageSize
   }
   /**
    * 设置分页
@@ -181,28 +199,24 @@ export default abstract class ListControl extends Control {
    */
   protected _setPage(query: Query):void {
     if (!this.isDownload()) {
-      var param = this._param
-      if (param.pageSize != null){
-        query.size(param.pageSize)
-      }
-      if (param._first != null) { 
-        query.first(param._first)
-      } else {
-
-        if (!this.firstPageIsZero()) {
-          if (param.pageNo == null) {
-            param.pageNo = 1
-          }
-          query.setPage(param.pageNo);
-        } else {
-          if (param.pageNo == null) {
-            param.pageNo = 0
-          }
-          query.setPage(param.pageNo + 1);
-        }
-      }
+      
+      query.size(this.getPageSize())
+      query.first(this.getFirst())
     }
 
+  }
+
+  protected getFirst() {
+    var param = this._param
+    if(param._first != null){
+      return 0;
+    }
+    if(param.pageNo != null){
+      let pageNo = parseInt(param.pageNo as any);
+
+      return (pageNo-1)*this.getPageSize()
+    }
+    return 0;
   }
 
   /**
@@ -210,8 +224,10 @@ export default abstract class ListControl extends Control {
   */
   protected async buildQuery() {
     var query = new Query()
-    var param = this._param
-    if (param == null) param = {}
+    let param:ListParam = this._param
+    if (param == null) {
+      param = {}
+    }
     this._setPage(query)
 
     var col = this.acqCol()
@@ -249,8 +265,8 @@ export default abstract class ListControl extends Control {
     if (this._orderArray) {
       for (var i = 0; i < this._orderArray.length; i++) {
         var item = this._orderArray[i]
-        if (item.col != null) {
-          query.addOrder(item.col, item.desc)
+        if (item.order != null) {
+          query.addOrder(item.order, item.desc)
         } else {
           query.addOrder(item)
         }
@@ -339,7 +355,7 @@ export default abstract class ListControl extends Control {
     }
     return await this.getDao().findCnt(query)
   }
-  protected async schCnt(map, query: Query) {
+  protected async schCnt(map:ListResult, query: Query) {
     map.totalElements = await this.findCnt(query)
   }
 
@@ -368,19 +384,21 @@ export default abstract class ListControl extends Control {
     if (this.isDownload()) {
       return await this.download()
     } else {
-      this._initPager()
+
       var query = await this.buildQuery()
 
-      let map: any = {}
+      let map: ListResult = {}
       if (query != null) {
-        map.list = await this.find(query)
+        map.content = this.onlyCols( await this.find(query))
       } else {
-        map.list = []
+        map.content = []
       }
-      if (!this.isOnlySch()) {
+      if (this.needSchCnt()) {
         await this.schCnt(map, query)
       } 
-      this._calPager(map)
+      map.first = this.getFirst()
+      map.pageSize = this.getPageSize()
+ 
       return map
     }
 
@@ -401,18 +419,7 @@ export default abstract class ListControl extends Control {
   protected getDownloadFileName() {
     return 'export.csv'
   }
-  /**
-   * 计算分页信息
-   * @param map 
-   */
-  protected _calPager(map) {
-    if ( map.list == null){
-      return;
-    }
-    map.content = this.onlyCols(map.list)
-    
-    delete map.list;
-  }
+   
 
   protected getOnlyCols():string[]{
     return null;

@@ -1,14 +1,12 @@
 import { ArrayUtil } from './../util/ArrayUtil';
 import CsvUtil from './../util/CsvUtil';
-import ListControl from './ListControl'
+import ListControl, { ListParam, ListResult } from './ListControl'
 import Query from './../dao/query/Query';
-import BaseCdt from './../dao/query/cdt/BaseCdt';
-import Cdt from './../dao/query/cdt/imp/Cdt';
 
 /**
  * 做group by的control
  */
-export default abstract class GroupControl extends ListControl {
+export default abstract class GroupControl<Param extends ListParam = ListParam> extends ListControl<Param> {
   /**
    * 内存查询的列
    */
@@ -27,15 +25,7 @@ export default abstract class GroupControl extends ListControl {
   protected async _processPageList(list: Array<any>): Promise<Array<any>> {
     return list;
   }
-  /**
-   * 默认分页数
-   */
-  protected acqDefPageSize() {
-    if(this._needPager()){
-      return 1500;
-    }
-    return 0
-  }
+  
   /**
    * 是否设置数据库排序
    * @returns 
@@ -70,7 +60,7 @@ export default abstract class GroupControl extends ListControl {
         var orders = []
         for (var i = 0; i < this._orderArray.length; i++) {
           var item = this._orderArray[i]
-          orders.push({ order: item.col, desc: item.desc })
+          orders.push({ order: item.order, desc: item.desc })
 
         }
         ArrayUtil.order(list, orders);
@@ -140,7 +130,7 @@ export default abstract class GroupControl extends ListControl {
     return array;
 
   }
-  protected async doExecute() {
+  protected async doExecute():Promise<any> {
     if (this.isDownload()) {
 
       let query = await this.buildQuery()
@@ -158,33 +148,35 @@ export default abstract class GroupControl extends ListControl {
 
 
     } else {
-      this._initPager()
       let query = await this.buildQuery()
-      let map: any = {}
+      let map: ListResult = {}
 
-      map.list = await this.find(query)
+      map.content = await this.find(query)
 
 
-      let processedList = await this._processList(map.list)
+      let processedList = await this._processList(map.content)
       if (processedList != null) {
-        map.list = processedList
+        map.content = processedList
       }
 
 
-      map.list = await this._filterByArrayCdt(map.list);
-      if (!this._onlySch){
-        this._pageOrder(map.list)
+      map.content = await this._filterByArrayCdt(map.content);
+      if (!this._needCnt){
+        this._pageOrder(map.content)
         await this.schCnt(map, query)
 
-        this.slice(map)
+        
       }
       if (this._processPageList) {
-        let processedList = await this._processPageList(map.list)
+        let processedList = await this._processPageList(map.content)
         if (processedList != null) {
-          map.list = processedList
+          map.content = processedList
         }
       }
-      this._calPager(map)
+      this.slice(map)
+      map.pageSize = this.getPageSize()
+      map.first = this.getFirst()
+ 
       return map
     }
   }
@@ -194,7 +186,7 @@ export default abstract class GroupControl extends ListControl {
    * @param query 
    */
   protected async schCnt(map, query) {
-    if(!this.isOnlySch()){
+    if(this.needSchCnt()){
       map.totalElements = map.list.length
     }
   }
@@ -202,41 +194,12 @@ export default abstract class GroupControl extends ListControl {
    * 内存中分页
    * @param map 
    */
-  slice(map) {
+  slice(map:ListResult) {
     if(!this._needPager()){
-      var pager = this.acqPager()
-      if (pager != null) {
-        map.list = map.list.slice(pager.first, pager.last)
-      }
+      map.content = map.content.slice(this.getFirst(),this.getFirst()+this.getPageSize())
     }
   }
-  acqPager() {
-
-    var param = this._param
-    if (!param.pageSize) return null
-    let pageNo: number = 1;
-    if (this.firstPageIsZero()) {
-      pageNo = 0;
-    }
-    var len = parseInt(param.pageSize);
-    var first;
-    if (param._first != null) {
-      first = param._first
-    } else {
-      if (param.pageNo != null) {
-        pageNo = parseInt(param.pageNo)
-      }
-      if (!this.firstPageIsZero())
-        first = (pageNo - 1) * len
-      else
-        first = pageNo * len
-    }
-    var last = first + len
-    return {
-      first: first,
-      last: last
-    }
-  }
+ 
 
   /**
    * setPage 注销掉，因为group 必须查询所有数据才知道数量

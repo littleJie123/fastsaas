@@ -4,11 +4,27 @@ import Query from './../dao/query/Query';
 import BaseCdt from './../dao/query/cdt/BaseCdt';
 import Dao from './../dao/Dao';
 import Control from "./Control";
+export interface ListParam {
+    _first?: number;
+    pageSize?: number;
+    pageNo?: number;
+    orderBy?: string;
+    desc?: 'desc' | 'asc';
+    __download?: boolean;
+    [key: string]: any;
+}
+export interface ListResult {
+    content?: any[];
+    totalElements?: number;
+    first?: number;
+    pageSize?: number;
+    [key: string]: any;
+}
 /**
  * 参数__download不为空，则转为下载
  * 查询（不包括group by）的控制类
  */
-export default abstract class ListControl extends Control {
+export default abstract class ListControl<Param extends ListParam = ListParam> extends Control<Param> {
     /**
      * 开关，不需要查询条件
      */
@@ -16,7 +32,7 @@ export default abstract class ListControl extends Control {
     /**
      * 开关，不需要查询数量
      */
-    protected _onlySch: boolean;
+    protected _needCnt: boolean;
     /**
      * 增加排序字段
      *  [{
@@ -24,8 +40,8 @@ export default abstract class ListControl extends Control {
         }]
      */
     protected _orderArray: {
-        col: string;
-        desc: string;
+        order: string;
+        desc?: 'desc' | 'asc';
     }[];
     protected _schCols: any;
     protected _noSchCols: any;
@@ -67,7 +83,11 @@ export default abstract class ListControl extends Control {
      返回查询字段
     */
     protected acqCol(): Array<string>;
-    protected isOnlySch(): boolean;
+    /**
+     * 是否需要搜索数量
+     * @returns
+     */
+    protected needSchCnt(): boolean;
     /**
      * 是否需要排序
      */
@@ -83,18 +103,15 @@ export default abstract class ListControl extends Control {
      */
     protected like(field: any, val: any, onlyLeft?: boolean): Cdt;
     /**
-     * 初始化分页信息
+     * 返回分页大小
      */
-    protected _initPager(): void;
-    /**
-     * 是否第一页为0
-     */
-    protected firstPageIsZero(): boolean;
+    protected getPageSize(): number;
     /**
      * 设置分页
      * @param query
      */
     protected _setPage(query: Query): void;
+    protected getFirst(): number;
     /**
     构建查询
     */
@@ -131,7 +148,7 @@ export default abstract class ListControl extends Control {
     protected findByDao(query: Query): Promise<any[]>;
     protected find(query: any): Promise<any[]>;
     protected findCnt(query: Query): Promise<number>;
-    protected schCnt(map: any, query: Query): Promise<void>;
+    protected schCnt(map: ListResult, query: Query): Promise<void>;
     /**
      * 判断当前请求是否下载
      */
@@ -142,11 +159,6 @@ export default abstract class ListControl extends Control {
     protected doExecute(): Promise<any>;
     protected _sendResp(resp: any, ret: any): void;
     protected getDownloadFileName(): string;
-    /**
-     * 计算分页信息
-     * @param map
-     */
-    protected _calPager(map: any): void;
     protected getOnlyCols(): string[];
     protected onlyCols(list: any[]): any[];
 }

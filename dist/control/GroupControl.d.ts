@@ -1,9 +1,9 @@
-import ListControl from './ListControl';
+import ListControl, { ListParam, ListResult } from './ListControl';
 import Query from './../dao/query/Query';
 /**
  * 做group by的control
  */
-export default abstract class GroupControl extends ListControl {
+export default abstract class GroupControl<Param extends ListParam = ListParam> extends ListControl<Param> {
     /**
      * 内存查询的列
      */
@@ -18,10 +18,6 @@ export default abstract class GroupControl extends ListControl {
      * @param list
      */
     protected _processPageList(list: Array<any>): Promise<Array<any>>;
-    /**
-     * 默认分页数
-     */
-    protected acqDefPageSize(): 0 | 1500;
     /**
      * 是否设置数据库排序
      * @returns
@@ -61,11 +57,7 @@ export default abstract class GroupControl extends ListControl {
      * 内存中分页
      * @param map
      */
-    slice(map: any): void;
-    acqPager(): {
-        first: any;
-        last: any;
-    };
+    slice(map: ListResult): void;
     /**
      * setPage 注销掉，因为group 必须查询所有数据才知道数量
      * @param query

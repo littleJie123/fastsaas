@@ -9,25 +9,23 @@ const ListControl_1 = __importDefault(require("./ListControl"));
  */
 class InitListControl extends ListControl_1.default {
     async doExecute() {
-        this._initPager();
         var query = await this.buildQuery();
         let map = {};
-        map.list = await this.find(query);
-        if (await this._needInit(map.list)) {
+        map.content = await this.find(query);
+        if (await this._needInit(map.content)) {
             let initRet = await this.processInit();
             //如果运行了初始化
             if (initRet) {
                 map.isInit = initRet;
-                map.list = await this.find(query);
+                map.content = await this.find(query);
             }
         }
-        if (!this._onlySch) {
+        if (!this._needCnt) {
             await this.schCnt(map, query);
         }
         else {
             return map;
         }
-        this._calPager(map);
         return map;
     }
     /**

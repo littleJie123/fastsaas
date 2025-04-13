@@ -23,7 +23,7 @@ class ListControl extends Control_1.default {
         /**
          * 开关，不需要查询数量
          */
-        this._onlySch = false;
+        this._needCnt = false;
         /**
          * 增加排序字段
          *  [{
@@ -72,8 +72,9 @@ class ListControl extends Control_1.default {
      */
     getDao() {
         let tableName = this.getTableName();
-        if (tableName == null)
+        if (tableName == null) {
             throw new Error('必须冲载getTableName');
+        }
         let context = this.getContext();
         return context.get(tableName + 'dao');
     }
@@ -91,8 +92,12 @@ class ListControl extends Control_1.default {
     acqCol() {
         return null;
     }
-    isOnlySch() {
-        if (this._onlySch) {
+    /**
+     * 是否需要搜索数量
+     * @returns
+     */
+    needSchCnt() {
+        if (this._needCnt) {
             return true;
         }
         return this._param._first != null;
@@ -155,19 +160,14 @@ class ListControl extends Control_1.default {
         }
     }
     /**
-     * 初始化分页信息
+     * 返回分页大小
      */
-    _initPager() {
+    getPageSize() {
         var param = this._param;
         if (param.pageSize == null) {
-            param.pageSize = this.acqDefPageSize();
+            return this.acqDefPageSize();
         }
-    }
-    /**
-     * 是否第一页为0
-     */
-    firstPageIsZero() {
-        return false;
+        return param.pageSize;
     }
     /**
      * 设置分页
@@ -175,37 +175,30 @@ class ListControl extends Control_1.default {
      */
     _setPage(query) {
         if (!this.isDownload()) {
-            var param = this._param;
-            if (param.pageSize != null) {
-                query.size(param.pageSize);
-            }
-            if (param._first != null) {
-                query.first(param._first);
-            }
-            else {
-                if (!this.firstPageIsZero()) {
-                    if (param.pageNo == null) {
-                        param.pageNo = 1;
-                    }
-                    query.setPage(param.pageNo);
-                }
-                else {
-                    if (param.pageNo == null) {
-                        param.pageNo = 0;
-                    }
-                    query.setPage(param.pageNo + 1);
-                }
-            }
+            query.size(this.getPageSize());
+            query.first(this.getFirst());
         }
+    }
+    getFirst() {
+        var param = this._param;
+        if (param._first != null) {
+            return 0;
+        }
+        if (param.pageNo != null) {
+            let pageNo = parseInt(param.pageNo);
+            return (pageNo - 1) * this.getPageSize();
+        }
+        return 0;
     }
     /**
     构建查询
     */
     async buildQuery() {
         var query = new Query_1.default();
-        var param = this._param;
-        if (param == null)
+        let param = this._param;
+        if (param == null) {
             param = {};
+        }
         this._setPage(query);
         var col = this.acqCol();
         if (col) {
@@ -239,8 +232,8 @@ class ListControl extends Control_1.default {
         if (this._orderArray) {
             for (var i = 0; i < this._orderArray.length; i++) {
                 var item = this._orderArray[i];
-                if (item.col != null) {
-                    query.addOrder(item.col, item.desc);
+                if (item.order != null) {
+                    query.addOrder(item.order, item.desc);
                 }
                 else {
                     query.addOrder(item);
@@ -356,19 +349,19 @@ class ListControl extends Control_1.default {
             return await this.download();
         }
         else {
-            this._initPager();
             var query = await this.buildQuery();
             let map = {};
             if (query != null) {
-                map.list = await this.find(query);
+                map.content = this.onlyCols(await this.find(query));
             }
             else {
-                map.list = [];
+                map.content = [];
             }
-            if (!this.isOnlySch()) {
+            if (this.needSchCnt()) {
                 await this.schCnt(map, query);
             }
-            this._calPager(map);
+            map.first = this.getFirst();
+            map.pageSize = this.getPageSize();
             return map;
         }
     }
@@ -387,17 +380,6 @@ class ListControl extends Control_1.default {
     }
     getDownloadFileName() {
         return 'export.csv';
-    }
-    /**
-     * 计算分页信息
-     * @param map
-     */
-    _calPager(map) {
-        if (map.list == null) {
-            return;
-        }
-        map.content = this.onlyCols(map.list);
-        delete map.list;
     }
     getOnlyCols() {
         return null;

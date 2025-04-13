@@ -26,15 +26,6 @@ class GroupControl extends ListControl_1.default {
         return list;
     }
     /**
-     * 默认分页数
-     */
-    acqDefPageSize() {
-        if (this._needPager()) {
-            return 1500;
-        }
-        return 0;
-    }
-    /**
      * 是否设置数据库排序
      * @returns
      */
@@ -67,7 +58,7 @@ class GroupControl extends ListControl_1.default {
                 var orders = [];
                 for (var i = 0; i < this._orderArray.length; i++) {
                     var item = this._orderArray[i];
-                    orders.push({ order: item.col, desc: item.desc });
+                    orders.push({ order: item.order, desc: item.desc });
                 }
                 ArrayUtil_1.ArrayUtil.order(list, orders);
             }
@@ -145,27 +136,27 @@ class GroupControl extends ListControl_1.default {
             return CsvUtil_1.default.toBuffer(list, this.getDownloadCols());
         }
         else {
-            this._initPager();
             let query = await this.buildQuery();
             let map = {};
-            map.list = await this.find(query);
-            let processedList = await this._processList(map.list);
+            map.content = await this.find(query);
+            let processedList = await this._processList(map.content);
             if (processedList != null) {
-                map.list = processedList;
+                map.content = processedList;
             }
-            map.list = await this._filterByArrayCdt(map.list);
-            if (!this._onlySch) {
-                this._pageOrder(map.list);
+            map.content = await this._filterByArrayCdt(map.content);
+            if (!this._needCnt) {
+                this._pageOrder(map.content);
                 await this.schCnt(map, query);
-                this.slice(map);
             }
             if (this._processPageList) {
-                let processedList = await this._processPageList(map.list);
+                let processedList = await this._processPageList(map.content);
                 if (processedList != null) {
-                    map.list = processedList;
+                    map.content = processedList;
                 }
             }
-            this._calPager(map);
+            this.slice(map);
+            map.pageSize = this.getPageSize();
+            map.first = this.getFirst();
             return map;
         }
     }
@@ -175,7 +166,7 @@ class GroupControl extends ListControl_1.default {
      * @param query
      */
     async schCnt(map, query) {
-        if (!this.isOnlySch()) {
+        if (this.needSchCnt()) {
             map.totalElements = map.list.length;
         }
     }
@@ -185,39 +176,8 @@ class GroupControl extends ListControl_1.default {
      */
     slice(map) {
         if (!this._needPager()) {
-            var pager = this.acqPager();
-            if (pager != null) {
-                map.list = map.list.slice(pager.first, pager.last);
-            }
+            map.content = map.content.slice(this.getFirst(), this.getFirst() + this.getPageSize());
         }
-    }
-    acqPager() {
-        var param = this._param;
-        if (!param.pageSize)
-            return null;
-        let pageNo = 1;
-        if (this.firstPageIsZero()) {
-            pageNo = 0;
-        }
-        var len = parseInt(param.pageSize);
-        var first;
-        if (param._first != null) {
-            first = param._first;
-        }
-        else {
-            if (param.pageNo != null) {
-                pageNo = parseInt(param.pageNo);
-            }
-            if (!this.firstPageIsZero())
-                first = (pageNo - 1) * len;
-            else
-                first = pageNo * len;
-        }
-        var last = first + len;
-        return {
-            first: first,
-            last: last
-        };
     }
     /**
      * setPage 注销掉，因为group 必须查询所有数据才知道数量

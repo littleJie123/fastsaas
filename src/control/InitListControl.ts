@@ -1,6 +1,9 @@
+interface Result extends ListResult{
+  isInit?: boolean;
+}
 
 
-import ListControl from './ListControl'
+import ListControl, { ListResult } from './ListControl'
 /**
  * 还是一个查询，查出来空会运行processInit 方法
  */
@@ -11,27 +14,26 @@ export default abstract class InitListControl extends ListControl {
   abstract processInit(): Promise<boolean>;
 
   protected async doExecute(): Promise<any> {
-    this._initPager()
+
 
     var query = await this.buildQuery()
 
-    let map: any = {}
-    map.list = await this.find(query)
-    if (await this._needInit(map.list)) {
+    let map: Result = {}
+    map.content = await this.find(query)
+    if (await this._needInit(map.content)) {
       let initRet = await this.processInit();
       //如果运行了初始化
 
       if (initRet) {
         map.isInit = initRet;
-        map.list = await this.find(query);
+        map.content = await this.find(query);
       }
     }
-    if (!this._onlySch) {
+    if (!this._needCnt) {
       await this.schCnt(map, query)
     } else {
       return map;
     }
-    this._calPager(map)
     return map
 
   }
