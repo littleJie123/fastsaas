@@ -114,10 +114,9 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
    * @returns 
    */
   protected needSchCnt():boolean{
-    if(this._needCnt){
-      return true;
-    }
-    return this._param._first != null;
+    
+    return this._needCnt ;
+     
   }
   /**
    * 是否需要排序
@@ -191,7 +190,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
     if (param.pageSize == null) {
       return this.acqDefPageSize()
     }
-    return param.pageSize
+    return parseInt(param.pageSize as any)
   }
   /**
    * 设置分页
@@ -209,7 +208,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
   protected getFirst() {
     var param = this._param
     if(param._first != null){
-      return 0;
+      return parseInt(param._first as any);
     }
     if(param.pageNo != null){
       let pageNo = parseInt(param.pageNo as any);

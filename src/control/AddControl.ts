@@ -4,5 +4,6 @@ export default abstract class extends BaseOpControl {
   async doExecute() {
     return await this.getDao().add(await this.getData())
   }
+  
 }
 

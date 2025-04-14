@@ -1,4 +1,4 @@
-import { Context, Dao, Query } from "../fastsaas";
+import { Context, Dao, Query, StrUtil } from "../fastsaas";
 
 interface ProcessResult {
   stop?:boolean
@@ -7,9 +7,22 @@ interface Opt<Pojo = any>{
   context?:Context;
   pageSize?:number;
   tableName?:string;
+  /**
+   * 排序字段，默认主键
+   */
   col?:string
+  /**
+   * 查询条件
+   */
   query?:any;
+  /**
+   * 查询的字段
+   */
   colArray?:string[]
+  /**
+   * 处理函数
+   * @param list 
+   */
   process?(list:Pojo[]):Promise<ProcessResult|void>;
 }
 /**
@@ -90,7 +103,7 @@ export default class BatchRunner<Pojo = any>{
   protected getCol():string{
     let col = this.opt.col;
     if(col == null){
-      col = this.opt.tableName + 'Id'
+      col = StrUtil.firstLower( StrUtil.changeUnderStringToCamel( this.opt.tableName) + 'Id')
     }
     return col;
   }

@@ -97,10 +97,7 @@ class ListControl extends Control_1.default {
      * @returns
      */
     needSchCnt() {
-        if (this._needCnt) {
-            return true;
-        }
-        return this._param._first != null;
+        return this._needCnt;
     }
     /**
      * 是否需要排序
@@ -167,7 +164,7 @@ class ListControl extends Control_1.default {
         if (param.pageSize == null) {
             return this.acqDefPageSize();
         }
-        return param.pageSize;
+        return parseInt(param.pageSize);
     }
     /**
      * 设置分页
@@ -182,7 +179,7 @@ class ListControl extends Control_1.default {
     getFirst() {
         var param = this._param;
         if (param._first != null) {
-            return 0;
+            return parseInt(param._first);
         }
         if (param.pageNo != null) {
             let pageNo = parseInt(param.pageNo);

@@ -69,7 +69,7 @@ class BatchRunner {
     getCol() {
         let col = this.opt.col;
         if (col == null) {
-            col = this.opt.tableName + 'Id';
+            col = fastsaas_1.StrUtil.firstLower(fastsaas_1.StrUtil.changeUnderStringToCamel(this.opt.tableName) + 'Id');
         }
         return col;
     }
