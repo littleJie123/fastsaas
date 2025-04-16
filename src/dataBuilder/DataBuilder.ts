@@ -23,7 +23,14 @@ export default abstract class DataBuilder<Param = any,Result=any> implements IDa
   protected runner:any;
 
   setRunner(runner:any){
-    this.runner = runner;
+    if(this.runner == null){
+      this.runner = runner;
+    }else{
+      for(let key in runner){
+        this.runner[key] = runner[key];
+      }
+    }
+
   }
   protected abstract doRun(param:Param,result:Result):Promise<Result>;
 
