@@ -54,21 +54,24 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
      */
     protected _opMap: any;
     /**
-     * 默认查询类型，可以是Array,结构体{store_id：330108}或者BaseCdt的实例
-     *
-     */
-    protected _schCdt: any;
-    /**
      * 查询字段转化map
-     * </br>
-     * <pre>
      * {
      *  begin:'gmt_crete',
      * end:'gmt_create'
      * }
-     * </pre>
      */
     protected _colMap: any;
+    /**
+     * 查询值转化的map
+     */
+    protected _valueMap: {
+        [key: string]: (val: any) => any;
+    };
+    /**
+     * 默认查询类型，可以是Array,结构体{store_id：330108}或者BaseCdt的实例
+     *
+     */
+    protected _schCdt: any;
     protected getTableName(): string;
     /**
      * 返回查询负责的dao
@@ -96,6 +99,8 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
      根据params的列和值构建某个条件
     */
     protected buildCdt(e: string, val: any): Promise<BaseCdt>;
+    protected doBuildCdt(e: string, val: any): BaseCdt;
+    protected getSchVal(e: string, val: any): any;
     /**
      * 产生一个like查询语句
      * @param field
@@ -144,7 +149,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     /**
     返回关联表
     */
-    protected getOp(name: any): Promise<any>;
+    protected getOp(name: any): any;
     protected findByDao(query: Query): Promise<any[]>;
     protected find(query: any): Promise<any[]>;
     protected findCnt(query: Query): Promise<number>;

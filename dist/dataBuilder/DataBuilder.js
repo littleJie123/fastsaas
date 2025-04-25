@@ -2,7 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class DataBuilder {
     setRunner(runner) {
-        this.runner = runner;
+        if (this.runner == null) {
+            this.runner = runner;
+        }
+        else {
+            for (let key in runner) {
+                this.runner[key] = runner[key];
+            }
+        }
     }
     setContext(context) {
         this.context = context;

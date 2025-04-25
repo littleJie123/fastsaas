@@ -48,21 +48,22 @@ class ListControl extends Control_1.default {
          */
         this._opMap = null;
         /**
-         * 默认查询类型，可以是Array,结构体{store_id：330108}或者BaseCdt的实例
-         *
-         */
-        this._schCdt = null;
-        /**
          * 查询字段转化map
-         * </br>
-         * <pre>
          * {
          *  begin:'gmt_crete',
          * end:'gmt_create'
          * }
-         * </pre>
          */
         this._colMap = null;
+        /**
+         * 查询值转化的map
+         */
+        this._valueMap = null;
+        /**
+         * 默认查询类型，可以是Array,结构体{store_id：330108}或者BaseCdt的实例
+         *
+         */
+        this._schCdt = null;
     }
     getTableName() {
         return null;
@@ -139,7 +140,23 @@ class ListControl extends Control_1.default {
         if (e == 'desc' || e == 'orderBy' || e == 'pageNo' || e == 'pageSize') {
             return null;
         }
-        return new Cdt_1.default(await this.getCol(e), await val, await this.getOp(e));
+        return this.doBuildCdt(e, val);
+    }
+    doBuildCdt(e, val) {
+        let newVal = this.getSchVal(e, val);
+        if (newVal == null) {
+            return null;
+        }
+        return new Cdt_1.default(this.getCol(e), newVal, this.getOp(e));
+    }
+    getSchVal(e, val) {
+        if (this._valueMap != null) {
+            let func = this._valueMap[e];
+            if (func) {
+                return func(val);
+            }
+        }
+        return val;
     }
     /**
      * 产生一个like查询语句
@@ -295,7 +312,7 @@ class ListControl extends Control_1.default {
     /**
     返回关联表
     */
-    async getOp(name) {
+    getOp(name) {
         if (this._opMap == null)
             return null;
         return this._opMap[name];

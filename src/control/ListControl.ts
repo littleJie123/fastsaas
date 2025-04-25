@@ -62,24 +62,25 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
    * }
    */
   protected _opMap: any = null;
-
+  /**
+   * 查询字段转化map
+   * {
+   *  begin:'gmt_crete',
+   * end:'gmt_create'
+   * } 
+   */
+  protected _colMap: any = null;
+  /**
+   * 查询值转化的map
+   */
+  protected _valueMap:{[key:string]:(val:any)=>any} = null;
   /**
    * 默认查询类型，可以是Array,结构体{store_id：330108}或者BaseCdt的实例
    * 
    */
   protected _schCdt: any = null;
 
-  /**
-   * 查询字段转化map
-   * </br>
-   * <pre>
-   * {
-   *  begin:'gmt_crete',
-   * end:'gmt_create'
-   * }
-   * </pre>
-   */
-  protected _colMap: any = null;
+  
 
   protected getTableName(): string {
     return null
@@ -162,10 +163,28 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
     if (e == 'desc' || e == 'orderBy' || e == 'pageNo' || e == 'pageSize') {
       return null;
     }
+    return this.doBuildCdt(e, val)
+  }
+
+  protected doBuildCdt(e: string, val: any):BaseCdt {
+    let newVal = this.getSchVal(e,val);
+    if (newVal == null) {
+      return null
+    }
     return new Cdt(
-      await this.getCol(e),
-      await val,
-      await this.getOp(e))
+      this.getCol(e),
+      newVal,
+      this.getOp(e))
+  }
+
+  protected getSchVal(e: string, val: any): any {
+    if (this._valueMap != null) {
+      let func = this._valueMap[e]
+      if (func) {
+        return func(val)
+      }
+    }
+    return val
   }
 
   /**
@@ -326,7 +345,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
   返回关联表
   */
 
-  protected async getOp(name) {
+  protected getOp(name) {
     if (this._opMap == null) return null
     return this._opMap[name]
   }

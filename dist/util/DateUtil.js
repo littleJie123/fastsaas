@@ -10,20 +10,8 @@ exports.DateUtil = void 0;
  * @LastEditTime : 2020-02-11 14:17:52
  */
 function _changeMonth(date, changeCnt) {
-    date = DateUtil.parse(date);
-    var cnt = date.getMonth();
-    cnt += changeCnt;
-    var month = cnt % 12;
-    var year = Math.floor(cnt / 12);
-    if (month < 0) {
-        month += 12;
-        year -= 1;
-    }
-    ;
-    var ret = new Date();
-    ret.setTime(date.getTime());
-    ret.setFullYear(date.getFullYear() + year);
-    ret.setMonth(month);
+    let ret = new Date(date.getTime());
+    ret.setMonth(date.getMonth() + changeCnt);
     return ret;
 }
 class DateUtil {
