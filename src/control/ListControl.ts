@@ -295,7 +295,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
    * 返回默认的查询条件
    */
   protected acqDefPageSize() {
-    return 1500
+    return 800
   }
 
   /**
