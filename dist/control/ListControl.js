@@ -259,7 +259,7 @@ class ListControl extends Control_1.default {
      * 返回默认的查询条件
      */
     acqDefPageSize() {
-        return 1500;
+        return 800;
     }
     /**
      * 处理this._schCdt

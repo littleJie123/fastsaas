@@ -306,7 +306,6 @@ export class ArrayUtil {
 				}
 			}
 		}
-		console.log('--------------------------');
 		array.sort(sort)
 		return array
 	}
@@ -456,6 +455,11 @@ opt:{
 		}
 		return ret
 	}
+	/**
+	 * 去除重复
+	 * @param array 
+	 * @returns 
+	 */
 	static distinct(array: Array<any>): Array<any> {
 		if (array == null || array.length == 0) return array
 		var map = {};

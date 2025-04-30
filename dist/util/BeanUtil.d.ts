@@ -81,4 +81,10 @@ export declare class BeanUtil {
      * @param cols
      */
     static onlyCols(obj: any, cols: string[]): any;
+    /**
+     * 设置默认值
+     * @param obj
+     * @param def
+     */
+    static setDefault<Opt = any>(obj: Opt, def: any): Opt;
 }

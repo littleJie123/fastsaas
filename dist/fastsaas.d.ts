@@ -190,6 +190,7 @@ export { default as Hat } from './hat/imp/Hat';
 export { default as PojoHat } from './hat/imp/PojoHat';
 export { default as SearcherHat } from './hat/imp/SearcherHat';
 export { default as MapNameHat } from './hat/imp/MapNameHat';
+export { default as BaseHatOpt } from './hat/BaseHatOpt';
 export { default as BaseHttpEntry } from './http/BaseHttpEntry';
 export { default as BaseBodyParser } from './http/bodyParser/BaseBodyParser';
 export { default as JsonBodyParser } from './http/bodyParser/imp/JsonBodyParser';

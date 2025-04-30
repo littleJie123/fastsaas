@@ -128,6 +128,11 @@ opt:{
     static andByKey(array1: Array<any>, array2: Array<any>, key1?: any, key2?: any): any[];
     static inArray(array: Array<any>, obj: any): boolean;
     static and(array1: any, array2: any): Array<any>;
+    /**
+     * 去除重复
+     * @param array
+     * @returns
+     */
     static distinct(array: Array<any>): Array<any>;
     /**
 建议使用

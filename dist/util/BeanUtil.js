@@ -457,5 +457,19 @@ class BeanUtil {
         }
         return obj;
     }
+    /**
+     * 设置默认值
+     * @param obj
+     * @param def
+     */
+    static setDefault(obj, def) {
+        obj = { ...obj };
+        for (let e in def) {
+            if (obj[e] == null) {
+                obj[e] = def[e];
+            }
+        }
+        return obj;
+    }
 }
 exports.BeanUtil = BeanUtil;
