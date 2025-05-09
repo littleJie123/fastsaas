@@ -692,7 +692,8 @@ class Dao {
         let self = this;
         let idCol = this._opt.acqPojoFirstId();
         return async function (array) {
-            await self.updateArray(ArrayUtil_1.ArrayUtil.onlyKeys(array, idCol), { is_del: 1 });
+            array = array.filter(row => row.isDel != 1);
+            await self.updateArray(ArrayUtil_1.ArrayUtil.onlyKeys(array, idCol), { isDel: 1 });
         };
     }
     async processInTimes(opt) {

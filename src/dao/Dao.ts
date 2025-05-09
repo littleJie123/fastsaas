@@ -753,10 +753,11 @@ export default abstract class Dao<Pojo = any> {
   buildLogicDelArrayFun(){
     let self = this;
     let idCol = this._opt.acqPojoFirstId();
-    return async function(array){
+    return async function(array:any[]){
+      array = array.filter(row=>row.isDel!=1);
       await self.updateArray(
         ArrayUtil.onlyKeys(array,idCol),
-        {is_del:1}
+        {isDel:1}
       )
     }
   }
