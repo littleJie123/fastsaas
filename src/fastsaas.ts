@@ -145,7 +145,7 @@ export { default as ValSql } from './dao/sql/ValSql';
 
 export { default as SqlUtil } from './dao/sqlUtil/SqlUtil';
 
-
+export { default as Share} from './decorator/Share';
 export { default as Column } from './decorator/Column';
 export { default as ContextId } from './decorator/ContextId';
 export { default as LogicDel } from './decorator/LogicDel';
@@ -246,6 +246,7 @@ export { default as JsonToUrl } from './inf/imp/JsonToUrl';
 export { default as StrToJson } from './inf/imp/StrToJson';
 export { default as IParser } from './inf/IParser';
 export { default as IProcessor } from './inf/IProcessor';
+export { default as IColChanger} from './inf/IColChanger';
 
 
 export { default as ArrayJsonKey } from './json/imp/ArrayJsonKey';
