@@ -9,8 +9,8 @@ export default function (cols:IColChanger[]) {
 
   return function classDecorator<T extends { new(...args: any[]): {} }>(constructor: T) {
     return class extends constructor {
-      protected async doExecute(req?: Request, resp?: Response): Promise<any> {
-        let superDoExecute = super['doExecute'];
+      protected async _parseRequestParam(req?: Request, resp?: Response): Promise<any> {
+        let superDoExecute = super['_parseRequestParam'];
         let param = this['_param'];
         if(param._shareData != null){
           for(let col of cols){

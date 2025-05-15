@@ -1,10 +1,10 @@
 import ConfigFac from './../config/ConfigFac';
-import {BeanUtil} from './../util/BeanUtil';
+import { BeanUtil } from './../util/BeanUtil';
 import BaseHttpEntry from './../http/BaseHttpEntry';
 import HttpEntryFac from './../http/HttpEntryFac';
 import TimezoneServer from './../server/TimezoneServer';
 import Bean from './../context/decorator/Bean';
-import {DateUtil} from './../util/DateUtil';
+import { DateUtil } from './../util/DateUtil';
 import Control from './Control'
 import { Request, Response } from 'express'
 import findIndex from 'lodash.findindex'
@@ -14,183 +14,183 @@ import RedisServer from '../redis/RedisServer'
 /**
  * 做http 代理
  */
-export default abstract class HttpProxyControl extends Control{
-    @Bean()
-    private timezoneServer:TimezoneServer;
-    abstract  getKey():string;
-    protected async _parseParam(param){
-        return param;
-    }
-    /**
-     * 返回黑名单
-     */
-    protected getBlackList(){
-        return null;
-    }
+export default abstract class HttpProxyControl extends Control {
+  @Bean()
+  private timezoneServer: TimezoneServer;
+  abstract getKey(): string;
+  private async _parseParam(param) {
+    return param;
+  }
+  /**
+   * 返回黑名单
+   */
+  protected getBlackList() {
+    return null;
+  }
 
-    protected getCheckReqId() {
-        return null;
-    }
+  protected getCheckReqId() {
+    return null;
+  }
 
-    protected async _checkReqIdList(req) {
-        let reqIdList = this.getCheckReqId();
-        
-        if(reqIdList == null)
-            return null;
+  protected async _checkReqIdList(req) {
+    let reqIdList = this.getCheckReqId();
 
-        const hit =(findIndex(reqIdList,
-            function (url) { return req.originalUrl.indexOf(url) > -1 }) > -1)
+    if (reqIdList == null)
+      return null;
 
-        if (hit) {
-            // 然后返回锁的信息
-            const redisServer:RedisServer =  this._context.get("redisServer")
-            const baseUrl = req.originalUrl;
-            const requestId = req.headers.requestId || req.headers.requestid;
+    const hit = (findIndex(reqIdList,
+      function (url) { return req.originalUrl.indexOf(url) > -1 }) > -1)
 
-            if (requestId == null) return {
-                "error": {
-                    "code": "requestId_IsNul",
-                    "message":  'requestId not allow null'
-                }
-            }
-        
-            const key = `${baseUrl}-${requestId}`;
-        
+    if (hit) {
+      // 然后返回锁的信息
+      const redisServer: RedisServer = this._context.get("redisServer")
+      const baseUrl = req.originalUrl;
+      const requestId = req.headers.requestId || req.headers.requestid;
 
-            const lock =  await redisServer.lock(key, "", 15 * 60)
-
-            if (lock !== true) return {
-                "error": {
-                    "code": "requestId_Repeat",
-                    "message":  'same url requestId not allow repeat'
-                }
-            }
+      if (requestId == null) return {
+        "error": {
+          "code": "requestId_IsNul",
+          "message": 'requestId not allow null'
         }
+      }
 
-        return null
+      const key = `${baseUrl}-${requestId}`;
+
+
+      const lock = await redisServer.lock(key, "", 15 * 60)
+
+      if (lock !== true) return {
+        "error": {
+          "code": "requestId_Repeat",
+          "message": 'same url requestId not allow repeat'
+        }
+      }
     }
 
-    protected _checkBlackList(req){
-        let blackList = this.getBlackList();
-        
-        if(blackList == null)
-            return true;
-        
-        let token = this._param._token;
-        
-        if(token == null){
-            
-            
-            if ((findIndex(blackList,
-                 function (url) { return req.originalUrl.indexOf(url) > -1 }) > -1)) {
-                return false;
-            }
-        }
-        return true;
+    return null
+  }
+
+  protected _checkBlackList(req) {
+    let blackList = this.getBlackList();
+
+    if (blackList == null)
+      return true;
+
+    let token = this._param._token;
+
+    if (token == null) {
+
+
+      if ((findIndex(blackList,
+        function (url) { return req.originalUrl.indexOf(url) > -1 }) > -1)) {
+        return false;
+      }
     }
-    protected async doExecute(req?: Request, resp?: Response): Promise<any> {
+    return true;
+  }
+  protected async doExecute(req?: Request, resp?: Response): Promise<any> {
 
-        if(!this._checkBlackList(req)){
-            resp.status(401);
-            
-            return {
-                "error": {
-                    "code": "TOKEN_ERROR",
-                    "message":  'http proxy control token error'
-                }
-            };
-        };
-        
-        
-        const checkError = await this._checkReqIdList(req)
+    if (!this._checkBlackList(req)) {
+      resp.status(401);
 
-        if (checkError !== null) {
-            resp.status(200);
-            return checkError;
+      return {
+        "error": {
+          "code": "TOKEN_ERROR",
+          "message": 'http proxy control token error'
         }
-        let key = this.getKey();
-    
-        var path = req.path;
-        var httpConfig = ConfigFac.get('httpconfig')
-        var opt = httpConfig[key];
-        opt = BeanUtil.shallowCombine(opt,{path});
-        
-        var param = this._param
-        
-        param = await this._parseParam(param) 
-        let headers:any = req.headers;
-        
-        //let headers = {};
-        headers['Accept'] = "application/json";
+      };
+    };
 
-        headers['accept'] = "application/json";
-        headers['cache-control'] = "no-cache";
-        delete headers['host']
 
-        if (this._context !=null) {
-            headers['context_id']= this._context.getId();
-        }
+    const checkError = await this._checkReqIdList(req)
 
-        for(var e in headers){
-            if("content-length".toLowerCase() == e.toLowerCase() && req.method.toLowerCase() != 'get'){
-                delete headers[e];
-            }
-
-        }
-        if(param._token){
-            headers["_token"] = JSON.stringify(param._token);
-
-            delete param._token;
-        }
-        if(param._memberToken){
-            headers["_memberToken"] = JSON.stringify(param._memberToken);
-
-            delete param._memberToken;
-        }
-        
-        if(this.timezoneServer)
-            headers['storetime'] = DateUtil.formatDate(this.timezoneServer.getDate())
-        
-        opt.headers = headers;
-        this._printProxyLog(opt);
-        let http = HttpEntryFac.get(req.method,opt)
-        //param._url = req.url;
-        let date = new Date();
-        this._printProxyLog(param);
-        let ret = await http.submit(param);
-        
-        this._printAfterSubmit(date)
-        return ret;
-        
+    if (checkError !== null) {
+      resp.status(200);
+      return checkError;
     }
-    protected _printProxyLog( message){
-       
-        let context = this.getContext();
-        if(context == null){
-            return ;
-        }
-        let logger  = context.getLogger('proxy')
-        logger.info(message);
-    }
-    protected _printAfterSubmit(date){
-        if(date == null){
-            return ;
-        }
-        let context = this.getContext();
-        if(context == null){
-            return ;
-        }
-        let logger  = context.getLogger('proxy')
-        logger.info(new Date().getTime()-date.getTime());
+    let key = this.getKey();
+
+    var path = req.path;
+    var httpConfig = ConfigFac.get('httpconfig')
+    var opt = httpConfig[key];
+    opt = BeanUtil.shallowCombine(opt, { path });
+
+    var param = this._param
+
+    param = await this._parseParam(param)
+    let headers: any = req.headers;
+
+    //let headers = {};
+    headers['Accept'] = "application/json";
+
+    headers['accept'] = "application/json";
+    headers['cache-control'] = "no-cache";
+    delete headers['host']
+
+    if (this._context != null) {
+      headers['context_id'] = this._context.getId();
     }
 
+    for (var e in headers) {
+      if ("content-length".toLowerCase() == e.toLowerCase() && req.method.toLowerCase() != 'get') {
+        delete headers[e];
+      }
 
-    protected _sendResp(resp, ret) {
-        if (ret == null) {
-            resp.send({});
-        } else {
-           
-            resp.send(ret);
-        }
     }
+    if (param._token) {
+      headers["_token"] = JSON.stringify(param._token);
+
+      delete param._token;
+    }
+    if (param._memberToken) {
+      headers["_memberToken"] = JSON.stringify(param._memberToken);
+
+      delete param._memberToken;
+    }
+
+    if (this.timezoneServer)
+      headers['storetime'] = DateUtil.formatDate(this.timezoneServer.getDate())
+
+    opt.headers = headers;
+    this._printProxyLog(opt);
+    let http = HttpEntryFac.get(req.method, opt)
+    //param._url = req.url;
+    let date = new Date();
+    this._printProxyLog(param);
+    let ret = await http.submit(param);
+
+    this._printAfterSubmit(date)
+    return ret;
+
+  }
+  protected _printProxyLog(message) {
+
+    let context = this.getContext();
+    if (context == null) {
+      return;
+    }
+    let logger = context.getLogger('proxy')
+    logger.info(message);
+  }
+  protected _printAfterSubmit(date) {
+    if (date == null) {
+      return;
+    }
+    let context = this.getContext();
+    if (context == null) {
+      return;
+    }
+    let logger = context.getLogger('proxy')
+    logger.info(new Date().getTime() - date.getTime());
+  }
+
+
+  protected _sendResp(resp, ret) {
+    if (ret == null) {
+      resp.send({});
+    } else {
+
+      resp.send(ret);
+    }
+  }
 }

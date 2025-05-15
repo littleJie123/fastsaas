@@ -40,6 +40,10 @@ export default class Control<Param = any, Result = any> {
     protected _printLog(message: object, category?: string): void;
     protected _printBeforeLog(req: any): void;
     protected _printEndLog(time: number): void;
+    /**
+     * 解析参数
+     */
+    protected _parseRequestParam(): void;
     execute(req: Request, resp: Response): Promise<void>;
     protected _sendError(resp: any, e: any): void;
     protected _printErrorLog(error: Error): void;

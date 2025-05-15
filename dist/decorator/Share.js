@@ -9,8 +9,8 @@ const fastsaas_1 = require("../fastsaas");
 function default_1(cols) {
     return function classDecorator(constructor) {
         return class extends constructor {
-            async doExecute(req, resp) {
-                let superDoExecute = super['doExecute'];
+            async _parseRequestParam(req, resp) {
+                let superDoExecute = super['_parseRequestParam'];
                 let param = this['_param'];
                 if (param._shareData != null) {
                     for (let col of cols) {
@@ -23,7 +23,6 @@ function default_1(cols) {
                     }
                 }
                 if (superDoExecute) {
-                    superDoExecute = superDoExecute.bind(this);
                     return await superDoExecute(req, resp);
                 }
             }

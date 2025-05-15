@@ -148,6 +148,12 @@ export default class Control<Param = any, Result = any> {
     }
 
   }
+  /**
+   * 解析参数
+   */
+  protected _parseRequestParam() {
+    
+  }
 
   async execute(req: Request, resp: Response) {
     this._req = req;
@@ -155,6 +161,7 @@ export default class Control<Param = any, Result = any> {
 
     this._resp = resp;
     this._param = req['_param'];
+    this._parseRequestParam();
     if (this._param == null)
       this._param = <Param>{};
     let ret;

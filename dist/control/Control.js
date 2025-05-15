@@ -128,10 +128,16 @@ class Control {
         catch (e) {
         }
     }
+    /**
+     * 解析参数
+     */
+    _parseRequestParam() {
+    }
     async execute(req, resp) {
         this._req = req;
         this._resp = resp;
         this._param = req['_param'];
+        this._parseRequestParam();
         if (this._param == null)
             this._param = {};
         let ret;

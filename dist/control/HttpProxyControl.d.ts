@@ -6,7 +6,7 @@ import { Request, Response } from 'express';
 export default abstract class HttpProxyControl extends Control {
     private timezoneServer;
     abstract getKey(): string;
-    protected _parseParam(param: any): Promise<any>;
+    private _parseParam;
     /**
      * 返回黑名单
      */
