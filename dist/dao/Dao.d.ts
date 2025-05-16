@@ -6,6 +6,7 @@ import Context from './../context/Context';
 import { OnlyArrayIntface, onlyDataInterface } from '../interface';
 import { Sql } from './sql';
 import IDaoOpt from '../inf/IDaoOpt';
+import ISaveItem from './ISaveItem';
 export default abstract class Dao<Pojo = any> {
     protected _opt: DaoOpt;
     protected _map: object;
@@ -89,6 +90,18 @@ export default abstract class Dao<Pojo = any> {
      *
      */
     update(obj: Pojo, whereObj?: any): Promise<number>;
+    incre(pojo: Pojo, col: string, num?: number): Promise<number>;
+    /**
+     * 多对1的保存，有点类似onlyArray，但是没有重复性检查
+     * @param saveItems
+     * @returns
+     */
+    saveItems(saveItems: ISaveItem<Pojo>): Promise<void>;
+    /**
+    }
+  
+   
+  
     /**
      * 更新一个数组
      * @param array

@@ -9,6 +9,7 @@ const lodash_1 = __importDefault(require("lodash"));
 const BeanUtil_1 = require("./../util/BeanUtil");
 const ArrayUtil_1 = require("./../util/ArrayUtil");
 const Context_1 = __importDefault(require("./../context/Context"));
+const sql_1 = require("./sql");
 class Dao {
     /**
      * 根据id更新cdt中的数据，updateArray的语法糖
@@ -187,6 +188,50 @@ class Dao {
         return ret.affectedRows;
     }
     ;
+    async incre(pojo, col, num) {
+        let id = this._opt.acqPojoFirstId();
+        let obj = {
+            [id]: pojo[id]
+        };
+        if (num == null) {
+            num = 1;
+        }
+        let sqlCol = this._opt.parsePojoField(col);
+        obj[col] = new sql_1.Sql(`${sqlCol}=${sqlCol}+${num}`);
+        return this.update(obj);
+    }
+    /**
+     * 多对1的保存，有点类似onlyArray，但是没有重复性检查
+     * @param saveItems
+     * @returns
+     */
+    async saveItems(saveItems) {
+        let needUpdates = [];
+        let needAdds = [];
+        let idCol = this._opt.acqPojoFirstId();
+        if (saveItems.list) {
+            for (let pojo of saveItems.list) {
+                if (pojo[idCol] == null) {
+                    needAdds.push(pojo);
+                }
+                else {
+                    needUpdates.push(pojo);
+                }
+            }
+        }
+        let exists = await this.find(saveItems.query);
+        let needDel = ArrayUtil_1.ArrayUtil.notInByKey(exists, needUpdates, idCol);
+        if (needDel.length > 0) {
+            await this.updateArrayWithCols(needDel, [], { isDel: 1 });
+        }
+        await this.updateArray(needUpdates);
+        await this.addArray(needAdds);
+    }
+    /**
+    }
+  
+   
+  
     /**
      * 更新一个数组
      * @param array

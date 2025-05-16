@@ -10,6 +10,7 @@ import Context from './../context/Context';
 import { OnlyArrayIntface, AnyObject, onlyDataInterface } from '../interface'
 import { Sql } from './sql';
 import IDaoOpt from '../inf/IDaoOpt';
+import ISaveItem from './ISaveItem';
 
 export default abstract class Dao<Pojo = any> {
   
@@ -205,6 +206,48 @@ export default abstract class Dao<Pojo = any> {
     var ret = await this._execute('update', obj, whereObj)
     return ret.affectedRows;
   };
+
+  async incre(pojo:Pojo,col:string,num?:number){
+    let id = this._opt.acqPojoFirstId()
+    let obj:any = {
+      [id]: pojo[id]
+    };
+    if (num == null) {
+      num = 1;
+    }
+    let sqlCol = this._opt.parsePojoField(col)
+    obj[col] = new Sql(`${sqlCol}=${sqlCol}+${num}`);
+    return this.update(obj);
+  }
+
+  /**
+   * 多对1的保存，有点类似onlyArray，但是没有重复性检查
+   * @param saveItems 
+   * @returns 
+   */
+  async saveItems(saveItems:ISaveItem<Pojo>){
+    let needUpdates:Pojo[] = [];
+    let needAdds:Pojo[] = [];
+    let idCol = this._opt.acqPojoFirstId()
+    if(saveItems.list){
+      for(let pojo of saveItems.list){
+        if(pojo[idCol] == null){
+          needAdds.push(pojo);
+        }else{
+          needUpdates.push(pojo);
+        }
+      }
+    }
+    let exists = await this.find(saveItems.query);
+    let needDel = ArrayUtil.notInByKey(exists,needUpdates,idCol);
+    if(needDel.length > 0){
+      await this.updateArrayWithCols(needDel,[],{isDel:1});
+    }
+    await this.updateArray(needUpdates);
+    await this.addArray(needAdds);
+  }
+  /**
+  }
 
  
 
