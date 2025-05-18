@@ -27,7 +27,9 @@ interface dataFormatFun {
 }
 
 interface beforeUpdate {
-  // 对于 oldData 数据, 和更新数据 data 的操作
+  /**
+   *  对于 oldData 数据, 和更新数据 data 的操作
+  */
   (data: AnyObject, oldData: AnyObject): AnyObject
 }
 
@@ -77,7 +79,9 @@ export interface OnlyArrayIntface<Pojo = any> {
    * del 之前的处理函数
    */
   delFun?: dataFormatFun, // query 数据经过 array 筛选根据 mapFun,
-
+  /**
+   * 数据更新之前的处理函数
+   */
   beforeUpdate?: beforeUpdate
 
   // 操作条件判断
