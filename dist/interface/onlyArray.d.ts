@@ -9,6 +9,9 @@ interface dataFormatFun {
     (data: AnyObject, oldData?: any): AnyObject;
 }
 interface beforeUpdate {
+    /**
+     *  对于 oldData 数据, 和更新数据 data 的操作
+    */
     (data: AnyObject, oldData: AnyObject): AnyObject;
 }
 interface isUpdate {
@@ -49,6 +52,9 @@ export interface OnlyArrayIntface<Pojo = any> {
      * del 之前的处理函数
      */
     delFun?: dataFormatFun;
+    /**
+     * 数据更新之前的处理函数
+     */
     beforeUpdate?: beforeUpdate;
     noAdd?: boolean;
     needUpdate?: boolean;

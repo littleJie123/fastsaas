@@ -208,7 +208,7 @@ export default class Control<Param = any, Result = any> {
         errorData.stack = e.stack
       }
     }
-    resp.send({
+    resp.status(500).json({
       error: errorData
     })
   }
