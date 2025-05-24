@@ -15,8 +15,7 @@ export { default as ImportDto } from './import/dto/ImportorDto';
 
 export { default as BaseInterceptor } from './control/interceptor/BaseInterceptor';
 
-
-export { default as BaseDomain } from './base/BaseDomain';
+ 
 export { default as BaseHttpInf } from './base/BaseHttpInf';
 export { default as BasePojo } from './base/BasePojo';
 
@@ -340,4 +339,6 @@ export { default as DataBuilderObj } from './dataBuilder/DataBuilderObj';
 export { default as MultiBuilder } from './dataBuilder/imp/MultiBuilder';
 export { default as UrlBuilder } from './dataBuilder/imp/UrlBuilder';
 
-
+ 
+export { default as BaseDomain } from './domain/BaseDomain';
+export { default as ISaveParam} from './domain/inf/ISaveParam';
