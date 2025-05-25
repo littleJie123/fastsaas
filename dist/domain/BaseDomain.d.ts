@@ -11,10 +11,11 @@ export default abstract class BaseDomain<Do = any> {
     protected getBussinessPks(): string[];
     protected getPkCol(): string;
     /**
-     * 保存数组
+     * 保存数组,根据业务主键来判断是否需要新增,更新,删除
      * @param obj
      */
-    saveDatasByParam(saveParams: ISaveParam<Do>): Promise<void>;
+    saveDatasWithBPk(saveParams: ISaveParam<Do>): Promise<void>;
+    protected addDatasByArray(datas: Do[]): Promise<void>;
     /**
      * 根据业务主键来查询是否有重复的数据
      * @param saveParams

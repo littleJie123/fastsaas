@@ -30,54 +30,33 @@ export default abstract class BaseDomain<Do = any>{
   }
 
   /**
-   * 保存数组
+   * 保存数组,根据业务主键来判断是否需要新增,更新,删除
    * @param obj
    */
-  async saveDatasByParam(saveParams:ISaveParam<Do>){
+  async saveDatasWithBPk(saveParams:ISaveParam<Do>){
+    if(saveParams.query == null){
+      throw new Error('查询条件不能为空');
+    }
     let dao = this.getDao();
-    let pkCol = this.getPkCol();
-    let needAdds:Do[] = [];
-    let needUpdates:Do[] = [];
-    let needDels:Do[] = [];
-    let bPks = this.getBussinessPks();
-    let existing:Do[] = null;
-    existing = await this.findExistsDatasByParam(saveParams);
-    if(bPks != null && bPks.length >0 ){
-      
-      let self = this;
-      ArrayUtil.joinArray({
-        list:saveParams.datas,
-        list2:existing,
-        key:bPks,
-        fun(data:Do,existingDatas:Do[]){
-          if(existingDatas.length > 1){
-            existingDatas.sort(self.buildSortFun4CheckRepeat())
-          }
-          data[pkCol] = existingDatas[0][pkCol];
-        },
-        
-      })
-    }
-    if(saveParams.needDel){
-      needDels = ArrayUtil.notInByKey(existing,saveParams.datas,pkCol);
-    }
-    for(let obj of saveParams.datas){
-      if(obj[pkCol]){
-        needUpdates.push(obj);
-      }else{
-        needAdds.push(obj);
-      }
-    }
-    await dao.addArray(needAdds);
-    if(saveParams.updateCols){
-      await dao.updateArrayWithCols(needUpdates,saveParams.updateCols);
-    }else{
-      await dao.updateArray(needUpdates);
-    }
-    await this.delDatas(needDels);
-    if(saveParams.needCheck){
-      await this.checkDatas(saveParams);
-    }
+    let self = this;
+    await dao.onlyArray({
+      array:saveParams.datas,
+      mapFun:this.getBussinessPks(),
+      query:saveParams.query,
+      needUpdate:saveParams.needUpdate,
+      needDel:saveParams.needDel,
+      async  adds(datas:Do[]){
+        await self.addDatasByArray(datas);
+      },
+      async dels(datas:Do[]){
+        await self.delDatas(datas);
+      },
+    })
+  }
+
+  protected async addDatasByArray(datas:Do[]){
+    let dao = this.getDao();
+    await dao.addArray(datas);
   }
   /**
    * 根据业务主键来查询是否有重复的数据
