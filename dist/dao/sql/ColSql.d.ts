@@ -8,9 +8,10 @@ export default class ColSql extends Sql {
      * @param cols
      */
     constructor(cols?: string | string[]);
-    toSql(type?: string): string;
+    toSql(): string;
     toVal(): null;
     /**
+     *
      * @description 考虑抛弃, 感觉很容易误用， sql 中 col 的位置并不是连贯的
      * @param cols
      */

@@ -74,23 +74,32 @@ export default class UpdateArraySql extends SqlBuilder {
       if (cnt++ > 0) {
         this._pushSqlTxt(sql, ',')
       }
-      this._pushSqlTxt(sql, new ColSql(opt.parsePojoField(pojoCol)))
+      let needIf = false;
+      let dbCol = new ColSql(opt.parsePojoField(pojoCol))
+      this._pushSqlTxt(sql,  dbCol) 
       this._pushSqlTxt(sql, '= CASE ')
       this._pushSqlTxt(sql,new ColSql(dbIdCol))
       for (var i = 0; i < data.length; i++) {
         const _data = data[i]
-        this._pushSqlTxt(sql, 'WHEN')
-        this._pushSqlTxt(sql, new ValSql(_data[this.parseDbField(dbIdCol)]))
-        this._pushSqlTxt(sql, 'THEN')
-
-        if (_data[pojoCol] && _data[pojoCol].getSql) {
-          this._pushSqlTxt(sql, _data[pojoCol].getSql(ColChanger))
-        } else {
-          this._pushSqlTxt(
-            sql,
-            this._caseValue(_data[pojoCol] )
-          )
+        if(_data.hasOwnProperty(pojoCol)){
+          this._pushSqlTxt(sql, 'WHEN')
+          this._pushSqlTxt(sql, new ValSql(_data[this.parseDbField(dbIdCol)]))  
+          this._pushSqlTxt(sql, 'THEN')
+          if (_data[pojoCol] && _data[pojoCol].getSql) {
+            this._pushSqlTxt(sql, _data[pojoCol].getSql(ColChanger))
+          } else {
+            this._pushSqlTxt(
+              sql,
+              this._caseValue(_data[pojoCol] )
+            )
+          }
+        }else{
+          needIf = true;
         }
+      }
+      if(needIf){
+        this._pushSqlTxt(sql, `ELSE `)
+        this._pushSqlTxt(sql, dbCol)
       }
       this._pushSqlTxt(sql, 'end')
     }

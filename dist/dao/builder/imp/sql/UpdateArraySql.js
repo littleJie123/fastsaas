@@ -70,20 +70,31 @@ class UpdateArraySql extends SqlBuilder_1.default {
             if (cnt++ > 0) {
                 this._pushSqlTxt(sql, ',');
             }
-            this._pushSqlTxt(sql, new sql_1.ColSql(opt.parsePojoField(pojoCol)));
+            let needIf = false;
+            let dbCol = new sql_1.ColSql(opt.parsePojoField(pojoCol));
+            this._pushSqlTxt(sql, dbCol);
             this._pushSqlTxt(sql, '= CASE ');
             this._pushSqlTxt(sql, new sql_1.ColSql(dbIdCol));
             for (var i = 0; i < data.length; i++) {
                 const _data = data[i];
-                this._pushSqlTxt(sql, 'WHEN');
-                this._pushSqlTxt(sql, new sql_1.ValSql(_data[this.parseDbField(dbIdCol)]));
-                this._pushSqlTxt(sql, 'THEN');
-                if (_data[pojoCol] && _data[pojoCol].getSql) {
-                    this._pushSqlTxt(sql, _data[pojoCol].getSql(ColChanger_1.default));
+                if (_data.hasOwnProperty(pojoCol)) {
+                    this._pushSqlTxt(sql, 'WHEN');
+                    this._pushSqlTxt(sql, new sql_1.ValSql(_data[this.parseDbField(dbIdCol)]));
+                    this._pushSqlTxt(sql, 'THEN');
+                    if (_data[pojoCol] && _data[pojoCol].getSql) {
+                        this._pushSqlTxt(sql, _data[pojoCol].getSql(ColChanger_1.default));
+                    }
+                    else {
+                        this._pushSqlTxt(sql, this._caseValue(_data[pojoCol]));
+                    }
                 }
                 else {
-                    this._pushSqlTxt(sql, this._caseValue(_data[pojoCol]));
+                    needIf = true;
                 }
+            }
+            if (needIf) {
+                this._pushSqlTxt(sql, `ELSE `);
+                this._pushSqlTxt(sql, dbCol);
             }
             this._pushSqlTxt(sql, 'end');
         }

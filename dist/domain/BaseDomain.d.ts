@@ -16,11 +16,7 @@ export default abstract class BaseDomain<Do = any> {
      */
     saveDatasWithBPk(saveParams: ISaveParam<Do>): Promise<void>;
     protected addDatasByArray(datas: Do[]): Promise<void>;
-    /**
-     * 根据业务主键来查询是否有重复的数据
-     * @param saveParams
-     */
-    protected checkDatas(saveParams: ISaveParam<Do>): Promise<void>;
+    protected saveDatasByArray(datas: Do[], updateCols?: string[]): Promise<void>;
     /**
      * 查询已经有的数据
      * @param saveParams
@@ -29,5 +25,4 @@ export default abstract class BaseDomain<Do = any> {
     protected findExistsDatasByParam(saveParams: ISaveParam<Do>): Promise<Do[]>;
     protected buildQueryByDatas(datas: Do[]): any;
     protected delDatas(datas: Do[]): Promise<void>;
-    protected buildSortFun4CheckRepeat(): (a: Do, b: Do) => number;
 }

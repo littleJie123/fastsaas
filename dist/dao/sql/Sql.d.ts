@@ -9,7 +9,7 @@ export default class Sql implements ISql {
     clazz: string;
     constructor(sql?: string, val?: any);
     getSql(): this;
-    toSql(type?: string, count?: object): string;
+    toSql(): string;
     toVal(): Array<object>;
     add(sql: Sql | String | string): Sql;
     /**

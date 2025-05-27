@@ -312,6 +312,17 @@ class Query {
     in(col, val) {
         return this.addCdt(new Cdt_1.default(col, val, 'in'));
     }
+    inObjs(cols, objs) {
+        let values = [];
+        for (let obj of objs) {
+            let objArray = [];
+            for (let col of cols) {
+                objArray.push(obj[col]);
+            }
+            values.push(objArray);
+        }
+        return this.in(cols, values);
+    }
     /**
      * 增加 in 查询
      * @param col 字段

@@ -14,8 +14,8 @@ export default class ValSql extends Sql {
      * @param type
      * @param count
      */
-    toSql(type?: string, count?: object): string;
-    protected sqlStrAfterProcessing(val: any, parmeterSqlStr: string): string;
+    toSql(): string;
+    private parseValueSql;
     toVal(): any;
     /**
      * @description sql 中的一个 value, 不支持 add, 一个 value 一个实例

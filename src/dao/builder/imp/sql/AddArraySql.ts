@@ -1,5 +1,5 @@
 import SqlBuilder from '../SqlBuilder';
-import { Sql, ColSql, ValSql, ReturnSql } from '../../../sql';
+import { Sql, ColSql, ValSql } from '../../../sql';
 /**
  * 执行addArray的sql 构建
  */
@@ -26,7 +26,6 @@ export default class AddArraySql extends SqlBuilder {
       }
       this._pushSqlTxt(sql, new ValSql(val))
     }
-    this._pushSqlTxt(sql, new ReturnSql(opt.acqIds()))
     return sql
   }
 

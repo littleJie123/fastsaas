@@ -12,8 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Sql_1 = __importDefault(require("./Sql"));
-const constant_1 = require("../../constant");
-const SqlUtilFactory_1 = __importDefault(require("./SqlUtilFactory"));
 /**
  * 1. 每种 sql, 对于 value 的占位符并不相同, mysql: ? pg: $num
  */
@@ -33,29 +31,44 @@ class ValSql extends Sql_1.default {
      * @param type
      * @param count
      */
-    toSql(type = constant_1.sqlType.mysql, count = { pgCount: 0 }) {
-        const sqlUtil = new SqlUtilFactory_1.default().get(type);
+    toSql() {
         let res = '';
         if (this.val instanceof Array) {
             let resArray = [];
             let vals = this.val;
             for (let _val of vals) {
-                resArray.push(this.sqlStrAfterProcessing(_val, sqlUtil.escapeParameters(count)));
+                resArray.push(this.parseValueSql(_val));
             }
             res = ['(', resArray.join(','), ')'].join('');
         }
         else {
-            res = this.sqlStrAfterProcessing(this.val, sqlUtil.escapeParameters(count));
+            res = '?';
         }
         return res;
     }
-    sqlStrAfterProcessing(val, parmeterSqlStr) {
-        return parmeterSqlStr;
+    parseValueSql(val) {
+        if (val instanceof Array) {
+            let array = Array(val.length).fill('?');
+            return `(${array.join(',')})`;
+        }
+        else {
+            return '?';
+        }
     }
     toVal() {
         // TODO: value 转义
-        if (this.val instanceof Array)
-            return this.val;
+        if (this.val instanceof Array) {
+            let array = [];
+            for (let _val of this.val) {
+                if (_val instanceof Array) {
+                    array.push(..._val);
+                }
+                else {
+                    array.push(_val);
+                }
+            }
+            return array;
+        }
         return [this.val];
     }
     /**

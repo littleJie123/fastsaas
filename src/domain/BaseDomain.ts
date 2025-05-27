@@ -24,6 +24,10 @@ export default abstract class BaseDomain<Do = any>{
     return null;
   }
 
+
+
+ 
+
   protected getPkCol(){
     let dao = this.getDao();
     return dao.getPojoIdCol();
@@ -58,32 +62,27 @@ export default abstract class BaseDomain<Do = any>{
     let dao = this.getDao();
     await dao.addArray(datas);
   }
-  /**
-   * 根据业务主键来查询是否有重复的数据
-   * @param saveParams 
-   */
-  protected async checkDatas(saveParams:ISaveParam<Do>){
-    let bPks = this.getBussinessPks();
-    if(bPks == null || bPks.length == 0){
-      return;
-    }
-    let existsDatas = await this.findExistsDatasByParam(saveParams);
-    let needDels:Do[] = [];
-    let sortFun = this.buildSortFun4CheckRepeat();
-    ArrayUtil.groupBy({
-      array:existsDatas,
-      key:bPks,
-      fun(list:Do[]){
-        if(list.length > 1){
-          list.sort(sortFun);
-          for(let i = 1;i < list.length;i++){
-            needDels.push(list[i]);
-          }
-        }
+
+  protected async saveDatasByArray(datas:Do[],updateCols?:string[]){
+    let pk = this.getPkCol();
+    let needAdds:Do[] = [];
+    let needUpdates:Do[] = [];
+    let dao = this.getDao();
+    for(let data of datas){
+      if(data[pk] == null){
+        needAdds.push(data);
+      }else{
+        needUpdates.push(data);
       }
-    })
-    await this.delDatas(needDels);
+    }
+    await dao.addArray(needAdds);
+    if(updateCols){
+      await dao.updateArrayWithCols(needUpdates,updateCols )
+    }else{
+      await dao.updateArray(needUpdates);
+    }
   }
+  
 
   /**
    * 查询已经有的数据
@@ -99,25 +98,7 @@ export default abstract class BaseDomain<Do = any>{
     return dao.find(query);
   }
 
-  // protected async setIdToDatas(datas:Do[],exists?:Do[]){
-  //   let bPks = this.getBussinessPks();
-  //   if(bPks == null || bPks.length == 0){
-  //     throw new Error('业务主键不能为空');
-  //   }
-  //   let pkCol = this.getPkCol();
-  //   if(exists == null){
-  //     let query = this.buildQueryByDatas(datas);
-  //     exists = await this.getDao().find(query);
-  //   }
-  //   ArrayUtil.join({
-  //     list:datas,
-  //     list2:exists,
-  //     key:bPks,
-  //     fun(data:Do ,data2:Do ){
-  //       data[pkCol] = data2[pkCol];
-  //     }
-  //   })
-  // }
+ 
 
   protected buildQueryByDatas(datas:Do[]){
     let bPks = this.getBussinessPks();
@@ -135,10 +116,5 @@ export default abstract class BaseDomain<Do = any>{
     })
   }
 
-  protected buildSortFun4CheckRepeat(){
-    let pkCol = this.getPkCol();
-    return function(a:Do,b:Do){
-      return b[pkCol] - a[pkCol];
-    }
-  }
+  
 }

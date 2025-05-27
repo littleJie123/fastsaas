@@ -32,7 +32,6 @@ class AddSql extends SqlBuilder_1.default {
             }
         }
         this._pushSqlTxt(array, ')');
-        this._pushSqlTxt(array, new sql_1.ReturnSql(opt.acqIds()));
         return array;
     }
 }

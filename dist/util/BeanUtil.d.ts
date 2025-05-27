@@ -71,6 +71,20 @@ export declare class BeanUtil {
     static parseJsonFromParam(obj: any, ...params: any[]): any;
     static pick(row: any, cols: string[]): any;
     /**
+     * 去除某些列
+     * @param row
+     * @param cols
+     * @returns
+     */
+    static notCols(row: any, cols: string[]): any;
+    /**
+     * 去除某些列
+     * @param list
+     * @param cols
+     * @returns
+     */
+    static notCols4List(list: any[], cols: string[]): any[];
+    /**
      * 从list中挑选出指定的列
      */
     static pickList(list: any[], cols: string[]): any[];

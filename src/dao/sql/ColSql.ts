@@ -9,7 +9,6 @@
 
 import Sql from './Sql'
 import { sqlType } from '../../constant'
-import SqlUtilFactory from './SqlUtilFactory'
 export default class ColSql extends Sql {
   protected cols: string[]
 
@@ -24,10 +23,9 @@ export default class ColSql extends Sql {
     this.cols = this._colsToArray(cols)
   }
 
-  toSql(type: string = sqlType.mysql): string {
-    let sqlUtil = new SqlUtilFactory().get(type)
+  toSql(): string { 
     const res = this.cols.map(col => {
-      return sqlUtil.escapeId(col)
+      return `\`${col}\``
     })
     return res.join(',')
   }
@@ -37,6 +35,7 @@ export default class ColSql extends Sql {
   }
 
   /**
+   * 
    * @description 考虑抛弃, 感觉很容易误用， sql 中 col 的位置并不是连贯的
    * @param cols
    */

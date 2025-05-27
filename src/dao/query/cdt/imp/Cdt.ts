@@ -11,9 +11,9 @@ import BaseCdt from '../BaseCdt'
 export default class Cdt extends BaseCdt {
   
   private op: string;
-  private col: string;
+  private col: string | string[];
   private val: any;
-  constructor(col: string, value, op?: string) {
+  constructor(col: string|string[], value, op?: string) {
     super();
     if (op == null) {
       if (value instanceof Array) {
@@ -28,10 +28,10 @@ export default class Cdt extends BaseCdt {
   }
 
   toEs() {
-    return OperatorFac.get(this.op).toEs(this.col, this.val)
+    return OperatorFac.get(this.op).toEs(this.col as string, this.val)
   }
   getCol():string{
-    return this.col;
+    return this.col as string;
   }
 
   getOp():string{
@@ -48,33 +48,52 @@ export default class Cdt extends BaseCdt {
     }
     const _sql: Sql = new Sql()
     let col = this.col;
-    let bracketIndex = col.indexOf(col)
-    if(bracketIndex == -1){
-      _sql.add(new ColSql(this.changeCol(col,colChanger)))
-    }else{
-      //_sql.add(new ColSql(this.hasBracket(col,colChanger)))
+    
+    if(!(col instanceof Array)){
       if(colChanger==null){
         _sql.add(col)
       }else{
         _sql.add(colChanger.changeSql(col))
       }
+    }else {
+      let colArray = this.col as string[]
+      let array = colArray.map((col)=>{
+        if(colChanger==null){
+          return col;
+        }else{
+          return colChanger.changeSql(col)
+        }
+      })
+      let colSql = `(${array.join(',')})`
+      _sql.add(colSql)
     }
+     
     _sql.add(this.op)
 
     _sql.add(new ValSql(this.val))
     return _sql
   }
 
-  private hasBracket(col:string,colChanger:ColChanger){
-    if(colChanger == null){
-      return col;
-    }
-    let begin = col.indexOf
-  }
+  
   isHit(obj) {
-    var val = obj[this.col]
-    var opt = OperatorFac.get(this.op)
-    if (opt == null) return false
-    return opt.cal([val, this.val])
+    if(!(this.col instanceof Array)){
+      var val = obj[this.col]
+      var opt = OperatorFac.get(this.op)
+      if (opt == null) return false
+      return opt.cal([val, this.val])
+    }else{
+
+      //多个字段
+      for(let col of this.col){
+        var val = obj[col]
+        var opt = OperatorFac.get(this.op)
+        if (opt == null) return false
+        let ret = opt.cal([val, this.val])
+        if(!ret){
+          return false
+        }
+      }
+      return true;
+    }
   }
 }

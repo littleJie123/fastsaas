@@ -1,5 +1,5 @@
 import SqlBuilder from '../SqlBuilder';
-import { Sql, ColSql, ValSql, ReturnSql } from '../../../sql';
+import { Sql, ColSql, ValSql } from '../../../sql';
 import AddArraySql from './AddArraySql';
 /**
  * 执行importSql的sql 构建

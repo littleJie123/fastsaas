@@ -6,7 +6,7 @@ export default class ReturnSql extends Sql {
      * @param cols
      */
     constructor(cols?: string | string[]);
-    toSql(type: string): string;
+    toSql(): string;
     toVal(): null;
     /**
      * @description

@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Sql_1 = __importDefault(require("./Sql"));
-const SqlUtilFactory_1 = __importDefault(require("./SqlUtilFactory"));
 class ReturnSql extends Sql_1.default {
     /**
      * @description 返回指定列
@@ -14,10 +13,10 @@ class ReturnSql extends Sql_1.default {
         super();
         this.cols = this._colsToArray(cols);
     }
-    toSql(type) {
+    toSql() {
         if (!this.cols.length)
             return '';
-        let sqlUtil = new SqlUtilFactory_1.default().get(type);
+        let sqlUtil = new SqlUtilFactory().get(type);
         return sqlUtil.returnStr(this.cols);
     }
     toVal() {

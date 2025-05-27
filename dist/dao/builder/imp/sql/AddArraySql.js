@@ -29,7 +29,6 @@ class AddArraySql extends SqlBuilder_1.default {
             }
             this._pushSqlTxt(sql, new sql_1.ValSql(val));
         }
-        this._pushSqlTxt(sql, new sql_1.ReturnSql(opt.acqIds()));
         return sql;
     }
     _need(name) {

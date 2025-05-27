@@ -137,12 +137,9 @@ export { default as OrderItem } from './dao/query/OrderItem';
 export { default as Query } from './dao/query/Query';
 export { default as ColSql } from './dao/sql/ColSql';
 export { default as ISql } from './dao/sql/ISql';
-export { default as ReturnSql } from './dao/sql/ReturnSql';
 export { default as Sql } from './dao/sql/Sql';
-export { default as SqlUtilFactory } from './dao/sql/SqlUtilFactory';
 export { default as ValSql } from './dao/sql/ValSql';
 
-export { default as SqlUtil } from './dao/sqlUtil/SqlUtil';
 
 export { default as Share} from './decorator/Share';
 export { default as Column } from './decorator/Column';

@@ -381,6 +381,41 @@ class BeanUtil {
         return retRow;
     }
     /**
+     * 去除某些列
+     * @param row
+     * @param cols
+     * @returns
+     */
+    static notCols(row, cols) {
+        let retRow = {};
+        for (let col in row) {
+            if (cols.indexOf(col) == -1) {
+                retRow[col] = row[col];
+            }
+        }
+        return retRow;
+    }
+    /**
+     * 去除某些列
+     * @param list
+     * @param cols
+     * @returns
+     */
+    static notCols4List(list, cols) {
+        let array = [];
+        let map = ArrayUtil_1.ArrayUtil.toMap(cols);
+        for (let data of list) {
+            let retRow = {};
+            for (let col in data) {
+                if (!map[col] && data.hasOwnProperty(col)) {
+                    retRow[col] = data[col];
+                }
+            }
+            array.push(retRow);
+        }
+        return array;
+    }
+    /**
      * 从list中挑选出指定的列
      */
     static pickList(list, cols) {

@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const constant_1 = require("../.././constant");
 class Sql {
     constructor(sql, val) {
         this._sql = '';
@@ -21,9 +20,8 @@ class Sql {
     getSql() {
         return this;
     }
-    toSql(type = constant_1.sqlType.mysql, count) {
-        count = count || { pgCount: 0 }; // 引用传递, 用来修改 pg 的占位符 $num
-        let other = this._other.map((sql) => sql.toSql(type, count));
+    toSql() {
+        let other = this._other.map((sql) => sql.toSql());
         let strs = [this._sql, other.join(' ')];
         return strs.join(' ');
     }

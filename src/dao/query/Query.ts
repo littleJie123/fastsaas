@@ -327,9 +327,21 @@ export default class Query {
 	 * @param col 字段
 	 * @param val 查询数组
 	 */
-	in(col: string, val: Array<any>): Query {
+	in(col: string|string[], val: any[]): Query {
 
 		return this.addCdt(new Cdt(col, val, 'in'))
+	}
+
+	inObjs(cols:string[],objs:any[]):Query{
+		let values = [];
+		for(let obj of objs){
+			let objArray = [];
+			for(let col of cols){
+				objArray.push(obj[col]);
+			}
+			values.push(objArray);
+		}
+		return this.in(cols,values);
 	}
 	/**
 	 * 增加 in 查询

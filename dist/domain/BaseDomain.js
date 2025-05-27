@@ -50,31 +50,26 @@ class BaseDomain {
         let dao = this.getDao();
         await dao.addArray(datas);
     }
-    /**
-     * 根据业务主键来查询是否有重复的数据
-     * @param saveParams
-     */
-    async checkDatas(saveParams) {
-        let bPks = this.getBussinessPks();
-        if (bPks == null || bPks.length == 0) {
-            return;
-        }
-        let existsDatas = await this.findExistsDatasByParam(saveParams);
-        let needDels = [];
-        let sortFun = this.buildSortFun4CheckRepeat();
-        fastsaas_1.ArrayUtil.groupBy({
-            array: existsDatas,
-            key: bPks,
-            fun(list) {
-                if (list.length > 1) {
-                    list.sort(sortFun);
-                    for (let i = 1; i < list.length; i++) {
-                        needDels.push(list[i]);
-                    }
-                }
+    async saveDatasByArray(datas, updateCols) {
+        let pk = this.getPkCol();
+        let needAdds = [];
+        let needUpdates = [];
+        let dao = this.getDao();
+        for (let data of datas) {
+            if (data[pk] == null) {
+                needAdds.push(data);
             }
-        });
-        await this.delDatas(needDels);
+            else {
+                needUpdates.push(data);
+            }
+        }
+        await dao.addArray(needAdds);
+        if (updateCols) {
+            await dao.updateArrayWithCols(needUpdates, updateCols);
+        }
+        else {
+            await dao.updateArray(needUpdates);
+        }
     }
     /**
      * 查询已经有的数据
@@ -89,25 +84,6 @@ class BaseDomain {
         }
         return dao.find(query);
     }
-    // protected async setIdToDatas(datas:Do[],exists?:Do[]){
-    //   let bPks = this.getBussinessPks();
-    //   if(bPks == null || bPks.length == 0){
-    //     throw new Error('业务主键不能为空');
-    //   }
-    //   let pkCol = this.getPkCol();
-    //   if(exists == null){
-    //     let query = this.buildQueryByDatas(datas);
-    //     exists = await this.getDao().find(query);
-    //   }
-    //   ArrayUtil.join({
-    //     list:datas,
-    //     list2:exists,
-    //     key:bPks,
-    //     fun(data:Do ,data2:Do ){
-    //       data[pkCol] = data2[pkCol];
-    //     }
-    //   })
-    // }
     buildQueryByDatas(datas) {
         let bPks = this.getBussinessPks();
         let query = { isDel: 0 };
@@ -121,12 +97,6 @@ class BaseDomain {
         await dao.updateArrayWithCols(datas, [], {
             isDel: 1
         });
-    }
-    buildSortFun4CheckRepeat() {
-        let pkCol = this.getPkCol();
-        return function (a, b) {
-            return b[pkCol] - a[pkCol];
-        };
     }
 }
 exports.default = BaseDomain;

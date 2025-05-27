@@ -371,22 +371,59 @@ export class BeanUtil {
     return obj;
   }
 
-  static pick(row:any,cols:string[]):any  {
+  static pick(row: any, cols: string[]): any {
     let retRow = {};
-    for(let col of cols){
+    for (let col of cols) {
       retRow[col] = row[col]
     }
     return retRow;
   }
 
   /**
+   * 去除某些列
+   * @param row 
+   * @param cols 
+   * @returns 
+   */
+  static notCols(row: any, cols: string[]): any {
+    let retRow = {};
+    for (let col in row) {
+      if (cols.indexOf(col) == -1) {
+        retRow[col] = row[col]
+      }
+    }
+    return retRow;
+  }
+
+  /**
+   * 去除某些列
+   * @param list 
+   * @param cols 
+   * @returns 
+   */
+  static notCols4List(list: any[], cols: string[]): any[] {
+    let array = [];
+    let map = ArrayUtil.toMap(cols);
+    for (let data of list) {
+      let retRow = {};
+      for (let col in data) {
+        if (!map[col] && data.hasOwnProperty(col)) {
+          retRow[col] = data[col]
+        }
+      }
+      array.push(retRow);
+    }
+    return array;
+  }
+
+  /**
    * 从list中挑选出指定的列
    */
-  static pickList(list:any[],cols:string[]):any[] {
-    let retList:any[] = [];
-    for(let row of list){
+  static pickList(list: any[], cols: string[]): any[] {
+    let retList: any[] = [];
+    for (let row of list) {
       let retRow = {};
-      for(let col of cols){
+      for (let col of cols) {
         retRow[col] = row[col]
       }
       retList.push(retRow);
@@ -454,9 +491,9 @@ export class BeanUtil {
    * @param obj 
    * @param cols 
    */
-  static onlyCols(obj:any,cols:string[]):any{
-    for(let e in obj){
-      if(!cols.includes(e)){
+  static onlyCols(obj: any, cols: string[]): any {
+    for (let e in obj) {
+      if (!cols.includes(e)) {
         delete obj[e]
       }
     }
@@ -469,13 +506,13 @@ export class BeanUtil {
    * @param obj 
    * @param def 
    */
-  static setDefault<Opt = any>(obj:Opt,def:any):Opt{
-    obj = {... obj}
-    for(let e in def){
-      if(obj[e] == null){
+  static setDefault<Opt = any>(obj: Opt, def: any): Opt {
+    obj = { ...obj }
+    for (let e in def) {
+      if (obj[e] == null) {
         obj[e] = def[e]
       }
-    }   
+    }
     return obj;
   }
 }

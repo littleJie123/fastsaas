@@ -43,12 +43,7 @@ class Cdt extends BaseCdt_1.default {
         }
         const _sql = new sql_1.Sql();
         let col = this.col;
-        let bracketIndex = col.indexOf(col);
-        if (bracketIndex == -1) {
-            _sql.add(new sql_1.ColSql(this.changeCol(col, colChanger)));
-        }
-        else {
-            //_sql.add(new ColSql(this.hasBracket(col,colChanger)))
+        if (!(col instanceof Array)) {
             if (colChanger == null) {
                 _sql.add(col);
             }
@@ -56,22 +51,45 @@ class Cdt extends BaseCdt_1.default {
                 _sql.add(colChanger.changeSql(col));
             }
         }
+        else {
+            let colArray = this.col;
+            let array = colArray.map((col) => {
+                if (colChanger == null) {
+                    return col;
+                }
+                else {
+                    return colChanger.changeSql(col);
+                }
+            });
+            let colSql = `(${array.join(',')})`;
+            _sql.add(colSql);
+        }
         _sql.add(this.op);
         _sql.add(new sql_1.ValSql(this.val));
         return _sql;
     }
-    hasBracket(col, colChanger) {
-        if (colChanger == null) {
-            return col;
-        }
-        let begin = col.indexOf;
-    }
     isHit(obj) {
-        var val = obj[this.col];
-        var opt = OperatorFac_1.default.get(this.op);
-        if (opt == null)
-            return false;
-        return opt.cal([val, this.val]);
+        if (!(this.col instanceof Array)) {
+            var val = obj[this.col];
+            var opt = OperatorFac_1.default.get(this.op);
+            if (opt == null)
+                return false;
+            return opt.cal([val, this.val]);
+        }
+        else {
+            //多个字段
+            for (let col of this.col) {
+                var val = obj[col];
+                var opt = OperatorFac_1.default.get(this.op);
+                if (opt == null)
+                    return false;
+                let ret = opt.cal([val, this.val]);
+                if (!ret) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
 exports.default = Cdt;

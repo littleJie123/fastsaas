@@ -104,7 +104,8 @@ export default class Query {
      * @param col 字段
      * @param val 查询数组
      */
-    in(col: string, val: Array<any>): Query;
+    in(col: string | string[], val: any[]): Query;
+    inObjs(cols: string[], objs: any[]): Query;
     /**
      * 增加 in 查询
      * @param col 字段

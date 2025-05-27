@@ -12,8 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Sql_1 = __importDefault(require("./Sql"));
-const constant_1 = require("../../constant");
-const SqlUtilFactory_1 = __importDefault(require("./SqlUtilFactory"));
 class ColSql extends Sql_1.default {
     /**
      * @description 列转义
@@ -25,10 +23,9 @@ class ColSql extends Sql_1.default {
         super();
         this.cols = this._colsToArray(cols);
     }
-    toSql(type = constant_1.sqlType.mysql) {
-        let sqlUtil = new SqlUtilFactory_1.default().get(type);
+    toSql() {
         const res = this.cols.map(col => {
-            return sqlUtil.escapeId(col);
+            return `\`${col}\``;
         });
         return res.join(',');
     }
@@ -36,6 +33,7 @@ class ColSql extends Sql_1.default {
         return null;
     }
     /**
+     *
      * @description 考虑抛弃, 感觉很容易误用， sql 中 col 的位置并不是连贯的
      * @param cols
      */
