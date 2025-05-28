@@ -333,15 +333,24 @@ export default class Query {
 	}
 
 	inObjs(cols:string[],objs:any[]):Query{
-		let values = [];
-		for(let obj of objs){
-			let objArray = [];
-			for(let col of cols){
-				objArray.push(obj[col]);
-			}
-			values.push(objArray);
+		if(cols == null || cols.length == 0){
+			throw new Error('cols 不能为空');
 		}
-		return this.in(cols,values);
+			
+		let values = [];
+		objs = ArrayUtil.distinctByKey(objs,cols);
+		if(cols.length >1){
+			for(let obj of objs){
+				let objArray = [];
+				for(let col of cols){
+					objArray.push(obj[col]);
+				}
+				values.push(objArray);
+			}
+			return this.in(cols,values);
+		}else{
+			return this.in(cols[0],ArrayUtil.toArray(objs,cols[0]));
+		}
 	}
 	/**
 	 * 增加 in 查询
