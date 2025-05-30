@@ -16,13 +16,28 @@ export default abstract class BaseDomain<Do = any> {
      */
     saveDatasWithBPk(saveParams: ISaveParam<Do>): Promise<void>;
     protected addDatasByArray(datas: Do[]): Promise<void>;
-    protected saveDatasByArray(datas: Do[], updateCols?: string[]): Promise<void>;
     /**
-     * 查询已经有的数据
-     * @param saveParams
-     * @returns
+     * 根据主键来更新数据
+     * @param datas
+     * @param updateCols
      */
-    protected findExistsDatasByParam(saveParams: ISaveParam<Do>): Promise<Do[]>;
-    protected buildQueryByDatas(datas: Do[]): any;
+    protected saveDatasByArray(datas: Do[], updateCols?: string[]): Promise<void>;
     protected delDatas(datas: Do[]): Promise<void>;
+    /**
+     * 根据业务主键删除重复数据
+     * @param query
+     */
+    protected delRepeatDatas(query: any): Promise<Do[]>;
+    /**
+     * 通过业务主键查询数据
+     * @param datas
+     */
+    protected schPk4Array(datas: Do[]): Promise<void>;
+    /**
+     * 将数据库中的数据主键设置到datas中
+     * @param datas 内存数据
+     * @param dbDatas 数据库数据
+     */
+    protected setPks(datas: Do[], dbDatas: Do[]): void;
+    protected schByBPks(datas: Do[]): Promise<Do[]>;
 }

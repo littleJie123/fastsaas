@@ -1,4 +1,4 @@
-import { ArrayUtil, Context, Dao } from "../fastsaas";
+import { ArrayUtil, Context, Dao, Query } from "../fastsaas";
 import ISaveParam from "./inf/ISaveParam";
 
 export default abstract class BaseDomain<Do = any>{
@@ -62,7 +62,11 @@ export default abstract class BaseDomain<Do = any>{
     let dao = this.getDao();
     await dao.addArray(datas);
   }
-
+  /**
+   * 根据主键来更新数据
+   * @param datas 
+   * @param updateCols 
+   */
   protected async saveDatasByArray(datas:Do[],updateCols?:string[]){
     let pk = this.getPkCol();
     let needAdds:Do[] = [];
@@ -84,30 +88,9 @@ export default abstract class BaseDomain<Do = any>{
   }
   
 
-  /**
-   * 查询已经有的数据
-   * @param saveParams 
-   * @returns 
-   */
-  protected findExistsDatasByParam(saveParams:ISaveParam<Do>):Promise<Do[]>{
-    let dao = this.getDao();  
-    let query = saveParams.query;
-    if(query == null){
-      query = this.buildQueryByDatas(saveParams.datas);
-    }
-    return dao.find(query);
-  }
-
  
 
-  protected buildQueryByDatas(datas:Do[]){
-    let bPks = this.getBussinessPks();
-    let query:any = {isDel:0};
-    for(let bPk of bPks){
-      query[bPk] = ArrayUtil.toArrayDis(datas,bPk)
-    }
-    return query
-  }
+ 
 
   protected async delDatas(datas:Do[]){
     let dao = this.getDao();
@@ -116,5 +99,75 @@ export default abstract class BaseDomain<Do = any>{
     })
   }
 
+
+
+  /**
+   * 根据业务主键删除重复数据
+   * @param query 
+   */
+  protected async delRepeatDatas(query:any):Promise<Do[]>{
+    let list = await this.getDao().find(query);
+    let bPks = this.getBussinessPks();
+    if(bPks == null || bPks.length == 0){
+      throw new Error('业务主键不能为空');
+    }
+    let retList:Do[] = [];
+    let needDel:Do[] = [];
+    let pkCol = this.getPkCol();
+    ArrayUtil.groupBy({
+      list:list,
+      key:bPks,
+      fun(list:Do[]){
+        list.sort((a,b)=>{
+          return a[pkCol] - b[pkCol];
+        })
+        retList.push(list[0]);
+        for(let i=1;i<list.length;i++){
+          needDel.push(list[i]);
+        }
+      }
+    })
+    await this.delDatas(needDel);
+    return retList;
+  }
+
+  /**
+   * 通过业务主键查询数据
+   * @param datas 
+   */
+  protected async schPk4Array(datas:Do[]){
+    let exists = await this.schByBPks(datas);
+    this.setPks(datas,exists);
+  }
+
+  /**
+   * 将数据库中的数据主键设置到datas中
+   * @param datas 内存数据
+   * @param dbDatas 数据库数据
+   */
+  protected setPks(datas:Do[],dbDatas:Do[]){
+    let pkCol = this.getPkCol();
+    ArrayUtil.joinArray({
+      list:dbDatas,
+      list2:datas,
+      key:this.getBussinessPks(),
+      fun(exists:Do,datasArray:Do[]){
+        for(let data of datasArray){
+          data[pkCol] = exists[pkCol];
+        }
+      }
+    })
+  }
+
+  protected async schByBPks(datas:Do[]):Promise<Do[]>{
+    let query = new Query();
+    query.eq('isDel',0);
+    let bPks = this.getBussinessPks()
+    if(bPks==null || bPks.length == 0 ){
+      throw new Error('业务主键不能为空');
+    }
+    query.inObjs(bPks,datas);
+    return this.getDao().find(query);
+  }
   
 }
