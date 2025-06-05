@@ -94,6 +94,9 @@ class GroupControl extends ListControl_1.default {
         return false;
     }
     async find(query) {
+        if (query == null) {
+            return [];
+        }
         let list = await this.findByDao(query);
         return list;
     }

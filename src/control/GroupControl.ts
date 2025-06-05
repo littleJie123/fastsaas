@@ -101,7 +101,9 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
     return false;
   }
   protected async find(query: Query) {
-    
+    if(query == null){
+      return []
+    }
     let list = await this.findByDao(query)
 
     return list

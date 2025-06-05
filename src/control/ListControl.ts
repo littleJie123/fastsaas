@@ -357,6 +357,9 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
   }
 
   protected async find(query) {
+    if(query == null){
+      return [];
+    }
     var list = await this.findByDao(query)
 
 
@@ -404,7 +407,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
     } else {
 
       var query = await this.buildQuery()
-
+       
       let map: ListResult = {}
       if (query != null) {
         map.content = this.onlyCols( await this.find(query))

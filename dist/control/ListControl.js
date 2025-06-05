@@ -324,6 +324,9 @@ class ListControl extends Control_1.default {
         return this.getDao().find(query);
     }
     async find(query) {
+        if (query == null) {
+            return [];
+        }
         var list = await this.findByDao(query);
         var processedList = await this._processList(list);
         if (processedList != null) {
