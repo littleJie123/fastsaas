@@ -7,6 +7,12 @@ export default function (cols: IColChanger[]): <T extends {
     new (...args: any[]): {};
 }>(constructor: T) => {
     new (...args: any[]): {
+        /**
+         * 将分享的数据解析到请求参数中
+         * @param req
+         * @param resp
+         * @returns
+         */
         _parseRequestParam(req?: Request, resp?: Response): Promise<any>;
     };
 } & T;

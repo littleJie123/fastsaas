@@ -38,6 +38,7 @@ class BaseDomain {
             query: saveParams.query,
             needUpdate: saveParams.needUpdate,
             needDel: saveParams.needDel,
+            noSch: saveParams.noSch,
             async adds(datas) {
                 await self.addDatasByArray(datas);
             },

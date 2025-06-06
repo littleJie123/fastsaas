@@ -9,6 +9,12 @@ export default function (cols:IColChanger[]) {
 
   return function classDecorator<T extends { new(...args: any[]): {} }>(constructor: T) {
     return class extends constructor {
+      /**
+       * 将分享的数据解析到请求参数中
+       * @param req 
+       * @param resp 
+       * @returns 
+       */
       protected async _parseRequestParam(req?: Request, resp?: Response): Promise<any> {
         let superDoExecute = super['_parseRequestParam'];
         let param = this['_param'];

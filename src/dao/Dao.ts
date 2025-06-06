@@ -401,8 +401,12 @@ export default abstract class Dao<Pojo = any> {
 				return await self.find(opt.query);
     }
 
-    let list = await find(opt);
-
+    let list ;
+    if(opt.noSch){
+      list = [];
+    }else{
+      list = await find(opt);
+    }
 		let mapFun = opt.mapFun
 		if (mapFun == null) {
 			throw new Error('没有给出map的函数')

@@ -9,6 +9,12 @@ const fastsaas_1 = require("../fastsaas");
 function default_1(cols) {
     return function classDecorator(constructor) {
         return class extends constructor {
+            /**
+             * 将分享的数据解析到请求参数中
+             * @param req
+             * @param resp
+             * @returns
+             */
             async _parseRequestParam(req, resp) {
                 let superDoExecute = super['_parseRequestParam'];
                 let param = this['_param'];

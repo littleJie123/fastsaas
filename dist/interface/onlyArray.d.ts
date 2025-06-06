@@ -83,5 +83,6 @@ export interface OnlyArrayIntface<Pojo = any> {
      * 去重,会试用mapFun 对array的参数进行去重
      */
     needDistinct?: boolean;
+    noSch?: boolean;
 }
 export {};

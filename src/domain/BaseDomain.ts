@@ -49,6 +49,7 @@ export default abstract class BaseDomain<Do = any>{
       query:saveParams.query,
       needUpdate:saveParams.needUpdate,
       needDel:saveParams.needDel,
+      noSch:saveParams.noSch,
       async  adds(datas:Do[]){
         await self.addDatasByArray(datas);
       },

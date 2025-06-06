@@ -9,4 +9,8 @@ export default interface ISaveParam<Do> {
      */
     needDel?: boolean;
     needUpdate?: boolean;
+    /**
+     * 这个开关表示是否需要初始查询
+     */
+    noSch?: boolean;
 }
