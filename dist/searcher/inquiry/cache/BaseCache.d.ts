@@ -26,7 +26,7 @@ export default abstract class BaseCache {
     */
     find(optArray: any): Promise<FindResult>;
     _find(hasArray: any): Promise<any[]>;
-    _acqKey(): any;
+    _acqKey(): string;
 }
 import BaseInquiry from '../BaseInquiry';
 import FindResult from './dto/FindResult';

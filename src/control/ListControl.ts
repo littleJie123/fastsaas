@@ -406,7 +406,15 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
       return await this.download()
     } else {
 
-      var query = await this.buildQuery()
+      let map = await this.findData()
+ 
+      return map
+    }
+
+  }
+
+  protected async findData():Promise<ListResult>{
+    var query = await this.buildQuery()
        
       let map: ListResult = {}
       if (query != null) {
@@ -419,10 +427,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
       } 
       map.first = this.getFirst()
       map.pageSize = this.getPageSize()
- 
       return map
-    }
-
   }
   protected _sendResp(resp, ret) {
     if (this.isDownload()) {

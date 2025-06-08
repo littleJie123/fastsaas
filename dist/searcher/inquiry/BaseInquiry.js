@@ -16,9 +16,6 @@ class BaseInquiry {
         }
         this._opt = opt;
     }
-    get(key) {
-        return this._opt[key];
-    }
     acqSchCols() {
         let opt = this._opt;
         return opt.schCols;
@@ -146,16 +143,16 @@ class BaseInquiry {
      * 返回其他条件
      */
     acqOtherCdt() {
-        return this._opt['otherCdt'];
+        return this._opt.otherCdt;
     }
     /**
      * 返回查询的表名
      */
     getKey() {
-        return this._opt['key'];
+        return this._opt.key;
     }
     setKey(key) {
-        this._opt['key'] = key;
+        this._opt.key = key;
         var cache = this.acqCache();
         cache.setKey(key);
     }

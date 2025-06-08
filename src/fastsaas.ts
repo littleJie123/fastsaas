@@ -148,6 +148,7 @@ export { default as LogicDel } from './decorator/LogicDel';
 export { default as NeedParam } from './decorator/NeedParam';
 export { default as RemoveCache } from './decorator/RemoveCache';
 export { default as Sch } from './decorator/Sch';
+export { default as GetCache} from './decorator/GetCache';
 export { default as SchStore } from './decorator/SchStore';
 export { default as SortCol } from './decorator/SortCol';
 export { default as StoreTime } from './decorator/StoreTime';

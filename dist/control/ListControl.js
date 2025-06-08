@@ -366,21 +366,25 @@ class ListControl extends Control_1.default {
             return await this.download();
         }
         else {
-            var query = await this.buildQuery();
-            let map = {};
-            if (query != null) {
-                map.content = this.onlyCols(await this.find(query));
-            }
-            else {
-                map.content = [];
-            }
-            if (this.needSchCnt()) {
-                await this.schCnt(map, query);
-            }
-            map.first = this.getFirst();
-            map.pageSize = this.getPageSize();
+            let map = await this.findData();
             return map;
         }
+    }
+    async findData() {
+        var query = await this.buildQuery();
+        let map = {};
+        if (query != null) {
+            map.content = this.onlyCols(await this.find(query));
+        }
+        else {
+            map.content = [];
+        }
+        if (this.needSchCnt()) {
+            await this.schCnt(map, query);
+        }
+        map.first = this.getFirst();
+        map.pageSize = this.getPageSize();
+        return map;
     }
     _sendResp(resp, ret) {
         if (this.isDownload()) {

@@ -78,7 +78,7 @@ class BaseInterceptor {
                 errorData.stack = e.stack;
             }
         }
-        resp.send({
+        resp.status(500).json({
             error: errorData
         });
     }

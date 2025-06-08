@@ -2,13 +2,14 @@
 import BaseInquiry from '../BaseInquiry'
 import Searcher from './../../Searcher';
 import {ArrayUtil} from './../../../util/ArrayUtil';
+import BaseInquiryOpt from '../BaseInquiryOpt';
 
 /**
  * 多表查询
  * {
  * }
  */
-interface Opt{
+interface Opt extends BaseInquiryOpt{
 	/**
 	 * 其他表的字段，用来取值查询当前表，不指定的话，将取得所有数据作为多值查询
 	 */
@@ -29,6 +30,7 @@ interface Opt{
 }
 export default  class TablesInquiry extends BaseInquiry{
 
+	protected _opt: Opt;
 	constructor(opt?:Opt){
 		super(opt);
 	}

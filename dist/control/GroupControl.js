@@ -139,29 +139,33 @@ class GroupControl extends ListControl_1.default {
             return CsvUtil_1.default.toBuffer(list, this.getDownloadCols());
         }
         else {
-            let query = await this.buildQuery();
-            let map = {};
-            map.content = await this.find(query);
-            let processedList = await this._processList(map.content);
+            let map = await this.findData();
+            return map;
+        }
+    }
+    async findData() {
+        let query = await this.buildQuery();
+        let map = {};
+        map.content = await this.find(query);
+        let processedList = await this._processList(map.content);
+        if (processedList != null) {
+            map.content = processedList;
+        }
+        map.content = await this._filterByArrayCdt(map.content);
+        if (!this._needCnt) {
+            this._pageOrder(map.content);
+            await this.schCnt(map, query);
+        }
+        if (this._processPageList) {
+            let processedList = await this._processPageList(map.content);
             if (processedList != null) {
                 map.content = processedList;
             }
-            map.content = await this._filterByArrayCdt(map.content);
-            if (!this._needCnt) {
-                this._pageOrder(map.content);
-                await this.schCnt(map, query);
-            }
-            if (this._processPageList) {
-                let processedList = await this._processPageList(map.content);
-                if (processedList != null) {
-                    map.content = processedList;
-                }
-            }
-            this.slice(map);
-            map.pageSize = this.getPageSize();
-            map.first = this.getFirst();
-            return map;
         }
+        this.slice(map);
+        map.pageSize = this.getPageSize();
+        map.first = this.getFirst();
+        return map;
     }
     /**
      * 搜索数量和值

@@ -1,6 +1,6 @@
 import Inquiry from './Inquiry';
 export default class KeysInquiry extends Inquiry {
-    acqColKeys(): any;
+    acqColKeys(): string[];
     _acqCodeByKeys(params: any): string;
     acqCode(params: any): string;
     acqDataCode(data: any): string;

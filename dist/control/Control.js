@@ -65,7 +65,8 @@ class Control {
         let needParam = this._getNeedParamKey();
         if (needParam != null) {
             for (let key of needParam) {
-                if (param[key] == null || param[key] === '') {
+                let val = fastsaas_1.JsonUtil.getByKeys(param, key);
+                if (val == null || val === '') {
                     throw new Error(`缺少参数${key}`);
                 }
             }

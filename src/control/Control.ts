@@ -75,7 +75,8 @@ export default class Control<Param = any, Result = any> {
     let needParam = this._getNeedParamKey();
     if (needParam != null) {
       for (let key of needParam) {
-        if (param[key] == null || param[key] === '') {
+        let val = JsonUtil.getByKeys(param,key)
+        if (val == null || val === '') {
           throw new Error(`缺少参数${key}`);
         }
       }
@@ -268,5 +269,5 @@ export default class Control<Param = any, Result = any> {
 
 }
 import IChecker from './inf/IChecker';
-import { ConfigFac } from '../fastsaas';
+import { ConfigFac, JsonUtil } from '../fastsaas';
 

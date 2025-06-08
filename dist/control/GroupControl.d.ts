@@ -47,6 +47,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
      */
     protected _filterByArrayCdt(list: any): Promise<any>;
     protected doExecute(): Promise<any>;
+    protected findData(): Promise<ListResult>;
     /**
      * 搜索数量和值
      * @param map

@@ -8,12 +8,12 @@ const ArrayUtil_1 = require("./../../../util/ArrayUtil");
 const DateUtil_1 = require("./../../../util/DateUtil");
 class KeysInquiry extends Inquiry_1.default {
     acqColKeys() {
-        return this.get('keys');
+        return this._opt.keys;
     }
     _acqCodeByKeys(params) {
         var keys = this.acqColKeys();
         var code;
-        var keyFun = this.get('keyFun');
+        var keyFun = this._opt.keyFun;
         if (keyFun != null) {
             code = keyFun(params);
         }

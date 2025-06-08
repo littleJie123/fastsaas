@@ -1,10 +1,11 @@
 import BaseInquiry from '../BaseInquiry';
+import BaseInquiryOpt from '../BaseInquiryOpt';
 /**
  * 多表查询
  * {
  * }
  */
-interface Opt {
+interface Opt extends BaseInquiryOpt {
     /**
      * 其他表的字段，用来取值查询当前表，不指定的话，将取得所有数据作为多值查询
      */
@@ -24,6 +25,7 @@ interface Opt {
     name?: string;
 }
 export default class TablesInquiry extends BaseInquiry {
+    protected _opt: Opt;
     constructor(opt?: Opt);
     acqDataCode(data: any): string;
     acqCode(param: any): string;
@@ -32,8 +34,8 @@ export default class TablesInquiry extends BaseInquiry {
     子类重写,从另外一个searcher 里面找
     */
     protected _findFromOtherSearcher(params: any): Promise<Array<any>>;
-    protected getOtherTable(): any;
-    protected getOtherName(): any;
+    protected getOtherTable(): string;
+    protected getOtherName(): string;
     protected _getName(): string;
     protected getSearcher<T>(key: string): T;
     protected _findArray(params: Array<any>): Promise<Array<any>>;

@@ -25,7 +25,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
   protected async _processPageList(list: Array<any>): Promise<Array<any>> {
     return list;
   }
-  
+
   /**
    * 是否设置数据库排序
    * @returns 
@@ -38,7 +38,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
    * 是否设置数据库排序
    * @returns 
    */
-  protected _needPager():boolean{
+  protected _needPager(): boolean {
     //通过first进行拉取
     return this._param._first != null;
   }
@@ -94,14 +94,14 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
 
     return query
   }
-   /**
-   * 使用findData 函数
-   */
-   protected useFindData(){
+  /**
+  * 使用findData 函数
+  */
+  protected useFindData() {
     return false;
   }
   protected async find(query: Query) {
-    if(query == null){
+    if (query == null) {
       return []
     }
     let list = await this.findByDao(query)
@@ -132,7 +132,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
     return array;
 
   }
-  protected async doExecute():Promise<any> {
+  protected async doExecute(): Promise<any> {
     if (this.isDownload()) {
 
       let query = await this.buildQuery()
@@ -150,37 +150,42 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
 
 
     } else {
-      let query = await this.buildQuery()
-      let map: ListResult = {}
+      let map = await this.findData()
 
-      map.content = await this.find(query)
+      return map
+    }
+  }
+
+  protected async findData():Promise<ListResult> {
+    let query = await this.buildQuery()
+    let map: ListResult = {}
+
+    map.content = await this.find(query)
 
 
-      let processedList = await this._processList(map.content)
+    let processedList = await this._processList(map.content)
+    if (processedList != null) {
+      map.content = processedList
+    }
+
+
+    map.content = await this._filterByArrayCdt(map.content);
+    if (!this._needCnt) {
+      this._pageOrder(map.content)
+      await this.schCnt(map, query)
+
+
+    }
+    if (this._processPageList) {
+      let processedList = await this._processPageList(map.content)
       if (processedList != null) {
         map.content = processedList
       }
-
-
-      map.content = await this._filterByArrayCdt(map.content);
-      if (!this._needCnt){
-        this._pageOrder(map.content)
-        await this.schCnt(map, query)
-
-        
-      }
-      if (this._processPageList) {
-        let processedList = await this._processPageList(map.content)
-        if (processedList != null) {
-          map.content = processedList
-        }
-      }
-      this.slice(map)
-      map.pageSize = this.getPageSize()
-      map.first = this.getFirst()
- 
-      return map
     }
+    this.slice(map)
+    map.pageSize = this.getPageSize()
+    map.first = this.getFirst()
+    return map;
   }
   /**
    * 搜索数量和值
@@ -188,7 +193,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
    * @param query 
    */
   protected async schCnt(map, query) {
-    if(this.needSchCnt()){
+    if (this.needSchCnt()) {
       map.totalElements = map.list.length
     }
   }
@@ -196,19 +201,19 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
    * 内存中分页
    * @param map 
    */
-  slice(map:ListResult) {
-    if(!this._needPager()){
-      map.content = map.content.slice(this.getFirst(),this.getFirst()+this.getPageSize())
+  slice(map: ListResult) {
+    if (!this._needPager()) {
+      map.content = map.content.slice(this.getFirst(), this.getFirst() + this.getPageSize())
     }
   }
- 
+
 
   /**
    * setPage 注销掉，因为group 必须查询所有数据才知道数量
    * @param query 
    */
   protected _setPage(query: Query) {
-    if(this._needPager()){
+    if (this._needPager()) {
       super._setPage(query);
     }
   }

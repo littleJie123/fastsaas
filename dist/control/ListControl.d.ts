@@ -162,6 +162,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     protected download(): Promise<Buffer>;
     protected buildDownloadBuffer(list: any[]): Buffer;
     protected doExecute(): Promise<any>;
+    protected findData(): Promise<ListResult>;
     protected _sendResp(resp: any, ret: any): void;
     protected getDownloadFileName(): string;
     protected getOnlyCols(): string[];

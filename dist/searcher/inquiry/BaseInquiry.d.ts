@@ -4,13 +4,13 @@
  * async _parseResult(data) //更改查询数据
  */
 export default abstract class BaseInquiry {
-    protected _opt: any;
+    protected _opt: BaseInquiryOpt;
     private _cache;
     /**
      * 从数据库查找
      * @param params
      */
-    protected abstract _findFromDb(params: any): Promise<any[]>;
+    protected abstract _findFromDb(params: any[]): Promise<any[]>;
     /**
      * 返回数据的字符串化
      */
@@ -20,9 +20,8 @@ export default abstract class BaseInquiry {
      * @param param
      */
     abstract acqCode(param: any): string;
-    constructor(opt?: any);
-    protected get(key: any): any;
-    protected acqSchCols(): any;
+    constructor(opt?: BaseInquiryOpt);
+    protected acqSchCols(): string[];
     /**
      * 注册的时候设置查询列
      * @param cols
@@ -42,7 +41,7 @@ export default abstract class BaseInquiry {
      * 不能改成any[] 会导致老代码编译不通过
      *
      */
-    find(params: any, col?: string): Promise<any>;
+    find(params: any[], col?: string): Promise<any>;
     protected _addDefData(list: any, opt: any): any;
     protected _findNotOpt(list: any, opt: any): any[];
     protected parseRsult(list: Array<any>): Array<any>;
@@ -53,7 +52,7 @@ export default abstract class BaseInquiry {
     /**
      * 返回查询的表名
      */
-    getKey(): any;
+    getKey(): string;
     setKey(key: string): void;
     getContext(): Context;
     setContext(context: any): void;
@@ -84,3 +83,4 @@ export default abstract class BaseInquiry {
 import Context from './../../context/Context';
 import Dao from './../../dao/Dao';
 import BaseCache from "./cache/BaseCache";
+import BaseInquiryOpt from "./BaseInquiryOpt";
