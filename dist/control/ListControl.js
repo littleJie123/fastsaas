@@ -356,9 +356,12 @@ class ListControl extends Control_1.default {
         this._param.pageSize = null;
         var query = await this.buildQuery();
         let list = await this.find(query);
-        return this.buildDownloadBuffer(list);
+        return this.buildDownloadBuffer(list, await this.buildDownloadInfo());
     }
-    buildDownloadBuffer(list) {
+    async buildDownloadInfo() {
+        return null;
+    }
+    buildDownloadBuffer(list, downloadInfo) {
         return CsvUtil_1.default.toBuffer(list, this.getDownloadCols());
     }
     async doExecute() {

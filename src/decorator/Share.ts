@@ -25,6 +25,8 @@ export default function (cols:IColChanger[]) {
             let srcVal = JsonUtil.getByKeys(param._shareData,srcCol);
             if(srcVal != null){
               JsonUtil.setByKeys(param,destCol,srcVal);
+            }else{
+              throw new Error(`分享数据缺少参数${srcCol}`);
             }
           }
         }

@@ -160,7 +160,8 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     protected isDownload(): boolean;
     protected getDownloadCols(): CsvCol[];
     protected download(): Promise<Buffer>;
-    protected buildDownloadBuffer(list: any[]): Buffer;
+    protected buildDownloadInfo(): Promise<any>;
+    protected buildDownloadBuffer(list: any[], downloadInfo?: any): Buffer;
     protected doExecute(): Promise<any>;
     protected findData(): Promise<ListResult>;
     protected _sendResp(resp: any, ret: any): void;

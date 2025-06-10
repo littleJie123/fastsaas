@@ -395,10 +395,14 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
     this._param.pageSize = null;
     var query = await this.buildQuery()
     let list = await this.find(query);
-    return this.buildDownloadBuffer(list);
+    return this.buildDownloadBuffer(list,await this.buildDownloadInfo());
   }
 
-  protected buildDownloadBuffer(list: any[]):Buffer {
+  protected async buildDownloadInfo():Promise<any>{
+    return null;
+  }
+
+  protected buildDownloadBuffer(list: any[],downloadInfo?:any):Buffer {
     return CsvUtil.toBuffer(list, this.getDownloadCols())
   }
   protected async doExecute(): Promise<any> {

@@ -26,6 +26,9 @@ function default_1(cols) {
                         if (srcVal != null) {
                             fastsaas_1.JsonUtil.setByKeys(param, destCol, srcVal);
                         }
+                        else {
+                            throw new Error(`分享数据缺少参数${srcCol}`);
+                        }
                     }
                 }
                 if (superDoExecute) {
