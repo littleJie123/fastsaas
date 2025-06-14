@@ -37,6 +37,13 @@ class default_1 extends Control_1.default {
         return context.get(tableName + 'dao');
     }
     ;
+    getSearcher() {
+        let tableName = this.getTableName();
+        if (tableName == null)
+            throw new Error('必须冲载getTableName');
+        let context = this.getContext();
+        return context.get(tableName + 'Searcher');
+    }
     getPkCol() {
         let ret = this.getTableName() + 'Id';
         ret = fastsaas_1.StrUtil.changeUnderStringToCamel(ret);

@@ -1,6 +1,7 @@
 import Dao from './../dao/Dao';
 import Control from './Control';
 import RepeatChecker from '../checker/RepeatChecker';
+import { Searcher } from '../fastsaas';
 /**
  * 基本操作的对象
  */
@@ -17,6 +18,7 @@ export default abstract class extends Control {
      * 返回查询负责的dao
      */
     protected getDao(): Dao;
+    protected getSearcher(): Searcher;
     getPkCol(): string;
     protected getPkData(): Promise<{
         [x: string]: any;

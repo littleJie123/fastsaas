@@ -3,7 +3,7 @@ import Bean from './../context/decorator/Bean';
 
 import Control from './Control';
 import RepeatChecker from '../checker/RepeatChecker';
-import { StrUtil } from '../fastsaas';
+import { Searcher, StrUtil } from '../fastsaas';
 /**
  * 基本操作的对象
  */
@@ -36,6 +36,14 @@ export default abstract class extends Control {
     let context = this.getContext();
     return context.get(tableName + 'dao');
   };
+
+  protected getSearcher():Searcher{
+    let tableName = this.getTableName();
+    if (tableName == null)
+      throw new Error('必须冲载getTableName');
+    let context = this.getContext();
+    return context.get(tableName + 'Searcher');
+  }
 
   getPkCol() {
     let ret =  this.getTableName() + 'Id'

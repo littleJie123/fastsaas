@@ -63,6 +63,7 @@ export { default as SearcherControl } from './control/SearcherControl';
 export { default as SortControl } from './control/SortControl';
 export { default as UpdateControl } from './control/UpdateControl';
 export { default as UploadControl } from './control/UploadControl';
+export { default as PojoControl } from './control/PojoControl';
 export { default as JointFun } from './control/wiget/imp/JointFun';
 export { default as JointTable } from './control/wiget/imp/JointTable';
 export { default as JointWiget } from './control/wiget/JointWiget';
