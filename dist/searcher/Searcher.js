@@ -115,12 +115,21 @@ class Searcher {
     async findByIds(idArray, col) {
         var inquiry = this.get('getById');
         let array = idArray;
+        let hasZero = false;
         if (this.hasZeroId()) {
-            array = idArray.filter(e => e != 0);
+            array = [];
+            for (let id of idArray) {
+                if (id != 0) {
+                    array.push(id);
+                }
+                else {
+                    hasZero = true;
+                }
+            }
         }
         let ret = await inquiry.find(array, col);
         if (this.hasZeroId()) {
-            if (idArray.filter(e => e == 0).length > 0) {
+            if (hasZero) {
                 ret.push(this.buildWithZeroId());
             }
         }

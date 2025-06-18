@@ -756,9 +756,11 @@ opt:{
     static join(opt) {
         var list = opt.list;
         var list2 = opt.list2;
-        if (list == null ||
-            list2 == null) {
-            return [];
+        if (list == null) {
+            list = [];
+        }
+        if (list2 == null) {
+            list2 = [];
         }
         var key = opt.key;
         var key2 = opt.key2;
@@ -776,35 +778,34 @@ opt:{
         }
         var onlyOne = opt.onlyOne;
         var onlyTwo = opt.onlyTwo;
-        var map = ArrayUtil.toMapByKey(list, key);
+        var map2 = ArrayUtil.toMapByKey(list2, key2);
         var ret = [];
-        for (var i = 0; i < list2.length; i++) {
-            var data2 = list2[i];
-            var keyValue = get(data2, key2);
-            var data1 = map[keyValue];
-            if (data1 != null) {
+        for (let i = 0; i < list.length; i++) {
+            let data1 = list[i];
+            let keyValue = get(data1, key);
+            let data2 = map2[keyValue];
+            if (data2 != null) {
                 let row = fun(data1, data2);
                 if (row != null) {
                     ret.push(row);
                 }
             }
             else {
-                if (onlyTwo != null) {
-                    let row = onlyTwo(data2);
+                if (onlyOne != null) {
+                    let row = onlyOne(data1);
                     if (row != null) {
                         ret.push(row);
                     }
                 }
             }
         }
-        if (onlyOne != null) {
-            var map2 = ArrayUtil.toMapByKey(list2, key2);
-            for (var i = 0; i < list.length; i++) {
-                var data1 = list[i];
-                var keyValue = get(data1, key);
-                var data2 = map2[keyValue];
-                if (data2 == null) {
-                    let row = onlyOne(data1);
+        if (onlyTwo != null) {
+            let map1 = this.toMapByKey(list, key);
+            for (let data2 of list2) {
+                let keyValue = get(data2, key2);
+                let data1 = map1[keyValue];
+                if (data1 == null) {
+                    let row = onlyTwo(data2);
                     if (row != null) {
                         ret.push(row);
                     }
