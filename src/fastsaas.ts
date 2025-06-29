@@ -275,6 +275,7 @@ export { default as KeysInquiry } from './searcher/inquiry/imp/KeysInquiry';
 export { default as ProxyInquiry } from './searcher/inquiry/imp/ProxyInquiry';
 export { default as TablesInquiry } from './searcher/inquiry/imp/TablesInquiry';
 export { default as Searcher } from './searcher/Searcher';
+export { default as SearcherOpt} from './searcher/SearcherOpt';
 
 export { default as TimezoneServer } from './server/TimezoneServer';
 

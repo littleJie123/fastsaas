@@ -105,6 +105,15 @@ export default abstract class Searcher<Pojo = any> {
       await inquiry.save(array)
     }
   }
+
+  /**
+   * 根据id保存到缓存中，以后get 和findByIds可以从缓存中读取数据
+   * @param key 
+   * @param array 
+   */
+  async saveByIds( array: any[]) {
+    await this.save('getById',array);
+  }
   get(key): BaseInquiry {
     return this._map[key]
   }

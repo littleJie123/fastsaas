@@ -35,6 +35,12 @@ export default abstract class Searcher<Pojo = any> {
     protected getSchCols(): Array<string>;
     _getAll(): Array<BaseInquiry>;
     save(key: string, array: Array<any>): Promise<void>;
+    /**
+     * 根据id保存到缓存中，以后get 和findByIds可以从缓存中读取数据
+     * @param key
+     * @param array
+     */
+    saveByIds(array: any[]): Promise<void>;
     get(key: any): BaseInquiry;
     getCache(key: any): BaseCache;
     saveAll(array: Array<any>): Promise<void>;

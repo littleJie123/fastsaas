@@ -14,7 +14,7 @@ class FindSql extends BaseFind_1.default {
         var cols = query.getCol();
         if (cols.length == 0)
             return new Sql_1.default(`select  * from ${tableName} `);
-        var str = cols.join(','); // select 后的列形式过于负责, 禁止使用 ColSql 转义
+        var str = cols.join(','); // select 后的列形式过于复杂, 禁止使用 ColSql 转义
         let colChanger = opt.getColChanger();
         if (colChanger != null) {
             str = colChanger.changeSql(str);
