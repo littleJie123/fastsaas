@@ -14,9 +14,10 @@ export default abstract class Dao<Pojo = any> {
     /**
      * 根据id更新cdt中的数据，updateArray的语法糖
      * @param pojos
-     * @param cdt
+     * @param cdt 更新内容
+     * @param where 更新条件
      */
-    updateByIds(pojos: Pojo[], cdt: any): Promise<number>;
+    updateByIds(pojos: Pojo[], cdt: any, where?: any): Promise<number>;
     /**
      * 根据一个查询条件，进行更新
      * @param whereCdt 查询条件

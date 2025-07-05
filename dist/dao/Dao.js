@@ -14,14 +14,15 @@ class Dao {
     /**
      * 根据id更新cdt中的数据，updateArray的语法糖
      * @param pojos
-     * @param cdt
+     * @param cdt 更新内容
+     * @param where 更新条件
      */
-    async updateByIds(pojos, cdt) {
+    async updateByIds(pojos, cdt, where) {
         let idCol = this._opt.acqPojoFirstId();
         let datas = pojos.map(pojo => ({
             [idCol]: pojo[idCol]
         }));
-        return this.updateArray(datas, cdt);
+        return this.updateArray(datas, cdt, where);
     }
     /**
      * 根据一个查询条件，进行更新
