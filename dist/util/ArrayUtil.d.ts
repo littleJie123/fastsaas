@@ -319,4 +319,18 @@ opt:{
      */
     static onlyKeys(list: any[], key: any): any[];
     static sort(array: ICompare[], desc?: boolean): void;
+    /**
+     * 和老notinbykey的区别，是她不会因为list中的key重复删除数据
+     * @param list
+     * @param list2
+     * @param key
+     */
+    static notInByKeyWithNoChangeData(list: any[], list2: any[], key: IGeter, key2?: IGeter): any[];
+    /**
+     * 和老andByKey的区别，是她不会因为list中的key重复删除数据
+     * @param list
+     * @param list2
+     * @param key
+     */
+    static andByKeyWithNoChangeData(list: any[], list2: any[], key: IGeter, key2?: IGeter): any[];
 }

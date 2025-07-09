@@ -7,6 +7,22 @@ const BeanConfig_1 = __importDefault(require("./bean/BeanConfig"));
 const LogHelp_1 = __importDefault(require("../log/LogHelp"));
 const ComponentBuilder_1 = __importDefault(require("./bean/ComponentBuilder"));
 const AfterBuild = 'afterBuild'; //后处理函数
+let spaceId = null;
+let nowId = 0;
+let randNum = Math.pow(2, 24);
+let maxId = randNum;
+function getContextId() {
+    let ret = null;
+    if (spaceId == null) {
+        spaceId = Math.floor(Math.random() * randNum) * randNum;
+    }
+    ret = spaceId + nowId;
+    nowId++;
+    if (nowId >= maxId) {
+        nowId = 0;
+    }
+    return ret;
+}
 /**
  * bean 上下午相关的结构
  * {
@@ -287,9 +303,7 @@ class Context {
     }
     getId() {
         if (this._id == null) {
-            let now = new Date().getTime();
-            let random = Math.floor(Math.random() * 1000);
-            this._id = now * 1000 + random;
+            this._id = getContextId();
         }
         return this._id;
     }

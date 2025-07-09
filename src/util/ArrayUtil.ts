@@ -1180,4 +1180,38 @@ opt:{
 		})
 	}
 
+	/**
+	 * 和老notinbykey的区别，是她不会因为list中的key重复删除数据
+	 * @param list 
+	 * @param list2 
+	 * @param key 
+	 */
+	static notInByKeyWithNoChangeData(list:any[],list2:any[],key:IGeter, key2?:IGeter){
+		if(key2 == null){
+			key2 = key;
+		}
+		let map2 = this.toMapByKey(list2,key2);
+		return list.filter(row=>{
+			let rowKey = get(row,key);
+			return map2[rowKey] == null;
+		})
+	}
+
+
+	/**
+	 * 和老andByKey的区别，是她不会因为list中的key重复删除数据
+	 * @param list 
+	 * @param list2 
+	 * @param key 
+	 */
+	static andByKeyWithNoChangeData(list:any[],list2:any[],key:IGeter, key2?:IGeter){
+		if(key2 == null){
+			key2 = key;
+		}
+		let map2 = this.toMapByKey(list2,key2);
+		return list.filter(row=>{
+			let rowKey = get(row,key);
+			return map2[rowKey] != null;
+		})
+	}
 }
