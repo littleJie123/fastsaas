@@ -143,6 +143,49 @@ class Searcher {
         }
         return ret;
     }
+    async findAndCheck(idArray, schQuery, cols) {
+        let pojos = await this.findByIds(idArray);
+        let query = schQuery;
+        if (schQuery != null && cols != null) {
+            query = {};
+            for (let col of cols) {
+                query[col] = schQuery[col];
+            }
+        }
+        if (query == null) {
+            return pojos;
+        }
+        let dao = new fastsaas_1.ArrayDao(pojos);
+        return await dao.find(query);
+    }
+    /**
+     *
+     * @param obj 带有主键的对象
+     * @param cols  需要检查的字段
+     * @returns
+     */
+    async getByObj(obj, cols) {
+        if (obj == null) {
+            return null;
+        }
+        let schObj;
+        if (cols == null) {
+            schObj = obj;
+        }
+        else {
+            schObj = {};
+            for (let col of cols) {
+                schObj[col] = obj[col];
+            }
+        }
+        let ret = await this.getById(obj[this.getIdKey()]);
+        for (let e in schObj) {
+            if (ret[e] != schObj[e]) {
+                return null;
+            }
+        }
+        return ret;
+    }
     /**
      * 从缓存中拿
      * @param array
@@ -179,3 +222,4 @@ class Searcher {
 }
 exports.default = Searcher;
 const Inquiry_1 = __importDefault(require("./inquiry/imp/Inquiry"));
+const fastsaas_1 = require("../fastsaas");

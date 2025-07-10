@@ -170,6 +170,57 @@ export default abstract class Searcher<Pojo = any> {
     }
     return ret;
   }
+
+  async findAndCheck(idArray:any[],schQuery?:any,cols?:string[]) :Promise<Pojo[]> {
+
+    let pojos = await this.findByIds(idArray);
+    let query = schQuery;
+    if(schQuery != null && cols != null){
+      query = {}
+      for(let col of cols){
+        query[col] = schQuery[col]
+      }
+    }
+    if(query == null){
+      return pojos;
+    }
+
+    let dao = new ArrayDao(pojos);
+    return await dao.find(query);
+  }
+
+  /**
+   * 
+   * @param obj 带有主键的对象
+   * @param cols  需要检查的字段
+   * @returns 
+   */
+  async getByObj(obj:any,cols?:string[]){
+    if(obj==null){
+      return null;
+    }
+    let schObj ;
+    if(cols == null){
+      schObj = obj;
+    }else{
+      schObj = {};
+      for(let col of cols){
+        schObj[col] = obj[col]
+      }
+     
+    }
+    let ret = await this.getById(obj[this.getIdKey()]);
+    for(let e in schObj){
+      if(ret[e] != schObj[e]){
+        return null;
+      }
+    }
+    return ret;
+    
+    
+  }
+
+  
   /**
    * 从缓存中拿
    * @param array 
@@ -216,5 +267,6 @@ import BaseInquiry from './inquiry/BaseInquiry'
 import BaseCache from './inquiry/cache/BaseCache';
 import Dao from './../dao/Dao';
 import e from 'cors';
+import { ArrayDao, StrUtil } from '../fastsaas';
 
 

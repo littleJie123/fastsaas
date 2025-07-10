@@ -53,6 +53,14 @@ export default abstract class Searcher<Pojo = any> {
      * @param array
      */
     findByIds(idArray: Array<any>, col?: string): Promise<Pojo[]>;
+    findAndCheck(idArray: any[], schQuery?: any, cols?: string[]): Promise<Pojo[]>;
+    /**
+     *
+     * @param obj 带有主键的对象
+     * @param cols  需要检查的字段
+     * @returns
+     */
+    getByObj(obj: any, cols?: string[]): Promise<Pojo>;
     /**
      * 从缓存中拿
      * @param array
