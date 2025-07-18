@@ -251,7 +251,9 @@ class Dao {
         let updateDatas = array.map(row => {
             let ret = {};
             cols.forEach(col => {
-                ret[col] = row[col];
+                if (row.hasOwnProperty(col)) {
+                    ret[col] = row[col];
+                }
             });
             ret[idName] = row[idName];
             return ret;

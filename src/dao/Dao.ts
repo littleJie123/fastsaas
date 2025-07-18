@@ -270,7 +270,9 @@ export default abstract class Dao<Pojo = any> {
     let updateDatas = array.map(row=>{
       let ret:any = {};
       cols.forEach(col=>{
-        ret[col] = row[col];
+        if(row.hasOwnProperty(col)){
+          ret[col] = row[col];
+        }
       })
       ret[idName] = row[idName];
       return ret;
