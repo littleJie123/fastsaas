@@ -24,6 +24,12 @@ class default_1 {
      */
     static gcd(a, b) {
         // 使用辗转相除法
+        if (a == null || isNaN(a)) {
+            a = 1;
+        }
+        if (b == null || isNaN(b)) {
+            b = 1;
+        }
         a = Math.abs(a);
         b = Math.abs(b);
         while (b !== 0) {

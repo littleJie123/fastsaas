@@ -1,10 +1,13 @@
-import { Context, Dao } from "../fastsaas";
+import { Context, Dao, Searcher } from "../fastsaas";
+import IDomainOpt from "./inf/IDomainOpt";
 import ISaveParam from "./inf/ISaveParam";
+import UpdateOpt from "./inf/UpdateOpt";
 export default abstract class BaseDomain<Do = any> {
     protected _context: Context;
     setContext(context: Context): void;
     getContext(): Context;
     getDao(): Dao<Do>;
+    getSearcher(): Searcher<Do>;
     /**
      * 返回业务主键
      */
@@ -40,4 +43,13 @@ export default abstract class BaseDomain<Do = any> {
      */
     protected setPks(datas: Do[], dbDatas: Do[]): void;
     protected schByBPks(datas: Do[]): Promise<Do[]>;
+    /**
+     * 加载数据
+     * @param datas
+     * @param opt
+     * @returns
+     */
+    load(datas: Do[], opt?: IDomainOpt<Do>): Promise<Do[]>;
+    protected updateWithContext(opt: UpdateOpt<Do>): Promise<Do[]>;
+    protected onlyCols(datas: Do[], cols: string[]): Do[];
 }

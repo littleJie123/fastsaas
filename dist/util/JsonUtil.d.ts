@@ -1,4 +1,18 @@
 declare class JsonUtil {
+    /**
+     * 将两个对象的属性相加
+     * @param obj1
+     * @param obj2
+     * @param cols
+     */
+    static addObj(obj1: any, obj2: any, cols: string[]): any;
+    /**
+    * 将两个对象的属性相减
+    * @param obj1
+    * @param obj2
+    * @param cols
+    */
+    static subObj(obj1: any, obj2: any, cols: string[]): any;
     static parseJson(json: any, opt: any): any;
     private static changeVal;
     private static parseStr;

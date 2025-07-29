@@ -277,7 +277,7 @@ export default abstract class Dao<Pojo = any> {
       ret[idName] = row[idName];
       return ret;
     })
-    await this.updateArray(updateDatas,other,whereObj);
+    return await this.updateArray(updateDatas,other,whereObj);
   }
 
   /**
@@ -877,5 +877,17 @@ export default abstract class Dao<Pojo = any> {
 
   getColChanger(){
     return this._opt.getColChanger();
+  }
+
+  /**
+   * 根据数据和字段，将对应属性变成add 的sql
+   */
+  changeDataToAddSql(pojo:Pojo,col:string){
+    let data:any = pojo;
+    let value = data[col]
+    if(value != null){
+      let dbCol = this._opt.parsePojoField(col)
+      data[col] = new Sql(`?+\`${dbCol}\``,value)
+    }
   }
 }

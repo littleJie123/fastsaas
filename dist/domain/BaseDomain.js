@@ -12,6 +12,9 @@ class BaseDomain {
         return null;
     }
     ;
+    getSearcher() {
+        return null;
+    }
     /**
      * 返回业务主键
      */
@@ -147,6 +150,80 @@ class BaseDomain {
         }
         query.inObjs(bPks, datas);
         return this.getDao().find(query);
+    }
+    /**
+     * 加载数据
+     * @param datas
+     * @param opt
+     * @returns
+     */
+    async load(datas, opt) {
+        let searcher = this.getSearcher();
+        let pkCol = this.getPkCol();
+        let dbDatas = await searcher.findAndCheck(fastsaas_1.ArrayUtil.toArray(datas, pkCol), opt === null || opt === void 0 ? void 0 : opt.schQuery);
+        if (opt.onBeforeLoad) {
+            await opt.onBeforeLoad(dbDatas);
+        }
+        function copy(src, target) {
+            if (opt === null || opt === void 0 ? void 0 : opt.cols) {
+                for (let col of opt.cols) {
+                    if (target[col] == null) {
+                        target[col] = src[col];
+                    }
+                }
+            }
+            else {
+                for (let col in src) {
+                    if (target[col] == null) {
+                        if (src.hasOwnProperty(col)) {
+                            target[col] = src[col];
+                        }
+                    }
+                }
+            }
+        }
+        return fastsaas_1.ArrayUtil.join({
+            list: dbDatas,
+            list2: datas,
+            fun(dbData, newData) {
+                if (opt === null || opt === void 0 ? void 0 : opt.onCompare) {
+                    opt === null || opt === void 0 ? void 0 : opt.onCompare(dbData, newData);
+                }
+                copy(dbData, newData);
+                return newData;
+            },
+            key: pkCol
+        });
+    }
+    async updateWithContext(opt) {
+        let dao = this.getDao();
+        let cnt = 0;
+        if (opt.cols == null) {
+            cnt = await dao.updateArray(opt.datas, opt.other, opt.whereObj);
+        }
+        else {
+            cnt = await dao.updateArrayWithCols(opt.datas, opt.cols, opt.other, opt.whereObj);
+        }
+        if (cnt == opt.datas.length) {
+            return opt.datas;
+        }
+        if (cnt == 0) {
+            return [];
+        }
+        let query = new fastsaas_1.Query(opt.whereObj);
+        query.eq('contextId', this._context.getId());
+        return await dao.find(query);
+    }
+    onlyCols(datas, cols) {
+        let pkCol = this.getPkCol();
+        return datas.map((data) => {
+            let ret = {};
+            ret[pkCol] = data[pkCol];
+            for (let col of cols) {
+                ret[col] = data[col];
+            }
+            return ret;
+        });
     }
 }
 exports.default = BaseDomain;

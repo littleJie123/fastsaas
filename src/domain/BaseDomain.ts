@@ -1,5 +1,7 @@
-import { ArrayUtil, Context, Dao, Query } from "../fastsaas";
+import { ArrayUtil, Context, Dao, Query, Searcher } from "../fastsaas";
+import IDomainOpt from "./inf/IDomainOpt";
 import ISaveParam from "./inf/ISaveParam";
+import UpdateOpt from "./inf/UpdateOpt";
 
 export default abstract class BaseDomain<Do = any>{
   protected _context:Context;
@@ -15,6 +17,10 @@ export default abstract class BaseDomain<Do = any>{
   getDao():Dao<Do>{
     return null
   };
+
+  getSearcher():Searcher<Do>{
+    return null;
+  }
 
 
   /**
@@ -170,5 +176,86 @@ export default abstract class BaseDomain<Do = any>{
     query.inObjs(bPks,datas);
     return this.getDao().find(query);
   }
+
+  /**
+   * 加载数据
+   * @param datas 
+   * @param opt 
+   * @returns 
+   */
+  async load(datas:Do[],opt?:IDomainOpt<Do>):Promise<Do[]> {
+    let searcher = this.getSearcher();
+    let pkCol = this.getPkCol()
+    let dbDatas = await searcher.findAndCheck(
+      ArrayUtil.toArray(datas,pkCol),
+      opt?.schQuery
+    )
+    if(opt.onBeforeLoad){
+      await opt.onBeforeLoad(dbDatas);
+    }
+    function copy(src,target){
+      if(opt?.cols){
+        for(let col of opt.cols){
+          if(target[col] == null){
+            target[col] = src [col]
+          }
+        }
+      }else{
+        for(let col in src){
+          if(target[col] == null){
+            if(src.hasOwnProperty(col)){
+              target[col] = src [col]
+            }
+          }
+        }
+      }
+    }
+    return ArrayUtil.join({
+      list:dbDatas,
+      list2:datas,
+      fun(dbData,newData){
+        if(opt?.onCompare){
+          opt?.onCompare(dbData,newData)
+        }
+        copy(dbData,newData)
+        return newData
+      },
+      key:pkCol
+    })
+  }
   
+  protected async updateWithContext(opt:UpdateOpt<Do>):Promise<Do[]>{
+    let dao = this.getDao();
+    let cnt = 0;
+    if(opt.datas == null || opt.datas.length == 0){
+      return [];
+    }
+    if(opt.cols == null){
+      cnt = await dao.updateArray(opt.datas,opt.other,opt.whereObj)
+    }else{
+      cnt = await dao.updateArrayWithCols(opt.datas,opt.cols,opt.other,opt.whereObj)
+    }
+    if(cnt == opt.datas.length){
+      return opt.datas
+    }
+    if(cnt == 0){
+      return [];
+    }
+    let query = new Query(opt.whereObj);
+    query.eq('contextId',this._context.getId())
+    return await dao.find(query);
+
+  }
+
+  protected onlyCols(datas:Do[],cols:string[]):Do[]{
+    let pkCol = this.getPkCol()
+    return datas.map((data:Do)=>{
+      let ret:any = {}
+      ret[pkCol] = data[pkCol];
+      for(let col of cols){
+        ret[col] = data[col]
+      }
+      return ret;
+    })
+  }
 }

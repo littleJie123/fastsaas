@@ -50,7 +50,14 @@ class UpdateSql extends SqlBuilder_1.default {
                 }
                 if (v != null && v.getSql) {
                     let valueSql = v.getSql(colChanger);
-                    this._pushSqlTxt(sql, valueSql);
+                    if (valueSql.toSql().indexOf('=') != -1) {
+                        this._pushSqlTxt(sql, valueSql);
+                    }
+                    else {
+                        this._pushSqlTxt(sql, new sql_1.ColSql(this.parsePojoField(pojoCol)));
+                        this._pushSqlTxt(sql, '=');
+                        this._pushSqlTxt(sql, valueSql);
+                    }
                 }
                 else {
                     this._pushSqlTxt(sql, new sql_1.ColSql(this.parsePojoField(pojoCol)));

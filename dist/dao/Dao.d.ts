@@ -108,7 +108,7 @@ export default abstract class Dao<Pojo = any> {
      * @param array
      */
     updateArray(array: Pojo[], other?: object, whereObj?: any): Promise<number>;
-    updateArrayWithCols(array: Pojo[], cols: string[], other?: object, whereObj?: any): Promise<void>;
+    updateArrayWithCols(array: Pojo[], cols: string[], other?: object, whereObj?: any): Promise<number>;
     /**
      *删除一条数据
      * @param obj 删除的数据
@@ -276,4 +276,8 @@ export default abstract class Dao<Pojo = any> {
      */
     changeDbArray2Pojo(datas: any[]): Pojo[];
     getColChanger(): import("./colChanger/ColChanger").default;
+    /**
+     * 根据数据和字段，将对应属性变成add 的sql
+     */
+    changeDataToAddSql(pojo: Pojo, col: string): void;
 }

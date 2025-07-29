@@ -15,7 +15,7 @@ export default class DaoOpt {
      */
     parsePojoFieldsToDbFields(pojoField: string[]): string[];
     /**
-     * 将一个内存的字段转成pos的字段
+     * 将一个内存的字段转成db的字段
      * @param pojoField 内存的字段
      */
     parsePojoField(pojoField: string): string;

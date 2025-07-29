@@ -258,7 +258,7 @@ class Dao {
             ret[idName] = row[idName];
             return ret;
         });
-        await this.updateArray(updateDatas, other, whereObj);
+        return await this.updateArray(updateDatas, other, whereObj);
     }
     /**
      *删除一条数据
@@ -807,6 +807,17 @@ class Dao {
     }
     getColChanger() {
         return this._opt.getColChanger();
+    }
+    /**
+     * 根据数据和字段，将对应属性变成add 的sql
+     */
+    changeDataToAddSql(pojo, col) {
+        let data = pojo;
+        let value = data[col];
+        if (value != null) {
+            let dbCol = this._opt.parsePojoField(col);
+            data[col] = new sql_1.Sql(`?+\`${dbCol}\``, value);
+        }
     }
 }
 exports.default = Dao;

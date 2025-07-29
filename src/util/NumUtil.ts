@@ -23,6 +23,12 @@ export default class {
    */
   static gcd(a: number, b: number): number {
     // 使用辗转相除法
+    if(a == null || isNaN(a)){
+      a = 1
+    }
+    if(b == null || isNaN(b)){
+      b = 1;
+    }
     a = Math.abs(a);
     b = Math.abs(b);
     while (b !== 0) {

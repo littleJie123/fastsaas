@@ -35,6 +35,38 @@ function setKey(obj, key, param) {
   return param
 }
 class JsonUtil {
+  /**
+   * 将两个对象的属性相加
+   * @param obj1 
+   * @param obj2 
+   * @param cols 
+   */
+  static addObj(obj1,obj2,cols:string[]){
+    let ret:any = {};
+    for(let col of cols){
+      let val1 = this.getByKeys(obj1,col) ?? 0;
+      let val2 =  this.getByKeys(obj2,col) ?? 0;
+      this.setByKeys(ret,col, val1 + val2);
+    }
+    return ret;
+  }
+
+   /**
+   * 将两个对象的属性相减
+   * @param obj1 
+   * @param obj2 
+   * @param cols 
+   */
+  static subObj(obj1,obj2,cols:string[]){
+    let ret:any = {};
+    for(let col of cols){
+      let val1 = this.getByKeys(obj1,col) ?? 0;
+      let val2 =  this.getByKeys(obj2,col) ?? 0;
+      this.setByKeys(ret,col, val1 - val2);
+    }
+    return ret;
+  }
+  
 
   static parseJson(json:any,opt:any){
     if(json == null || opt == null){
