@@ -7,7 +7,7 @@ export default class ArrayDao extends Dao {
     private acqFirstId;
     add(obj: any): Promise<any>;
     update(obj: any, whereObj?: any): Promise<number>;
-    getById(id: any): Promise<void>;
+    getById(id: any): Promise<any>;
     private findMaxId;
     find(opt: any): Promise<any[]>;
     private _processCol;

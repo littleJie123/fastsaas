@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArrayUtil = void 0;
+const fastsaas_1 = require("../fastsaas");
 const JsonUtil_1 = __importDefault(require("./JsonUtil"));
 const StrUtil_1 = require("./StrUtil");
 /**
@@ -36,6 +37,10 @@ function get(obj, key) {
     }
 }
 class ArrayUtil {
+    static async sch(array, query) {
+        let arrayDao = new fastsaas_1.ArrayDao(array);
+        return arrayDao.find(query);
+    }
     /**
      * 类似字符串的indexOf
      * @param array1

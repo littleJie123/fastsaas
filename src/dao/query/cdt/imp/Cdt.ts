@@ -6,6 +6,7 @@ import OperatorFac from './../../../../formula/operator/OperatorFac';
 import ColChanger from '../../../colChanger/ColChanger';
 import { Sql, ColSql, ValSql } from '../../../sql'
 import BaseCdt from '../BaseCdt'
+import { JsonUtil } from '../../../../fastsaas';
 
 
 export default class Cdt extends BaseCdt {
@@ -77,16 +78,17 @@ export default class Cdt extends BaseCdt {
   
   isHit(obj) {
     if(!(this.col instanceof Array)){
-      var val = obj[this.col]
-      var opt = OperatorFac.get(this.op)
+      //var val = obj[this.col]
+      let val = JsonUtil.getByKeys(obj,this.col)
+      let opt = OperatorFac.get(this.op)
       if (opt == null) return false
       return opt.cal([val, this.val])
     }else{
 
       //多个字段
       for(let col of this.col){
-        var val = obj[col]
-        var opt = OperatorFac.get(this.op)
+        let val = JsonUtil.getByKeys(obj,col)
+        let opt = OperatorFac.get(this.op)
         if (opt == null) return false
         let ret = opt.cal([val, this.val])
         if(!ret){

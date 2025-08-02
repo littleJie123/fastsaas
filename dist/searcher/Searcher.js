@@ -144,7 +144,19 @@ class Searcher {
         return ret;
     }
     async findAndCheck(idArray, schQuery, cols) {
-        let pojos = await this.findByIds(idArray);
+        let ids = [];
+        let idCol = this.getIdKey();
+        for (let idObj of idArray) {
+            if (fastsaas_1.StrUtil.isStr(idObj) || fastsaas_1.NumUtil.isNum(idObj)) {
+                ids.push(idObj);
+            }
+            else {
+                if (idObj[idCol] != null) {
+                    ids.push(idObj[idCol]);
+                }
+            }
+        }
+        let pojos = await this.findByIds(ids);
         let query = schQuery;
         if (schQuery != null && cols != null) {
             query = {};

@@ -50,6 +50,9 @@ export default abstract class BaseDomain<Do = any> {
      * @returns
      */
     load(datas: Do[], opt?: IDomainOpt<Do>): Promise<Do[]>;
+    private loadOtherTable;
+    private getSearcherByKey;
+    private getIdColByKey;
     protected updateWithContext(opt: UpdateOpt<Do>): Promise<Do[]>;
     protected onlyCols(datas: Do[], cols: string[]): Do[];
 }

@@ -58,6 +58,7 @@ interface JoinOpt<JoinFun, OnlyOneFun, OnlyTwoFun> {
     onlyTwo?: OnlyTwoFun;
 }
 export declare class ArrayUtil {
+    static sch(array: any[], query: any): Promise<any[]>;
     /**
      * 类似字符串的indexOf
      * @param array1

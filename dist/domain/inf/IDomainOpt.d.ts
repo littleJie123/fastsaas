@@ -8,4 +8,8 @@ export default interface IDomainOpt<Pojo = any> {
      * @param data 内存数据
      */
     onCompare?(dbData: Pojo, data: Pojo): any;
+    /**
+     * 根据数据中的id去其他表进行加载
+     */
+    loadKeys?: string[];
 }

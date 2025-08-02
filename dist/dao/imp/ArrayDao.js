@@ -85,8 +85,13 @@ class ArrayDao extends Dao_1.default {
         BeanUtil_1.BeanUtil.copy(obj, row);
     }
     async getById(id) {
+        let idCol = this.acqFirstId();
         for (let row of this.array) {
+            if (row[idCol] == id) {
+                return row;
+            }
         }
+        return null;
     }
     findMaxId() {
         if (this.array == null || this.array.length == 0) {

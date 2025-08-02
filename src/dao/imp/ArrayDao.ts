@@ -90,9 +90,13 @@ export default class ArrayDao extends Dao {
   }
 
   async getById(id) {
+    let idCol = this.acqFirstId()
     for (let row of this.array) {
-
+      if(row[idCol] == id){
+        return row;
+      }
     }
+    return null;
   }
 
 

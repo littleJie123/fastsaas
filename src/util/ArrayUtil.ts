@@ -7,6 +7,7 @@
  * @LastEditTime : 2020-02-11 19:33:16
  */
 
+import { ArrayDao } from "../fastsaas";
 import IGeter from "./inf/IGeter"
 import JsonUtil from "./JsonUtil";
 import { StrUtil } from "./StrUtil";
@@ -94,6 +95,11 @@ function get(obj: object, key:IGeter) {
 }
 
 export class ArrayUtil {
+
+	static async sch(array:any[],query:any):Promise<any[]>{
+		let arrayDao = new ArrayDao(array);
+		return  arrayDao.find(query);
+	}
 	/**
 	 * 类似字符串的indexOf
 	 * @param array1 

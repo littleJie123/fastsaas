@@ -173,7 +173,18 @@ export default abstract class Searcher<Pojo = any> {
 
   async findAndCheck(idArray:any[],schQuery?:any,cols?:string[]) :Promise<Pojo[]> {
 
-    let pojos = await this.findByIds(idArray);
+    let ids:any[] = [];
+    let idCol = this.getIdKey()
+    for(let idObj of idArray){
+      if(StrUtil.isStr(idObj) || NumUtil.isNum(idObj)){
+        ids.push(idObj)
+      }else{
+        if(idObj[idCol] != null){
+          ids.push(idObj[idCol]);
+        }
+      }
+    }
+    let pojos = await this.findByIds(ids);
     let query = schQuery;
     if(schQuery != null && cols != null){
       query = {}
@@ -267,6 +278,6 @@ import BaseInquiry from './inquiry/BaseInquiry'
 import BaseCache from './inquiry/cache/BaseCache';
 import Dao from './../dao/Dao';
 import e from 'cors';
-import { ArrayDao, StrUtil } from '../fastsaas';
+import { ArrayDao, NumUtil, StrUtil } from '../fastsaas';
 
 

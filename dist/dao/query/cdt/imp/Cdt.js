@@ -10,6 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const OperatorFac_1 = __importDefault(require("./../../../../formula/operator/OperatorFac"));
 const sql_1 = require("../../../sql");
 const BaseCdt_1 = __importDefault(require("../BaseCdt"));
+const fastsaas_1 = require("../../../../fastsaas");
 class Cdt extends BaseCdt_1.default {
     constructor(col, value, op) {
         super();
@@ -70,8 +71,9 @@ class Cdt extends BaseCdt_1.default {
     }
     isHit(obj) {
         if (!(this.col instanceof Array)) {
-            var val = obj[this.col];
-            var opt = OperatorFac_1.default.get(this.op);
+            //var val = obj[this.col]
+            let val = fastsaas_1.JsonUtil.getByKeys(obj, this.col);
+            let opt = OperatorFac_1.default.get(this.op);
             if (opt == null)
                 return false;
             return opt.cal([val, this.val]);
@@ -79,8 +81,8 @@ class Cdt extends BaseCdt_1.default {
         else {
             //多个字段
             for (let col of this.col) {
-                var val = obj[col];
-                var opt = OperatorFac_1.default.get(this.op);
+                let val = fastsaas_1.JsonUtil.getByKeys(obj, col);
+                let opt = OperatorFac_1.default.get(this.op);
                 if (opt == null)
                     return false;
                 let ret = opt.cal([val, this.val]);

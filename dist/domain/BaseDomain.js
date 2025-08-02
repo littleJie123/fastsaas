@@ -182,7 +182,7 @@ class BaseDomain {
                 }
             }
         }
-        return fastsaas_1.ArrayUtil.join({
+        let retList = fastsaas_1.ArrayUtil.join({
             list: dbDatas,
             list2: datas,
             fun(dbData, newData) {
@@ -194,10 +194,39 @@ class BaseDomain {
             },
             key: pkCol
         });
+        await this.loadOtherTable(retList, opt);
+        return retList;
+    }
+    async loadOtherTable(list, opt) {
+        let loadKeys = opt.loadKeys;
+        if (loadKeys != null && loadKeys.length > 0) {
+            for (let loadKey of loadKeys) {
+                let searcher = this.getSearcherByKey(loadKey);
+                await searcher.findByIds(fastsaas_1.ArrayUtil.toArrayDis(list, this.getIdColByKey(loadKey)));
+            }
+            for (let row of list) {
+                for (let loadKey of loadKeys) {
+                    let searcher = this.getSearcherByKey(loadKey);
+                    let idCol = this.getIdColByKey(loadKey);
+                    if (row[idCol] != null) {
+                        row[loadKey] = await searcher.getById(row[idCol]);
+                    }
+                }
+            }
+        }
+    }
+    getSearcherByKey(key) {
+        return this._context.get(key + 'Searcher');
+    }
+    getIdColByKey(key) {
+        return key + 'Id';
     }
     async updateWithContext(opt) {
         let dao = this.getDao();
         let cnt = 0;
+        if (opt.datas == null || opt.datas.length == 0) {
+            return [];
+        }
         if (opt.cols == null) {
             cnt = await dao.updateArray(opt.datas, opt.other, opt.whereObj);
         }
