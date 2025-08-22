@@ -102,7 +102,9 @@ export default class DaoUtil {
       async onUpdateArray(dao: any, array: Array<any>, other?: any, whereObj?: any) {
         if (other == null)
           other = {};
-        fun(dao, other);
+        for(let row of array){
+          fun(dao, row);
+        }
       }
     }
     return DaoUtil.createOnChangeDecorator(new DefOnChangeOpt(changeOpt));

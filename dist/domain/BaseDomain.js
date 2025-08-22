@@ -35,7 +35,7 @@ class BaseDomain {
         }
         let dao = this.getDao();
         let self = this;
-        await dao.onlyArray({
+        return await dao.onlyArray({
             array: saveParams.datas,
             mapFun: this.getBussinessPks(),
             query: saveParams.query,
@@ -49,6 +49,37 @@ class BaseDomain {
                 await self.delDatas(datas);
             },
         });
+    }
+    /**
+     *
+     * @param data
+     */
+    async saveDoByBPK(data) {
+        let bpk = this.getBussinessPks();
+        if (bpk == null || bpk.length == 0) {
+            throw new Error('没有设置业务主键');
+        }
+        let query = {};
+        for (let pk of bpk) {
+            query[pk] = data[pk];
+        }
+        let list = await this.saveDatasWithBPk({
+            datas: [data],
+            needUpdate: true,
+            query
+        });
+        return list[0];
+    }
+    async getDoByBPK(data) {
+        let bpk = this.getBussinessPks();
+        if (bpk == null || bpk.length == 0) {
+            throw new Error('没有设置业务主键');
+        }
+        let query = {};
+        for (let pk of bpk) {
+            query[pk] = data[pk];
+        }
+        return this.getDao().findOne(query);
     }
     async addDatasByArray(datas) {
         let dao = this.getDao();
@@ -197,6 +228,11 @@ class BaseDomain {
         await this.loadOtherTable(retList, opt);
         return retList;
     }
+    /**
+     * 查询其他表
+     * @param list
+     * @param opt
+     */
     async loadOtherTable(list, opt) {
         let loadKeys = opt.loadKeys;
         if (loadKeys != null && loadKeys.length > 0) {

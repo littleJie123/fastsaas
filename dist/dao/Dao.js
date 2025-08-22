@@ -750,6 +750,10 @@ class Dao {
             await self.updateArray(ArrayUtil_1.ArrayUtil.onlyKeys(array, idCol), { isDel: 1 });
         };
     }
+    /**
+     * 分批次处理数据
+     * @param opt
+     */
     async processInTimes(opt) {
         let { query, fun, limit, col } = opt;
         let dbQuery = Query_1.default.parse(query);

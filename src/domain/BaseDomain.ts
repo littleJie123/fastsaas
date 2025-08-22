@@ -43,13 +43,13 @@ export default abstract class BaseDomain<Do = any> {
    * 保存数组,根据业务主键来判断是否需要新增,更新,删除
    * @param obj
    */
-  async saveDatasWithBPk(saveParams: ISaveParam<Do>) {
+  async saveDatasWithBPk(saveParams: ISaveParam<Do>):Promise<Do[]> {
     if (saveParams.query == null) {
       throw new Error('查询条件不能为空');
     }
     let dao = this.getDao();
     let self = this;
-    await dao.onlyArray({
+    return await dao.onlyArray({
       array: saveParams.datas,
       mapFun: this.getBussinessPks(),
       query: saveParams.query,
@@ -63,6 +63,38 @@ export default abstract class BaseDomain<Do = any> {
         await self.delDatas(datas);
       },
     })
+  }
+  /**
+   * 
+   * @param data 
+   */
+  protected async saveDoByBPK(data:Do){
+    let bpk = this.getBussinessPks();
+    if(bpk == null || bpk.length == 0){
+      throw new Error('没有设置业务主键');
+    }
+    let query:any = {}
+    for(let pk of bpk){
+      query[pk] = data[pk];
+    }
+    let list= await this.saveDatasWithBPk({
+      datas:[data],
+      needUpdate:true,
+      query
+    })
+    return list[0]
+  }
+
+  async getDoByBPK(data:Do):Promise<Do>{
+    let bpk = this.getBussinessPks();
+    if(bpk == null || bpk.length == 0){
+      throw new Error('没有设置业务主键');
+    }
+    let query:any = {}
+    for(let pk of bpk){
+      query[pk] = data[pk];
+    }
+    return this.getDao().findOne(query);
   }
 
   protected async addDatasByArray(datas: Do[]) {
@@ -228,6 +260,11 @@ export default abstract class BaseDomain<Do = any> {
 
   }
 
+  /**
+   * 查询其他表
+   * @param list 
+   * @param opt 
+   */
   private async loadOtherTable(list: Do[], opt?: IDomainOpt<Do>) {
     let loadKeys = opt.loadKeys;
     if (loadKeys != null && loadKeys.length > 0) {

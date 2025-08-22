@@ -258,9 +258,13 @@ export default abstract class Dao<Pojo = any> {
      * 高阶函数，返回一个逻辑删除的批量操作
      */
     buildLogicDelArrayFun(): (array: any[]) => Promise<void>;
+    /**
+     * 分批次处理数据
+     * @param opt
+     */
     processInTimes(opt: {
         query: any;
-        /** 处理函数 */
+        /** 处理函数  */
         fun: (list: Pojo[]) => Promise<boolean>;
         limit?: number;
         col?: string;

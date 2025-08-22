@@ -17,7 +17,13 @@ export default abstract class BaseDomain<Do = any> {
      * 保存数组,根据业务主键来判断是否需要新增,更新,删除
      * @param obj
      */
-    saveDatasWithBPk(saveParams: ISaveParam<Do>): Promise<void>;
+    saveDatasWithBPk(saveParams: ISaveParam<Do>): Promise<Do[]>;
+    /**
+     *
+     * @param data
+     */
+    protected saveDoByBPK(data: Do): Promise<Do>;
+    getDoByBPK(data: Do): Promise<Do>;
     protected addDatasByArray(datas: Do[]): Promise<void>;
     /**
      * 根据主键来更新数据
@@ -50,6 +56,11 @@ export default abstract class BaseDomain<Do = any> {
      * @returns
      */
     load(datas: Do[], opt?: IDomainOpt<Do>): Promise<Do[]>;
+    /**
+     * 查询其他表
+     * @param list
+     * @param opt
+     */
     private loadOtherTable;
     private getSearcherByKey;
     private getIdColByKey;

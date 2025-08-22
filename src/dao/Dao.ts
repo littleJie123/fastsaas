@@ -812,10 +812,13 @@ export default abstract class Dao<Pojo = any> {
     }
   }
 
-
+  /**
+   * 分批次处理数据
+   * @param opt 
+   */
   async processInTimes(opt:{
       query:any,
-      /** 处理函数 */
+      /** 处理函数  */
       fun:(list:Pojo[])=>Promise<boolean>,
       limit?:number,
       col?:string
