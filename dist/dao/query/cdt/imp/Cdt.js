@@ -11,6 +11,9 @@ const OperatorFac_1 = __importDefault(require("./../../../../formula/operator/Op
 const sql_1 = require("../../../sql");
 const BaseCdt_1 = __importDefault(require("../BaseCdt"));
 const fastsaas_1 = require("../../../../fastsaas");
+/**
+ * 支持多个字段的in查询
+ */
 class Cdt extends BaseCdt_1.default {
     constructor(col, value, op) {
         super();

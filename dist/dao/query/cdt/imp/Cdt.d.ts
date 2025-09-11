@@ -1,6 +1,9 @@
 import ColChanger from '../../../colChanger/ColChanger';
 import { Sql } from '../../../sql';
 import BaseCdt from '../BaseCdt';
+/**
+ * 支持多个字段的in查询
+ */
 export default class Cdt extends BaseCdt {
     private op;
     private col;

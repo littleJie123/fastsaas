@@ -90,7 +90,7 @@ export default abstract class BaseDomain<Do = any> {
     if(bpk == null || bpk.length == 0){
       throw new Error('没有设置业务主键');
     }
-    let query:any = {}
+    let query:any = {isDel:0}
     for(let pk of bpk){
       query[pk] = data[pk];
     }

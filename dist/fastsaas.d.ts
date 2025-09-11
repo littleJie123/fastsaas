@@ -126,6 +126,7 @@ export { default as ColSql } from './dao/sql/ColSql';
 export { default as ISql } from './dao/sql/ISql';
 export { default as Sql } from './dao/sql/Sql';
 export { default as ValSql } from './dao/sql/ValSql';
+export { default as InIdsCdtBuilder } from './dao/query/InIdsCdtBuilder';
 export { default as Share } from './decorator/Share';
 export { default as Column } from './decorator/Column';
 export { default as ContextId } from './decorator/ContextId';
