@@ -29,6 +29,10 @@ interface ImportOpt {
      */
     needUpdate?: boolean;
     checker?: (context: Context, param: any, datas: ImportorObj[]) => Promise<boolean>;
+    /**
+     * domain中的函数名
+     */
+    domainFun?: string;
 }
 /**
  * 一个表的导入类
@@ -59,13 +63,14 @@ export default class Importor {
      * @returns
      */
     protected checkByDomain(context: Context, param: any, datas: ImportorObj[]): Promise<boolean>;
+    private needProcessByDomain;
     /**
      * 处理导入
      * @param context
      * @param param
      * @param datas
      */
-    process(context: Context, param: any, datas: ImportorObj[]): Promise<void>;
+    process(context: Context, param: any, datas: ImportorObj[]): Promise<any>;
     /**
      * 将需要导入的数据转成pojo
      * @param param
@@ -90,6 +95,7 @@ export default class Importor {
     join(datas: ImportorObj[], retArray: any[]): void;
     protected getIdCol(): string;
     protected getIdColByKey(key: string): string;
+    private getDomain;
     /**
      * 如果domain中实现了onImport方法，则通过import方法来调用
      * @param context
@@ -97,6 +103,7 @@ export default class Importor {
      * @param datas
      */
     processByDomain(context: Context, param: any, datas: ImportorObj[]): Promise<boolean>;
+    private getDomainFun;
     getKey(): string;
     /**
      * 该列所有对应的数据为空

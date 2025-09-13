@@ -60,6 +60,17 @@ class Importor {
             return true;
         }
     }
+    needProcessByDomain(context) {
+        if (this.opt.noDomain) {
+            return false;
+        }
+        let domain = this.getDomain(context);
+        if (domain == null) {
+            return false;
+        }
+        let domFun = this.getDomainFun();
+        return domain[domFun] != null;
+    }
     /**
      * 处理导入
      * @param context
@@ -70,9 +81,11 @@ class Importor {
         if (this.isAllNull(datas)) {
             return;
         }
-        let ret = await this.processByDomain(context, param, datas);
-        if (!ret) {
-            await this.processByDao(context, param, datas);
+        if (this.needProcessByDomain(context)) {
+            return await this.processByDomain(context, param, datas);
+        }
+        else {
+            return await this.processByDao(context, param, datas);
         }
     }
     /**
@@ -189,6 +202,9 @@ class Importor {
     getIdColByKey(key) {
         return fastsaas_1.StrUtil.changeUnderStringToCamel(key) + 'Id';
     }
+    getDomain(context) {
+        return context.get(this.opt.key + 'Domain');
+    }
     /**
      * 如果domain中实现了onImport方法，则通过import方法来调用
      * @param context
@@ -196,17 +212,22 @@ class Importor {
      * @param datas
      */
     async processByDomain(context, param, datas) {
-        let noDomain = this.opt.noDomain;
-        if (noDomain) {
-            return false;
-        }
-        let domain = context.get(this.opt.key + 'Domain');
-        if (domain === null || domain === void 0 ? void 0 : domain.onImport) {
-            let ret = await domain.onImport(param, datas, datas.map(row => this.parseDataToPojo(param, row)));
+        let domain = this.getDomain(context);
+        let domFun = this.getDomainFun();
+        if (domain === null || domain === void 0 ? void 0 : domain[domFun]) {
+            let ret = await domain[domFun](param, datas, datas.map(row => this.parseDataToPojo(param, row)));
             this.join(datas, ret);
-            return true;
+            return ret;
         }
-        return false;
+        return null;
+    }
+    getDomainFun() {
+        var _a;
+        let domFun = (_a = this.opt) === null || _a === void 0 ? void 0 : _a.domainFun;
+        if (domFun == null || domFun == '') {
+            domFun = 'onImport';
+        }
+        return domFun;
     }
     getKey() {
         return this.opt.key;

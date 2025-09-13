@@ -17,16 +17,16 @@ class ImportorManager {
                 };
             }
         }
+        let processResult = null;
         while (imports.length > 0) {
             if (count++ > 200) {
                 throw new Error('死循环了？');
             }
             let noRuned = true;
             let nextArray = [];
-            console.log('imports', imports);
             for (let importor of imports) {
                 if (importor.isReady(datas)) {
-                    await importor.process(context, param, datas);
+                    processResult = await importor.process(context, param, datas);
                     noRuned = false;
                 }
                 else {
@@ -38,7 +38,8 @@ class ImportorManager {
             }
             imports = nextArray;
         }
-        return { checked: true };
+        //返回最后一个的处理结果
+        return processResult;
     }
     /**
      * 转变数据

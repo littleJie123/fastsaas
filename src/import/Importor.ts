@@ -37,6 +37,11 @@ interface ImportOpt{
   needUpdate?:boolean;
 
   checker?:(context: Context, param: any, datas: ImportorObj[])=>Promise<boolean>
+
+  /**
+   * domain中的函数名
+   */
+  domainFun?:string;
 }
 
 /**
@@ -106,21 +111,41 @@ export default class Importor{
     }
   }
 
+
+  private needProcessByDomain(context:Context):boolean{
+    if(this.opt.noDomain){
+      return false;
+    }
+
+    let domain = this.getDomain(context);
+    if(domain == null){
+      return false;
+    }
+    let domFun = this.getDomainFun();
+    return domain[domFun] != null;
+  }
   /**
    * 处理导入
    * @param context 
    * @param param 
    * @param datas 
    */
-  async process(context: Context, param: any, datas: ImportorObj[]):Promise<void> {
+  async process(context: Context, param: any, datas: ImportorObj[]):Promise<any> {
     if(this.isAllNull(datas)){
       return;
     }
-    let ret = await this.processByDomain(context,param,datas);
-    if(!ret){
-      await this.processByDao(context,param,datas);
+     
+    
+    if(this.needProcessByDomain(context)){
+      return await this.processByDomain(context,param,datas);
+    }else{
+      return await this.processByDao(context,param,datas);
     }
+    
+    
   }
+
+  
 
 
   /**
@@ -198,6 +223,7 @@ export default class Importor{
         needUpdate:this.opt.needUpdate
       })
       this.join(datas,ret);
+      
     }
   }
 
@@ -243,6 +269,10 @@ export default class Importor{
 
 
 
+  private getDomain(context: Context){
+
+    return context.get(this.opt.key+'Domain');
+  }
 
   /**
    * 如果domain中实现了onImport方法，则通过import方法来调用
@@ -251,17 +281,23 @@ export default class Importor{
    * @param datas 
    */
   async processByDomain(context: Context, param: any, datas: ImportorObj[]):Promise<boolean>{
-    let noDomain = this.opt.noDomain;
-    if(noDomain){
-      return false;
-    }
-    let domain = context.get(this.opt.key+'Domain');
-    if(domain?.onImport){
-      let ret = await domain.onImport(param,datas, datas.map(row=>this.parseDataToPojo(param,row)));
+    
+    let domain = this.getDomain(context)
+    let domFun = this.getDomainFun()
+    if(domain?.[domFun]){
+      let ret = await domain[domFun](param,datas, datas.map(row=>this.parseDataToPojo(param,row)));
       this.join(datas,ret);
-      return true;
+      return ret;
     }
-    return false;
+    return null;
+  }
+
+  private getDomainFun():string{
+    let domFun = this.opt?.domainFun
+    if(domFun == null || domFun == ''){
+      domFun = 'onImport'
+    }
+    return domFun;
   }
 
   getKey(){
