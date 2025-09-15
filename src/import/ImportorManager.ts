@@ -14,6 +14,7 @@ interface ImportorManagerOpt{
 export default class ImportorManager {
   private opt:ImportorManagerOpt;
   constructor(opt:ImportorManagerOpt){
+    
     this.opt = opt;
   }
 
@@ -39,7 +40,7 @@ export default class ImportorManager {
       let noRuned = true;
       let nextArray = [];
       for(let importor of imports){
-        if(importor.isReady(datas)){
+        if(importor.isReady(datas,imports)){
           processResult = await importor.process(context,param,datas);
           noRuned = false;
         }else{

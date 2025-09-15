@@ -42,6 +42,10 @@ interface ImportOpt{
    * domain中的函数名
    */
   domainFun?:string;
+  /**
+   * 不检查数据
+   */
+  noCheck?:boolean
 }
 
 /**
@@ -49,7 +53,13 @@ interface ImportOpt{
 */
 export default class Importor{
   
-  opt:ImportOpt;
+  private opt:ImportOpt;
+
+  private runned:boolean;
+
+  getRunned(){
+    return this.runned;
+  }
   constructor(opt:ImportOpt){
     this.opt = opt;
   }
@@ -131,12 +141,14 @@ export default class Importor{
    * @param datas 
    */
   async process(context: Context, param: any, datas: ImportorObj[]):Promise<any> {
+    this.runned = true;
     if(this.isAllNull(datas)){
       return;
     }
      
     
     if(this.needProcessByDomain(context)){
+      
       return await this.processByDomain(context,param,datas);
     }else{
       return await this.processByDao(context,param,datas);
@@ -318,7 +330,26 @@ export default class Importor{
     return true;
   }
 
-  isReady(datas: ImportorObj[]):boolean {
+  /**
+   * 判断有没有运行
+   * @param importors 
+   * @returns 
+   */
+  private needAllRun(importors:Importor[]):boolean{
+    let needIds = this.opt.needId;
+    
+    for(let needId of needIds){
+      let need = importors.find(row=>row.getKey().toLowerCase()==needId.toLowerCase())
+      if(need != null && !need.getRunned()){
+        return false;
+      }
+    }
+    return true;
+  }
+  isReady(datas: ImportorObj[],importors:Importor[]):boolean {
+    if(this.opt.noCheck){
+      return this.needAllRun(importors)
+    }
     if(this.isAllNull(datas)){
       return true;
     }

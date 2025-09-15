@@ -33,12 +33,18 @@ interface ImportOpt {
      * domain中的函数名
      */
     domainFun?: string;
+    /**
+     * 不检查数据
+     */
+    noCheck?: boolean;
 }
 /**
  * 一个表的导入类
 */
 export default class Importor {
-    opt: ImportOpt;
+    private opt;
+    private runned;
+    getRunned(): boolean;
     constructor(opt: ImportOpt);
     /**
      * 转变数据
@@ -111,6 +117,12 @@ export default class Importor {
      * @returns
      */
     isAllNull(datas: ImportorObj[]): boolean;
-    isReady(datas: ImportorObj[]): boolean;
+    /**
+     * 判断有没有运行
+     * @param importors
+     * @returns
+     */
+    private needAllRun;
+    isReady(datas: ImportorObj[], importors: Importor[]): boolean;
 }
 export {};

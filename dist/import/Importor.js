@@ -5,6 +5,9 @@ const fastsaas_1 = require("../fastsaas");
  * 一个表的导入类
 */
 class Importor {
+    getRunned() {
+        return this.runned;
+    }
     constructor(opt) {
         this.opt = opt;
     }
@@ -78,6 +81,7 @@ class Importor {
      * @param datas
      */
     async process(context, param, datas) {
+        this.runned = true;
         if (this.isAllNull(datas)) {
             return;
         }
@@ -246,7 +250,25 @@ class Importor {
         }
         return true;
     }
-    isReady(datas) {
+    /**
+     * 判断有没有运行
+     * @param importors
+     * @returns
+     */
+    needAllRun(importors) {
+        let needIds = this.opt.needId;
+        for (let needId of needIds) {
+            let need = importors.find(row => row.getKey().toLowerCase() == needId.toLowerCase());
+            if (need != null && !need.getRunned()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    isReady(datas, importors) {
+        if (this.opt.noCheck) {
+            return this.needAllRun(importors);
+        }
         if (this.isAllNull(datas)) {
             return true;
         }
