@@ -13,6 +13,6 @@ interface ImportorInf {
      * @param datas
      * @param rows
      */
-    onImport(param: any, datas: ImportorObj[], rows: any[]): Promise<any[]>;
+    onImport(param: any, datas: ImportorObj[], rows: any[]): Promise<any>;
 }
 export default ImportorInf;

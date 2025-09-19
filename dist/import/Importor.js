@@ -74,6 +74,10 @@ class Importor {
         let domFun = this.getDomainFun();
         return domain[domFun] != null;
     }
+    isEmptyDomainFun() {
+        let domainFun = this.opt.domainFun;
+        return domainFun == null || domainFun == '';
+    }
     /**
      * 处理导入
      * @param context
@@ -82,14 +86,20 @@ class Importor {
      */
     async process(context, param, datas) {
         this.runned = true;
-        if (this.isAllNull(datas)) {
-            return;
+        let allNull = this.isAllNull(datas);
+        if (allNull && this.isEmptyDomainFun()) {
+            return null;
         }
         if (this.needProcessByDomain(context)) {
             return await this.processByDomain(context, param, datas);
         }
         else {
-            return await this.processByDao(context, param, datas);
+            if (!allNull) {
+                return await this.processByDao(context, param, datas);
+            }
+            else {
+                return null;
+            }
         }
     }
     /**
@@ -220,7 +230,9 @@ class Importor {
         let domFun = this.getDomainFun();
         if (domain === null || domain === void 0 ? void 0 : domain[domFun]) {
             let ret = await domain[domFun](param, datas, datas.map(row => this.parseDataToPojo(param, row)));
-            this.join(datas, ret);
+            if (ret instanceof Array) {
+                this.join(datas, ret);
+            }
             return ret;
         }
         return null;

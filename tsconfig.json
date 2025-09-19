@@ -12,7 +12,8 @@
       "resolveJsonModule": true,
       "rootDir": "./src",
       "target": "ES2018",
-      "experimentalDecorators":true
+      "experimentalDecorators":true,
+      "newLine": "crlf"
   },
   "include": [
       "src/**/*.ts"

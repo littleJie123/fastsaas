@@ -70,6 +70,7 @@ export default class Importor {
      */
     protected checkByDomain(context: Context, param: any, datas: ImportorObj[]): Promise<boolean>;
     private needProcessByDomain;
+    private isEmptyDomainFun;
     /**
      * 处理导入
      * @param context

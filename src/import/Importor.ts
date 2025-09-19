@@ -134,6 +134,11 @@ export default class Importor{
     let domFun = this.getDomainFun();
     return domain[domFun] != null;
   }
+
+  private isEmptyDomainFun(){
+    let domainFun = this.opt.domainFun;
+    return domainFun == null || domainFun == '';
+  }
   /**
    * 处理导入
    * @param context 
@@ -142,8 +147,9 @@ export default class Importor{
    */
   async process(context: Context, param: any, datas: ImportorObj[]):Promise<any> {
     this.runned = true;
-    if(this.isAllNull(datas)){
-      return;
+    let allNull = this.isAllNull(datas);
+    if(allNull && this.isEmptyDomainFun()){
+      return null;
     }
      
     
@@ -151,7 +157,11 @@ export default class Importor{
       
       return await this.processByDomain(context,param,datas);
     }else{
-      return await this.processByDao(context,param,datas);
+      if(!allNull){
+        return await this.processByDao(context,param,datas);
+      }else{
+        return null;
+      }
     }
     
     
@@ -298,7 +308,9 @@ export default class Importor{
     let domFun = this.getDomainFun()
     if(domain?.[domFun]){
       let ret = await domain[domFun](param,datas, datas.map(row=>this.parseDataToPojo(param,row)));
-      this.join(datas,ret);
+      if(ret instanceof Array){
+        this.join(datas,ret);
+      }
       return ret;
     }
     return null;

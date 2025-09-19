@@ -34,12 +34,28 @@ class ImportorManager {
                 }
             }
             if (noRuned) {
-                throw new Error('一个能import的都没有');
+                let noRuned = imports.filter(row => !row.getRunned());
+                let keys = noRuned.map(row => row.getKey());
+                throw new Error(` 一个能import的都没有,还剩下${keys.join(',')}`);
             }
             imports = nextArray;
         }
+        if (processResult == null) {
+            return {
+                checked: true
+            };
+        }
         //返回最后一个的处理结果
-        return processResult;
+        if (processResult instanceof Array) {
+            return {
+                checked: true,
+                datas: processResult
+            };
+        }
+        else {
+            return processResult;
+        }
+        ;
     }
     /**
      * 转变数据
