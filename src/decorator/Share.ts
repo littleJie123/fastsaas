@@ -21,7 +21,7 @@ export default function (cols:IColChanger[]) {
         if(param._shareData != null){
           for(let col of cols){
             let srcCol = col.srcCol;
-            let destCol = col.targetCol;
+            let destCol = col.targetCol ?? srcCol;
             let srcVal = JsonUtil.getByKeys(param._shareData,srcCol);
             if(srcVal != null){
               JsonUtil.setByKeys(param,destCol,srcVal);

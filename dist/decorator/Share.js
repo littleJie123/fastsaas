@@ -16,12 +16,13 @@ function default_1(cols) {
              * @returns
              */
             async _parseRequestParam(req, resp) {
+                var _a;
                 let superDoExecute = super['_parseRequestParam'];
                 let param = this['_param'];
                 if (param._shareData != null) {
                     for (let col of cols) {
                         let srcCol = col.srcCol;
-                        let destCol = col.targetCol;
+                        let destCol = (_a = col.targetCol) !== null && _a !== void 0 ? _a : srcCol;
                         let srcVal = fastsaas_1.JsonUtil.getByKeys(param._shareData, srcCol);
                         if (srcVal != null) {
                             fastsaas_1.JsonUtil.setByKeys(param, destCol, srcVal);
