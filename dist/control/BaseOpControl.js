@@ -17,6 +17,13 @@ const fastsaas_1 = require("../fastsaas");
  * 基本操作的对象
  */
 class default_1 extends Control_1.default {
+    constructor() {
+        super(...arguments);
+        /**
+         * 在data中不需要的字段
+         */
+        this.noDataCols = null;
+    }
     getBaseDataCdt() {
         return this.dataCdt;
     }
@@ -101,9 +108,18 @@ class default_1 extends Control_1.default {
         return ret;
     }
     async getData() {
-        return {
-            ...this._param
-        };
+        if (this.noDataCols == null || this.noDataCols.length == 0) {
+            return {
+                ...this._param
+            };
+        }
+        else {
+            let ret = { ...this._param };
+            for (let col of this.noDataCols) {
+                delete ret[col];
+            }
+            return ret;
+        }
     }
     getDataCdt() {
         let dataCdt = this.getBaseDataCdt();

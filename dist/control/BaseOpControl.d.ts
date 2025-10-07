@@ -6,6 +6,10 @@ import { Searcher } from '../fastsaas';
  * 基本操作的对象
  */
 export default abstract class extends Control {
+    /**
+     * 在data中不需要的字段
+     */
+    protected noDataCols: string[];
     protected dataCdt: {
         get(): any;
         getOtherCdt(): any;

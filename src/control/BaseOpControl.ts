@@ -8,6 +8,10 @@ import { Searcher, StrUtil } from '../fastsaas';
  * 基本操作的对象
  */
 export default abstract class extends Control {
+  /**
+   * 在data中不需要的字段
+   */
+  protected noDataCols:string[] = null;
   @Bean()
   protected dataCdt:{
     get():any
@@ -104,9 +108,17 @@ export default abstract class extends Control {
     return ret;
   }
   protected async getData() {
-    return {
-      ... this._param
-    };
+    if(this.noDataCols == null || this.noDataCols.length == 0){
+      return {
+        ... this._param
+      };
+    }else{
+      let ret:any  = {... this._param};
+      for(let col of this.noDataCols){
+        delete ret[col];
+      }
+      return ret;
+    }
   }
 
   getDataCdt() {
