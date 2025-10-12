@@ -265,7 +265,7 @@ export default abstract class BaseDomain<Do = any> {
    * @param list 
    * @param opt 
    */
-  private async loadOtherTable(list: Do[], opt?: IDomainOpt<Do>) {
+  protected async loadOtherTable(list: Do[], opt?: IDomainOpt<Do>) {
     let loadKeys = opt.loadKeys;
     if (loadKeys != null && loadKeys.length > 0) {
       for (let loadKey of loadKeys) {

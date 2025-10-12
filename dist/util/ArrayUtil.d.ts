@@ -119,7 +119,7 @@ opt:{
 */
     static groupBy(opt: GroupByParam): Array<any>;
     /**
- * 将 通过比较key将两个数组按and的方式and
+ * 将 通过比较key将两个数组按and的方式and,第一个数组会因为key而去除重复
      
             array1:数组1
             array2:数组2

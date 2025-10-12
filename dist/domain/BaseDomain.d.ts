@@ -61,7 +61,7 @@ export default abstract class BaseDomain<Do = any> {
      * @param list
      * @param opt
      */
-    private loadOtherTable;
+    protected loadOtherTable(list: Do[], opt?: IDomainOpt<Do>): Promise<void>;
     private getSearcherByKey;
     private getIdColByKey;
     protected updateWithContext(opt: UpdateOpt<Do>): Promise<Do[]>;
