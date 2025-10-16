@@ -184,6 +184,7 @@ class BaseDomain {
     }
     /**
      * 加载数据
+     * 会将数据库的数据设置到datas的对应属性里面，如果datas已经设置了数据，则不会被复制
      * @param datas
      * @param opt
      * @returns

@@ -114,6 +114,7 @@ class Control {
             let url = req.baseUrl + req.url;
             this._printLog({
                 url,
+                contextId: this.getContext().getId(),
                 param: JSON.stringify(this._param)
             });
         }

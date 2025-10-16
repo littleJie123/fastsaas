@@ -132,6 +132,7 @@ export default class Control<Param = any, Result = any> {
       let url: string = req.baseUrl + req.url;
       this._printLog({
         url,
+        contextId:this.getContext().getId(),
         param: JSON.stringify(this._param)
       });
     } catch (e) {
