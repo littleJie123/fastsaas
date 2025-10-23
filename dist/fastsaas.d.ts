@@ -300,3 +300,6 @@ export { default as UrlBuilder } from './dataBuilder/imp/UrlBuilder';
 export { default as BaseDomain } from './domain/BaseDomain';
 export { default as ISaveParam } from './domain/inf/ISaveParam';
 export { default as DataLoader } from './dataLoader/DataLoader';
+export { default as EventBus } from './events/EventBus';
+export { default as SpanCache } from './cache/SpanCache';
+export { SpanOpt } from './cache/SpanCache';

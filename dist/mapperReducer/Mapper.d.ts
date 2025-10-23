@@ -1,9 +1,27 @@
 import { IGeter } from "../fastsaas";
+type Key = number | string;
+/**
+ * 一个多级的缓存
+ */
 export default class Mapper<Pojo = any> {
     private mapper;
-    constructor(datas: Pojo[], keys: IGeter[]);
+    private keysLen;
+    constructor(datas?: Pojo[], keyGeters?: IGeter[]);
+    /**
+     * 设置数据,会进行分组
+     * @param keyGeters
+     * @param datas
+     */
+    setByGeters(keyGeters: IGeter[], datas: Pojo[]): void;
+    add(keys: Key[], datas: Pojo[]): void;
     private init;
-    get(keys: string[]): Pojo[];
+    /**
+     * 根据keys查询出内存的值
+     * @param keys
+     * @returns
+     */
+    get(keys: Key[]): Pojo[];
     private getArrayFromMap;
     private doGetArrayFromMap;
 }
+export {};

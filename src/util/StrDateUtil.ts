@@ -18,4 +18,8 @@ export default class{
   static getToday():string{
     return DateUtil.format(new Date());
   }
+
+  static getDays(begin:string,end:string):string[]{
+
+  }
 }
