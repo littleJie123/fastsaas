@@ -1,3 +1,4 @@
+import { IGeter } from '../fastsaas';
 import { AnyObject } from './anyObject';
 interface sortFun {
     (obj1: AnyObject, obj2: AnyObject): number;
@@ -26,7 +27,7 @@ export interface OnlyArrayIntface<Pojo = any> {
     /**
      * 匹配的条件
      */
-    mapFun: Function | string | Array<string>;
+    mapFun: IGeter<Pojo>;
     /**
      数据库的查询条件，根据条件查出对比数据
     */

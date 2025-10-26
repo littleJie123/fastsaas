@@ -21,6 +21,10 @@ export default class Mapper<Pojo = any> {
      * @returns
      */
     get(keys: Key[]): Pojo[];
+    /**
+     * 返回缓存中所有的实例
+     */
+    getAll(): Pojo[];
     private getArrayFromMap;
     private doGetArrayFromMap;
 }

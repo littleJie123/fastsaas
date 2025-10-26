@@ -8,7 +8,7 @@
  */
 
 import { ArrayDao } from "../fastsaas";
-import IGeter from "./inf/IGeter"
+import IGeter, { IGeterValue } from "./inf/IGeter"
 import JsonUtil from "./JsonUtil";
 import { StrUtil } from "./StrUtil";
 type OrderItemParam = string | ArrayOrderItem | ArrayOrderItem[];
@@ -24,7 +24,7 @@ interface ICompare {
 interface GroupByParam {
 	list?: Array<any>, //数组
 	array?: Array<any>,
-	key: any, //分组的key
+	key: IGeter, //分组的key
 	fun: Function // 处理函数
 }
 
@@ -32,7 +32,7 @@ interface AbsJoinParam {
 	list: Array<any>;
 	list2: Array<any>;
 	fun?: Function;
-	keys?: Array<string>;
+	keys?: string[];
 }
 
 type OnlyFun = (obj:any)=>(any | null);
@@ -56,11 +56,11 @@ interface JoinOpt<JoinFun,OnlyOneFun,OnlyTwoFun> {
 	/**
 	 * 对应的key
 	 */
-	key: Function | string | Array<string>;
+	key: IGeter;
 	/**
 	 * 默认和key相同
 	 */
-	key2?: Function | string | Array<string>;
+	key2?: IGeter;
 	/**
 	 * 只有数组1有的时候处理函数
 	 * function(array,e)
@@ -77,7 +77,7 @@ interface JoinOpt<JoinFun,OnlyOneFun,OnlyTwoFun> {
 从一个元素中取值
 也支持有function
 */
-function get(obj: object, key:IGeter) {
+function get<Pojo=any>(obj: Pojo, key:IGeter<Pojo>) {
 	if (key == null)
 		return obj;
 	if (key instanceof Function) {
@@ -146,7 +146,7 @@ export class ArrayUtil {
 	 * @param array 
 	 * @param key 
 	 */
-	static isDuplicate(array: any[], key: Function | string | string[]): boolean {
+	static isDuplicate<Pojo=any>(array: Pojo[], key: IGeter<Pojo>): boolean {
 		let map: any = {}
 		for (let row of array) {
 			let keyStr = get(row, key);
@@ -210,7 +210,7 @@ export class ArrayUtil {
 		return ret;
 	}
 
-	static sum(array: Array<any>, key?: Array<string> | Function | string): number {
+	static sum<Pojo=any>(array: Pojo[], key?: IGeter<Pojo>): number {
 		var ret = 0
 		if (!array) return 0
 		var len = array.length
@@ -222,15 +222,15 @@ export class ArrayUtil {
 					ret += val
 				}
 			} else {
-				ret += obj
+				ret += (obj as number)
 			}
 		}
 		return ret
 	}
-	static distinctByKey(array, keys: string | Function | Array<string>) {
+	static distinctByKey<Pojo=any>(array:Pojo[], keys: IGeter<Pojo>) {
 		var map = ArrayUtil.toMapByKey(array, keys)
-		var list = []
-		for (var e in map) {
+		var list:any[] = []
+		for (let e in map) {
 			list.push(map[e])
 		}
 		return list
@@ -486,7 +486,7 @@ opt:{
  * @param array
  * @param key
  */
-	static toMapByKey(array: any[], key: any, fun?: Function | string) {
+	static toMapByKey<Pojo=any>(array: Pojo[], key: any, fun?: IGeterValue<Pojo>):{[key:string]:any} {
 		if (fun == null) {
 			fun = (data) => {
 				return data
@@ -500,9 +500,9 @@ opt:{
 			const len = array.length
 			for (let i = 0; i < len; i++) {
 				let data = array[i]
-				let mapKey = get(data, key)
+				let mapKey = get(data as any, key)
 				if(mapKey != null){
-					map[mapKey] = get(data, fun)
+					map[mapKey] = get(data as any, fun)
 				}
 			}
 		}
@@ -512,12 +512,12 @@ opt:{
 	/**
  * @description 将一个list按key分组，放在map中
  */
-	static toMapArray(list: any[], key: any, fun?: Function) {
+	static toMapArray<Pojo=any>(list: Pojo[], key: IGeter<Pojo>, fun?: IGeter<Pojo>) {
 
 		var ret = {}
 		if (list != null && key != null) {
 			for (let i = 0; i < list.length; i++) {
-				let data = list[i]
+				let data:any = list[i]
 				let val = get(data, key)
 				let mapData = get(data, fun)
 				if (val != null && mapData != null) {
@@ -751,7 +751,7 @@ opt:{
 		return array1
 	}
 
-	static toArray(array, key: string | Function | Array<string>) {
+	static toArray<Pojo>(array:Pojo[], key: IGeter<Pojo>) {
 		if (array == null)
 			return [];
 		if (!(array instanceof Array))
@@ -802,7 +802,7 @@ opt:{
 		return true;
 	}
 
-	static orByKey(array1, array2, key1?: string | Array<string> | Function, key2?: string | Array<string> | Function) {
+	static orByKey(array1, array2, key1?: IGeter, key2?: IGeter) {
 		if (key1 == null) {
 			key1 = (row) => row;
 		}
@@ -1069,16 +1069,16 @@ opt:{
 	 * @param array 
 	 * @param key 
 	 */
-	static toArrayDis(array: Array<any>, key: string | Function | Array<string>): Array<any> {
+	static toArrayDis<Pojo>(array: Pojo[], key: IGeter<Pojo>): any[] {
 		if (array == null)
 			return null;
-		let set = new Set();
+		let set = new Set<Pojo>();
 		for (let row of array) {
 			let val = get(row, key);
 			if (val != null)
 				set.add(val);
 		}
-		return [...set];
+		return [... set];
 	}
 	/**
 	 * 将一个mapArray 转成map
@@ -1098,7 +1098,7 @@ opt:{
 	 * @param array2 
 	 * @param key 
 	 */
-	static isSameByKey(array1: Array<any>, array2: Array<any>, key: string | Array<string> | Function) {
+	static isSameByKey(array1: Array<any>, array2: Array<any>, key: IGeter) {
 		if (array1 == null && array2 == null) return true;
 		if (array1 == null || array2 == null) return false;
 		if (array1.length != array2.length)

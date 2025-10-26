@@ -96,6 +96,13 @@ export default class Mapper<Pojo = any>{
     }
   }
 
+  /**
+   * 返回缓存中所有的实例
+   */
+  getAll(): Pojo[] {
+    return this.getArrayFromMap(this.mapper);
+  }
+
   private getArrayFromMap(mapArray:any):Pojo[]{
     if(mapArray == null){
       return [];

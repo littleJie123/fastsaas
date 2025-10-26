@@ -31,7 +31,9 @@ export default class Hat extends BaseHat {
      * 将查询结果转成map ，方便取值
      * @param array
      */
-    protected _toMap(array: any): {};
+    protected _toMap(array: any): {
+        [key: string]: any;
+    };
     /**
      * 根据主键从 关联表取数据
      * @param list

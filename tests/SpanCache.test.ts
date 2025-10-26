@@ -26,6 +26,12 @@ describe('SpanCache', () => {
   beforeEach(() => {
     mockSpanOpt = {
       findFromDb: jest.fn(async (span: Span) => {
+        if (span.begin === null || span.end === null) {
+            // Handle infinite cases for mock
+            const b = span.begin === null ? 1 : parseInt(span.begin as string, 10);
+            const e = span.end === null ? 30 : parseInt(span.end as string, 10);
+            return generateMockData(b.toString(), e.toString());
+        }
         if (!span.begin || !span.end) {
           return [];
         }
@@ -34,6 +40,15 @@ describe('SpanCache', () => {
       }),
       getKeyFromPojo: jest.fn((pojo: TestPojo) => pojo.id),
       getKeysFromSpan: jest.fn((span: Span) => {
+        if (span.begin === null || span.end === null) {
+            const b = span.begin === null ? 1 : parseInt(span.begin as string, 10);
+            const e = span.end === null ? 30 : parseInt(span.end as string, 10);
+            const keys: string[] = [];
+            for (let i = b; i <= e; i++) {
+              keys.push(i.toString());
+            }
+            return keys;
+        }
         if (!span.begin || !span.end) {
           return [];
         }
@@ -132,5 +147,63 @@ describe('SpanCache', () => {
     expect(mockSpanOpt.findFromDb).toHaveBeenCalledWith({ begin: '1', end: '6' });
     expect(result).toHaveLength(3);
     expect(result.map(p => p.id).sort()).toEqual(['1', '2', '3']);
+  });
+
+  // --- Tests for null spans ---
+
+  test('should fetch from -infinity when begin is null', async () => {
+    await spanCache.find({ begin: '10', end: '20' });
+    (mockSpanOpt.findFromDb as jest.Mock).mockClear();
+
+    const requestedSpan: Span = { begin: null, end: '15' };
+    await spanCache.find(requestedSpan);
+
+    expect(mockSpanOpt.findFromDb).toHaveBeenCalledTimes(1);
+    expect(mockSpanOpt.findFromDb).toHaveBeenCalledWith({ begin: null, end: '10' });
+  });
+
+  test('should fetch to +infinity when end is null', async () => {
+    await spanCache.find({ begin: '10', end: '20' });
+    (mockSpanOpt.findFromDb as jest.Mock).mockClear();
+
+    const requestedSpan: Span = { begin: '15', end: null };
+    await spanCache.find(requestedSpan);
+
+    expect(mockSpanOpt.findFromDb).toHaveBeenCalledTimes(1);
+    expect(mockSpanOpt.findFromDb).toHaveBeenCalledWith({ begin: '20', end: null });
+  });
+
+  test('should fetch from -infinity to +infinity when both are null', async () => {
+    await spanCache.find({ begin: '10', end: '20' });
+    (mockSpanOpt.findFromDb as jest.Mock).mockClear();
+
+    const requestedSpan: Span = { begin: null, end: null };
+    await spanCache.find(requestedSpan);
+
+    expect(mockSpanOpt.findFromDb).toHaveBeenCalledTimes(2);
+    expect(mockSpanOpt.findFromDb).toHaveBeenCalledWith({ begin: null, end: '10' });
+    expect(mockSpanOpt.findFromDb).toHaveBeenCalledWith({ begin: '20', end: null });
+  });
+
+  test('should hit cache when requesting -infinity and cache starts at -infinity', async () => {
+    await spanCache.find({ begin: null, end: '20' });
+    (mockSpanOpt.findFromDb as jest.Mock).mockClear();
+
+    const requestedSpan: Span = { begin: null, end: '10' };
+    const result = await spanCache.find(requestedSpan);
+
+    expect(mockSpanOpt.findFromDb).not.toHaveBeenCalled();
+    expect(result.length).toBeGreaterThan(0);
+  });
+
+  test('should hit cache when requesting to +infinity and cache ends at +infinity', async () => {
+    await spanCache.find({ begin: '10', end: null });
+    (mockSpanOpt.findFromDb as jest.Mock).mockClear();
+
+    const requestedSpan: Span = { begin: '20', end: null };
+    const result = await spanCache.find(requestedSpan);
+
+    expect(mockSpanOpt.findFromDb).not.toHaveBeenCalled();
+    expect(result.length).toBeGreaterThan(0);
   });
 });

@@ -15,11 +15,15 @@ class SpanCache {
      * @param span
      * @param datas
      */
-    async saveToCache(param, datas) {
+    async saveToCache(param, datas, saveOpt) {
         if (!this.isCouldSave(param)) {
-            throw new Error("您的参数不合法，不能合并");
+            if (!(saveOpt === null || saveOpt === void 0 ? void 0 : saveOpt.noError)) {
+                throw new Error("您的参数不合法，不能合并");
+            }
         }
-        await this.updateCache(datas); // Only called if isCouldSave returns true
+        else {
+            await this.updateCache(datas); // Only called if isCouldSave returns true
+        }
     }
     isCouldSave(param) {
         // 如果没有缓存，则初始化缓存
@@ -53,6 +57,8 @@ class SpanCache {
             this.span.end = newEnd;
             return true; // Valid adjacency
         }
+        // 3. 既不是允许的允许的相邻扩展，也不存在广义上的重叠，则意味着存在间隙
+        return false; // Gap, not allowed
     }
     /**
      * 根据范围查询数据，如果传入的参数在缓存中（判断this.span 和param的差异）,

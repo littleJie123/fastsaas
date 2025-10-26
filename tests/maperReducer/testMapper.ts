@@ -47,3 +47,17 @@ it('测试mapper',()=>{
 
    console.log(mapper1.get(['99','日本']))
 })
+
+it('测试mapper.getAll', () => {
+  const list = [
+    { age: 10, country: '中国', name: '小杰' },
+    { age: 5, country: '美国', name: 'marry' }
+  ];
+
+  const mapper = new Mapper(list, ['age', 'country']);
+  const all = mapper.getAll();
+  console.log('--- testing getAll ---');
+  console.log('Result of getAll:', all);
+  console.log('Expected length:', list.length, 'Actual length:', all.length);
+  expect(all.length).toBe(list.length);
+});

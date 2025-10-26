@@ -18,8 +18,12 @@ export default abstract class GroupHat extends Hat {
     protected _opt: GroupHatOpt;
     protected abstract acqDataCol(): string;
     constructor(opt: GroupHatOpt);
-    protected _schMap(list: any): Promise<{}>;
-    protected _toMap(array: any): {};
+    protected _schMap(list: any): Promise<{
+        [key: string]: any;
+    }>;
+    protected _toMap(array: any): {
+        [key: string]: any;
+    };
     _processData(data: any, hatData: any): void;
     /**
      * 返回列

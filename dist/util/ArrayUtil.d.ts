@@ -1,4 +1,4 @@
-import IGeter from "./inf/IGeter";
+import IGeter, { IGeterValue } from "./inf/IGeter";
 type OrderItemParam = string | ArrayOrderItem | ArrayOrderItem[];
 export default OrderItemParam;
 export interface ArrayOrderItem {
@@ -12,14 +12,14 @@ interface ICompare {
 interface GroupByParam {
     list?: Array<any>;
     array?: Array<any>;
-    key: any;
+    key: IGeter;
     fun: Function;
 }
 interface AbsJoinParam {
     list: Array<any>;
     list2: Array<any>;
     fun?: Function;
-    keys?: Array<string>;
+    keys?: string[];
 }
 type OnlyFun = (obj: any) => (any | null);
 type OnlyArrayFun = (obj: any) => (any | null);
@@ -41,11 +41,11 @@ interface JoinOpt<JoinFun, OnlyOneFun, OnlyTwoFun> {
     /**
      * 对应的key
      */
-    key: Function | string | Array<string>;
+    key: IGeter;
     /**
      * 默认和key相同
      */
-    key2?: Function | string | Array<string>;
+    key2?: IGeter;
     /**
      * 只有数组1有的时候处理函数
      * function(array,e)
@@ -73,7 +73,7 @@ export declare class ArrayUtil {
      * @param array
      * @param key
      */
-    static isDuplicate(array: any[], key: Function | string | string[]): boolean;
+    static isDuplicate<Pojo = any>(array: Pojo[], key: IGeter<Pojo>): boolean;
     static keys(array: any[]): string;
     /**
      * 求各个key不重复的数量
@@ -87,8 +87,8 @@ export declare class ArrayUtil {
      * @param keys
      */
     static sumObj(array: any[], keys: string[]): any;
-    static sum(array: Array<any>, key?: Array<string> | Function | string): number;
-    static distinctByKey(array: any, keys: string | Function | Array<string>): any[];
+    static sum<Pojo = any>(array: Pojo[], key?: IGeter<Pojo>): number;
+    static distinctByKey<Pojo = any>(array: Pojo[], keys: IGeter<Pojo>): any[];
     /**
      * 根据这个产生一个key
      * @param obj
@@ -141,11 +141,13 @@ opt:{
  * @param array
  * @param key
  */
-    static toMapByKey(array: any[], key: any, fun?: Function | string): {};
+    static toMapByKey<Pojo = any>(array: Pojo[], key: any, fun?: IGeterValue<Pojo>): {
+        [key: string]: any;
+    };
     /**
  * @description 将一个list按key分组，放在map中
  */
-    static toMapArray(list: any[], key: any, fun?: Function): {};
+    static toMapArray<Pojo = any>(list: Pojo[], key: IGeter<Pojo>, fun?: IGeter<Pojo>): {};
     static copy(destArray: any, srcArray: any, maxLen: any): any;
     static toMap(array: any): {};
     /**
@@ -201,9 +203,9 @@ opt:{
  */
     private static _parseArray;
     static addAll(array1: any, array2: any): any;
-    static toArray(array: any, key: string | Function | Array<string>): any[];
+    static toArray<Pojo>(array: Pojo[], key: IGeter<Pojo>): any[];
     static isSame(array1: Array<any>, array2: Array<any>): boolean;
-    static orByKey(array1: any, array2: any, key1?: string | Array<string> | Function, key2?: string | Array<string> | Function): any[];
+    static orByKey(array1: any, array2: any, key1?: IGeter, key2?: IGeter): any[];
     /**
 两个list进行join操作,
 类似数据库中inner join
@@ -289,7 +291,7 @@ opt:{
      * @param array
      * @param key
      */
-    static toArrayDis(array: Array<any>, key: string | Function | Array<string>): Array<any>;
+    static toArrayDis<Pojo>(array: Pojo[], key: IGeter<Pojo>): any[];
     /**
      * 将一个mapArray 转成map
      * @param map
@@ -301,7 +303,7 @@ opt:{
      * @param array2
      * @param key
      */
-    static isSameByKey(array1: Array<any>, array2: Array<any>, key: string | Array<string> | Function): boolean;
+    static isSameByKey(array1: Array<any>, array2: Array<any>, key: IGeter): boolean;
     /**
     将两个数组笛卡尔相乘，返回一个新数组
     新数组的长度 是两个数组的长度乘积

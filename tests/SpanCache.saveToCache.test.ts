@@ -1,6 +1,7 @@
+
 // tests/SpanCache.saveToCache.test.ts
 
-import SpanCache, { Span, SpanOpt } from '../src/cache/SpanCache';
+import SpanCache, { Span, SpanOpt, SpanCacheKeyType } from '../src/cache/SpanCache';
 
 interface TestPojo {
   id: string;
@@ -28,7 +29,7 @@ describe('SpanCache saveToCache', () => {
       findFromDb: jest.fn(), // Not directly used by saveToCache, but required by interface
       getKeyFromPojo: jest.fn((pojo: TestPojo) => pojo.id),
       getKeysFromSpan: jest.fn(), // Not directly used by saveToCache, but required by interface
-      isAdjacent: jest.fn((key1: KeyType, key2: KeyType) => {
+      isAdjacent: jest.fn((key1: SpanCacheKeyType, key2: SpanCacheKeyType) => {
         if (typeof key1 === 'number' && typeof key2 === 'number') {
           return key1 + 1 === key2;
         }
@@ -143,6 +144,49 @@ describe('SpanCache saveToCache', () => {
 
     const param: Span = { begin: '4', end: '5' };
     const datas = generateMockData('4', '5');
+    await expect(spanCache.saveToCache(param, datas)).rejects.toThrow(
+      "您的参数不合法，不能合并"
+    );
+  });
+
+  // Test Case 8: Valid adjacency with null (before)
+  test('should extend cache to -infinity when new data is adjacent before with null begin', async () => {
+    // Initial cache: [10, 20]
+    await spanCache.saveToCache({ begin: '10', end: '20' }, generateMockData('10', '20'));
+
+    // New data: [null, 9] - adjacent before [10, 20]
+    const param: Span = { begin: null, end: '9' };
+    const datas = generateMockData('1', '9'); // Assuming some data for the null range
+    
+    await spanCache.saveToCache(param, datas);
+
+    // @ts-ignore
+    expect(spanCache.span).toEqual({ begin: null, end: '20' });
+  });
+
+  // Test Case 9: Valid adjacency with null (after)
+  test('should extend cache to +infinity when new data is adjacent after with null end', async () => {
+    // Initial cache: [10, 20]
+    await spanCache.saveToCache({ begin: '10', end: '20' }, generateMockData('10', '20'));
+
+    // New data: [21, null] - adjacent after [10, 20]
+    const param: Span = { begin: '21', end: null };
+    const datas = generateMockData('21', '30'); // Assuming some data for the null range
+    
+    await spanCache.saveToCache(param, datas);
+
+    // @ts-ignore
+    expect(spanCache.span).toEqual({ begin: '10', end: null });
+  });
+
+  // Test Case 10: Error: Overlap with null begin
+  test('should throw error if new span with null begin overlaps with current span', async () => {
+    // Initial cache: [10, 20]
+    await spanCache.saveToCache({ begin: '10', end: '20' }, generateMockData('10', '20'));
+
+    // New data: [null, 15] - overlaps
+    const param: Span = { begin: null, end: '15' };
+    const datas = generateMockData('1', '15');
     await expect(spanCache.saveToCache(param, datas)).rejects.toThrow(
       "您的参数不合法，不能合并"
     );

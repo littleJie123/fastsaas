@@ -6,6 +6,9 @@ export interface Span {
     begin?: SpanCacheKeyType;
     end?: SpanCacheKeyType;
 }
+interface SaveOpt {
+    noError?: boolean;
+}
 export interface SpanOpt<Pojo> {
     findFromDb(span: Span): Promise<Pojo[]>;
     /**
@@ -40,7 +43,7 @@ export default class SpanCache<Pojo = any> {
      * @param span
      * @param datas
      */
-    saveToCache(param: Span, datas: Pojo[]): Promise<void>;
+    saveToCache(param: Span, datas: Pojo[], saveOpt?: SaveOpt): Promise<void>;
     isCouldSave(param: Span): boolean;
     /**
      * 根据范围查询数据，如果传入的参数在缓存中（判断this.span 和param的差异）,
@@ -55,3 +58,4 @@ export default class SpanCache<Pojo = any> {
     private updateCache;
     private readFromCache;
 }
+export {};

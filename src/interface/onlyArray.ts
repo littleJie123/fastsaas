@@ -7,6 +7,7 @@
  * @LastEditTime : 2020-02-12 14:44:32
  */
 import Query from '../dao/query/Query'
+import { IGeter } from '../fastsaas'
 import { AnyObject } from './anyObject'
 
 interface sortFun {
@@ -50,7 +51,7 @@ export interface OnlyArrayIntface<Pojo = any> {
   /**
    * 匹配的条件
    */
-  mapFun: Function | string | Array<string>,
+  mapFun: IGeter<Pojo>,
   /**
    数据库的查询条件，根据条件查出对比数据
   */

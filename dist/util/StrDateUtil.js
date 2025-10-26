@@ -18,5 +18,19 @@ class default_1 {
     static getToday() {
         return DateUtil_1.DateUtil.format(new Date());
     }
+    /**
+     * 根据开始结束返回日期列表
+     * @param begin
+     * @param end
+     * @returns
+     */
+    static getDays(begin, end) {
+        let ret = [];
+        while (begin <= end) {
+            ret.push(begin);
+            begin = this.add(end, 1);
+        }
+        return ret;
+    }
 }
 exports.default = default_1;

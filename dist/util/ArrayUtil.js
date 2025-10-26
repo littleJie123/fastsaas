@@ -164,7 +164,7 @@ class ArrayUtil {
     static distinctByKey(array, keys) {
         var map = ArrayUtil.toMapByKey(array, keys);
         var list = [];
-        for (var e in map) {
+        for (let e in map) {
             list.push(map[e]);
         }
         return list;

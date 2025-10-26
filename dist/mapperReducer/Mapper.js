@@ -94,6 +94,12 @@ class Mapper {
             }
         }
     }
+    /**
+     * 返回缓存中所有的实例
+     */
+    getAll() {
+        return this.getArrayFromMap(this.mapper);
+    }
     getArrayFromMap(mapArray) {
         if (mapArray == null) {
             return [];
