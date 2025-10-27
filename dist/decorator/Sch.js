@@ -8,7 +8,13 @@ const StrUtil_1 = require("./../util/StrUtil");
 const Inquiry_1 = __importDefault(require("./../searcher/inquiry/imp/Inquiry"));
 const KeysInquiry_1 = __importDefault(require("./../searcher/inquiry/imp/KeysInquiry"));
 /**
- * 生成一个默认的search方法
+ * 生成一个默认的 search 方法
+ *
+ * 可以是 **get** 开头或者 **find** 开头
+ *
+ * 多个字段用 **And** 来进行分割
+ *
+ * `get` 开头只会返回 1 个元素
  */
 function default_1(opt) {
     return function (target, propertyName, descriptor) {

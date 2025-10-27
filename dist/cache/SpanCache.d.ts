@@ -3,8 +3,8 @@ export type SpanCacheKeyType = number | string;
  * 表示一个范围类
  */
 export interface Span {
-    begin?: SpanCacheKeyType;
-    end?: SpanCacheKeyType;
+    begin?: SpanCacheKeyType | null;
+    end?: SpanCacheKeyType | null;
 }
 interface SaveOpt {
     noError?: boolean;
@@ -36,6 +36,10 @@ export default class SpanCache<Pojo = any> {
     private opt;
     private cacheMap;
     constructor(opt: SpanOpt<Pojo>);
+    private _gte;
+    private _lt;
+    private _lte;
+    private _gt;
     /**
      * 首先判断参数和this.span是否存在间隙，需要调用opt.isAdjacent方法，
      * 如果存在间隙或者用重叠，则抛出异常。

@@ -8,6 +8,34 @@ class SpanCache {
         this.cacheMap = {};
         this.opt = opt;
     }
+    _gte(a, b) {
+        if (typeof a === 'string' && typeof b === 'string') {
+            return parseInt(a, 10) >= parseInt(b, 10);
+        }
+        // @ts-ignore
+        return a >= b;
+    }
+    _lt(a, b) {
+        if (typeof a === 'string' && typeof b === 'string') {
+            return parseInt(a, 10) < parseInt(b, 10);
+        }
+        // @ts-ignore
+        return a < b;
+    }
+    _lte(a, b) {
+        if (typeof a === 'string' && typeof b === 'string') {
+            return parseInt(a, 10) <= parseInt(b, 10);
+        }
+        // @ts-ignore
+        return a <= b;
+    }
+    _gt(a, b) {
+        if (typeof a === 'string' && typeof b === 'string') {
+            return parseInt(a, 10) > parseInt(b, 10);
+        }
+        // @ts-ignore
+        return a > b;
+    }
     /**
      * 首先判断参数和this.span是否存在间隙，需要调用opt.isAdjacent方法，
      * 如果存在间隙或者用重叠，则抛出异常。
@@ -41,19 +69,21 @@ class SpanCache {
         const newBegin = param.begin;
         const newEnd = param.end;
         // 检查类型一致性，以确保比较的有效性
-        if (typeof currentBegin !== typeof newBegin || typeof currentEnd !== typeof newEnd) {
+        if ((currentBegin !== null && newBegin !== null && typeof currentBegin !== typeof newBegin) || (currentEnd !== null && newEnd !== null && typeof currentEnd !== typeof newEnd)) {
             return false; // Invalid parameter types
         }
         /**发生重叠 */
-        if (newBegin <= currentEnd && newEnd >= currentBegin) {
-            return false; // Overlap, not allowed
+        const overlap = (currentEnd === null || newBegin === null || this._gte(currentEnd, newBegin)) &&
+            (newEnd === null || currentBegin === null || this._gte(newEnd, currentBegin));
+        if (overlap) {
+            return false;
         }
         // 1. 检查是否为允许的相邻扩展
-        if (this.opt.isAdjacent(newEnd, currentBegin)) { // 新范围在当前范围之前相邻
+        if (newEnd !== null && currentBegin !== null && this.opt.isAdjacent(newEnd, currentBegin)) { // 新范围在当前范围之前相邻
             this.span.begin = newBegin;
             return true; // Valid adjacency
         }
-        else if (this.opt.isAdjacent(currentEnd, newBegin)) { // 新范围在当前范围之后相邻
+        else if (currentEnd !== null && newBegin !== null && this.opt.isAdjacent(currentEnd, newBegin)) { // 新范围在当前范围之后相邻
             this.span.end = newEnd;
             return true; // Valid adjacency
         }
@@ -71,38 +101,45 @@ class SpanCache {
      */
     async find(param) {
         // 1. 处理无缓存或缓存不完整的情况
-        if (!this.span || !this.span.begin || !this.span.end) {
+        if (!this.span || this.span.begin === undefined || this.span.end === undefined) {
             const data = await this.opt.findFromDb(param);
-            this.updateCache(data);
-            this.span = param;
+            await this.updateCache(data);
+            this.span = { ...param };
             return this.readFromCache(param);
         }
         // 2. 检查是否完全命中缓存
-        const isCacheHit = (param.begin >= this.span.begin) && (param.end <= this.span.end);
-        if (isCacheHit) {
+        const pBegin = param.begin;
+        const pEnd = param.end;
+        const sBegin = this.span.begin;
+        const sEnd = this.span.end;
+        const isBeginCovered = sBegin === null || (pBegin !== null && this._gte(pBegin, sBegin));
+        const isEndCovered = sEnd === null || (pEnd !== null && this._lte(pEnd, sEnd));
+        if (isBeginCovered && isEndCovered) {
             return this.readFromCache(param);
         }
         // 3. 处理部分命中或完全未命中的情况
         const spansToFetch = [];
         // 检查当前缓存范围之前是否需要拉取数据
-        if (param.begin < this.span.begin) {
-            spansToFetch.push({ begin: param.begin, end: this.span.begin });
+        const needFetchBefore = (pBegin === null && sBegin !== null) || (pBegin !== null && sBegin !== null && this._lt(pBegin, sBegin));
+        if (needFetchBefore) {
+            spansToFetch.push({ begin: pBegin, end: sBegin });
         }
         // 检查当前缓存范围之后是否需要拉取数据
-        if (param.end > this.span.end) {
-            spansToFetch.push({ begin: this.span.end, end: param.end });
+        const needFetchAfter = (pEnd === null && sEnd !== null) || (pEnd !== null && sEnd !== null && this._gt(pEnd, sEnd));
+        if (needFetchAfter) {
+            spansToFetch.push({ begin: sEnd, end: pEnd });
         }
         // 并行拉取所有需要的数据
         if (spansToFetch.length > 0) {
             const fetchPromises = spansToFetch.map(span => this.opt.findFromDb(span));
             const results = await Promise.all(fetchPromises);
             const newData = results.flat();
-            this.updateCache(newData);
+            await this.updateCache(newData);
         }
         // 更新缓存的范围为新的并集
         this.span = {
-            begin: param.begin < this.span.begin ? param.begin : this.span.begin,
-            end: param.end > this.span.end ? param.end : this.span.end,
+            begin: needFetchBefore ? pBegin : sBegin,
+            end: needFetchAfter ? pEnd : sEnd,
         };
         // 缓存更新后，从中读取所需数据并返回
         return this.readFromCache(param);
