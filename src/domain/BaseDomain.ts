@@ -262,12 +262,12 @@ export default abstract class BaseDomain<Do = any> {
   }
 
   /**
-   * 查询其他表
+   * 查询其他表 根据opt的 **loadKeys** 进行加载,loadKeys保存的是表名
    * @param list 
    * @param opt 
    */
   protected async loadOtherTable(list: Do[], opt?: IDomainOpt<Do>) {
-    let loadKeys = opt.loadKeys;
+    let loadKeys = opt?.loadKeys;
     if (loadKeys != null && loadKeys.length > 0) {
       for (let loadKey of loadKeys) {
         let searcher: Searcher = this.getSearcherByKey(loadKey);

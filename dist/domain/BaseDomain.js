@@ -230,12 +230,12 @@ class BaseDomain {
         return retList;
     }
     /**
-     * 查询其他表
+     * 查询其他表 根据opt的 **loadKeys** 进行加载,loadKeys保存的是表名
      * @param list
      * @param opt
      */
     async loadOtherTable(list, opt) {
-        let loadKeys = opt.loadKeys;
+        let loadKeys = opt === null || opt === void 0 ? void 0 : opt.loadKeys;
         if (loadKeys != null && loadKeys.length > 0) {
             for (let loadKey of loadKeys) {
                 let searcher = this.getSearcherByKey(loadKey);

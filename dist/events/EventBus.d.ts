@@ -12,7 +12,7 @@ interface EventOpt<Event = any> {
     preProcess?(events: any[]): Promise<void>;
     context?: Context;
     afterProcess?(events: any[]): Promise<any[]>;
-    getKey?(event: Event): IGeter;
+    keys?: IGeter;
     eventProcessorBuilder?: IEventProcessorBuilder<Event>;
 }
 /**

@@ -29,7 +29,7 @@ export default class{
     let ret:string[] = [];
     while(begin<=end){
       ret.push(begin);
-      begin = this.add(end,1)
+      begin = this.add(begin,1)
     }
     return ret;
   }

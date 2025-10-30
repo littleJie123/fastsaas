@@ -354,3 +354,5 @@ export { default as EventBus} from './events/EventBus';
 
 export { default as SpanCache} from './cache/SpanCache';
 export { SpanOpt } from './cache/SpanCache';
+
+export { ICompare } from './util/ArrayUtil';

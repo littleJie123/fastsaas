@@ -17,7 +17,7 @@ interface EventOpt<Event=any>{
   context?:Context;
   afterProcess?(events:any[]):Promise<any[]>;
 
-  getKey?(event:Event):IGeter;
+  keys?:IGeter;
 
   eventProcessorBuilder?:IEventProcessorBuilder<Event>;
 }
@@ -75,7 +75,7 @@ export default class EventBus<Event = any>{
 
   protected groupByEventType(events:Event[]):{[eventType:string]:Event[]}{
     let opt = this.opt;
-    return ArrayUtil.toMapArray(events,(event)=>opt.getKey(event))
+    return ArrayUtil.toMapArray(events,opt.keys)
   }
 
 

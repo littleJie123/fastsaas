@@ -58,7 +58,7 @@ export default abstract class BaseDomain<Do = any> {
      */
     load(datas: Do[], opt?: IDomainOpt<Do>): Promise<Do[]>;
     /**
-     * 查询其他表
+     * 查询其他表 根据opt的 **loadKeys** 进行加载,loadKeys保存的是表名
      * @param list
      * @param opt
      */

@@ -28,7 +28,7 @@ class default_1 {
         let ret = [];
         while (begin <= end) {
             ret.push(begin);
-            begin = this.add(end, 1);
+            begin = this.add(begin, 1);
         }
         return ret;
     }

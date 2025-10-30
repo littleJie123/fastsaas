@@ -17,7 +17,7 @@ export interface ArrayOrderItem{
   order:IGeter;
   desc?:'desc'|'asc'
 }
-interface ICompare {
+export interface ICompare {
 	compare?(obj:any):number;
 	getSortValue?():number;
 }

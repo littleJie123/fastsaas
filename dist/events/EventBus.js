@@ -49,7 +49,7 @@ class EventBus {
     }
     groupByEventType(events) {
         let opt = this.opt;
-        return fastsaas_1.ArrayUtil.toMapArray(events, (event) => opt.getKey(event));
+        return fastsaas_1.ArrayUtil.toMapArray(events, opt.keys);
     }
     async preProcess(events) {
         if (this.opt.preProcess != null) {
