@@ -539,7 +539,7 @@ opt:{
         return ret;
     }
     /**
-     * 查找最大的
+     * 查找最小的
      * @param array
      * @param fun
      * @returns

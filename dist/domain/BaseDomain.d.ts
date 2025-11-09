@@ -62,8 +62,15 @@ export default abstract class BaseDomain<Do = any> {
      * @param list
      * @param opt
      */
-    protected loadOtherTable(list: Do[], opt?: IDomainOpt<Do>): Promise<void>;
+    protected loadOtherTable(list: any[], opt?: IDomainOpt<Do>): Promise<void>;
+    /**
+     * 查询其他表 根据opt的 **loadKeys** 进行加载,loadKeys保存的是表名
+     * @param list
+     * @param opt
+     */
+    protected loadOtherTableToArray(list: any[], opt?: IDomainOpt<Do>): Promise<void>;
     private getSearcherByKey;
+    private getDaoByKey;
     private getIdColByKey;
     protected updateWithContext(opt: UpdateOpt<Do>): Promise<Do[]>;
     protected onlyCols(datas: Do[], cols: string[]): Do[];

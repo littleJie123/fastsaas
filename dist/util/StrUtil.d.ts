@@ -33,7 +33,7 @@ export declare class StrUtil {
     static pad(num: any, n: any): string;
     static isEmpty(str: any): boolean;
     /**
-    替换字符串
+    替换字符串,会替换所有
     */
     static replace(str: string, substr: string, replacement: string): string;
     static start(str: string, prefix: string, noCase?: boolean): boolean;

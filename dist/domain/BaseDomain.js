@@ -193,7 +193,7 @@ class BaseDomain {
         let searcher = this.getSearcher();
         let pkCol = this.getPkCol();
         let dbDatas = await searcher.findAndCheck(fastsaas_1.ArrayUtil.toArray(datas, pkCol), opt === null || opt === void 0 ? void 0 : opt.schQuery);
-        if (opt.onBeforeLoad) {
+        if (opt === null || opt === void 0 ? void 0 : opt.onBeforeLoad) {
             await opt.onBeforeLoad(dbDatas);
         }
         function copy(src, target) {
@@ -235,15 +235,21 @@ class BaseDomain {
      * @param opt
      */
     async loadOtherTable(list, opt) {
+        var _a, _b, _c, _d, _e, _f;
+        if (list == null || list.length == 0) {
+            return;
+        }
         let loadKeys = opt === null || opt === void 0 ? void 0 : opt.loadKeys;
         if (loadKeys != null && loadKeys.length > 0) {
             for (let loadKey of loadKeys) {
-                let searcher = this.getSearcherByKey(loadKey);
+                let table = (_c = (_b = (_a = opt === null || opt === void 0 ? void 0 : opt.loadOpt) === null || _a === void 0 ? void 0 : _a.tables) === null || _b === void 0 ? void 0 : _b[loadKey]) !== null && _c !== void 0 ? _c : loadKey;
+                let searcher = this.getSearcherByKey(table);
                 await searcher.findByIds(fastsaas_1.ArrayUtil.toArrayDis(list, this.getIdColByKey(loadKey)));
             }
             for (let row of list) {
                 for (let loadKey of loadKeys) {
-                    let searcher = this.getSearcherByKey(loadKey);
+                    let table = (_f = (_e = (_d = opt === null || opt === void 0 ? void 0 : opt.loadOpt) === null || _d === void 0 ? void 0 : _d.tables) === null || _e === void 0 ? void 0 : _e[loadKey]) !== null && _f !== void 0 ? _f : loadKey;
+                    let searcher = this.getSearcherByKey(table);
                     let idCol = this.getIdColByKey(loadKey);
                     if (row[idCol] != null) {
                         row[loadKey] = await searcher.getById(row[idCol]);
@@ -252,8 +258,44 @@ class BaseDomain {
             }
         }
     }
+    /**
+     * 查询其他表 根据opt的 **loadKeys** 进行加载,loadKeys保存的是表名
+     * @param list
+     * @param opt
+     */
+    async loadOtherTableToArray(list, opt) {
+        if (list == null || list.length == 0) {
+            return;
+        }
+        if (opt.table == null) {
+            throw new Error('请提供主表信息');
+        }
+        let loadKeys = opt === null || opt === void 0 ? void 0 : opt.loadKeys;
+        if (loadKeys != null && loadKeys.length > 0) {
+            for (let loadKey of loadKeys) {
+                let pkCol = this.getIdColByKey(opt.table);
+                let dao = this.getDaoByKey(loadKey);
+                let array = await dao.find({
+                    [pkCol]: fastsaas_1.ArrayUtil.toArrayDis(list, pkCol)
+                });
+                if (array.length > 0) {
+                    fastsaas_1.ArrayUtil.joinArray({
+                        list,
+                        list2: array,
+                        key: pkCol,
+                        fun(mainData, otherTableDatas) {
+                            mainData[loadKey + 's'] = otherTableDatas;
+                        }
+                    });
+                }
+            }
+        }
+    }
     getSearcherByKey(key) {
         return this._context.get(key + 'Searcher');
+    }
+    getDaoByKey(key) {
+        return this._context.get(key + 'Dao');
     }
     getIdColByKey(key) {
         return key + 'Id';

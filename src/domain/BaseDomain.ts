@@ -223,7 +223,7 @@ export default abstract class BaseDomain<Do = any> {
       ArrayUtil.toArray(datas, pkCol),
       opt?.schQuery
     )
-    if (opt.onBeforeLoad) {
+    if (opt?.onBeforeLoad) {
       await opt.onBeforeLoad(dbDatas);
     }
     function copy(src, target) {
@@ -266,17 +266,22 @@ export default abstract class BaseDomain<Do = any> {
    * @param list 
    * @param opt 
    */
-  protected async loadOtherTable(list: Do[], opt?: IDomainOpt<Do>) {
+  protected async loadOtherTable(list: any[], opt?: IDomainOpt<Do>) {
+    if(list == null || list.length == 0){
+      return;
+    }
     let loadKeys = opt?.loadKeys;
     if (loadKeys != null && loadKeys.length > 0) {
       for (let loadKey of loadKeys) {
-        let searcher: Searcher = this.getSearcherByKey(loadKey);
+        let table = opt?.loadOpt?.tables?.[loadKey] ?? loadKey;
+        let searcher: Searcher = this.getSearcherByKey(table);
         await searcher.findByIds(ArrayUtil.toArrayDis(list, this.getIdColByKey(loadKey)));
 
       }
       for (let row of list) {
         for (let loadKey of loadKeys) {
-          let searcher: Searcher = this.getSearcherByKey(loadKey);
+          let table = opt?.loadOpt?.tables?.[loadKey] ?? loadKey;
+          let searcher: Searcher = this.getSearcherByKey(table);
           let idCol = this.getIdColByKey(loadKey);
           if (row[idCol] != null) {
             row[loadKey] = await searcher.getById(row[idCol]);
@@ -286,8 +291,48 @@ export default abstract class BaseDomain<Do = any> {
     }
   }
 
+  /**
+   * 查询其他表 根据opt的 **loadKeys** 进行加载,loadKeys保存的是表名
+   * @param list 
+   * @param opt 
+   */
+  protected async loadOtherTableToArray(list: any[], opt?: IDomainOpt<Do>) {
+    if(list == null || list.length == 0){
+      return;
+    } 
+    if(opt.table == null){
+      throw new Error('请提供主表信息');
+    }
+    let loadKeys = opt?.loadKeys; 
+    if (loadKeys != null && loadKeys.length > 0) { 
+      for (let loadKey of loadKeys) {
+        let pkCol = this.getIdColByKey(opt.table);
+        let dao: Dao = this.getDaoByKey(loadKey)
+        let array = await dao.find({
+          [pkCol]:ArrayUtil.toArrayDis(list,pkCol )
+        });
+        if(array.length>0){
+          ArrayUtil.joinArray({
+            list,
+            list2:array,
+            key:pkCol,
+            fun(mainData:any,otherTableDatas:any[]){
+              mainData[loadKey+'s'] = otherTableDatas;
+            }
+          })
+        }
+
+      }
+       
+    }
+  }
+
   private getSearcherByKey(key: string): Searcher {
     return this._context.get(key + 'Searcher');
+  }
+
+  private getDaoByKey(key: string): Dao {
+    return this._context.get(key + 'Dao');
   }
 
   private getIdColByKey(key: string) {

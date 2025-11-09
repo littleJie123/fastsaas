@@ -1,3 +1,6 @@
+interface ILoadOpt{
+  tables?:{[loadKey:string]:string}
+}
 
 export default interface IDomainOpt<Pojo=any> {
   schQuery?:any;
@@ -14,6 +17,10 @@ export default interface IDomainOpt<Pojo=any> {
    * 根据数据中的id去其他表进行加载
    */
   loadKeys?:string[];
+
+  table?:string;
+
+  loadOpt?:ILoadOpt;
 
 
 

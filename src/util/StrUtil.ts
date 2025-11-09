@@ -117,7 +117,7 @@ export class StrUtil {
     return typeof str !== 'string' || str.length === 0
   }
   /**
-  替换字符串
+  替换字符串,会替换所有
   */
   static replace(str:string, substr:string, replacement:string):string {
     var array = []

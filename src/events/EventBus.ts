@@ -49,6 +49,8 @@ export default class EventBus<Event = any>{
     }
     await this.afterProcess(events);
   }
+
+ 
   protected async doProcessEventType( eventType: string,events: Event[]):Promise<void>{ 
     let eventProcesser = this.getEventProcesser(eventType,events);
     if(eventProcesser != null){
