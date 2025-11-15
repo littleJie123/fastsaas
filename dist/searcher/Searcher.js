@@ -210,7 +210,7 @@ class Searcher {
     buildWithZeroId() {
         return null;
     }
-    async getById(id) {
+    async getById(id, cols) {
         if (id == null) {
             return null;
         }
@@ -218,7 +218,15 @@ class Searcher {
             return this.buildWithZeroId();
         }
         var list = await this.findByIds([id]);
-        return list[0];
+        let ret = list[0];
+        if (ret != null && cols != null) {
+            let retObj = {};
+            for (let col of cols) {
+                retObj[col] = ret[col];
+            }
+            return retObj;
+        }
+        return ret;
     }
     /**
      * 从缓存中拿

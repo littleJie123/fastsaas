@@ -6,7 +6,7 @@ const fastsaas_1 = require("../fastsaas");
  * 读取分享数据
  * @returns
  */
-function default_1(cols) {
+function default_1(cols, itemIds) {
     return function classDecorator(constructor) {
         return class extends constructor {
             /**
@@ -20,6 +20,11 @@ function default_1(cols) {
                 let superDoExecute = super['_parseRequestParam'];
                 let param = this['_param'];
                 if (param._shareData != null) {
+                    if (itemIds != null && param._shareItemId != '' && param._shareItemId != null) {
+                        if (!itemIds.includes(param._shareItemId)) {
+                            throw new Error('该密钥不能访问这个接口');
+                        }
+                    }
                     for (let col of cols) {
                         let srcCol = col.srcCol;
                         let destCol = (_a = col.targetCol) !== null && _a !== void 0 ? _a : srcCol;

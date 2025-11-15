@@ -68,7 +68,7 @@ export default abstract class Searcher<Pojo = any> {
      */
     findByIdsFromCache(array: any, col?: string): any[];
     buildWithZeroId(): Pojo;
-    getById(id: any): Promise<Pojo>;
+    getById(id: any, cols?: string[]): Promise<Pojo>;
     /**
      * 从缓存中拿
      * @param array

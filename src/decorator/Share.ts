@@ -5,7 +5,7 @@ import IColChanger from "../inf/IColChanger";
  * 读取分享数据
  * @returns 
  */
-export default function (cols:IColChanger[]) {
+export default function (cols:IColChanger[],itemIds?:string[]) {
 
   return function classDecorator<T extends { new(...args: any[]): {} }>(constructor: T) {
     return class extends constructor {
@@ -19,6 +19,11 @@ export default function (cols:IColChanger[]) {
         let superDoExecute = super['_parseRequestParam'];
         let param = this['_param'];
         if(param._shareData != null){
+          if(itemIds != null && param._shareItemId != '' && param._shareItemId != null){
+            if(!itemIds.includes(param._shareItemId)){
+              throw new Error('该密钥不能访问这个接口');
+            }
+          }
           for(let col of cols){
             let srcCol = col.srcCol;
             let destCol = col.targetCol ?? srcCol;

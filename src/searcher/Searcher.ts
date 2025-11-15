@@ -246,7 +246,7 @@ export default abstract class Searcher<Pojo = any> {
     return null;
   }
 
-  async getById(id): Promise<Pojo> {
+  async getById(id,cols?:string[]): Promise<Pojo> {
     if (id == null){
       return null;
     }
@@ -255,7 +255,15 @@ export default abstract class Searcher<Pojo = any> {
     }
 
     var list = await this.findByIds([id])
-    return list[0]
+    let ret =  list[0];
+    if(ret != null && cols != null){
+      let retObj:any = {};
+      for(let col of cols){
+        retObj[col] = ret[col] 
+      }
+      return retObj;
+    }
+    return ret;
   }
   /**
    * 从缓存中拿
