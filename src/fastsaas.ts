@@ -2,8 +2,8 @@ export { default as MySqlUtil } from './util/MySqlUtil'
 
 export { default as DaoHelper } from './dao/DaoHelper';
 export { default as DataCompare } from './dao/DataCompare';
-export {default as IDaoHelper} from './dao/IDaoHelper';
-export {default as DataBakup} from './dao/DataBakup';
+export { default as IDaoHelper } from './dao/IDaoHelper';
+export { default as DataBakup } from './dao/DataBakup';
 export { TableBackUp } from './dao/DataBakup';
 
 
@@ -12,11 +12,11 @@ export { default as ImportorManager } from './import/ImportorManager';
 export { default as ImportorObj } from './import/dto/ImportorObj';
 export { default as Importor } from './import/Importor';
 export { default as ImportDto } from './import/dto/ImportorDto';
-export { default as ImportorResult} from './import/dto/ImportorResult';
+export { default as ImportorResult } from './import/dto/ImportorResult';
 
 export { default as BaseInterceptor } from './control/interceptor/BaseInterceptor';
 
- 
+
 export { default as BaseHttpInf } from './base/BaseHttpInf';
 export { default as BasePojo } from './base/BasePojo';
 
@@ -50,6 +50,7 @@ export { default as FileContext } from './context/FileContext';
 export { default as MysqlContext } from './context/MysqlContext';
 export { default as OrmContext } from './context/OrmContext';
 
+export { default as ProxyControl } from './control/ProxyControl';
 export { default as AddControl } from './control/AddControl';
 export { default as BaseOpControl } from './control/BaseOpControl';
 export { default as AskFile } from './control/bus/event/AskFile';
@@ -79,7 +80,7 @@ export { default as SortControl } from './control/SortControl';
 export { default as UpdateControl } from './control/UpdateControl';
 export { default as UploadControl } from './control/UploadControl';
 export { default as PojoControl } from './control/PojoControl';
-export { default as DownloadControl} from './control/DownloadControl';
+export { default as DownloadControl } from './control/DownloadControl';
 
 
 export { default as JointFun } from './control/wiget/imp/JointFun';
@@ -144,17 +145,17 @@ export { default as ColSql } from './dao/sql/ColSql';
 export { default as ISql } from './dao/sql/ISql';
 export { default as Sql } from './dao/sql/Sql';
 export { default as ValSql } from './dao/sql/ValSql';
-export { default as  InIdsCdtBuilder} from './dao/query/InIdsCdtBuilder';
+export { default as InIdsCdtBuilder } from './dao/query/InIdsCdtBuilder';
 
 
-export { default as Share} from './decorator/Share';
+export { default as Share } from './decorator/Share';
 export { default as Column } from './decorator/Column';
 export { default as ContextId } from './decorator/ContextId';
 export { default as LogicDel } from './decorator/LogicDel';
 export { default as NeedParam } from './decorator/NeedParam';
 export { default as RemoveCache } from './decorator/RemoveCache';
 export { default as Sch } from './decorator/Sch';
-export { default as GetCache} from './decorator/GetCache';
+export { default as GetCache } from './decorator/GetCache';
 export { default as SchStore } from './decorator/SchStore';
 export { default as SortCol } from './decorator/SortCol';
 export { default as StoreTime } from './decorator/StoreTime';
@@ -216,8 +217,8 @@ export { default as GroupHat } from './hat/imp/GroupHat';
 export { default as Hat } from './hat/imp/Hat';
 export { default as PojoHat } from './hat/imp/PojoHat';
 export { default as SearcherHat } from './hat/imp/SearcherHat';
-export {default as MapNameHat} from './hat/imp/MapNameHat';
-export {default as BaseHatOpt} from './hat/BaseHatOpt'
+export { default as MapNameHat } from './hat/imp/MapNameHat';
+export { default as BaseHatOpt } from './hat/BaseHatOpt'
 
 export { default as BaseHttpEntry } from './http/BaseHttpEntry';
 export { default as BaseBodyParser } from './http/bodyParser/BaseBodyParser';
@@ -249,7 +250,7 @@ export { default as JsonToUrl } from './inf/imp/JsonToUrl';
 export { default as StrToJson } from './inf/imp/StrToJson';
 export { default as IParser } from './inf/IParser';
 export { default as IProcessor } from './inf/IProcessor';
-export { default as IColChanger} from './inf/IColChanger';
+export { default as IColChanger } from './inf/IColChanger';
 
 
 export { default as ArrayJsonKey } from './json/imp/ArrayJsonKey';
@@ -279,7 +280,7 @@ export { default as KeysInquiry } from './searcher/inquiry/imp/KeysInquiry';
 export { default as ProxyInquiry } from './searcher/inquiry/imp/ProxyInquiry';
 export { default as TablesInquiry } from './searcher/inquiry/imp/TablesInquiry';
 export { default as Searcher } from './searcher/Searcher';
-export { default as SearcherOpt} from './searcher/SearcherOpt';
+export { default as SearcherOpt } from './searcher/SearcherOpt';
 
 export { default as TimezoneServer } from './server/TimezoneServer';
 
@@ -289,7 +290,7 @@ export { default as TransManager } from './tans/TransManager';
 
 
 export { ArrayUtil } from './util/ArrayUtil';
-export { default as DownloadUtil} from './util/DownloadUtil';
+export { default as DownloadUtil } from './util/DownloadUtil';
 export { BeanUtil } from './util/BeanUtil';
 export { default as BufferUtil } from './util/BufferUtil';
 export { default as ClazzUtil } from './util/ClazzUtil';
@@ -344,16 +345,16 @@ export { default as DataBuilderObj } from './dataBuilder/DataBuilderObj';
 export { default as MultiBuilder } from './dataBuilder/imp/MultiBuilder';
 export { default as UrlBuilder } from './dataBuilder/imp/UrlBuilder';
 
- 
+
 export { default as BaseDomain } from './domain/BaseDomain';
-export { default as ISaveParam} from './domain/inf/ISaveParam';
+export { default as ISaveParam } from './domain/inf/ISaveParam';
 
-export { default as DataLoader} from './dataLoader/DataLoader';
+export { default as DataLoader } from './dataLoader/DataLoader';
 
-export { default as EventBus} from './events/EventBus';
-export { IEventProcessor,IEventProcessorBuilder } from './events/EventBus';
+export { default as EventBus } from './events/EventBus';
+export { IEventProcessor, IEventProcessorBuilder } from './events/EventBus';
 
-export { default as SpanCache} from './cache/SpanCache';
+export { default as SpanCache } from './cache/SpanCache';
 export { SpanOpt } from './cache/SpanCache';
 
 export { ICompare } from './util/ArrayUtil';

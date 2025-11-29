@@ -36,6 +36,7 @@ export { default as Server } from './context/decorator/Server';
 export { default as FileContext } from './context/FileContext';
 export { default as MysqlContext } from './context/MysqlContext';
 export { default as OrmContext } from './context/OrmContext';
+export { default as ProxyControl } from './control/ProxyControl';
 export { default as AddControl } from './control/AddControl';
 export { default as BaseOpControl } from './control/BaseOpControl';
 export { default as AskFile } from './control/bus/event/AskFile';

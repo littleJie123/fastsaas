@@ -211,9 +211,9 @@ class Control {
     async doExecute(req, resp) {
         return null;
     }
-    async executeParam(param) {
+    async executeParam(param, req, resp) {
         this._param = param;
-        return await this.doExecute();
+        return await this.doExecute(req, resp);
     }
     buildControl(controlClazz) {
         let ctrl = new controlClazz();

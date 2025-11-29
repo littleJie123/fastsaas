@@ -50,7 +50,7 @@ export default class Control<Param = any, Result = any> {
     protected _sendResp(resp: any, ret: any): void;
     protected _processRet(ret: any): any;
     protected doExecute(req?: Request, resp?: Response): Promise<Result>;
-    executeParam(param: any): Promise<Result>;
+    executeParam(param: any, req?: Request, resp?: Response): Promise<Result>;
     buildControl(controlClazz: any): Control;
 }
 import IChecker from './inf/IChecker';

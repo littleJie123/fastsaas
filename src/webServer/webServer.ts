@@ -13,7 +13,7 @@ import { Request, Response } from 'express';
 
 
 
-interface WebServerOption {
+export interface WebServerOption {
   /**
    * 
    */
@@ -162,7 +162,7 @@ export default function (opt: WebServerOption) {
   })
 
   if (opt.webSocketClazz) {
-    Socket.listen(server,opt.webSocketClazz);
+    Socket.listen(server, opt.webSocketClazz);
   }
   app.disable('x-powered-by')
   return app;

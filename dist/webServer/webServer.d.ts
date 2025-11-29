@@ -1,7 +1,7 @@
 import { WebSocketTokenOpt } from '../interface/Websocket.interface';
 import Context from '../context/Context';
 import { Request, Response } from 'express';
-interface WebServerOption {
+export interface WebServerOption {
     /**
      *
      */
@@ -25,4 +25,3 @@ interface WebServerOption {
     interceptorBeans?: string[];
 }
 export default function (opt: WebServerOption): any;
-export {};

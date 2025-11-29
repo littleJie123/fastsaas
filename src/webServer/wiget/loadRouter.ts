@@ -1,21 +1,22 @@
-import { Router,Request,Response } from 'express';
+import { Router, Request, Response } from 'express';
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { StrUtil } from '../../util/StrUtil';
 import Context from '../../context/Context';
- 
+import { WebServerOption } from '../webServer';
+
 
 /**
  截取mocker
 */
 
-function createFun(clazz, opt): Function {
+function createFun(clazz, opt: WebServerOption): Function {
   if (clazz.default) {
     //兼容ts的export
     clazz = clazz.default;
   }
 
-  return async function (req:Request, resp:Response) {
+  return async function (req: Request, resp: Response) {
 
 
     var ctrl = new clazz();
@@ -34,27 +35,27 @@ function createFun(clazz, opt): Function {
 
       childContext.setSessionId(req?.headers?.session_id)
       childContext.assembly([ctrl]);
-      if(opt.interceptorBeans){
-        for(let beanStr of opt.interceptorBeans){
-          try{
+      if (opt.interceptorBeans) {
+        for (let beanStr of opt.interceptorBeans) {
+          try {
             let bean = childContext.get(beanStr);
-            if(bean != null && bean.onBefore){
-              let ret = await bean.onBefore(req,resp,req._param);
-              if(ret){
-                return 
+            if (bean != null && bean.onBefore) {
+              let ret = await bean.onBefore(req, resp, req._param);
+              if (ret) {
+                return
               }
             }
-          }catch(e){
+          } catch (e) {
             console.error(e);
           }
         }
 
       }
-    } 
+    }
     ctrl.execute(req, resp);
   }
 }
-function loadFromWebPath(app, opt) {
+function loadFromWebPath(app, opt: WebServerOption) {
   if (opt.webPath == null)
     return;
   var map = {};
@@ -114,7 +115,7 @@ function loadFromWebPath(app, opt) {
 
 
 //自动生成
-function loadRouter(app, opt) {
+function loadRouter(app, opt: WebServerOption) {
   loadFromWebPath(app, opt);
 }
 export default loadRouter;

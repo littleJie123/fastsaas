@@ -75,7 +75,7 @@ export default class Control<Param = any, Result = any> {
     let needParam = this._getNeedParamKey();
     if (needParam != null) {
       for (let key of needParam) {
-        let val = JsonUtil.getByKeys(param,key)
+        let val = JsonUtil.getByKeys(param, key)
         if (val == null || val === '') {
           throw new Error(`缺少参数${key}`);
         }
@@ -132,7 +132,7 @@ export default class Control<Param = any, Result = any> {
       let url: string = req.baseUrl + req.url;
       this._printLog({
         url,
-        contextId:this.getContext().getId(),
+        contextId: this.getContext().getId(),
         param: JSON.stringify(this._param)
       });
     } catch (e) {
@@ -154,7 +154,7 @@ export default class Control<Param = any, Result = any> {
    * 解析参数
    */
   protected _parseRequestParam() {
-    
+
   }
 
   async execute(req: Request, resp: Response) {
@@ -185,7 +185,7 @@ export default class Control<Param = any, Result = any> {
     } catch (e) {
       this._printErrorLog(e);
       this._sendError(resp, e);
-      
+
     }
 
   }
@@ -247,9 +247,9 @@ export default class Control<Param = any, Result = any> {
     return null;
   }
 
-  async executeParam(param: any) {
+  async executeParam(param: any, req?: Request, resp?: Response) {
     this._param = param;
-    return await this.doExecute();
+    return await this.doExecute(req, resp);
   }
 
   buildControl(controlClazz): Control {
