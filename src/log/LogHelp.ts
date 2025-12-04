@@ -32,7 +32,7 @@ export default class LogHelp {
     }
   }
 
-  setContextId(contextId: number) {
+  setContextId(contextId: string) {
     this._opt.context_id = contextId
   }
 

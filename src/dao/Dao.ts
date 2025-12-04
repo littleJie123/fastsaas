@@ -4,8 +4,8 @@ import Builder from './builder/Builder';
 import DaoOpt from './opt/DaoOpt';
 
 import _ from 'lodash'
-import {BeanUtil} from './../util/BeanUtil';
-import {ArrayUtil} from './../util/ArrayUtil';
+import { BeanUtil } from './../util/BeanUtil';
+import { ArrayUtil } from './../util/ArrayUtil';
 import Context from './../context/Context';
 import { OnlyArrayIntface, AnyObject, onlyDataInterface } from '../interface'
 import { Sql } from './sql';
@@ -13,11 +13,11 @@ import IDaoOpt from '../inf/IDaoOpt';
 import ISaveItem from './ISaveItem';
 
 export default abstract class Dao<Pojo = any> {
-  
- 
+
+
   protected _opt: DaoOpt;
   protected _map: object;
-  protected _context:Context;
+  protected _context: Context;
 
 
   /**
@@ -26,83 +26,83 @@ export default abstract class Dao<Pojo = any> {
    * @param cdt 更新内容
    * @param where 更新条件
    */
-  async updateByIds(pojos:Pojo[],cdt:any,where?:any){
+  async updateByIds(pojos: Pojo[], cdt: any, where?: any) {
     let idCol = this._opt.acqPojoFirstId();
-    let datas:any[] = pojos.map(pojo=>({
-      [idCol]:pojo[idCol]
+    let datas: any[] = pojos.map(pojo => ({
+      [idCol]: pojo[idCol]
     }))
-    return this.updateArray(datas,cdt,where);
+    return this.updateArray(datas, cdt, where);
 
   }
-  
+
   /**
    * 根据一个查询条件，进行更新
    * @param whereCdt 查询条件
    * @param data  //更新数据
    */
-  async updateByCdt(whereCdt,data){
+  async updateByCdt(whereCdt, data) {
     this._checkNullCdt(whereCdt);
     let idCol = this._opt.acqPojoFirstId();
-    let list = await this.findCol(whereCdt,idCol);
-    list = list.map(id=>({[idCol]:id}))
-    
-    return await this.updateArray(list,data,whereCdt);
+    let list = await this.findCol(whereCdt, idCol);
+    list = list.map(id => ({ [idCol]: id }))
+
+    return await this.updateArray(list, data, whereCdt);
   }
 
-  
+
   /**
    * 根据一个查询条件，进行删除
    * @param cdt 
    * @param data 
    */
-  async delByCdt(cdt){
+  async delByCdt(cdt) {
     this._checkNullCdt(cdt);
     let idCol = this._opt.acqPojoFirstId();
-    let list = await this.findCol(cdt,idCol);
-    list = list.map(id=>({[idCol]:id}))
-    return await this.delArray(list,cdt);
+    let list = await this.findCol(cdt, idCol);
+    list = list.map(id => ({ [idCol]: id }))
+    return await this.delArray(list, cdt);
   }
   /**
    * 检查一些查询条件是否为空
    * @param cdt 
    * @returns 
    */
-  protected _checkNullCdt(cdt){
-    if(cdt == null){
+  protected _checkNullCdt(cdt) {
+    if (cdt == null) {
       throw new Error('条件不能为空');
     }
-    if(cdt.clazz == 'BaseCdt' || cdt.clazz == 'Query'){ //BaseCdt 没办法检测条件
+    if (cdt.clazz == 'BaseCdt' || cdt.clazz == 'Query') { //BaseCdt 没办法检测条件
       throw new Error('条件只能传结构体');
     }
     let cnt = 0;
-    for(var e in cdt){
-      if(cdt[e]!= null){
-        
-        cnt ++;
+    for (var e in cdt) {
+      if (cdt[e] != null) {
+
+        cnt++;
       }
     }
-    if(cnt == 0)
+    if (cnt == 0)
       throw new Error('不能传空的条件');
-    
+
   }
   /**
    * 返回表格名称
    * @returns 
    */
-  getTableName():string{
+  getTableName(): string {
     return this._opt.getTableName();
   }
 
-  setContext(context:Context){
+  setContext(context: Context) {
     this._context = context;
   }
-  getContext(){
-    if(this._context == null)
+  getContext() {
+    if (this._context == null)
       this._context = new Context()
     return this._context;
   }
-  constructor(opt:IDaoOpt) {
-    
+  constructor(opt: IDaoOpt) {
+
     this._opt = new DaoOpt(opt);
   }
 
@@ -110,14 +110,14 @@ export default abstract class Dao<Pojo = any> {
    * 根据主键判断有或者没有 来决定是更新还是新增
    * @param data 
    */
-  async save(data:Pojo,whereObj?){
-    if(data == null)
-      return 
+  async save(data: Pojo, whereObj?) {
+    if (data == null)
+      return
     let id = data[this._opt.acqPojoFirstId()]
-    if(id == null){
+    if (id == null) {
       await this.add(data)
-    }else{
-      await this.update(data,whereObj);
+    } else {
+      await this.update(data, whereObj);
     }
     return data;
   }
@@ -131,28 +131,28 @@ export default abstract class Dao<Pojo = any> {
    * 为0 表示没有更新到，返回false
    * @param data 
    */
-  async saved(data:Pojo,whereObj?):Promise<boolean>{
-    if(data == null)
-      return 
+  async saved(data: Pojo, whereObj?): Promise<boolean> {
+    if (data == null)
+      return
     let id = data[this._opt.acqPojoFirstId()]
-    if(id == null){
+    if (id == null) {
       await this.add(data)
       return true;
-    }else{
-      return (0 != (await this.update(data,whereObj)));
+    } else {
+      return (0 != (await this.update(data, whereObj)));
     }
   }
   /**
    * 返回table的主键，只针对一个主键的表有效
    */
-  getIdCol():string{
-    return  this._opt.acqFirstId();
+  getIdCol(): string {
+    return this._opt.acqFirstId();
   }
 
   /**
    * 返回table的pojo【内存】主键 和getIdCol的区别本函数返回驼峰，getIdCol返回下划线
    */
-  getPojoIdCol():string{
+  getPojoIdCol(): string {
     return this._opt.acqPojoFirstId();
   }
   /**
@@ -174,7 +174,7 @@ export default abstract class Dao<Pojo = any> {
    * @param list 
    */
   async importArray(list: Pojo[]) {
-    if(list !=null && list.length > 0){
+    if (list != null && list.length > 0) {
       await this._execute('importArray', _.cloneDeep(list))
     }
   }
@@ -201,16 +201,16 @@ export default abstract class Dao<Pojo = any> {
    * @param whereObj 其他条件
    *
    */
-  async update(obj:Pojo, whereObj?): Promise<number> {
+  async update(obj: Pojo, whereObj?): Promise<number> {
 
 
     var ret = await this._execute('update', obj, whereObj)
     return ret.affectedRows;
   };
 
-  async incre(pojo:Pojo,col:string,num?:number){
+  async incre(pojo: Pojo, col: string, num?: number) {
     let id = this._opt.acqPojoFirstId()
-    let obj:any = {
+    let obj: any = {
       [id]: pojo[id]
     };
     if (num == null) {
@@ -226,23 +226,23 @@ export default abstract class Dao<Pojo = any> {
    * @param saveItems 
    * @returns 
    */
-  async saveItems(saveItems:ISaveItem<Pojo>){
-    let needUpdates:Pojo[] = [];
-    let needAdds:Pojo[] = [];
+  async saveItems(saveItems: ISaveItem<Pojo>) {
+    let needUpdates: Pojo[] = [];
+    let needAdds: Pojo[] = [];
     let idCol = this._opt.acqPojoFirstId()
-    if(saveItems.list){
-      for(let pojo of saveItems.list){
-        if(pojo[idCol] == null){
+    if (saveItems.list) {
+      for (let pojo of saveItems.list) {
+        if (pojo[idCol] == null) {
           needAdds.push(pojo);
-        }else{
+        } else {
           needUpdates.push(pojo);
         }
       }
     }
     let exists = await this.find(saveItems.query);
-    let needDel = ArrayUtil.notInByKey(exists,needUpdates,idCol);
-    if(needDel.length > 0){
-      await this.updateArrayWithCols(needDel,[],{isDel:1});
+    let needDel = ArrayUtil.notInByKey(exists, needUpdates, idCol);
+    if (needDel.length > 0) {
+      await this.updateArrayWithCols(needDel, [], { isDel: 1 });
     }
     await this.updateArray(needUpdates);
     await this.addArray(needAdds);
@@ -256,28 +256,28 @@ export default abstract class Dao<Pojo = any> {
    * 更新一个数组
    * @param array
    */
-  async updateArray(array: Pojo[], other?: object,whereObj?:any): Promise<number> {
+  async updateArray(array: Pojo[], other?: object, whereObj?: any): Promise<number> {
     if (!array || array.length == 0) return
     if (array.length == 1 && other == null) {
-      return this.update(array[0],whereObj)
+      return this.update(array[0], whereObj)
     }
-    const res = await this._execute('updateArray', array, {other,whereObj})
+    const res = await this._execute('updateArray', array, { other, whereObj })
     return res.affectedRows
   }
 
-  async updateArrayWithCols(array:Pojo[],cols:string[], other?: object,whereObj?:any){
+  async updateArrayWithCols(array: Pojo[], cols: string[], other?: object, whereObj?: any) {
     const idName = this._opt.acqPojoFirstId()
-    let updateDatas = array.map(row=>{
-      let ret:any = {};
-      cols.forEach(col=>{
-        if(row.hasOwnProperty(col)){
+    let updateDatas = array.map(row => {
+      let ret: any = {};
+      cols.forEach(col => {
+        if (row.hasOwnProperty(col)) {
           ret[col] = row[col];
         }
       })
       ret[idName] = row[idName];
       return ret;
     })
-    return await this.updateArray(updateDatas,other,whereObj);
+    return await this.updateArray(updateDatas, other, whereObj);
   }
 
   /**
@@ -285,7 +285,7 @@ export default abstract class Dao<Pojo = any> {
    * @param obj 删除的数据
    * @param opts 删除条件
    */
-  async del(obj:Pojo, opts?): Promise<number> {
+  async del(obj: Pojo, opts?): Promise<number> {
     var ret = await this._execute('del', obj, opts)
     return ret.affectedRows;
   }
@@ -296,12 +296,12 @@ export default abstract class Dao<Pojo = any> {
    * @opts 删除条件
    */
   async delArray(array: Pojo[], opts?: any): Promise<number> {
- 
+
     if (!array || !array.length) return 0;
     const res = await this._execute('delArray', array, opts)
     return res.affectedRows
   }
-   
+
   /**
    * 查询
    * @param query 可以是个结构体，可以是个Cdt，可以是个Query 
@@ -320,8 +320,8 @@ export default abstract class Dao<Pojo = any> {
   async findData(query): Promise<any[]> {
 
     let executor = this._acqExecutor();
-    let builder = this._acqBuilder('find',this._opt.clone().removeColChange());
-    let sql = builder.build(query )
+    let builder = this._acqBuilder('find', this._opt.clone().removeColChange());
+    let sql = builder.build(query)
     return await executor.query(sql);
   }
 
@@ -329,7 +329,7 @@ export default abstract class Dao<Pojo = any> {
    * 创建查询的sql
    * @param query 
    */
-  createFindSql(query:any):Sql{
+  createFindSql(query: any): Sql {
     let builder = this._acqBuilder('find');
     return builder.build(query);
   }
@@ -387,204 +387,204 @@ export default abstract class Dao<Pojo = any> {
    * @param opt 
    * @returns 
    */
-  async onlyArray (opt: OnlyArrayIntface<Pojo>): Promise<Pojo[]> {
+  async onlyArray(opt: OnlyArrayIntface<Pojo>): Promise<Pojo[]> {
     if (!opt || typeof opt != 'object') throw new Error('OnlyArray: need a object')
     if (!opt.query && !opt.finds) throw new Error('OnlyArray: choose one from query and finds')
     let idCol = this._opt.acqPojoFirstId();
     let sortFun = opt.sortFun || ((obj1, obj2) => obj1[idCol] - obj2[idCol])
 
-		let checkUpdate = opt.checkUpdate || (
+    let checkUpdate = opt.checkUpdate || (
       (oldData, data) => !BeanUtil.checkIgnore(oldData, data)
     )
-		let self = this;
-		const find = async (opt) => {
-			if (opt.finds)
-				return await opt.finds();
-			else
-				return await self.find(opt.query);
+    let self = this;
+    const find = async (opt) => {
+      if (opt.finds)
+        return await opt.finds();
+      else
+        return await self.find(opt.query);
     }
 
-    let list ;
-    if(opt.noSch){
+    let list;
+    if (opt.noSch) {
       list = [];
-    }else{
+    } else {
       list = await find(opt);
     }
-		let mapFun = opt.mapFun
-		if (mapFun == null) {
-			throw new Error('没有给出map的函数')
-		}
+    let mapFun = opt.mapFun
+    if (mapFun == null) {
+      throw new Error('没有给出map的函数')
+    }
     let array = opt.array;
-    if(array == null && opt.data  != null){
+    if (array == null && opt.data != null) {
       array = [opt.data];
     }
     let allDatas = array; //记录一下所有的数据，后续查询出来设置id用
-    if(array != null && opt.needDistinct){
-      array = ArrayUtil.distinctByKey(array,mapFun);
+    if (array != null && opt.needDistinct) {
+      array = ArrayUtil.distinctByKey(array, mapFun);
     }
-		if (array == null  ) {
-			return [];
-		}
-		let arrayMap = ArrayUtil.toMapByKey(array, mapFun)
-		let listMap = ArrayUtil.toMapArray(list, mapFun)
-		let hasDelData = false;
-		for (let e in listMap) {
-			var datas = listMap[e]
-			if (datas.length > 1) {
-				hasDelData = true;
-				datas.sort(sortFun);
-			}
-			listMap[e] = datas[0];
-		}
-		
-		var needAdd = []
-		var needUpdate = []
-		var needDel = []
-
-		function pushAdd(e, data) {
-			if (data == null) {
-				return null
-			}
-			if (opt.addFun) {
-				var addFunRet = opt.addFun(data)
-				if (addFunRet != null) {
-					data = addFunRet
-				}
+    if (array == null) {
+      return [];
+    }
+    let arrayMap = ArrayUtil.toMapByKey(array, mapFun)
+    let listMap = ArrayUtil.toMapArray(list, mapFun)
+    let hasDelData = false;
+    for (let e in listMap) {
+      var datas = listMap[e]
+      if (datas.length > 1) {
+        hasDelData = true;
+        datas.sort(sortFun);
       }
-			
-			needAdd.push(data)
-		}
+      listMap[e] = datas[0];
+    }
 
-		function pushUpdate(e, data, oldData) {
-			if (data == null) {
-				return null
-			}
-			if (opt.updateFun) {
-				var updateFunRet = opt.updateFun(data,oldData)
-				if (updateFunRet != null) {
-					data = updateFunRet
-				}
-			}
-			
+    var needAdd = []
+    var needUpdate = []
+    var needDel = []
 
-			if (checkUpdate(oldData, data)) {
+    function pushAdd(e, data) {
+      if (data == null) {
+        return null
+      }
+      if (opt.addFun) {
+        var addFunRet = opt.addFun(data)
+        if (addFunRet != null) {
+          data = addFunRet
+        }
+      }
+
+      needAdd.push(data)
+    }
+
+    function pushUpdate(e, data: Pojo, oldData: Pojo) {
+      if (data == null) {
+        return null
+      }
+      if (opt.updateFun) {
+        var updateFunRet: Pojo = opt.updateFun(data, oldData)
+        if (updateFunRet != null) {
+          data = updateFunRet
+        }
+      }
+
+
+      if (checkUpdate(oldData, data)) {
         data = BeanUtil.shallowClone(data);
-				data[idCol] = oldData[idCol]
+        data[idCol] = oldData[idCol]
 
-				if (opt.beforeUpdate) {
-					var beforeUpdateRet = opt.beforeUpdate(data, oldData)
-					if (beforeUpdateRet != null) {
-						data = beforeUpdateRet;
-					}
-				}
-				needUpdate.push(data)
-			}
-		}
-		for (let e in arrayMap) {
-			var oldData = listMap[e]
-			var data = arrayMap[e]
-			if (oldData == null) {
-				if (!opt.noAdd) pushAdd(e, data)
-			} else {
-				if (opt.needUpdate) {
-					if (opt.isUpdate == null || (await opt.isUpdate(data, oldData))) {
-						pushUpdate(e, data, oldData)
-					}
-				}
-			}
-		}
-		var delArray = [];
-		if (opt.needDel) {
-			delArray = ArrayUtil.notInByKey(list, array, mapFun);
-			if (opt.delFun) {
-				delArray = ArrayUtil.parse(delArray, opt.delFun);
-			}
-			if (opt.dels == null) {
-				await this.delArray(delArray);
-			} else {
-				await opt.dels(delArray);
-			}
-		}
-		if (needAdd.length == 0 &&
-			needUpdate.length == 0 &&
-			!hasDelData &&
-			delArray.length == 0) {
+        if (opt.beforeUpdate) {
+          var beforeUpdateRet = opt.beforeUpdate(data, oldData)
+          if (beforeUpdateRet != null) {
+            data = beforeUpdateRet;
+          }
+        }
+        needUpdate.push(data)
+      }
+    }
+    for (let e in arrayMap) {
+      var oldData = listMap[e]
+      var data = arrayMap[e]
+      if (oldData == null) {
+        if (!opt.noAdd) pushAdd(e, data)
+      } else {
+        if (opt.needUpdate) {
+          if (opt.isUpdate == null || (await opt.isUpdate(data, oldData))) {
+            pushUpdate(e, data, oldData)
+          }
+        }
+      }
+    }
+    var delArray = [];
+    if (opt.needDel) {
+      delArray = ArrayUtil.notInByKey(list, array, mapFun);
+      if (opt.delFun) {
+        delArray = ArrayUtil.parse(delArray, opt.delFun);
+      }
+      if (opt.dels == null) {
+        await this.delArray(delArray);
+      } else {
+        await opt.dels(delArray);
+      }
+    }
+    if (needAdd.length == 0 &&
+      needUpdate.length == 0 &&
+      !hasDelData &&
+      delArray.length == 0) {
       if (opt.needFindId) {
-				for (let data of allDatas) {
-					let key = ArrayUtil.get(data,mapFun);
-					let dbData = listMap[key];
-					if (dbData != null) {
-						data[idCol] = dbData[idCol];
-					}
-				}
-			}
-			return list
+        for (let data of allDatas) {
+          let key = ArrayUtil.get(data, mapFun);
+          let dbData = listMap[key];
+          if (dbData != null) {
+            data[idCol] = dbData[idCol];
+          }
+        }
+      }
+      return list
     }
     let addedArray = null
-		if (opt.adds) {
-			addedArray = await opt.adds(needAdd);
-		} else {
-      
-			addedArray =await this.addArray(needAdd);
-		}
-		if (opt.updates) {
-			await opt.updates(needUpdate);
-		} else {
+    if (opt.adds) {
+      addedArray = await opt.adds(needAdd);
+    } else {
+
+      addedArray = await this.addArray(needAdd);
+    }
+    if (opt.updates) {
+      await opt.updates(needUpdate, list);
+    } else {
       await this.updateArray(needUpdate)
-		}
-		if (opt.afterFun) {
-			await opt.afterFun();
-		}
-		if (!opt.noLastFind) {
-			list = await find(opt);
-			let arrayMap = ArrayUtil.toMapArray(list, mapFun)
-			let ret = []
-			for (let e in arrayMap) {
-				var mapArray = arrayMap[e]
-				if (mapArray.length == 1) {
-					ret.push(mapArray[0])
-				}
-				if (mapArray.length > 1) {
-					mapArray.sort(sortFun)
-					ret.push(mapArray[0])
-					ArrayUtil.addAll(needDel, mapArray.slice(1))
-				}
-        
-			}
-      if(opt.needFindId){
-        for(let data of allDatas){
-          let key = ArrayUtil.get(data,mapFun);
+    }
+    if (opt.afterFun) {
+      await opt.afterFun();
+    }
+    if (!opt.noLastFind) {
+      list = await find(opt);
+      let arrayMap = ArrayUtil.toMapArray(list, mapFun)
+      let ret: Pojo[] = []
+      for (let e in arrayMap) {
+        var mapArray = arrayMap[e]
+        if (mapArray.length == 1) {
+          ret.push(mapArray[0])
+        }
+        if (mapArray.length > 1) {
+          mapArray.sort(sortFun)
+          ret.push(mapArray[0])
+          ArrayUtil.addAll(needDel, mapArray.slice(1))
+        }
+
+      }
+      if (opt.needFindId) {
+        for (let data of allDatas) {
+          let key = ArrayUtil.get(data, mapFun);
           let dbData = arrayMap[key];
-          if(dbData != null){
+          if (dbData != null) {
             data[idCol] = dbData[0][idCol];
           }
         }
       }
-			if (!opt.noDel){
-        if(addedArray != null){
-          let delAddArray = ArrayUtil.andByKey(addedArray,delArray,idCol);
-          
-          for(let row of delAddArray){
+      if (!opt.noDel) {
+        if (addedArray != null) {
+          let delAddArray = ArrayUtil.andByKey(addedArray, delArray, idCol);
+
+          for (let row of delAddArray) {
             delete row[idCol];
           }
         }
-				if(opt.dels == null){
-					await this.delArray(needDel);
-        }else{
-          await opt.dels(needDel);
+        if (opt.dels == null) {
+          await this.delArray(needDel);
+        } else {
+          await opt.dels(needDel, ArrayUtil.andByKey(ret, needDel, opt.mapFun));
         }
-			}
-			return ret
-		}
-	}
+      }
+      return ret
+    }
+  }
 
   /**
-	 * 只查询某一列 distinct col
-	 * @param {[type]} query     [description]
-	 * @param {[type]} col       [description]
-	 * @yield {[type]} [description]
-	 */
-  protected async _findCol(query: Query, col: string):Promise<any[]> {
+   * 只查询某一列 distinct col
+   * @param {[type]} query     [description]
+   * @param {[type]} col       [description]
+   * @yield {[type]} [description]
+   */
+  protected async _findCol(query: Query, col: string): Promise<any[]> {
     if (!col) col = this._opt.acqFirstId();
     query = this._parseQuery(query)
     query.col('distinct ' + col)
@@ -597,7 +597,7 @@ export default abstract class Dao<Pojo = any> {
    * @param query 
    * @param col 
    */
-  async findCol(query,col:string):Promise<any[]>{
+  async findCol(query, col: string): Promise<any[]> {
     const ret = this._findCol(query, col)
     return ret
   }
@@ -607,11 +607,11 @@ export default abstract class Dao<Pojo = any> {
    * @param col 
    * @returns 
    */
-  async findOneCol(query,col?):Promise<any>{
+  async findOneCol(query, col?): Promise<any> {
     var schQuery = Query.parse(query);
     schQuery.size(1);
-    var ret = await this.findCol(schQuery,col);
-    if(ret.length == 0)
+    var ret = await this.findCol(schQuery, col);
+    if (ret.length == 0)
       return null;
     return ret[0]
   }
@@ -637,32 +637,32 @@ export default abstract class Dao<Pojo = any> {
     if (!opt) return null
     if (!opt.query) return null
 
-		let query = opt.query
-		let fun = opt.fun
-		let data = opt.data || {}
-		let noSch = opt.noSch
+    let query = opt.query
+    let fun = opt.fun
+    let data = opt.data || {}
+    let noSch = opt.noSch
     let self = this
 
-    if (typeof query === 'object' && !(query.clazz == 'Query')){
+    if (typeof query === 'object' && !(query.clazz == 'Query')) {
       let _queryObj = Object.assign({}, query)
       data = BeanUtil.combine(_queryObj, data)
       query = new Query()
       for (let [k, v] of Object.entries(_queryObj)) query.eq(k, v)
     }
 
-		async function sch() {
-			var list = await self.find(query)
+    async function sch() {
+      var list = await self.find(query)
 
-			return self._delOther(list, fun)
+      return self._delOther(list, fun)
     }
 
-		var ret = null
-		if (!noSch) {
-			ret = await sch()
-			if (ret) return ret
-		}
-		await this.add(<Pojo>data)
-		return sch()
+    var ret = null
+    if (!noSch) {
+      ret = await sch()
+      if (ret) return ret
+    }
+    await this.add(<Pojo>data)
+    return sch()
   }
 
   /**
@@ -674,23 +674,23 @@ export default abstract class Dao<Pojo = any> {
   protected async _delOther(
     list: any[],
     sortFun?: (obj1?: Pojo, obj2?: Pojo) => number
-     
-  ){
+
+  ) {
     let idCol = this._opt.acqPojoFirstId()
     if (!sortFun) {
-			sortFun = (obj1, obj2) => obj1[idCol] - obj2[idCol]
+      sortFun = (obj1, obj2) => obj1[idCol] - obj2[idCol]
     }
     if (!list || !list.length) return null
     if (list.length == 1) return list[0]
 
-    
-		list.sort(sortFun)
+
+    list.sort(sortFun)
     const ret = list[0]
 
     let delArray = list.slice(1);
     await this.delArray(delArray);
 
-		return ret
+    return ret
   }
 
   /**
@@ -698,9 +698,9 @@ export default abstract class Dao<Pojo = any> {
    * @param querys 
    * @returns 
    */
-  async findByQuerys(querys:Query[]):Promise<Pojo[]>{
-    let ret:Pojo[] = [];
-    for(let query of querys){
+  async findByQuerys(querys: Query[]): Promise<Pojo[]> {
+    let ret: Pojo[] = [];
+    for (let query of querys) {
       ret.push(... (await this.find(query)))
     }
     return ret;
@@ -731,42 +731,42 @@ export default abstract class Dao<Pojo = any> {
   protected async _execute(key: string, obj: any, opts?: any): Promise<any> {
     let executor = this._acqExecutor();
     let builder = this._acqBuilder(key);
-    if(builder == null){
+    if (builder == null) {
       throw new Error(key + '的builder没有被构造');
     }
     let sql = builder.build(obj, opts)
-    
+
     return await executor.execute(sql);
   }
 
-  
+
   /**
    * 直接执行sql
    * @param sql sql,可以带?
    * @param values sql的值
    *
    */
-  async executeSql(sql:string,values?:any[]){
+  async executeSql(sql: string, values?: any[]) {
     let executor = this._acqExecutor();
-    return executor.executeSql(sql,values);
+    return executor.executeSql(sql, values);
   }
   /**
    * 执行存储过程
    * @param sql 
    * @param values 
    */
-  async executeStoreProcedure(name:string,values?:any[]){
+  async executeStoreProcedure(name: string, values?: any[]) {
     let executor = this._acqExecutor();
     let strName = '';
-    if(values != null && values.length>0){
+    if (values != null && values.length > 0) {
       let strValues = []
-      for(let value of values){
+      for (let value of values) {
         strValues.push('?')
       }
       strName = strValues.join(',');
     }
     let str = `call ${name}(${strName})`
-    let list =await executor.executeSql(str,values);
+    let list = await executor.executeSql(str, values);
     return list[0];
   }
 
@@ -786,8 +786,8 @@ export default abstract class Dao<Pojo = any> {
    * 返回
    * @param key 操作，类似add ,update
    */
-  protected _acqBuilder(key: string,opt?:DaoOpt): Builder {
-    if(opt == null){
+  protected _acqBuilder(key: string, opt?: DaoOpt): Builder {
+    if (opt == null) {
       opt = this._opt
     }
     let map = this._acqMap();
@@ -800,14 +800,14 @@ export default abstract class Dao<Pojo = any> {
   /**
    * 高阶函数，返回一个逻辑删除的批量操作
    */
-  buildLogicDelArrayFun(){
+  buildLogicDelArrayFun() {
     let self = this;
     let idCol = this._opt.acqPojoFirstId();
-    return async function(array:any[]){
-      array = array.filter(row=>row.isDel!=1);
+    return async function (array: any[]) {
+      array = array.filter(row => row.isDel != 1);
       await self.updateArray(
-        ArrayUtil.onlyKeys(array,idCol),
-        {isDel:1}
+        ArrayUtil.onlyKeys(array, idCol),
+        { isDel: 1 }
       )
     }
   }
@@ -816,51 +816,51 @@ export default abstract class Dao<Pojo = any> {
    * 分批次处理数据
    * @param opt 
    */
-  async processInTimes(opt:{
-      query:any,
-      /** 处理函数  */
-      fun:(list:Pojo[])=>Promise<boolean>,
-      limit?:number,
-      col?:string
-  }){
-    let {query,fun,limit,col} = opt;
+  async processInTimes(opt: {
+    query: any,
+    /** 处理函数  */
+    fun: (list: Pojo[]) => Promise<boolean>,
+    limit?: number,
+    col?: string
+  }) {
+    let { query, fun, limit, col } = opt;
     let dbQuery = Query.parse(query);
-    if(col==null)
+    if (col == null)
       col = this._opt.acqIds()[0];
     let beginNum = null;
-    if(limit == null)
+    if (limit == null)
       limit = 1000;
     let cloneQuery = dbQuery.cloneSameCdt();
     cloneQuery.size(limit);
     cloneQuery.order(col);
     cloneQuery.col(dbQuery.getCol())
     let list = await this.find(cloneQuery);
-    do{
-      if(list.length > 0){
+    do {
+      if (list.length > 0) {
         let needStop = await fun(list);
-        if(needStop || list.length<limit ){
+        if (needStop || list.length < limit) {
           break;
         }
 
-        beginNum = list[list.length-1][col];   
+        beginNum = list[list.length - 1][col];
         cloneQuery = dbQuery.cloneSameCdt();
-        cloneQuery.big(col,beginNum)
+        cloneQuery.big(col, beginNum)
         cloneQuery.size(limit);
         cloneQuery.order(col);
         cloneQuery.col(dbQuery.getCol())
         list = await this.find(cloneQuery);
       }
-    }while(list.length > 0);
+    } while (list.length > 0);
   }
   /**
    * 将一个从数据库里面查询出来的数据转成内存的数据
    * @param data 
    */
-  protected changeDbData2Pojo(data:any):Pojo{
+  protected changeDbData2Pojo(data: any): Pojo {
     let colChanger = this._opt.getColChanger();
-    if(colChanger != null){
+    if (colChanger != null) {
       return <Pojo>colChanger.changeDb2Pojo(data);
-    }else{
+    } else {
       return data;
     }
   }
@@ -869,28 +869,28 @@ export default abstract class Dao<Pojo = any> {
    * 将一个从数据库里面查询出来的数据转成内存的数据
    * @param data 
    */
-  changeDbArray2Pojo(datas:any[]):Pojo[]{
+  changeDbArray2Pojo(datas: any[]): Pojo[] {
     let colChanger = this._opt.getColChanger();
-    if(colChanger != null){
+    if (colChanger != null) {
       return <Pojo[]>colChanger.changeDbArray2Pojo(datas)
-    }else{
+    } else {
       return datas;
     }
   }
 
-  getColChanger(){
+  getColChanger() {
     return this._opt.getColChanger();
   }
 
   /**
    * 根据数据和字段，将对应属性变成add 的sql
    */
-  changeDataToAddSql(pojo:Pojo,col:string){
-    let data:any = pojo;
+  changeDataToAddSql(pojo: Pojo, col: string) {
+    let data: any = pojo;
     let value = data[col]
-    if(value != null){
+    if (value != null) {
       let dbCol = this._opt.parsePojoField(col)
-      data[col] = new Sql(`?+\`${dbCol}\``,value)
+      data[col] = new Sql(`?+\`${dbCol}\``, value)
     }
   }
 }

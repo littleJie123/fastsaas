@@ -498,7 +498,7 @@ class Dao {
             addedArray = await this.addArray(needAdd);
         }
         if (opt.updates) {
-            await opt.updates(needUpdate);
+            await opt.updates(needUpdate, list);
         }
         else {
             await this.updateArray(needUpdate);
@@ -541,18 +541,18 @@ class Dao {
                     await this.delArray(needDel);
                 }
                 else {
-                    await opt.dels(needDel);
+                    await opt.dels(needDel, ArrayUtil_1.ArrayUtil.andByKey(ret, needDel, opt.mapFun));
                 }
             }
             return ret;
         }
     }
     /**
-       * 只查询某一列 distinct col
-       * @param {[type]} query     [description]
-       * @param {[type]} col       [description]
-       * @yield {[type]} [description]
-       */
+     * 只查询某一列 distinct col
+     * @param {[type]} query     [description]
+     * @param {[type]} col       [description]
+     * @yield {[type]} [description]
+     */
     async _findCol(query, col) {
         if (!col)
             col = this._opt.acqFirstId();

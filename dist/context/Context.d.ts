@@ -81,6 +81,6 @@ export default class Context {
      * 返回日志处理器
      */
     getLogger(category?: string): LogHelp;
-    getId(): number;
-    setId(context_id: number): number;
+    getId(): string;
+    setId(context_id: string): string;
 }

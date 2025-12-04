@@ -166,11 +166,11 @@ export default abstract class Dao<Pojo = any> {
      */
     onlyArray(opt: OnlyArrayIntface<Pojo>): Promise<Pojo[]>;
     /**
-       * 只查询某一列 distinct col
-       * @param {[type]} query     [description]
-       * @param {[type]} col       [description]
-       * @yield {[type]} [description]
-       */
+     * 只查询某一列 distinct col
+     * @param {[type]} query     [description]
+     * @param {[type]} col       [description]
+     * @yield {[type]} [description]
+     */
     protected _findCol(query: Query, col: string): Promise<any[]>;
     /**
      * 查询某一列，返回当前列的简单数据，没有结构体

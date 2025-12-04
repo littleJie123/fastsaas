@@ -17,7 +17,7 @@ export default class LogHelp {
     private _opt;
     setSessionId(sessionId: string): void;
     constructor(opt?: LoggerOpt);
-    setContextId(contextId: number): void;
+    setContextId(contextId: string): void;
     setCategory(category: string): void;
     infoObj(obj: any): void;
     ding(...message: Message[]): void;

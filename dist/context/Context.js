@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const BeanConfig_1 = __importDefault(require("./bean/BeanConfig"));
 const LogHelp_1 = __importDefault(require("../log/LogHelp"));
 const ComponentBuilder_1 = __importDefault(require("./bean/ComponentBuilder"));
+const UuidUtil_1 = __importDefault(require("../util/UuidUtil"));
 const AfterBuild = 'afterBuild'; //后处理函数
 let spaceId = null;
 let nowId = 0;
@@ -303,7 +304,7 @@ class Context {
     }
     getId() {
         if (this._id == null) {
-            this._id = getContextId();
+            this._id = UuidUtil_1.default.getUuid();
         }
         return this._id;
     }

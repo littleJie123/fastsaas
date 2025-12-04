@@ -3,21 +3,22 @@ import BeanConfig from "./bean/BeanConfig";
 import LogHelp from "../log/LogHelp";
 
 import ComponentBuilder from "./bean/ComponentBuilder";
+import UuidUtil from "../util/UuidUtil";
 
 const AfterBuild = 'afterBuild' //后处理函数
 
-let spaceId:number = null;
-let nowId:number = 0;
-let randNum = Math.pow(2,24);
+let spaceId: number = null;
+let nowId: number = 0;
+let randNum = Math.pow(2, 24);
 let maxId = randNum;
-function getContextId(){
+function getContextId() {
   let ret = null;
-  if(spaceId == null){
-    spaceId = Math.floor(Math.random() * randNum) * randNum;  
+  if (spaceId == null) {
+    spaceId = Math.floor(Math.random() * randNum) * randNum;
   }
   ret = spaceId + nowId;
-  nowId ++ ;
-  if(nowId >= maxId){
+  nowId++;
+  if (nowId >= maxId) {
     nowId = 0
   }
   return ret;
@@ -49,7 +50,7 @@ export default class Context {
   private _builderMap = {};
 
 
-  private _id: number;
+  private _id: string;
   private sessionId: string;
 
 
@@ -331,21 +332,21 @@ export default class Context {
     if (category == null)
       category = 'server';
     let logger = new LogHelp();
-    logger.setContextId(  this.getId())
+    logger.setContextId(this.getId())
     logger.setSessionId(this.sessionId);
-    logger.setCategory( category )
+    logger.setCategory(category)
     return logger;
   }
 
-  getId(): number {
+  getId(): string {
     if (this._id == null) {
-      
-      this._id = getContextId()
+
+      this._id = UuidUtil.getUuid()
     }
     return this._id;
   }
 
-  setId(context_id: number): number {
+  setId(context_id: string): string {
     this._id = context_id
     return this._id
   }

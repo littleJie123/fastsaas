@@ -6,20 +6,20 @@ interface sortFun {
 interface checkUpdate {
     (oldData: AnyObject, data: AnyObject): boolean;
 }
-interface dataFormatFun {
-    (data: AnyObject, oldData?: any): AnyObject;
+interface DataFormatFun<Pojo = any> {
+    (data: Pojo, oldData?: Pojo): Pojo;
 }
-interface beforeUpdate {
+interface BeforeUpdate<Pojo = any> {
     /**
      *  对于 oldData 数据, 和更新数据 data 的操作
     */
-    (data: AnyObject, oldData: AnyObject): AnyObject;
+    (data: Pojo, oldData: Pojo): Pojo;
 }
 interface isUpdate {
     (data: AnyObject, oldData: AnyObject): boolean;
 }
-interface optExcute {
-    (data: AnyObject[]): Promise<any>;
+interface OptExcute<Pojo = any> {
+    (data: Pojo[], oldData?: Pojo[]): Promise<any>;
 }
 export interface OnlyArrayIntface<Pojo = any> {
     array?: Pojo[];
@@ -44,19 +44,19 @@ export interface OnlyArrayIntface<Pojo = any> {
      * 判断更新的函数
      */
     checkUpdate?: checkUpdate;
-    addFun?: dataFormatFun;
+    addFun?: DataFormatFun;
     /**
      * array 经过 query 数据筛选根据 mapFun, 经过 updateDataArray 补充
      */
-    updateFun?: dataFormatFun;
+    updateFun?: DataFormatFun;
     /**
      * del 之前的处理函数
      */
-    delFun?: dataFormatFun;
+    delFun?: DataFormatFun<Pojo>;
     /**
      * 数据更新之前的处理函数
      */
-    beforeUpdate?: beforeUpdate;
+    beforeUpdate?: BeforeUpdate<Pojo>;
     noAdd?: boolean;
     needUpdate?: boolean;
     isUpdate?: isUpdate;
@@ -64,15 +64,15 @@ export interface OnlyArrayIntface<Pojo = any> {
     /**
      * 真正执行增加的函数
      */
-    adds?: optExcute;
+    adds?: OptExcute<Pojo>;
     /**
      * 真正更新的函数
      */
-    updates?: optExcute;
+    updates?: OptExcute<Pojo>;
     /**
      * 真正删除的函数
      */
-    dels?: optExcute;
+    dels?: OptExcute<Pojo>;
     afterFun?: Function;
     noLastFind?: boolean;
     noDel?: boolean;

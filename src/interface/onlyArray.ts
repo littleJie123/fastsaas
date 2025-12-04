@@ -22,16 +22,16 @@ interface checkUpdate {
 
 
 
-interface dataFormatFun {
+interface DataFormatFun<Pojo = any> {
   // 用于 add、update 数据的格式化
-  (data: AnyObject, oldData?: any): AnyObject
+  (data: Pojo, oldData?: Pojo): Pojo
 }
 
-interface beforeUpdate {
+interface BeforeUpdate<Pojo = any> {
   /**
    *  对于 oldData 数据, 和更新数据 data 的操作
   */
-  (data: AnyObject, oldData: AnyObject): AnyObject
+  (data: Pojo, oldData: Pojo): Pojo
 }
 
 interface isUpdate {
@@ -39,9 +39,9 @@ interface isUpdate {
   (data: AnyObject, oldData: AnyObject): boolean
 }
 
-interface optExcute {
+interface OptExcute<Pojo = any> {
   // 新增、更新、删除数据, 默认为 Dao.addArray, Dao.updateArray, Dao.delArray
-  (data: AnyObject[]): Promise<any>
+  (data: Pojo[], oldData?: Pojo[]): Promise<any>
 }
 
 export interface OnlyArrayIntface<Pojo = any> {
@@ -71,19 +71,19 @@ export interface OnlyArrayIntface<Pojo = any> {
   checkUpdate?: checkUpdate,
 
   /*add 数据格式化*/
-  addFun?: dataFormatFun, // array 经过 query 数据筛选根据 mapFun, 经过 addDataArray 补充
+  addFun?: DataFormatFun, // array 经过 query 数据筛选根据 mapFun, 经过 addDataArray 补充
   /**
    * array 经过 query 数据筛选根据 mapFun, 经过 updateDataArray 补充
    */
-  updateFun?: dataFormatFun, // array 经过 query 数据筛选根据 mapFun, 经过 updateDataArray 补充
+  updateFun?: DataFormatFun, // array 经过 query 数据筛选根据 mapFun, 经过 updateDataArray 补充
   /**
    * del 之前的处理函数
    */
-  delFun?: dataFormatFun, // query 数据经过 array 筛选根据 mapFun,
+  delFun?: DataFormatFun<Pojo>, // query 数据经过 array 筛选根据 mapFun,
   /**
    * 数据更新之前的处理函数
    */
-  beforeUpdate?: beforeUpdate
+  beforeUpdate?: BeforeUpdate<Pojo>,
 
   // 操作条件判断
   noAdd?: boolean, // 不需要新增数据: true
@@ -95,15 +95,15 @@ export interface OnlyArrayIntface<Pojo = any> {
   /**
    * 真正执行增加的函数
    */
-  adds?: optExcute,
+  adds?: OptExcute<Pojo>,
   /**
    * 真正更新的函数
    */
-  updates?: optExcute
+  updates?: OptExcute<Pojo>
   /**
    * 真正删除的函数
    */
-  dels?: optExcute,
+  dels?: OptExcute<Pojo>,
 
   // 后执行方法
   afterFun?: Function, // 后执行
