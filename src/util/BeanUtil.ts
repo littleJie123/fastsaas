@@ -100,8 +100,8 @@ export class BeanUtil {
   }
 
   /**
-根据param 检查obj
-*/
+  根据param 检查obj，忽略null和'',检查两个对象的属性是否相等
+  */
   static checkIgnore(obj, param) {
     if (obj == null || param == null) return true
     let ret = true
