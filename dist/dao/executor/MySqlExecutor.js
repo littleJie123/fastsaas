@@ -63,8 +63,9 @@ class MySqlExecutor {
     async executeSql(sql, values) {
         var opt = this._opt;
         let poolName = opt.getPoolName();
-        if (poolName == null || poolName == '')
+        if (poolName == null || poolName == '') {
             poolName = MysqlPoolFac_1.default.getDefPoolName();
+        }
         let status = this._acqStatus();
         let obj;
         let now = new Date();

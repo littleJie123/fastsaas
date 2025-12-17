@@ -43,7 +43,7 @@ export default abstract class BaseDomain<Do = any> {
    * 保存数组,根据业务主键来判断是否需要新增,更新,删除
    * @param obj
    */
-  async saveDatasWithBPk(saveParams: ISaveParam<Do>):Promise<Do[]> {
+  async saveDatasWithBPk(saveParams: ISaveParam<Do>): Promise<Do[]> {
     if (saveParams.query == null) {
       throw new Error('查询条件不能为空');
     }
@@ -68,30 +68,30 @@ export default abstract class BaseDomain<Do = any> {
    * 
    * @param data 
    */
-  protected async saveDoByBPK(data:Do){
+  protected async saveDoByBPK(data: Do) {
     let bpk = this.getBussinessPks();
-    if(bpk == null || bpk.length == 0){
+    if (bpk == null || bpk.length == 0) {
       throw new Error('没有设置业务主键');
     }
-    let query:any = {}
-    for(let pk of bpk){
+    let query: any = {}
+    for (let pk of bpk) {
       query[pk] = data[pk];
     }
-    let list= await this.saveDatasWithBPk({
-      datas:[data],
-      needUpdate:true,
+    let list = await this.saveDatasWithBPk({
+      datas: [data],
+      needUpdate: true,
       query
     })
     return list[0]
   }
 
-  async getDoByBPK(data:Do):Promise<Do>{
+  async getDoByBPK(data: Do): Promise<Do> {
     let bpk = this.getBussinessPks();
-    if(bpk == null || bpk.length == 0){
+    if (bpk == null || bpk.length == 0) {
       throw new Error('没有设置业务主键');
     }
-    let query:any = {isDel:0}
-    for(let pk of bpk){
+    let query: any = { isDel: 0 }
+    for (let pk of bpk) {
       query[pk] = data[pk];
     }
     return this.getDao().findOne(query);
@@ -219,17 +219,25 @@ export default abstract class BaseDomain<Do = any> {
   async load(datas: Do[], opt?: IDomainOpt<Do>): Promise<Do[]> {
     let searcher = this.getSearcher();
     let pkCol = this.getPkCol()
-    let dbDatas = await searcher.findAndCheck(
-      ArrayUtil.toArray(datas, pkCol),
-      opt?.schQuery
-    )
+    let dbDatas = null
+
+    if (opt?.useDao) {
+      let schQuery = new Query(opt?.schQuery);
+      schQuery.in(pkCol, ArrayUtil.toArray(datas, pkCol));
+      dbDatas = await this.getDao().find(schQuery);
+    } else {
+      dbDatas = await searcher.findAndCheck(
+        ArrayUtil.toArray(datas, pkCol),
+        opt?.schQuery
+      )
+    }
     if (opt?.onBeforeLoad) {
       await opt.onBeforeLoad(dbDatas);
     }
     function copy(src, target) {
       if (opt?.cols) {
         for (let col of opt.cols) {
-          if (target[col] == null) {
+          if (target[col] == null || opt?.overwrite) {
             target[col] = src[col]
           }
         }
@@ -267,7 +275,7 @@ export default abstract class BaseDomain<Do = any> {
    * @param opt 
    */
   protected async loadOtherTable(list: any[], opt?: IDomainOpt<Do>) {
-    if(list == null || list.length == 0){
+    if (list == null || list.length == 0) {
       return;
     }
     let loadKeys = opt?.loadKeys;
@@ -297,33 +305,33 @@ export default abstract class BaseDomain<Do = any> {
    * @param opt 
    */
   protected async loadOtherTableToArray(list: any[], opt?: IDomainOpt<Do>) {
-    if(list == null || list.length == 0){
+    if (list == null || list.length == 0) {
       return;
-    } 
-    if(opt.table == null){
+    }
+    if (opt.table == null) {
       throw new Error('请提供主表信息');
     }
-    let loadKeys = opt?.loadKeys; 
-    if (loadKeys != null && loadKeys.length > 0) { 
+    let loadKeys = opt?.loadKeys;
+    if (loadKeys != null && loadKeys.length > 0) {
       for (let loadKey of loadKeys) {
         let pkCol = this.getIdColByKey(opt.table);
         let dao: Dao = this.getDaoByKey(loadKey)
         let array = await dao.find({
-          [pkCol]:ArrayUtil.toArrayDis(list,pkCol )
+          [pkCol]: ArrayUtil.toArrayDis(list, pkCol)
         });
-        if(array.length>0){
+        if (array.length > 0) {
           ArrayUtil.joinArray({
             list,
-            list2:array,
-            key:pkCol,
-            fun(mainData:any,otherTableDatas:any[]){
-              mainData[loadKey+'s'] = otherTableDatas;
+            list2: array,
+            key: pkCol,
+            fun(mainData: any, otherTableDatas: any[]) {
+              mainData[loadKey + 's'] = otherTableDatas;
             }
           })
         }
 
       }
-       
+
     }
   }
 

@@ -96,7 +96,7 @@ export declare class ArrayUtil {
      */
     static get(obj: any, keys: IGeter): any;
     /**
-     * 排序
+     * 排序，支持属性是日期
      * @param array 排序数组
      * @param param string|{order:'name',desc:'desc'} 支持多级排序
      *
@@ -159,14 +159,14 @@ opt:{
      */
     static notInByKey(array1: any[], array2: any[], key?: any, key2?: any): any[];
     /**
-     * 查找最大的
+     * 查找最大的 支持属性是日期
      * @param array
      * @param fun
      * @returns
      */
     static findMax(array: any[], fun: string | ((row: any) => any)): any;
     /**
-     * 查找最小的
+     * 查找最小的值,支持属性是日期
      * @param array
      * @param fun
      * @returns

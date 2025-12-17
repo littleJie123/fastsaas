@@ -12,29 +12,31 @@ import BasePoolFac from './../pool/BasePoolFac';
 import { BaseOption } from '../pool/poolOptions';
 
 interface MySqlOption extends BaseOption {
-    user: string
+  user: string
 }
 class MysqlPoolFac extends BasePoolFac {
 
-    getType(){
-        return 'mysql'
-    }
+  getType() {
+    return 'mysql'
+  }
 
-    _needNoType(){
-        return true;
-    }
+  _needNoType() {
+    return true;
+  }
 
-    protected _formatConnectOption(config: BaseOption): MySqlOption {
-        let _config: MySqlOption = Object.assign({}, { user: '' }, config)
 
-        if (!_config.user) _config.user = _config.username
-        return _config
-    }
+  protected _formatConnectOption(config: BaseOption): MySqlOption {
+    let _config: MySqlOption = Object.assign({}, { user: '' }, config)
 
-    protected createPool(config) {
-        config = this._formatConnectOption(config)
-        const pool = mysql.createPool(config)
-        return pool;
-    }
+    if (!_config.user) _config.user = _config.username
+    return _config
+  }
+
+  protected createPool(config) {
+    config = this._formatConnectOption(config)
+    const pool = mysql.createPool(config)
+
+    return pool;
+  }
 }
 export default new MysqlPoolFac();

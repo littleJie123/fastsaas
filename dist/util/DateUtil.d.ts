@@ -5,7 +5,7 @@ export declare class DateUtil {
      * @param  {[type]} str [description]
      * @return {[type]}	 [description]
      */
-    static parse(str: any): Date;
+    static parse(str: Date | string): Date;
     static formatList(list: Array<any>, col: any): void;
     static formatDateList(list: any[], col: any): void;
     static format(date: any): string;

@@ -17,8 +17,8 @@ export declare class BeanUtil {
   */
     static check(obj: any, param: any): boolean;
     /**
-  根据param 检查obj
-  */
+    根据param 检查obj，忽略null和'',检查两个对象的属性是否相等
+    */
     static checkIgnore(obj: any, param: any): boolean;
     static isEq(val1: any, val2: any): boolean;
     static isBeanEq(bean1: any, bean2: any): boolean;

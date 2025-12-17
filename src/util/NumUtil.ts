@@ -1,4 +1,70 @@
+import { ArrayUtil } from "./ArrayUtil";
+
+interface AssignOpt {
+  /**
+   * 被分配的值的属性
+   */
+  col: string;
+  /**
+   * 需要分配的值的属性
+   */
+  assignNumObjCol?: string
+  /**
+   * 分配前乘以某个比例，分配后除以某个比例，例如金额单位为元，要分配到分，则改比例为100 
+   * */
+  fee?: number
+}
 export default class {
+
+  /**
+   * 如果需要分配的值大于被分配对象的值，那么需要分配的值将按比例缩小，直到等于被分配对象的值
+   * @param numObj 被分配的值
+   * @param assignNumObjs 需要分配的值
+   
+   */
+  static assign(numObj: any, assignNumObjs: any[], opt: AssignOpt) {
+    let { col, assignNumObjCol } = opt;
+    let value = numObj[col] ?? 0;
+    if (assignNumObjCol == null) {
+      assignNumObjCol = col;
+    }
+    let sumAssignValue = ArrayUtil.sum(assignNumObjs, assignNumObjCol);
+    if (assignNumObjs == null || value >= sumAssignValue) {
+      return;
+    }
+    if (value == 0) {
+      for (let assignNumObj of assignNumObjs) {
+        assignNumObj[assignNumObjCol] = 0;
+      }
+      return;
+    }
+    if (opt.fee) {
+      value *= opt.fee;
+    }
+    for (let assignNumObj of assignNumObjs) {
+      let assignValue = assignNumObj[assignNumObjCol] ?? 0;
+      assignNumObj[assignNumObjCol] = Math.floor((assignValue / sumAssignValue) * value);
+    }
+    sumAssignValue = ArrayUtil.sum(assignNumObjs, assignNumObjCol);
+    if (sumAssignValue < value) {
+      let diff = value - sumAssignValue;
+      let index = 0;
+      while (diff > 0) {
+        assignNumObjs[index][assignNumObjCol] += 1;
+        diff--;
+        index++;
+        if (index >= assignNumObjs.length) {
+          index = 0;
+        }
+      }
+    }
+    if (opt.fee) {
+      for (let assignNumObj of assignNumObjs) {
+        assignNumObj[assignNumObjCol] = assignNumObj[assignNumObjCol] / opt.fee;
+      }
+    }
+
+  }
   /**
    * 能否整除
    * @param num1 
@@ -23,10 +89,10 @@ export default class {
    */
   static gcd(a: number, b: number): number {
     // 使用辗转相除法
-    if(a == null || isNaN(a)){
+    if (a == null || isNaN(a)) {
       a = 1
     }
-    if(b == null || isNaN(b)){
+    if (b == null || isNaN(b)) {
       b = 1;
     }
     a = Math.abs(a);
@@ -50,12 +116,12 @@ export default class {
     return Math.abs(a * b) / this.gcd(a, b);
   }
 
-  
-  static add(... nums:number[]){
+
+  static add(...nums: number[]) {
     let cnt = 0;
-    if(nums){
-      for(let num of nums){
-        if(num != null){
+    if (nums) {
+      for (let num of nums) {
+        if (num != null) {
           cnt += num;
         }
       }
@@ -83,7 +149,7 @@ export default class {
     }
     num = num * x;
     let ret = Math.floor(num);
-    if (Math.abs((num - (ret + 1))) < 0.01){
+    if (Math.abs((num - (ret + 1))) < 0.01) {
       ret = ret + 1;
 
     }
@@ -119,9 +185,9 @@ export default class {
    * 是否含有小数
    * @param num 
    */
-  static isDecimal(num:number){
+  static isDecimal(num: number) {
 
-    if(num == null){
+    if (num == null) {
       return false;
     }
     return Math.floor(num) != num;

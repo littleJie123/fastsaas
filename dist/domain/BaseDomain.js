@@ -192,14 +192,22 @@ class BaseDomain {
     async load(datas, opt) {
         let searcher = this.getSearcher();
         let pkCol = this.getPkCol();
-        let dbDatas = await searcher.findAndCheck(fastsaas_1.ArrayUtil.toArray(datas, pkCol), opt === null || opt === void 0 ? void 0 : opt.schQuery);
+        let dbDatas = null;
+        if (opt === null || opt === void 0 ? void 0 : opt.useDao) {
+            let schQuery = new fastsaas_1.Query(opt === null || opt === void 0 ? void 0 : opt.schQuery);
+            schQuery.in(pkCol, fastsaas_1.ArrayUtil.toArray(datas, pkCol));
+            dbDatas = await this.getDao().find(schQuery);
+        }
+        else {
+            dbDatas = await searcher.findAndCheck(fastsaas_1.ArrayUtil.toArray(datas, pkCol), opt === null || opt === void 0 ? void 0 : opt.schQuery);
+        }
         if (opt === null || opt === void 0 ? void 0 : opt.onBeforeLoad) {
             await opt.onBeforeLoad(dbDatas);
         }
         function copy(src, target) {
             if (opt === null || opt === void 0 ? void 0 : opt.cols) {
                 for (let col of opt.cols) {
-                    if (target[col] == null) {
+                    if (target[col] == null || (opt === null || opt === void 0 ? void 0 : opt.overwrite)) {
                         target[col] = src[col];
                     }
                 }

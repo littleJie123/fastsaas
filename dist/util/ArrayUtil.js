@@ -178,7 +178,7 @@ class ArrayUtil {
         return get(obj, keys);
     }
     /**
-     * 排序
+     * 排序，支持属性是日期
      * @param array 排序数组
      * @param param string|{order:'name',desc:'desc'} 支持多级排序
      *
@@ -515,7 +515,7 @@ opt:{
         return array;
     }
     /**
-     * 查找最大的
+     * 查找最大的 支持属性是日期
      * @param array
      * @param fun
      * @returns
@@ -539,7 +539,7 @@ opt:{
         return ret;
     }
     /**
-     * 查找最小的
+     * 查找最小的值,支持属性是日期
      * @param array
      * @param fun
      * @returns

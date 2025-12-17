@@ -13,13 +13,13 @@ import JsonUtil from "./JsonUtil";
 import { StrUtil } from "./StrUtil";
 type OrderItemParam = string | ArrayOrderItem | ArrayOrderItem[];
 export default OrderItemParam;
-export interface ArrayOrderItem{
-  order:IGeter;
-  desc?:'desc'|'asc'
+export interface ArrayOrderItem {
+	order: IGeter;
+	desc?: 'desc' | 'asc'
 }
 export interface ICompare {
-	compare?(obj:any):number;
-	getSortValue?():number;
+	compare?(obj: any): number;
+	getSortValue?(): number;
 }
 interface GroupByParam {
 	list?: Array<any>, //数组
@@ -35,17 +35,17 @@ interface AbsJoinParam {
 	keys?: string[];
 }
 
-type OnlyFun = (obj:any)=>(any | null);
-type OnlyArrayFun = (obj:any)=>(any | null);
-type JoinFunction = (ojb1:any,obj2:any)=>any;
-type JoinArrayFunction = (ojb:any,array:any[])=>any;
-type JoinMultiFunction = (array1:any[],array2:any[])=>any;
+type OnlyFun = (obj: any) => (any | null);
+type OnlyArrayFun = (obj: any) => (any | null);
+type JoinFunction = (ojb1: any, obj2: any) => any;
+type JoinArrayFunction = (ojb: any, array: any[]) => any;
+type JoinMultiFunction = (array1: any[], array2: any[]) => any;
 /**
  * 数组的join
  * @param opt
  */
 
-interface JoinOpt<JoinFun,OnlyOneFun,OnlyTwoFun> {
+interface JoinOpt<JoinFun, OnlyOneFun, OnlyTwoFun> {
 	list: Array<any>;
 	list2: Array<any>;
 	/**
@@ -77,7 +77,7 @@ interface JoinOpt<JoinFun,OnlyOneFun,OnlyTwoFun> {
 从一个元素中取值
 也支持有function
 */
-function get<Pojo=any>(obj: Pojo, key:IGeter<Pojo>) {
+function get<Pojo = any>(obj: Pojo, key: IGeter<Pojo>) {
 	if (key == null)
 		return obj;
 	if (key instanceof Function) {
@@ -86,19 +86,19 @@ function get<Pojo=any>(obj: Pojo, key:IGeter<Pojo>) {
 	var ret = []
 	if (key instanceof Array) {
 		for (var k of key) {
-			ret.push(JsonUtil.getByKeys(obj,k))
+			ret.push(JsonUtil.getByKeys(obj, k))
 		}
 		return ArrayUtil.link(ret);
 	} else {
-		return JsonUtil.getByKeys(obj,key);
+		return JsonUtil.getByKeys(obj, key);
 	}
 }
 
 export class ArrayUtil {
 
-	static async sch(array:any[],query:any):Promise<any[]>{
+	static async sch(array: any[], query: any): Promise<any[]> {
 		let arrayDao = new ArrayDao(array);
-		return  arrayDao.find(query);
+		return arrayDao.find(query);
 	}
 	/**
 	 * 类似字符串的indexOf
@@ -106,39 +106,39 @@ export class ArrayUtil {
 	 * @param arra2 
 	 * @param fun 
 	 */
-	static indexOf(array1:any[],array2:any[],fun?:(row1,row2)=>boolean):number{
-		
+	static indexOf(array1: any[], array2: any[], fun?: (row1, row2) => boolean): number {
+
 		let ret = -1;
-		for(let i=0;i<array1.length;i++){
-			if(this.equalArray(array1,array2,i,fun)){
+		for (let i = 0; i < array1.length; i++) {
+			if (this.equalArray(array1, array2, i, fun)) {
 				return i;
 			}
 		}
 		return ret;
 	}
 
-	static equalArray(array1:any[],
-		array2:any[],
-		start?:number,
-		fun?:(row1,row2)=>boolean):boolean{
-		if(fun == null){
-			fun = (row1,row2)=>row1==row2
+	static equalArray(array1: any[],
+		array2: any[],
+		start?: number,
+		fun?: (row1, row2) => boolean): boolean {
+		if (fun == null) {
+			fun = (row1, row2) => row1 == row2
 		}
-		if(start == null){
+		if (start == null) {
 			start = 0;
 		}
-		if(array2.length > array1.length-start){
+		if (array2.length > array1.length - start) {
 			return false;
 		}
-		for(let i=0;i<array2.length;i++){
-			if(!fun(array2[i],array1[i+start])){
+		for (let i = 0; i < array2.length; i++) {
+			if (!fun(array2[i], array1[i + start])) {
 				return false
 			}
 		}
 		return true;
 	}
 
-	static link(strs:any[]):string{
+	static link(strs: any[]): string {
 		return strs.join('#___#')
 	}
 	/**
@@ -146,7 +146,7 @@ export class ArrayUtil {
 	 * @param array 
 	 * @param key 
 	 */
-	static isDuplicate<Pojo=any>(array: Pojo[], key: IGeter<Pojo>): boolean {
+	static isDuplicate<Pojo = any>(array: Pojo[], key: IGeter<Pojo>): boolean {
 		let map: any = {}
 		for (let row of array) {
 			let keyStr = get(row, key);
@@ -210,7 +210,7 @@ export class ArrayUtil {
 		return ret;
 	}
 
-	static sum<Pojo=any>(array: Pojo[], key?: IGeter<Pojo>): number {
+	static sum<Pojo = any>(array: Pojo[], key?: IGeter<Pojo>): number {
 		var ret = 0
 		if (!array) return 0
 		var len = array.length
@@ -227,9 +227,9 @@ export class ArrayUtil {
 		}
 		return ret
 	}
-	static distinctByKey<Pojo=any>(array:Pojo[], keys: IGeter<Pojo>) {
+	static distinctByKey<Pojo = any>(array: Pojo[], keys: IGeter<Pojo>) {
 		var map = ArrayUtil.toMapByKey(array, keys)
-		var list:any[] = []
+		var list: any[] = []
 		for (let e in map) {
 			list.push(map[e])
 		}
@@ -245,29 +245,29 @@ export class ArrayUtil {
 
 	}
 	/**
-	 * 排序
+	 * 排序，支持属性是日期
 	 * @param array 排序数组
 	 * @param param string|{order:'name',desc:'desc'} 支持多级排序
 	 * 	
 	 * 
 	 */
-	static order(array:any[], param: OrderItemParam): Array<any> {
-		let opts:ArrayOrderItem[] ;
-    if (!(param instanceof Array)) {
-      if(StrUtil.isStr(param)){
-        opts = [{
-          order:param as string
-        }]
-      }else{
-        opts = [param as ArrayOrderItem]
-      }
-    }else{
-      opts = param;
-    }
+	static order(array: any[], param: OrderItemParam): Array<any> {
+		let opts: ArrayOrderItem[];
+		if (!(param instanceof Array)) {
+			if (StrUtil.isStr(param)) {
+				opts = [{
+					order: param as string
+				}]
+			} else {
+				opts = [param as ArrayOrderItem]
+			}
+		} else {
+			opts = param;
+		}
 
 		function sort(obj1, obj2) {
-			function createFun(opt:ArrayOrderItem) {
-				 
+			function createFun(opt: ArrayOrderItem) {
+
 				return function (obj1, obj2) {
 					var order = opt.order
 					var desc = opt.desc
@@ -486,22 +486,22 @@ opt:{
  * @param array
  * @param key
  */
-	static toMapByKey<Pojo=any>(array: Pojo[], key: any, fun?: IGeterValue<Pojo>):{[key:string]:any} {
+	static toMapByKey<Pojo = any>(array: Pojo[], key: any, fun?: IGeterValue<Pojo>): { [key: string]: any } {
 		if (fun == null) {
 			fun = (data) => {
 				return data
 			}
 		}
 		let map = {}
-		if (key==null){
-			key = (data)=>data;
+		if (key == null) {
+			key = (data) => data;
 		}
 		if (array) {
 			const len = array.length
 			for (let i = 0; i < len; i++) {
 				let data = array[i]
 				let mapKey = get(data as any, key)
-				if(mapKey != null){
+				if (mapKey != null) {
 					map[mapKey] = get(data as any, fun)
 				}
 			}
@@ -512,12 +512,12 @@ opt:{
 	/**
  * @description 将一个list按key分组，放在map中
  */
-	static toMapArray<Pojo=any>(list: Pojo[], key: IGeter<Pojo>, fun?: IGeter<Pojo>) {
+	static toMapArray<Pojo = any>(list: Pojo[], key: IGeter<Pojo>, fun?: IGeter<Pojo>) {
 
 		var ret = {}
 		if (list != null && key != null) {
 			for (let i = 0; i < list.length; i++) {
-				let data:any = list[i]
+				let data: any = list[i]
 				let val = get(data, key)
 				let mapData = get(data, fun)
 				if (val != null && mapData != null) {
@@ -590,7 +590,7 @@ opt:{
 		return array;
 	}
 	/**
-	 * 查找最大的
+	 * 查找最大的 支持属性是日期
 	 * @param array 
 	 * @param fun 
 	 * @returns 
@@ -618,12 +618,12 @@ opt:{
 
 
 	/**
-	 * 查找最小的
+	 * 查找最小的值,支持属性是日期
 	 * @param array 
 	 * @param fun 
 	 * @returns 
 	 */
-	static findMin(array: any[], fun: string | ((row: any) => any)) {
+	static findMin(array: any[], fun: string | ((row: any) => any)): any {
 		let ret = null;
 		let val = null;
 		for (let row of array) {
@@ -751,7 +751,7 @@ opt:{
 		return array1
 	}
 
-	static toArray<Pojo>(array:Pojo[], key: IGeter<Pojo>) {
+	static toArray<Pojo>(array: Pojo[], key: IGeter<Pojo>) {
 		if (array == null)
 			return [];
 		if (!(array instanceof Array))
@@ -847,66 +847,66 @@ opt:{
 
 }
 */
-	static join(opt: JoinOpt<JoinFunction,OnlyFun,OnlyFun>): Array<any> {
+	static join(opt: JoinOpt<JoinFunction, OnlyFun, OnlyFun>): Array<any> {
 		var list = opt.list
-    var list2 = opt.list2
-    if (list == null){
-      list = [];
-    }
-    if(list2 == null){
-      list2 = [];
-    }
-    
-    var key = opt.key
-    var key2 = opt.key2
-    var fun = opt.fun
-    if (key == null) {
-      key = 'id'
-    }
-    if (key2 == null) {
-      key2 = key
-    }
-    if (fun == null) {
-      fun = function (data) {
-        return data
-      }
-    }
-    var onlyOne = opt.onlyOne
-    var onlyTwo = opt.onlyTwo
-    var map2 = ArrayUtil.toMapByKey(list2, key2)
-    var ret:any[] = []
-    for(let i=0;i<list.length;i++){
-      let data1 = list[i];
-      let keyValue = get(data1,key)
-      let data2=map2[keyValue];
-      if(data2 != null){
-        let row = fun(data1,data2);
-        if(row != null){
-          ret.push(row)
-        }
-      }else{
-        if(onlyOne != null){
-          let row = onlyOne(data1);
-          if(row != null){
-            ret.push(row);
-          }
-        }
-      }
-    }
-    if(onlyTwo != null){
-      let map1 = this.toMapByKey(list,key);
+		var list2 = opt.list2
+		if (list == null) {
+			list = [];
+		}
+		if (list2 == null) {
+			list2 = [];
+		}
 
-      for(let data2 of list2){
-        let keyValue = get(data2,key2);
-        let data1 = map1[keyValue];
-        if(data1 == null){
-          let row = onlyTwo(data2);
-          if(row != null){
-            ret.push(row)
-          }
-        }
-      }
-    }
+		var key = opt.key
+		var key2 = opt.key2
+		var fun = opt.fun
+		if (key == null) {
+			key = 'id'
+		}
+		if (key2 == null) {
+			key2 = key
+		}
+		if (fun == null) {
+			fun = function (data) {
+				return data
+			}
+		}
+		var onlyOne = opt.onlyOne
+		var onlyTwo = opt.onlyTwo
+		var map2 = ArrayUtil.toMapByKey(list2, key2)
+		var ret: any[] = []
+		for (let i = 0; i < list.length; i++) {
+			let data1 = list[i];
+			let keyValue = get(data1, key)
+			let data2 = map2[keyValue];
+			if (data2 != null) {
+				let row = fun(data1, data2);
+				if (row != null) {
+					ret.push(row)
+				}
+			} else {
+				if (onlyOne != null) {
+					let row = onlyOne(data1);
+					if (row != null) {
+						ret.push(row);
+					}
+				}
+			}
+		}
+		if (onlyTwo != null) {
+			let map1 = this.toMapByKey(list, key);
+
+			for (let data2 of list2) {
+				let keyValue = get(data2, key2);
+				let data1 = map1[keyValue];
+				if (data1 == null) {
+					let row = onlyTwo(data2);
+					if (row != null) {
+						ret.push(row)
+					}
+				}
+			}
+		}
 		return ret
 	}
 
@@ -938,7 +938,7 @@ opt:{
 
 	}
 	*/
-	static joinArray(opt: JoinOpt<JoinArrayFunction,OnlyFun,OnlyArrayFun>) {
+	static joinArray(opt: JoinOpt<JoinArrayFunction, OnlyFun, OnlyArrayFun>) {
 		var list = opt.list
 		var list2 = opt.list2
 		if (list == null && list2 == null)
@@ -1014,7 +1014,7 @@ opt:{
 
 	}
 	*/
-	static joinMany(opt: JoinOpt<JoinMultiFunction,OnlyArrayFun,OnlyArrayFun>) {
+	static joinMany(opt: JoinOpt<JoinMultiFunction, OnlyArrayFun, OnlyArrayFun>) {
 		var list = opt.list
 		var list2 = opt.list2
 		var onlyOne = opt.onlyOne;
@@ -1078,7 +1078,7 @@ opt:{
 			if (val != null)
 				set.add(val);
 		}
-		return [... set];
+		return [...set];
 	}
 	/**
 	 * 将一个mapArray 转成map
@@ -1169,17 +1169,17 @@ opt:{
 	}
 
 
-	static sort(array:ICompare[],desc?:boolean){
-		array.sort(function(o1,o2){
+	static sort(array: ICompare[], desc?: boolean) {
+		array.sort(function (o1, o2) {
 			let ret = 0;
-			if(o1.compare){
+			if (o1.compare) {
 				ret = o1.compare(o2);
-			}else{
-				if(o1.getSortValue && o2.getSortValue){
-					ret = o1.getSortValue()-o2.getSortValue();
+			} else {
+				if (o1.getSortValue && o2.getSortValue) {
+					ret = o1.getSortValue() - o2.getSortValue();
 				}
 			}
-			if(desc){
+			if (desc) {
 				ret = ret * (-1);
 			}
 			return ret;
@@ -1192,13 +1192,13 @@ opt:{
 	 * @param list2 
 	 * @param key 
 	 */
-	static notInByKeyWithNoChangeData(list:any[],list2:any[],key:IGeter, key2?:IGeter){
-		if(key2 == null){
+	static notInByKeyWithNoChangeData(list: any[], list2: any[], key: IGeter, key2?: IGeter) {
+		if (key2 == null) {
 			key2 = key;
 		}
-		let map2 = this.toMapByKey(list2,key2);
-		return list.filter(row=>{
-			let rowKey = get(row,key);
+		let map2 = this.toMapByKey(list2, key2);
+		return list.filter(row => {
+			let rowKey = get(row, key);
 			return map2[rowKey] == null;
 		})
 	}
@@ -1210,13 +1210,13 @@ opt:{
 	 * @param list2 
 	 * @param key 
 	 */
-	static andByKeyWithNoChangeData(list:any[],list2:any[],key:IGeter, key2?:IGeter){
-		if(key2 == null){
+	static andByKeyWithNoChangeData(list: any[], list2: any[], key: IGeter, key2?: IGeter) {
+		if (key2 == null) {
 			key2 = key;
 		}
-		let map2 = this.toMapByKey(list2,key2);
-		return list.filter(row=>{
-			let rowKey = get(row,key);
+		let map2 = this.toMapByKey(list2, key2);
+		return list.filter(row => {
+			let rowKey = get(row, key);
 			return map2[rowKey] != null;
 		})
 	}

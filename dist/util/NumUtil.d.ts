@@ -1,4 +1,25 @@
+interface AssignOpt {
+    /**
+     * 被分配的值的属性
+     */
+    col: string;
+    /**
+     * 需要分配的值的属性
+     */
+    assignNumObjCol?: string;
+    /**
+     * 分配前乘以某个比例，分配后除以某个比例，例如金额单位为元，要分配到分，则改比例为100
+     * */
+    fee?: number;
+}
 export default class {
+    /**
+     * 如果需要分配的值大于被分配对象的值，那么需要分配的值将按比例缩小，直到等于被分配对象的值
+     * @param numObj 被分配的值
+     * @param assignNumObjs 需要分配的值
+     
+     */
+    static assign(numObj: any, assignNumObjs: any[], opt: AssignOpt): void;
     /**
      * 能否整除
      * @param num1
@@ -41,3 +62,4 @@ export default class {
      */
     static isDecimal(num: number): boolean;
 }
+export {};

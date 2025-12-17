@@ -6,7 +6,7 @@
  * @LastEditors  : kaikai.hou
  * @LastEditTime : 2020-02-11 14:17:52
  */
-function _changeMonth(date: Date, changeCnt:number) {
+function _changeMonth(date: Date, changeCnt: number) {
   let ret = new Date(date.getTime())
   ret.setMonth(date.getMonth() + changeCnt)
   return ret
@@ -18,8 +18,8 @@ export class DateUtil {
    * @param  {[type]} str [description]
    * @return {[type]}	 [description]
    */
-  static parse(str): Date {
-    if (str == null || str.length < 10) return null
+  static parse(str: Date | string): Date {
+    if (str == null || (str as string).length < 10) return null
     if (str instanceof Date) return str
     var date = new Date()
     date.setDate(1)
@@ -65,7 +65,7 @@ export class DateUtil {
     }
   }
 
-  static formatDateList(list: any[], col){
+  static formatDateList(list: any[], col) {
     if (col == null) {
       col = 'gmt_create'
     }
@@ -165,7 +165,7 @@ export class DateUtil {
     return this.onlyDate(new Date())
   }
 
-  static todayStr():string{
+  static todayStr(): string {
     return this.format(this.today())
   }
 

@@ -1,6 +1,56 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ArrayUtil_1 = require("./ArrayUtil");
 class default_1 {
+    /**
+     * 如果需要分配的值大于被分配对象的值，那么需要分配的值将按比例缩小，直到等于被分配对象的值
+     * @param numObj 被分配的值
+     * @param assignNumObjs 需要分配的值
+     
+     */
+    static assign(numObj, assignNumObjs, opt) {
+        var _a, _b;
+        let { col, assignNumObjCol } = opt;
+        let value = (_a = numObj[col]) !== null && _a !== void 0 ? _a : 0;
+        if (assignNumObjCol == null) {
+            assignNumObjCol = col;
+        }
+        let sumAssignValue = ArrayUtil_1.ArrayUtil.sum(assignNumObjs, assignNumObjCol);
+        if (assignNumObjs == null || value >= sumAssignValue) {
+            return;
+        }
+        if (value == 0) {
+            for (let assignNumObj of assignNumObjs) {
+                assignNumObj[assignNumObjCol] = 0;
+            }
+            return;
+        }
+        if (opt.fee) {
+            value *= opt.fee;
+        }
+        for (let assignNumObj of assignNumObjs) {
+            let assignValue = (_b = assignNumObj[assignNumObjCol]) !== null && _b !== void 0 ? _b : 0;
+            assignNumObj[assignNumObjCol] = Math.floor((assignValue / sumAssignValue) * value);
+        }
+        sumAssignValue = ArrayUtil_1.ArrayUtil.sum(assignNumObjs, assignNumObjCol);
+        if (sumAssignValue < value) {
+            let diff = value - sumAssignValue;
+            let index = 0;
+            while (diff > 0) {
+                assignNumObjs[index][assignNumObjCol] += 1;
+                diff--;
+                index++;
+                if (index >= assignNumObjs.length) {
+                    index = 0;
+                }
+            }
+        }
+        if (opt.fee) {
+            for (let assignNumObj of assignNumObjs) {
+                assignNumObj[assignNumObjCol] = assignNumObj[assignNumObjCol] / opt.fee;
+            }
+        }
+    }
     /**
      * 能否整除
      * @param num1

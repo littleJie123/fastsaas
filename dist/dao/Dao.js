@@ -239,7 +239,7 @@ class Dao {
      */
     async updateArray(array, other, whereObj) {
         if (!array || array.length == 0)
-            return;
+            return 0;
         if (array.length == 1 && other == null) {
             return this.update(array[0], whereObj);
         }
@@ -399,7 +399,7 @@ class Dao {
         if (array == null) {
             return [];
         }
-        let arrayMap = ArrayUtil_1.ArrayUtil.toMapByKey(array, mapFun);
+        let arrayMap = ArrayUtil_1.ArrayUtil.toMapArray(array, mapFun);
         let listMap = ArrayUtil_1.ArrayUtil.toMapArray(list, mapFun);
         let hasDelData = false;
         for (let e in listMap) {
@@ -448,16 +448,18 @@ class Dao {
             }
         }
         for (let e in arrayMap) {
-            var oldData = listMap[e];
-            var data = arrayMap[e];
-            if (oldData == null) {
-                if (!opt.noAdd)
-                    pushAdd(e, data);
-            }
-            else {
-                if (opt.needUpdate) {
-                    if (opt.isUpdate == null || (await opt.isUpdate(data, oldData))) {
-                        pushUpdate(e, data, oldData);
+            let arrayInMap = arrayMap[e];
+            for (let data of arrayInMap) {
+                let oldData = listMap[e];
+                if (oldData == null) {
+                    if (!opt.noAdd)
+                        pushAdd(e, data);
+                }
+                else {
+                    if (opt.needUpdate) {
+                        if (opt.isUpdate == null || (await opt.isUpdate(data, oldData))) {
+                            pushUpdate(e, data, oldData);
+                        }
                     }
                 }
             }

@@ -257,7 +257,7 @@ export default abstract class Dao<Pojo = any> {
    * @param array
    */
   async updateArray(array: Pojo[], other?: object, whereObj?: any): Promise<number> {
-    if (!array || array.length == 0) return
+    if (!array || array.length == 0) return 0;
     if (array.length == 1 && other == null) {
       return this.update(array[0], whereObj)
     }
@@ -425,7 +425,7 @@ export default abstract class Dao<Pojo = any> {
     if (array == null) {
       return [];
     }
-    let arrayMap = ArrayUtil.toMapByKey(array, mapFun)
+    let arrayMap = ArrayUtil.toMapArray(array, mapFun)
     let listMap = ArrayUtil.toMapArray(list, mapFun)
     let hasDelData = false;
     for (let e in listMap) {
@@ -481,14 +481,16 @@ export default abstract class Dao<Pojo = any> {
       }
     }
     for (let e in arrayMap) {
-      var oldData = listMap[e]
-      var data = arrayMap[e]
-      if (oldData == null) {
-        if (!opt.noAdd) pushAdd(e, data)
-      } else {
-        if (opt.needUpdate) {
-          if (opt.isUpdate == null || (await opt.isUpdate(data, oldData))) {
-            pushUpdate(e, data, oldData)
+      let arrayInMap = arrayMap[e];
+      for (let data of arrayInMap) {
+        let oldData = listMap[e]
+        if (oldData == null) {
+          if (!opt.noAdd) pushAdd(e, data)
+        } else {
+          if (opt.needUpdate) {
+            if (opt.isUpdate == null || (await opt.isUpdate(data, oldData))) {
+              pushUpdate(e, data, oldData)
+            }
           }
         }
       }

@@ -4,6 +4,7 @@ interface ILoadOpt {
     };
 }
 export default interface IDomainOpt<Pojo = any> {
+    overwrite?: boolean;
     schQuery?: any;
     cols?: string[];
     onBeforeLoad?(pojos: Pojo[]): Promise<void>;
@@ -19,5 +20,6 @@ export default interface IDomainOpt<Pojo = any> {
     loadKeys?: string[];
     table?: string;
     loadOpt?: ILoadOpt;
+    useDao?: boolean;
 }
 export {};
