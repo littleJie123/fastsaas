@@ -46,7 +46,7 @@ export interface OnlyArrayIntface<Pojo = any> {
     checkUpdate?: checkUpdate;
     addFun?: DataFormatFun;
     /**
-     * array 经过 query 数据筛选根据 mapFun, 经过 updateDataArray 补充
+     * 设置值之前的处理
      */
     updateFun?: DataFormatFun;
     /**
@@ -54,7 +54,7 @@ export interface OnlyArrayIntface<Pojo = any> {
      */
     delFun?: DataFormatFun<Pojo>;
     /**
-     * 数据更新之前的处理函数
+     * 数据更新之前的处理函数,设置值之后的处理
      */
     beforeUpdate?: BeforeUpdate<Pojo>;
     noAdd?: boolean;
