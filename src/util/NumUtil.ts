@@ -14,7 +14,56 @@ interface AssignOpt {
    * */
   fee?: number
 }
+interface NumAndUnit {
+  /**
+   * 数量
+   */
+  cnt: number;
+  /**
+   * 单位
+   */
+  name: string;
+}
 export default class {
+
+  /**
+   * 把类似“￥54.90”，“$10”,"10.01"等字符串转化成数字，上述返回分别是54.9， 10，10.01
+   * @param str 
+   */
+  static getNum(str: string): number {
+    if (str == null)
+      return 0
+    // 去掉逗号
+    str = str.replace(/,/g, '');
+    let reg = /((-)?\d+(\.\d+)?)/;
+    let match = reg.exec(str);
+    if (match) {
+      return parseFloat(match[0]);
+    }
+    return 0;
+  }
+
+  /**
+   * 获取数字和单位，例如“23瓶500ml”变成[{num:23,unit:'瓶'},{num:500,unit:'ml'}]
+   * @param str 
+   */
+  static getNumAndUnit(str: string): NumAndUnit[] {
+    if (str == null || str == '')
+      return []
+    // 去除掉字符串中的空格
+    str = str.replace(/\s+/g, '');
+    let list: NumAndUnit[] = [];
+    // 匹配数字(包含小数)和非数字部分
+    let reg = /(\d+(\.\d+)?)([^\d\.]*)/g;
+    let r;
+    while (r = reg.exec(str)) {
+      list.push({
+        cnt: parseFloat(r[1]),
+        name: r[3]
+      })
+    }
+    return list;
+  }
 
   /**
    * 如果需要分配的值大于被分配对象的值，那么需要分配的值将按比例缩小，直到等于被分配对象的值

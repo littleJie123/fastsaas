@@ -125,7 +125,7 @@ export default abstract class Dao<Pojo = any> {
      * 查询
      * @param query 可以是个结构体，可以是个Cdt，可以是个Query
      */
-    find(query: any): Promise<Pojo[]>;
+    find(query: any, cols?: string[]): Promise<Pojo[]>;
     /**
      * 和find一样的用法，但是不会再经过转换，适合于group之类的场景
      * @param query
@@ -244,7 +244,7 @@ export default abstract class Dao<Pojo = any> {
      * @param values
      */
     executeStoreProcedure(name: string, values?: any[]): Promise<any>;
-    protected _query(key: string, obj: any, opts?: any): Promise<any>;
+    protected _query(key: string, query: any, opts?: any): Promise<any>;
     /**
      * 返回sql的执行器，每个数据库重写
      */

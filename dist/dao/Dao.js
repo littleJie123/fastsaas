@@ -284,8 +284,12 @@ class Dao {
      * 查询
      * @param query 可以是个结构体，可以是个Cdt，可以是个Query
      */
-    async find(query) {
-        const ret = await this._query('find', query);
+    async find(query, cols) {
+        let theQuery = Query_1.default.parse(query);
+        if (cols != null) {
+            theQuery.col(cols);
+        }
+        const ret = await this._query('find', theQuery);
         return this.changeDbArray2Pojo(ret);
     }
     /**
@@ -721,10 +725,10 @@ class Dao {
         let list = await executor.executeSql(str, values);
         return list[0];
     }
-    async _query(key, obj, opts) {
+    async _query(key, query, opts) {
         let executor = this._acqExecutor();
         let builder = this._acqBuilder(key);
-        let sql = builder.build(obj, opts);
+        let sql = builder.build(query, opts);
         return await executor.query(sql);
     }
     /**

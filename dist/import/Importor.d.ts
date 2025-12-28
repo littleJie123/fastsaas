@@ -37,6 +37,10 @@ interface ImportOpt {
      * 不检查数据
      */
     noCheck?: boolean;
+    /**
+     * 纯数据，不需要处理
+     */
+    noProcess?: boolean;
 }
 /**
  * 一个表的导入类

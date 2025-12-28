@@ -86,6 +86,9 @@ class Importor {
      */
     async process(context, param, datas) {
         this.runned = true;
+        if (this.opt.noProcess) {
+            return null;
+        }
         let allNull = this.isAllNull(datas);
         if (allNull && this.isEmptyDomainFun()) {
             return null;
@@ -269,6 +272,9 @@ class Importor {
      */
     needAllRun(importors) {
         let needIds = this.opt.needId;
+        if (needIds == null) {
+            return true;
+        }
         for (let needId of needIds) {
             let need = importors.find(row => row.getKey().toLowerCase() == needId.toLowerCase());
             if (need != null && !need.getRunned()) {

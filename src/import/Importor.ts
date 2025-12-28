@@ -1,66 +1,71 @@
 import { ArrayUtil, BeanUtil, Context, Dao, StrUtil } from "../fastsaas";
 import ImportorObj from "./dto/ImportorObj";
 
-interface ImportOpt{
+interface ImportOpt {
   /**
    * 默认值
    */
   defVal?: string;
 
-  paramKeys?:string[];
+  paramKeys?: string[];
 
-  key:string;
+  key: string;
 
-  needId?:string[];
+  needId?: string[];
   /**
    * 不需要domain进行处理
    */
-  noDomain?:boolean;
+  noDomain?: boolean;
 
   /**
    * 结果数据不需要拼,使用dao来进行导入的时候用
    */
-  noJoin?:boolean;
+  noJoin?: boolean;
 
   /**
    * dao的process时候用
    */
-  query?:any;
+  query?: any;
 
   /**
    * 其他列的数据
    */
-  otherColMap?:any;
+  otherColMap?: any;
   /**
    * 更新
    */
-  needUpdate?:boolean;
+  needUpdate?: boolean;
 
-  checker?:(context: Context, param: any, datas: ImportorObj[])=>Promise<boolean>
+  checker?: (context: Context, param: any, datas: ImportorObj[]) => Promise<boolean>
 
   /**
    * domain中的函数名
    */
-  domainFun?:string;
+  domainFun?: string;
   /**
    * 不检查数据
    */
-  noCheck?:boolean
+  noCheck?: boolean
+
+  /**
+   * 纯数据，不需要处理
+   */
+  noProcess?: boolean;
 }
 
 /**
  * 一个表的导入类
 */
-export default class Importor{
-  
-  private opt:ImportOpt;
+export default class Importor {
 
-  private runned:boolean;
+  private opt: ImportOpt;
 
-  getRunned(){
+  private runned: boolean;
+
+  getRunned() {
     return this.runned;
   }
-  constructor(opt:ImportOpt){
+  constructor(opt: ImportOpt) {
     this.opt = opt;
   }
 
@@ -69,19 +74,19 @@ export default class Importor{
    * @param data 
    * @param caolMap 
    */
-  change(oldData:any,newData:ImportorObj):void{
+  change(oldData: any, newData: ImportorObj): void {
     let opt = this.opt
     let value = oldData[opt.key];
-    if(value == null || value==''){
+    if (value == null || value == '') {
       value = opt.defVal;
     }
-    newData[opt.key] = {name:value};
-    
+    newData[opt.key] = { name: value };
+
   }
 
-  async checked(context: Context, param: any, datas: ImportorObj[]):Promise<boolean> {
-    let domainRet = await this.checkByDomain( context, param, datas);
-    let daoRet = await this.checkByChecker(context,param,datas);
+  async checked(context: Context, param: any, datas: ImportorObj[]): Promise<boolean> {
+    let domainRet = await this.checkByDomain(context, param, datas);
+    let daoRet = await this.checkByChecker(context, param, datas);
     return domainRet && daoRet;
   }
 
@@ -92,14 +97,14 @@ export default class Importor{
    * @param datas 
    * @returns 
    */
-  protected async checkByChecker(context:Context,param,datas: ImportorObj[]):Promise<boolean>{
+  protected async checkByChecker(context: Context, param, datas: ImportorObj[]): Promise<boolean> {
     let checker = this.opt.checker;
-    if(checker == null){
+    if (checker == null) {
       return true;
     }
-    return checker(context,param,datas);
+    return checker(context, param, datas);
   }
-  
+
 
   /**
    * 
@@ -108,34 +113,34 @@ export default class Importor{
    * @param datas 
    * @returns 
    */
-  protected async checkByDomain(context: Context, param: any, datas: ImportorObj[]):Promise<boolean>{
+  protected async checkByDomain(context: Context, param: any, datas: ImportorObj[]): Promise<boolean> {
     let noDomain = this.opt.noDomain;
-    if(noDomain){
+    if (noDomain) {
       return true;
     }
-    let domain = context.get(this.opt.key+'Domain');
-    if(domain?.onImportChecker){
-      return await domain.onImportChecker(param,datas, datas.map(row=>this.parseDataToPojo(param,row)));
-    }else{
+    let domain = context.get(this.opt.key + 'Domain');
+    if (domain?.onImportChecker) {
+      return await domain.onImportChecker(param, datas, datas.map(row => this.parseDataToPojo(param, row)));
+    } else {
       return true;
     }
   }
 
 
-  private needProcessByDomain(context:Context):boolean{
-    if(this.opt.noDomain){
+  private needProcessByDomain(context: Context): boolean {
+    if (this.opt.noDomain) {
       return false;
     }
 
     let domain = this.getDomain(context);
-    if(domain == null){
+    if (domain == null) {
       return false;
     }
     let domFun = this.getDomainFun();
     return domain[domFun] != null;
   }
 
-  private isEmptyDomainFun(){
+  private isEmptyDomainFun() {
     let domainFun = this.opt.domainFun;
     return domainFun == null || domainFun == '';
   }
@@ -145,29 +150,35 @@ export default class Importor{
    * @param param 
    * @param datas 
    */
-  async process(context: Context, param: any, datas: ImportorObj[]):Promise<any> {
+  async process(context: Context, param: any, datas: ImportorObj[]): Promise<any> {
     this.runned = true;
-    let allNull = this.isAllNull(datas);
-    if(allNull && this.isEmptyDomainFun()){
+
+    if (this.opt.noProcess) {
       return null;
     }
-     
-    
-    if(this.needProcessByDomain(context)){
-      
-      return await this.processByDomain(context,param,datas);
-    }else{
-      if(!allNull){
-        return await this.processByDao(context,param,datas);
-      }else{
+
+    let allNull = this.isAllNull(datas);
+
+    if (allNull && this.isEmptyDomainFun()) {
+      return null;
+    }
+
+
+    if (this.needProcessByDomain(context)) {
+
+      return await this.processByDomain(context, param, datas);
+    } else {
+      if (!allNull) {
+        return await this.processByDao(context, param, datas);
+      } else {
         return null;
       }
     }
-    
-    
+
+
   }
 
-  
+
 
 
   /**
@@ -176,39 +187,39 @@ export default class Importor{
    * @param data 
    * @returns 
    */
-  protected parseDataToPojo(param,data){
+  protected parseDataToPojo(param, data) {
     let opt = this.opt;
-    let retData:any = {}
+    let retData: any = {}
     retData.name = data[opt.key].name;
-    if(retData.name == null){
+    if (retData.name == null) {
       retData.name = opt.defVal;
     }
-    if(param != null){
-      if(opt.paramKeys == null){
-        for(let e in param){
+    if (param != null) {
+      if (opt.paramKeys == null) {
+        for (let e in param) {
           retData[e] = param[e]
         }
-      }else{
-        for(let paramKey of opt.paramKeys){
+      } else {
+        for (let paramKey of opt.paramKeys) {
           retData[paramKey] = param[paramKey];
         }
       }
     }
     let needId = this.opt.needId;
-    if(needId != null){
-      for(let key of needId){
+    if (needId != null) {
+      for (let key of needId) {
         let col = this.getIdColByKey(key);
         retData[col] = data[key]?.id
       }
     }
     let otherColMap = this.opt.otherColMap;
-    if(otherColMap != null){
-      for(let e in otherColMap){
+    if (otherColMap != null) {
+      for (let e in otherColMap) {
         retData[otherColMap[e]] = data[e]?.name;
       }
     }
     return retData;
-  } 
+  }
 
   /**
    * 通过dao类来进行处理
@@ -217,35 +228,35 @@ export default class Importor{
    * @param datas 
    * @returns 
    */
-  protected async processByDao(context,param,datas: ImportorObj[]):Promise<void>{
-    let dao:Dao = context.get(this.opt.key +'Dao');
-    if(dao != null){
+  protected async processByDao(context, param, datas: ImportorObj[]): Promise<void> {
+    let dao: Dao = context.get(this.opt.key + 'Dao');
+    if (dao != null) {
       let query = this.opt.query;
-      if(query == null){
+      if (query == null) {
         query = {
-          ... param,
-          isDel:0
+          ...param,
+          isDel: 0
         }
-      }else{
-        query = BeanUtil.parseJsonFromParam(query,param);
+      } else {
+        query = BeanUtil.parseJsonFromParam(query, param);
       }
       let array = [];
-      for(let data of datas){
-        array.push(this.parseDataToPojo(param,data))
+      for (let data of datas) {
+        array.push(this.parseDataToPojo(param, data))
       }
-      array = array.filter(row=>row.name!=null);
-      array = ArrayUtil.distinctByKey(array,'name');      
+      array = array.filter(row => row.name != null);
+      array = ArrayUtil.distinctByKey(array, 'name');
       let ret = await dao.onlyArray({
-        query:{
-          name:ArrayUtil.toArray(array,'name'),
-          ... query
+        query: {
+          name: ArrayUtil.toArray(array, 'name'),
+          ...query
         },
-        mapFun:'name',
+        mapFun: 'name',
         array,
-        needUpdate:this.opt.needUpdate
+        needUpdate: this.opt.needUpdate
       })
-      this.join(datas,ret);
-      
+      this.join(datas, ret);
+
     }
   }
 
@@ -255,45 +266,45 @@ export default class Importor{
    * @param retArray 
    * @returns 
    */
-  join(datas:ImportorObj[],retArray:any[]){
-    if(datas == null  || retArray == null || retArray.length==0){
-      return ;
+  join(datas: ImportorObj[], retArray: any[]) {
+    if (datas == null || retArray == null || retArray.length == 0) {
+      return;
     }
-    if(this.opt.noJoin){
+    if (this.opt.noJoin) {
       return;
     }
     let key = this.opt.key;
     let self = this;
     ArrayUtil.joinArray({
-      list2:datas,
-      list:retArray,
-      key2(row){
+      list2: datas,
+      list: retArray,
+      key2(row) {
         return row[key].name
       },
-      key:'name',
-      fun(retData,rows){
-        for(let row of rows){
+      key: 'name',
+      fun(retData, rows) {
+        for (let row of rows) {
           row[key].id = retData[self.getIdCol()]
         }
       }
     })
   }
 
-  protected getIdCol(){
+  protected getIdCol() {
     return this.getIdColByKey(this.opt.key);
   }
 
-  protected getIdColByKey(key:string){
-    return StrUtil.changeUnderStringToCamel(key)+'Id';
+  protected getIdColByKey(key: string) {
+    return StrUtil.changeUnderStringToCamel(key) + 'Id';
   }
 
 
 
 
 
-  private getDomain(context: Context){
+  private getDomain(context: Context) {
 
-    return context.get(this.opt.key+'Domain');
+    return context.get(this.opt.key + 'Domain');
   }
 
   /**
@@ -302,29 +313,29 @@ export default class Importor{
    * @param param 
    * @param datas 
    */
-  async processByDomain(context: Context, param: any, datas: ImportorObj[]):Promise<boolean>{
-    
+  async processByDomain(context: Context, param: any, datas: ImportorObj[]): Promise<boolean> {
+
     let domain = this.getDomain(context)
     let domFun = this.getDomainFun()
-    if(domain?.[domFun]){
-      let ret = await domain[domFun](param,datas, datas.map(row=>this.parseDataToPojo(param,row)));
-      if(ret instanceof Array){
-        this.join(datas,ret);
+    if (domain?.[domFun]) {
+      let ret = await domain[domFun](param, datas, datas.map(row => this.parseDataToPojo(param, row)));
+      if (ret instanceof Array) {
+        this.join(datas, ret);
       }
       return ret;
     }
     return null;
   }
 
-  private getDomainFun():string{
+  private getDomainFun(): string {
     let domFun = this.opt?.domainFun
-    if(domFun == null || domFun == ''){
+    if (domFun == null || domFun == '') {
       domFun = 'onImport'
     }
     return domFun;
   }
 
-  getKey(){
+  getKey() {
     return this.opt.key;
   }
   /**
@@ -332,10 +343,10 @@ export default class Importor{
    * @param datas 
    * @returns 
    */
-  isAllNull(datas:ImportorObj[]):boolean{
+  isAllNull(datas: ImportorObj[]): boolean {
     let key = this.opt.key;
-    for(let data of datas){
-      if(data[key]!=null && data[key].name != null){
+    for (let data of datas) {
+      if (data[key] != null && data[key].name != null) {
         return false;
       }
     }
@@ -347,40 +358,42 @@ export default class Importor{
    * @param importors 
    * @returns 
    */
-  private needAllRun(importors:Importor[]):boolean{
+  private needAllRun(importors: Importor[]): boolean {
     let needIds = this.opt.needId;
-    
-    for(let needId of needIds){
-      let need = importors.find(row=>row.getKey().toLowerCase()==needId.toLowerCase())
-      if(need != null && !need.getRunned()){
+    if (needIds == null) {
+      return true;
+    }
+    for (let needId of needIds) {
+      let need = importors.find(row => row.getKey().toLowerCase() == needId.toLowerCase())
+      if (need != null && !need.getRunned()) {
         return false;
       }
     }
     return true;
   }
-  isReady(datas: ImportorObj[],importors:Importor[]):boolean {
-    if(this.opt.noCheck){
+  isReady(datas: ImportorObj[], importors: Importor[]): boolean {
+    if (this.opt.noCheck) {
       return this.needAllRun(importors)
     }
-    if(this.isAllNull(datas)){
+    if (this.isAllNull(datas)) {
       return true;
     }
     let needId = this.opt.needId;
-    if(needId != null){
-      for(let key of needId){
+    if (needId != null) {
+      for (let key of needId) {
         let allNull = true;
-        let allNameNull = true; 
-        for(let data of datas){
-          if(data[key] != null && data[key].name != null){
+        let allNameNull = true;
+        for (let data of datas) {
+          if (data[key] != null && data[key].name != null) {
             allNameNull = false;
           }
-          if(data[key]!=null && data[key].id != null){
+          if (data[key] != null && data[key].id != null) {
             allNull = false;
             break;
           }
 
         }
-        if(!allNameNull && allNull){
+        if (!allNameNull && allNull) {
           return false;
         }
       }
