@@ -1,4 +1,5 @@
 import { ArrayUtil } from "./ArrayUtil";
+import JsonUtil from "./JsonUtil";
 
 interface AssignOpt {
   /**
@@ -12,7 +13,16 @@ interface AssignOpt {
   /**
    * 分配前乘以某个比例，分配后除以某个比例，例如金额单位为元，要分配到分，则改比例为100 
    * */
-  fee?: number
+  fee?: number;
+  /**
+   * 计算比例的值
+   */
+  valueCol?: string;
+
+  /**
+   * 如果需要分配的值大于分配的值，则不分配保持原值
+   */
+  ifBigNoAssign?: boolean
 }
 interface NumAndUnit {
   /**
@@ -73,17 +83,25 @@ export default class {
    */
   static assign(numObj: any, assignNumObjs: any[], opt: AssignOpt) {
     let { col, assignNumObjCol } = opt;
-    let value = numObj[col] ?? 0;
+    let value = JsonUtil.getByKeys(numObj, col) ?? 0;
     if (assignNumObjCol == null) {
       assignNumObjCol = col;
     }
-    let sumAssignValue = ArrayUtil.sum(assignNumObjs, assignNumObjCol);
-    if (assignNumObjs == null || value >= sumAssignValue) {
-      return;
+    let valueCol = opt.valueCol ?? assignNumObjCol;
+    let sumAssignValue = ArrayUtil.sum(assignNumObjs, valueCol);
+    if (opt.ifBigNoAssign && value >= sumAssignValue) {
+      if (valueCol == assignNumObjCol) {
+        return;
+      } else {
+        for (let assignNumObj of assignNumObjs) {
+          let value = JsonUtil.getByKeys(assignNumObj, valueCol)
+          JsonUtil.setByKeys(assignNumObj, assignNumObjCol, value);
+        }
+      }
     }
     if (value == 0) {
       for (let assignNumObj of assignNumObjs) {
-        assignNumObj[assignNumObjCol] = 0;
+        JsonUtil.setByKeys(assignNumObj, assignNumObjCol, 0);
       }
       return;
     }
@@ -91,15 +109,16 @@ export default class {
       value *= opt.fee;
     }
     for (let assignNumObj of assignNumObjs) {
-      let assignValue = assignNumObj[assignNumObjCol] ?? 0;
-      assignNumObj[assignNumObjCol] = Math.floor((assignValue / sumAssignValue) * value);
+      let assignValue = JsonUtil.getByKeys(assignNumObj, valueCol) ?? 0;
+      JsonUtil.setByKeys(assignNumObj, assignNumObjCol, Math.floor((assignValue / sumAssignValue) * value));
     }
     sumAssignValue = ArrayUtil.sum(assignNumObjs, assignNumObjCol);
     if (sumAssignValue < value) {
       let diff = value - sumAssignValue;
       let index = 0;
       while (diff > 0) {
-        assignNumObjs[index][assignNumObjCol] += 1;
+        let val = JsonUtil.getByKeys(assignNumObjs[index], assignNumObjCol) ?? 0;
+        JsonUtil.setByKeys(assignNumObjs[index], assignNumObjCol, val + 1);
         diff--;
         index++;
         if (index >= assignNumObjs.length) {
@@ -109,7 +128,8 @@ export default class {
     }
     if (opt.fee) {
       for (let assignNumObj of assignNumObjs) {
-        assignNumObj[assignNumObjCol] = assignNumObj[assignNumObjCol] / opt.fee;
+        let val = JsonUtil.getByKeys(assignNumObj, assignNumObjCol)
+        JsonUtil.setByKeys(assignNumObj, assignNumObjCol, val / opt.fee);
       }
     }
 

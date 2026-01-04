@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const ArrayUtil_1 = require("./ArrayUtil");
+const JsonUtil_1 = __importDefault(require("./JsonUtil"));
 class default_1 {
     /**
      * 把类似“￥54.90”，“$10”,"10.01"等字符串转化成数字，上述返回分别是54.9， 10，10.01
@@ -46,19 +50,28 @@ class default_1 {
      
      */
     static assign(numObj, assignNumObjs, opt) {
-        var _a, _b;
+        var _a, _b, _c, _d;
         let { col, assignNumObjCol } = opt;
-        let value = (_a = numObj[col]) !== null && _a !== void 0 ? _a : 0;
+        let value = (_a = JsonUtil_1.default.getByKeys(numObj, col)) !== null && _a !== void 0 ? _a : 0;
         if (assignNumObjCol == null) {
             assignNumObjCol = col;
         }
-        let sumAssignValue = ArrayUtil_1.ArrayUtil.sum(assignNumObjs, assignNumObjCol);
-        if (assignNumObjs == null || value >= sumAssignValue) {
-            return;
+        let valueCol = (_b = opt.valueCol) !== null && _b !== void 0 ? _b : assignNumObjCol;
+        let sumAssignValue = ArrayUtil_1.ArrayUtil.sum(assignNumObjs, valueCol);
+        if (opt.ifBigNoAssign && value >= sumAssignValue) {
+            if (valueCol == assignNumObjCol) {
+                return;
+            }
+            else {
+                for (let assignNumObj of assignNumObjs) {
+                    let value = JsonUtil_1.default.getByKeys(assignNumObj, valueCol);
+                    JsonUtil_1.default.setByKeys(assignNumObj, assignNumObjCol, value);
+                }
+            }
         }
         if (value == 0) {
             for (let assignNumObj of assignNumObjs) {
-                assignNumObj[assignNumObjCol] = 0;
+                JsonUtil_1.default.setByKeys(assignNumObj, assignNumObjCol, 0);
             }
             return;
         }
@@ -66,15 +79,16 @@ class default_1 {
             value *= opt.fee;
         }
         for (let assignNumObj of assignNumObjs) {
-            let assignValue = (_b = assignNumObj[assignNumObjCol]) !== null && _b !== void 0 ? _b : 0;
-            assignNumObj[assignNumObjCol] = Math.floor((assignValue / sumAssignValue) * value);
+            let assignValue = (_c = JsonUtil_1.default.getByKeys(assignNumObj, valueCol)) !== null && _c !== void 0 ? _c : 0;
+            JsonUtil_1.default.setByKeys(assignNumObj, assignNumObjCol, Math.floor((assignValue / sumAssignValue) * value));
         }
         sumAssignValue = ArrayUtil_1.ArrayUtil.sum(assignNumObjs, assignNumObjCol);
         if (sumAssignValue < value) {
             let diff = value - sumAssignValue;
             let index = 0;
             while (diff > 0) {
-                assignNumObjs[index][assignNumObjCol] += 1;
+                let val = (_d = JsonUtil_1.default.getByKeys(assignNumObjs[index], assignNumObjCol)) !== null && _d !== void 0 ? _d : 0;
+                JsonUtil_1.default.setByKeys(assignNumObjs[index], assignNumObjCol, val + 1);
                 diff--;
                 index++;
                 if (index >= assignNumObjs.length) {
@@ -84,7 +98,8 @@ class default_1 {
         }
         if (opt.fee) {
             for (let assignNumObj of assignNumObjs) {
-                assignNumObj[assignNumObjCol] = assignNumObj[assignNumObjCol] / opt.fee;
+                let val = JsonUtil_1.default.getByKeys(assignNumObj, assignNumObjCol);
+                JsonUtil_1.default.setByKeys(assignNumObj, assignNumObjCol, val / opt.fee);
             }
         }
     }

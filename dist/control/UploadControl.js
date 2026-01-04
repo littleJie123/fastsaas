@@ -137,8 +137,16 @@ class UploadControl extends Control_1.default {
             }
         }
     }
-    _printBeforeLog() {
-        this._printLog({});
+    _printBeforeLog(req) {
+        try {
+            let url = req.baseUrl + req.url;
+            this._printLog({
+                url,
+                contextId: this.getContext().getId()
+            });
+        }
+        catch (e) {
+        }
     }
 }
 exports.default = UploadControl;

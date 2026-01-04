@@ -42,5 +42,5 @@ export default abstract class UploadControl extends Control {
      * @param key 文件名，为空则只取一个文件
      */
     protected _getFile(key?: any): UploadFile;
-    protected _printBeforeLog(): void;
+    protected _printBeforeLog(req: any): void;
 }

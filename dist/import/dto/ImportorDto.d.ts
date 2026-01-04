@@ -3,7 +3,7 @@
  */
 interface ImportorDto {
     id?: number;
-    name: any;
+    name?: any;
     error?: string;
     dbId?: number;
     param?: any;

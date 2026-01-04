@@ -11,6 +11,14 @@ interface AssignOpt {
      * 分配前乘以某个比例，分配后除以某个比例，例如金额单位为元，要分配到分，则改比例为100
      * */
     fee?: number;
+    /**
+     * 计算比例的值
+     */
+    valueCol?: string;
+    /**
+     * 如果需要分配的值大于分配的值，则不分配保持原值
+     */
+    ifBigNoAssign?: boolean;
 }
 interface NumAndUnit {
     /**

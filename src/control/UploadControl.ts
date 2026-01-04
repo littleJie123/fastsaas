@@ -8,7 +8,7 @@ import UploadFile from './bus/UploadFile';
 export default abstract class UploadControl extends Control {
   protected _fileMap: any;
   protected abstract _executeUpload();
-  
+
   /**
    * 得到所有的上传文件
    */
@@ -64,7 +64,7 @@ export default abstract class UploadControl extends Control {
 
     //await this._parseUpload(req)
     if (!this._checkSuffix()) {
-      throw new Error( this._createWrongSuffix());
+      throw new Error(this._createWrongSuffix());
     }
     return await this._executeUpload();
   }
@@ -74,7 +74,7 @@ export default abstract class UploadControl extends Control {
     let contentLen = this._getContentLen();
     if (contentLen != null) {
       let len = req.get('Content-Length')
-      if (len == null){
+      if (len == null) {
         len = req.headers['content-length'];
       }
       let num = parseInt(<string>len);
@@ -147,7 +147,15 @@ export default abstract class UploadControl extends Control {
       }
     }
   }
-  protected _printBeforeLog() {
-    this._printLog({});
+  protected _printBeforeLog(req) {
+    try {
+      let url: string = req.baseUrl + req.url;
+      this._printLog({
+        url,
+        contextId: this.getContext().getId()
+      });
+    } catch (e) {
+
+    }
   }
 }
