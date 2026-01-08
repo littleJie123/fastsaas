@@ -56,9 +56,10 @@ function createFun(clazz, opt: WebServerOption): Function {
   }
 }
 function loadFromWebPath(app, opt: WebServerOption) {
-  if (opt.webPath == null)
+  let map = {}
+  if (opt.webPath == null) {
     return;
-  var map = {};
+  }
   /**
    * 构建路由
    * @param dirPath 
@@ -71,7 +72,7 @@ function loadFromWebPath(app, opt: WebServerOption) {
       if (clazz.default) {
         clazz = clazz.default;
       }
-      var routerName = clazz.router;
+      var routerName: string = clazz.router;
       if (routerName) {
         if (routerName.length > 0 && routerName[0] !== '/') {
           routerName = '/' + routerName
@@ -83,6 +84,9 @@ function loadFromWebPath(app, opt: WebServerOption) {
         routerName = '/' + routerPath
       }
       app.all(routerName, createFun(clazz, opt));
+      if (opt.needWebSocketAction) {
+        map[routerName.toLocaleLowerCase()] = clazz
+      }
     }
   }
   /**
@@ -109,14 +113,14 @@ function loadFromWebPath(app, opt: WebServerOption) {
   for (var dir of dirs) {
     _parseDir(dir, opt.webPath, opt.webPath)
   }
-
+  return map;
 }
 
 
 
 //自动生成
-function loadRouter(app, opt: WebServerOption) {
-  loadFromWebPath(app, opt);
+function loadRouter(app, opt: WebServerOption): any {
+  return loadFromWebPath(app, opt);
 }
 export default loadRouter;
 

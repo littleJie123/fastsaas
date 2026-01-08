@@ -34,6 +34,11 @@ export interface WebServerOption {
    */
   keepBody?: boolean;
   interceptorBeans?: string[]
+
+  /**
+   * 是否通过websocket访问控制层
+   */
+  needWebSocketAction?: boolean;
 }
 
 
@@ -153,7 +158,7 @@ export default function (opt: WebServerOption) {
   let apiPort = opt.port;
 
   initApp(app, opt)
-  loadRouter(app, opt);
+  let map = loadRouter(app, opt);
   addRouters(app, opt)
 
   let server = app.listen(apiPort, function () {
@@ -162,7 +167,7 @@ export default function (opt: WebServerOption) {
   })
 
   if (opt.webSocketClazz) {
-    Socket.listen(server, opt.webSocketClazz);
+    Socket.listen(server, opt.webSocketClazz, map);
   }
   app.disable('x-powered-by')
   return app;
