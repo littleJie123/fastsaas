@@ -85,7 +85,7 @@ function loadFromWebPath(app, opt: WebServerOption) {
       }
       app.all(routerName, createFun(clazz, opt));
       if (opt.needWebSocketAction) {
-        map[routerName.toLocaleLowerCase()] = clazz
+        map[routerName.toLowerCase()] = clazz
       }
     }
   }

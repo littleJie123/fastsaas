@@ -167,7 +167,7 @@ export default function (opt: WebServerOption) {
   })
 
   if (opt.webSocketClazz) {
-    Socket.listen(server, opt.webSocketClazz, map);
+    Socket.listen(server, opt.webSocketClazz, map, opt);
   }
   app.disable('x-powered-by')
   return app;
