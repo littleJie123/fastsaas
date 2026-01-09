@@ -1,3 +1,3 @@
 import { WebServerOption } from '../webServer';
-declare function loadRouter(app: any, opt: WebServerOption): void;
+declare function loadRouter(app: any, opt: WebServerOption): any;
 export default loadRouter;

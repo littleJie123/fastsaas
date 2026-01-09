@@ -23,5 +23,9 @@ export interface WebServerOption {
      */
     keepBody?: boolean;
     interceptorBeans?: string[];
+    /**
+     * 是否通过websocket访问控制层
+     */
+    needWebSocketAction?: boolean;
 }
 export default function (opt: WebServerOption): any;

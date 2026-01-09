@@ -111,13 +111,13 @@ function default_1(opt) {
     app.disable('x-powered-by');
     let apiPort = opt.port;
     initApp(app, opt);
-    (0, loadRouter_1.default)(app, opt);
+    let map = (0, loadRouter_1.default)(app, opt);
     addRouters(app, opt);
     let server = app.listen(apiPort, function () {
         console.log(`app listening at ${apiPort}`);
     });
     if (opt.webSocketClazz) {
-        Socket_1.default.listen(server, opt.webSocketClazz);
+        Socket_1.default.listen(server, opt.webSocketClazz, map, opt);
     }
     app.disable('x-powered-by');
     return app;
