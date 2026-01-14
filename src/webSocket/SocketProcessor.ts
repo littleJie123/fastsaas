@@ -39,6 +39,7 @@ export default abstract class {
     this.opt = opt;
     ws.on('message', (message) => {
       try {
+
         let json: ISocketEvent = JSON.parse(message);
         if (json.eventType == S_Join) {
           this.joinRoom(json.msg);
@@ -116,7 +117,14 @@ export default abstract class {
                   }
                 }
               } catch (e) {
+                this.send({
+                  eventType: S_Error,
+                  msg: {
+                    message: e.message
+                  }
+                })
                 console.error(e);
+                return;
               }
             }
 
@@ -125,7 +133,7 @@ export default abstract class {
         if (ctrl.setSocketProcessor) {
           ctrl.setSocketProcessor(this);
         }
-        let result = await ctrl.executeWebSocket(param);
+        let result = await ctrl.executeWebSocket(param, url);
         this.send({
           eventType: S_ActionResult,
           msg: {

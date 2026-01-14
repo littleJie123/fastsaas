@@ -105,7 +105,14 @@ class default_1 {
                                 }
                             }
                             catch (e) {
+                                this.send({
+                                    eventType: S_Error,
+                                    msg: {
+                                        message: e.message
+                                    }
+                                });
                                 console.error(e);
+                                return;
                             }
                         }
                     }
@@ -113,7 +120,7 @@ class default_1 {
                 if (ctrl.setSocketProcessor) {
                     ctrl.setSocketProcessor(this);
                 }
-                let result = await ctrl.executeWebSocket(param);
+                let result = await ctrl.executeWebSocket(param, url);
                 this.send({
                     eventType: S_ActionResult,
                     msg: {

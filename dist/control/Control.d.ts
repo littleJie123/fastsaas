@@ -12,7 +12,10 @@ export default class Control<Param = any, Result = any> {
     protected _req: Request;
     protected _resp: Response;
     protected _context: Context;
+    protected socketProcessor: SocketProcessor;
     protected beforeControlProcess: IExe;
+    executeWebSocket(param: any, url?: string): Promise<any>;
+    setSocketProcessor(socketProcessor: SocketProcessor): void;
     getContext(): Context;
     /**
      * 返回这次操作的名称
@@ -38,6 +41,7 @@ export default class Control<Param = any, Result = any> {
     setContext(context: any): void;
     protected _getLogger(category?: string): LogHelp;
     protected _printLog(message: object, category?: string): void;
+    protected _printBeforeLog4WebSocket(param: any, url: string): void;
     protected _printBeforeLog(req: any): void;
     protected _printEndLog(time: number): void;
     /**
@@ -54,4 +58,5 @@ export default class Control<Param = any, Result = any> {
     buildControl(controlClazz: any): Control;
 }
 import IChecker from './inf/IChecker';
+import { SocketProcessor } from '../fastsaas';
 export {};

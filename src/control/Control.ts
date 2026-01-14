@@ -22,9 +22,55 @@ export default class Control<Param = any, Result = any> {
   protected _resp: Response = null;
   protected _context: Context = null;
 
+  protected socketProcessor: SocketProcessor = null;
+
   @Bean()
   protected beforeControlProcess: IExe;
 
+
+  async executeWebSocket(param: any, url?: string) {
+
+    this._param = param;
+    this._parseRequestParam();
+    if (this._param == null) {
+      this._param = <Param>{};
+    }
+    let ret;
+    let begin = new Date();
+    try {
+
+
+      this._printBeforeLog4WebSocket(param, url)
+      await this._checkParam(this._param);
+      await this._checkArray(this._param);
+
+      ret = await this.doExecute();
+
+
+      this._printEndLog(new Date().getTime() - begin.getTime());
+      return ret;
+    } catch (e) {
+      console.error(e);
+      var code = e.code;
+      if (code == null) {
+        code = -1;
+      }
+
+      var errorData: any = {
+        code,
+        status: e?.status,
+        message: e?.message,
+        data: e?.data,
+        error: true
+      }
+
+      return errorData
+    }
+  }
+
+  setSocketProcessor(socketProcessor: SocketProcessor) {
+    this.socketProcessor = socketProcessor
+  }
   getContext(): Context {
     return this._context;
   }
@@ -127,6 +173,13 @@ export default class Control<Param = any, Result = any> {
 
   }
 
+  protected _printBeforeLog4WebSocket(param: any, url: string) {
+    this._printLog({
+      url,
+      contextId: this.getContext().getId(),
+      param: JSON.stringify(param)
+    });
+  }
   protected _printBeforeLog(req) {
     try {
       let url: string = req.baseUrl + req.url;
@@ -271,5 +324,5 @@ export default class Control<Param = any, Result = any> {
 
 }
 import IChecker from './inf/IChecker';
-import { ConfigFac, JsonUtil } from '../fastsaas';
+import { ConfigFac, JsonUtil, SocketProcessor } from '../fastsaas';
 

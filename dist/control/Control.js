@@ -20,6 +20,42 @@ class Control {
         this._req = null;
         this._resp = null;
         this._context = null;
+        this.socketProcessor = null;
+    }
+    async executeWebSocket(param, url) {
+        this._param = param;
+        this._parseRequestParam();
+        if (this._param == null) {
+            this._param = {};
+        }
+        let ret;
+        let begin = new Date();
+        try {
+            this._printBeforeLog4WebSocket(param, url);
+            await this._checkParam(this._param);
+            await this._checkArray(this._param);
+            ret = await this.doExecute();
+            this._printEndLog(new Date().getTime() - begin.getTime());
+            return ret;
+        }
+        catch (e) {
+            console.error(e);
+            var code = e.code;
+            if (code == null) {
+                code = -1;
+            }
+            var errorData = {
+                code,
+                status: e === null || e === void 0 ? void 0 : e.status,
+                message: e === null || e === void 0 ? void 0 : e.message,
+                data: e === null || e === void 0 ? void 0 : e.data,
+                error: true
+            };
+            return errorData;
+        }
+    }
+    setSocketProcessor(socketProcessor) {
+        this.socketProcessor = socketProcessor;
     }
     getContext() {
         return this._context;
@@ -108,6 +144,13 @@ class Control {
     _printLog(message, category) {
         let logger = this._getLogger(category);
         logger.infoObj(message);
+    }
+    _printBeforeLog4WebSocket(param, url) {
+        this._printLog({
+            url,
+            contextId: this.getContext().getId(),
+            param: JSON.stringify(param)
+        });
     }
     _printBeforeLog(req) {
         try {
