@@ -306,3 +306,4 @@ export { IEventProcessor, IEventProcessorBuilder } from './events/EventBus';
 export { default as SpanCache } from './cache/SpanCache';
 export { SpanOpt } from './cache/SpanCache';
 export { ICompare } from './util/ArrayUtil';
+export { default as LogControl } from './control/LogControl';

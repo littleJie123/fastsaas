@@ -1,5 +1,5 @@
 import { ConfigFac } from '../../fastsaas';
-import LogType from './LogType' 
+import LogType from './LogType'
 
 var colorMap = {
   red: { begin: '[31m', end: "[m" },
@@ -8,42 +8,47 @@ var colorMap = {
 }
 export default class LocalLog extends LogType {
   print(obj: any) {
+    let fileWriter = this.getLoggerWiter();
+
+    if (fileWriter) {
+      fileWriter.info(JSON.stringify(obj));
+    }
     let log = ConfigFac.get('log');
     let category = obj.category;
     let needPrint = true;
-    if(log?.category !=null && category != null ){
-      let categorys:string[] = log.category;
-      needPrint = categorys.includes(category); 
+    if (log?.category != null && category != null) {
+      let categorys: string[] = log.category;
+      needPrint = categorys.includes(category);
     }
 
-    if(!needPrint){
+    if (!needPrint) {
       return;
     }
-    let message = obj.message; 
-    let strArray:any[] = [`[${category},${obj.level}]:`]
-    if(message == null){
+    let message = obj.message;
+    let strArray: any[] = [`[${category},${obj.level}]:`]
+    if (message == null) {
       strArray.push(JSON.stringify({
-        ... obj,
-        category:null,
-        level:null
+        ...obj,
+        category: null,
+        level: null
       }))
-    }else{
-      if(message instanceof Array){
+    } else {
+      if (message instanceof Array) {
         strArray.push(message.join('\r\n'));
-      }else{
-        if(message instanceof Error){
+      } else {
+        if (message instanceof Error) {
           console.log('------------------')
           strArray.push(message.stack);
-        }else{
+        } else {
           strArray.push(message);
         }
       }
     }
 
     console.log(strArray.join(" "));
-    
+
   }
-  
- 
+
+
 
 }

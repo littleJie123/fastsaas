@@ -329,8 +329,9 @@ export default class Context {
    * 返回日志处理器
    */
   getLogger(category?: string): LogHelp {
-    if (category == null)
+    if (category == null) {
       category = 'server';
+    }
     let logger = new LogHelp();
     logger.setContextId(this.getId())
     logger.setSessionId(this.sessionId);

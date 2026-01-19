@@ -30,7 +30,7 @@ export default class BaseHttpEntry {
     private _printLog;
     submit(param: any): Promise<any>;
     submitReturnWithHeaders(param: any): Promise<HttpResult>;
-    protected _acqClient(): typeof https | typeof http;
+    protected _acqClient(): typeof http | typeof https;
     writeParam(req: any, param: any): void;
     /**
     可以一个参数 submit ('aaa',123)

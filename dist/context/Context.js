@@ -294,8 +294,9 @@ class Context {
      * 返回日志处理器
      */
     getLogger(category) {
-        if (category == null)
+        if (category == null) {
             category = 'server';
+        }
         let logger = new LogHelp_1.default();
         logger.setContextId(this.getId());
         logger.setSessionId(this.sessionId);

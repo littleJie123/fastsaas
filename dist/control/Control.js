@@ -143,13 +143,15 @@ class Control {
     }
     _printLog(message, category) {
         let logger = this._getLogger(category);
-        logger.infoObj(message);
+        if (logger != null) {
+            logger.infoObj(message);
+        }
     }
     _printBeforeLog4WebSocket(param, url) {
         this._printLog({
             url,
             contextId: this.getContext().getId(),
-            param: JSON.stringify(param)
+            param: param
         });
     }
     _printBeforeLog(req) {
@@ -158,7 +160,7 @@ class Control {
             this._printLog({
                 url,
                 contextId: this.getContext().getId(),
-                param: JSON.stringify(this._param)
+                param: this._param
             });
         }
         catch (e) {
@@ -168,7 +170,7 @@ class Control {
         //this._printLog(time,'webFinish')
         try {
             let logger = this._getLogger('webFinish');
-            logger.infoObj({ requestTime: time });
+            logger === null || logger === void 0 ? void 0 : logger.infoObj({ requestTime: time });
         }
         catch (e) {
         }
@@ -230,7 +232,7 @@ class Control {
         let base = fastsaas_1.ConfigFac.get('base');
         if (error['code'] != 0 || base.env == 'local') {
             let logger = this._getLogger();
-            logger.error(error);
+            logger === null || logger === void 0 ? void 0 : logger.error(error);
         }
     }
     _sendResp(resp, ret) {

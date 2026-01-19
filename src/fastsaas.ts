@@ -1,3 +1,4 @@
+
 export { default as MySqlUtil } from './util/MySqlUtil'
 
 export { default as DaoHelper } from './dao/DaoHelper';
@@ -358,3 +359,5 @@ export { default as SpanCache } from './cache/SpanCache';
 export { SpanOpt } from './cache/SpanCache';
 
 export { ICompare } from './util/ArrayUtil';
+
+export { default as LogControl } from './control/LogControl'

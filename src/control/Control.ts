@@ -169,7 +169,9 @@ export default class Control<Param = any, Result = any> {
   protected _printLog(message: object, category?: string) {
 
     let logger = this._getLogger(category);
-    logger.infoObj(message);
+    if (logger != null) {
+      logger.infoObj(message);
+    }
 
   }
 
@@ -177,7 +179,7 @@ export default class Control<Param = any, Result = any> {
     this._printLog({
       url,
       contextId: this.getContext().getId(),
-      param: JSON.stringify(param)
+      param: param
     });
   }
   protected _printBeforeLog(req) {
@@ -186,7 +188,7 @@ export default class Control<Param = any, Result = any> {
       this._printLog({
         url,
         contextId: this.getContext().getId(),
-        param: JSON.stringify(this._param)
+        param: this._param
       });
     } catch (e) {
 
@@ -197,7 +199,7 @@ export default class Control<Param = any, Result = any> {
     //this._printLog(time,'webFinish')
     try {
       let logger = this._getLogger('webFinish')
-      logger.infoObj({ requestTime: time })
+      logger?.infoObj({ requestTime: time })
     } catch (e) {
 
     }
@@ -274,7 +276,7 @@ export default class Control<Param = any, Result = any> {
     let base = ConfigFac.get('base');
     if (error['code'] != 0 || base.env == 'local') {
       let logger = this._getLogger();
-      logger.error(error);
+      logger?.error(error);
     }
   }
 
