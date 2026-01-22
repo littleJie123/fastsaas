@@ -8,6 +8,9 @@ const ConfigFac_1 = __importDefault(require("../../config/ConfigFac"));
  * 拦截器的父类
  */
 class BaseInterceptor {
+    setContext(context) {
+        this.context = context;
+    }
     /**
      * 是否有效
      * @param req

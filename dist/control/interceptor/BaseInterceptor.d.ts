@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
+import { Context } from '../../fastsaas';
 /**
  * 拦截器的父类
  */
 export default abstract class BaseInterceptor {
+    protected context: Context;
+    setContext(context: Context): void;
     /**
      * 是否有效
      * @param req
