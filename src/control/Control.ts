@@ -48,7 +48,9 @@ export default class Control<Param = any, Result = any> {
 
 
       this._printEndLog(new Date().getTime() - begin.getTime());
-      return ret;
+      return {
+        result: ret
+      }
     } catch (e) {
       console.error(e);
       var code = e.code;

@@ -36,7 +36,9 @@ class Control {
             await this._checkArray(this._param);
             ret = await this.doExecute();
             this._printEndLog(new Date().getTime() - begin.getTime());
-            return ret;
+            return {
+                result: ret
+            };
         }
         catch (e) {
             console.error(e);

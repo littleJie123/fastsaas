@@ -6,12 +6,15 @@ import WebSocket from 'ws';
 import IActionMsg from './inf/IActionMsg';
 import { WebServerOption } from '../webServer/webServer';
 import { Context } from '../fastsaas';
+import UuidUtil from '../util/UuidUtil';
 const S_Join = 'join';
 const S_Level = 'level';
 const S_Action = 'S_Action'
 const S_Error = 'S_Error'
 const S_ActionResult = 'S_ActionResult'
-
+/**
+ * 一个websocket一个链接
+ */
 export default abstract class {
 
   private actionMap = null;
@@ -29,7 +32,17 @@ export default abstract class {
     }
 
   }
+
+  sendEvent(eventType: string, msg: any) {
+    this.send({
+      eventType,
+      msg
+    })
+  }
   getUuid(): string {
+    if (this.uuid == null) {
+      this.uuid = UuidUtil.getUuid()
+    }
     return this.uuid;
   }
 
@@ -42,7 +55,7 @@ export default abstract class {
 
         let json: ISocketEvent = JSON.parse(message);
         if (json.eventType == S_Join) {
-          this.joinRoom(json.msg);
+          this.joinRoom(json.msg.roomId);
         } else if (json.eventType == S_Level) {
           this.levelRoom(json.msg.roomId);
         } else if (json.eventType == S_Action) {
@@ -110,19 +123,17 @@ export default abstract class {
             for (let beanStr of opt.interceptorBeans) {
               try {
                 let bean = childContext.get(beanStr);
-                if (bean != null && bean.onBefore) {
-                  let ret = await bean.onBefore(null, null, param);
+                if (bean != null && bean.onWebSocketBefore) {
+                  if (bean.setSocketProcessor) {
+                    bean.setSocketProcessor(this);
+                  }
+                  let ret = await bean.onWebSocketBefore(url, param);
                   if (ret) {
                     return
                   }
                 }
               } catch (e) {
-                this.send({
-                  eventType: S_Error,
-                  msg: {
-                    message: e.message
-                  }
-                })
+                this.sendError(e)
                 console.error(e);
                 return;
               }
@@ -146,18 +157,21 @@ export default abstract class {
 
     }
   }
+
+  sendError(e: Error) {
+    this.send({
+      eventType: S_Error,
+      msg: {
+        message: e.message
+      }
+    })
+  }
   onMessage(json: ISocketEvent) {
 
   }
-  joinRoom(msg: any) {
-    let roomId = msg.roomId;
-    if (this.uuid == null) {
-      if (msg.uuid != null) {
-        this.uuid = msg.uuid;
-      } else {
-        this.uuid = uuidv4();
-      }
-    }
+  joinRoom(roomId: string) {
+
+
     this.roomIds[roomId] = true;
     SocketRoom.joinRoom(roomId, this);
   }

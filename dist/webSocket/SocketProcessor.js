@@ -3,14 +3,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const uuid_1 = require("uuid");
 const SocketRoom_1 = __importDefault(require("./SocketRoom"));
 const ws_1 = __importDefault(require("ws"));
+const UuidUtil_1 = __importDefault(require("../util/UuidUtil"));
 const S_Join = 'join';
 const S_Level = 'level';
 const S_Action = 'S_Action';
 const S_Error = 'S_Error';
 const S_ActionResult = 'S_ActionResult';
+/**
+ * 一个websocket一个链接
+ */
 class default_1 {
     constructor() {
         this.actionMap = null;
@@ -22,7 +25,16 @@ class default_1 {
             this.ws.send(JSON.stringify(msg));
         }
     }
+    sendEvent(eventType, msg) {
+        this.send({
+            eventType,
+            msg
+        });
+    }
     getUuid() {
+        if (this.uuid == null) {
+            this.uuid = UuidUtil_1.default.getUuid();
+        }
         return this.uuid;
     }
     onConnect(ws, map, opt) {
@@ -33,7 +45,7 @@ class default_1 {
             try {
                 let json = JSON.parse(message);
                 if (json.eventType == S_Join) {
-                    this.joinRoom(json.msg);
+                    this.joinRoom(json.msg.roomId);
                 }
                 else if (json.eventType == S_Level) {
                     this.levelRoom(json.msg.roomId);
@@ -97,20 +109,18 @@ class default_1 {
                         for (let beanStr of opt.interceptorBeans) {
                             try {
                                 let bean = childContext.get(beanStr);
-                                if (bean != null && bean.onBefore) {
-                                    let ret = await bean.onBefore(null, null, param);
+                                if (bean != null && bean.onWebSocketBefore) {
+                                    if (bean.setSocketProcessor) {
+                                        bean.setSocketProcessor(this);
+                                    }
+                                    let ret = await bean.onWebSocketBefore(url, param);
                                     if (ret) {
                                         return;
                                     }
                                 }
                             }
                             catch (e) {
-                                this.send({
-                                    eventType: S_Error,
-                                    msg: {
-                                        message: e.message
-                                    }
-                                });
+                                this.sendError(e);
                                 console.error(e);
                                 return;
                             }
@@ -131,18 +141,17 @@ class default_1 {
             }
         }
     }
+    sendError(e) {
+        this.send({
+            eventType: S_Error,
+            msg: {
+                message: e.message
+            }
+        });
+    }
     onMessage(json) {
     }
-    joinRoom(msg) {
-        let roomId = msg.roomId;
-        if (this.uuid == null) {
-            if (msg.uuid != null) {
-                this.uuid = msg.uuid;
-            }
-            else {
-                this.uuid = (0, uuid_1.v4)();
-            }
-        }
+    joinRoom(roomId) {
         this.roomIds[roomId] = true;
         SocketRoom_1.default.joinRoom(roomId, this);
     }

@@ -361,3 +361,5 @@ export { SpanOpt } from './cache/SpanCache';
 export { ICompare } from './util/ArrayUtil';
 
 export { default as LogControl } from './control/LogControl'
+
+export { default as WebSocketInterceptor } from './control/interceptor/WebSocketInterceptor';

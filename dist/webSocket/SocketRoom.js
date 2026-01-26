@@ -20,19 +20,25 @@ class default_1 {
         let room = this.getRoom(roomId);
         delete room[processor.getUuid()];
     }
-    static emitMsg(roomId, msg) {
+    static emitMsg(roomId, msg, opt) {
+        var _a;
         let room = this.getRoom(roomId);
         for (let e in room) {
-            room[e].send(msg);
+            if (opt == null || e != ((_a = opt.socketProcessor) === null || _a === void 0 ? void 0 : _a.getUuid())) {
+                room[e].send(msg);
+            }
         }
     }
-    static emit(roomId, eventType, msg) {
+    static emit(roomId, eventType, msg, opt) {
+        var _a;
         let room = this.getRoom(roomId);
         for (let e in room) {
-            room[e].send({
-                msg,
-                eventType
-            });
+            if (opt == null || e != ((_a = opt.socketProcessor) === null || _a === void 0 ? void 0 : _a.getUuid())) {
+                room[e].send({
+                    msg,
+                    eventType
+                });
+            }
         }
     }
 }
