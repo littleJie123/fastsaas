@@ -18,18 +18,20 @@ export default class LogControl extends Control<LogParam> {
     private getCdts;
     private checkJson;
     /**
-     * 读取文件流 文件名为 `${filePath}/log${param.day}.log`或者`${filePath}/log${param.day}.log.gz`
-     * 程序中需要先查询扩展名为log的，如果没有则查询扩展名为gz的文件
-     * @param filePath
+     * Finds the log file, preferring .log over .log.gz.
+     * @param dirPath The directory containing log files.
+     * @returns An object with the file path and a flag indicating if it's gzipped, or null if not found.
      */
-    private readFileStream;
+    private findLogFile;
     /**
-     * 逐行读取日志记录，每一行都是一个合法的json字符串，
-     * 如果找到符合条件的200条则直接返回。
-     * 读完文件也返回
-     * @param fileStream
-     * @param check
+     * Reads a stream line by line from the beginning. Used for gzipped files.
+     * It uses a fixed-size buffer to store only the last 200 matching lines, preventing OOM.
      */
-    private readLines;
+    private readLinesFromStart;
+    /**
+     * Reads a file line by line from the end. Used for plain text .log files.
+     * Stops after finding 200 matching lines. This is memory-efficient for large files.
+     */
+    private readLinesBackwards;
 }
 export {};
