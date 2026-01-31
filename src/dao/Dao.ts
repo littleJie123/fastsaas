@@ -256,7 +256,7 @@ export default abstract class Dao<Pojo = any> {
    * 更新一个数组
    * @param array
    */
-  async updateArray(array: Pojo[], other?: object, whereObj?: any): Promise<number> {
+  async updateArray(array: Pojo[], other?: any, whereObj?: any): Promise<number> {
     if (!array || array.length == 0) return 0;
     if (array.length == 1 && other == null) {
       return this.update(array[0], whereObj)

@@ -54,13 +54,22 @@ class DaoHelper {
         return obj;
     }
     /**
-     * 增加数据
+     * 增加数据[不支持主键插入]
      * @param key
      * @param list
      */
     async addArray(key, list) {
         let dao = this.getDao(key);
         await dao.addArray(list);
+    }
+    /**
+     * 增加数据
+     * @param key
+     * @param list
+     */
+    async add(key, obj) {
+        let dao = this.getDao(key);
+        await dao.add(obj);
     }
     /**
      * 更新数组

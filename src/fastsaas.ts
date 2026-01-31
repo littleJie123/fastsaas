@@ -137,6 +137,7 @@ export { default as IsNullCdt } from './dao/query/cdt/imp/IsNullCdt';
 export { default as NotCdt } from './dao/query/cdt/imp/NotCdt';
 export { default as OrCdt } from './dao/query/cdt/imp/OrCdt';
 export { default as SqlCdt } from './dao/query/cdt/imp/SqlCdt';
+export { default as CaseCdt } from './dao/query/cdt/imp/CaseCdt';
 export { default as CdtDto } from './dao/query/dto/CdtDto';
 export { default as ParseJsonDto } from './dao/query/dto/ParseJsonDto';
 export { default as JoinTable } from './dao/query/JoinTable';

@@ -44,6 +44,54 @@ class default_1 {
         return list;
     }
     /**
+     * 分别负担。例如多个账户负担一笔支出。
+     * 如果账户的余额总和小于支出，则支出全部余额。
+     * 如果总和大于支出，则按比例分配。剩余的再依次扣减
+     * @param cost 支出
+     * @param shareCosts 账户余额
+     * @param opt
+     */
+    static shareCost(cost, shareCosts, opt) {
+        let sum = ArrayUtil_1.ArrayUtil.sum(shareCosts);
+        if (sum <= cost) {
+            return [...shareCosts];
+        }
+        let realCost = cost;
+        if (opt === null || opt === void 0 ? void 0 : opt.fee) {
+            realCost = Math.round(cost * opt.fee);
+        }
+        let result = [];
+        let currentSum = 0;
+        // First pass: proportional distribution
+        for (let shareCost of shareCosts) {
+            let val = 0;
+            if (sum > 0) {
+                val = Math.floor((shareCost / sum) * realCost);
+            }
+            result.push(val);
+            currentSum += val;
+        }
+        // Second pass: distribute remainder
+        let diff = realCost - currentSum;
+        let index = 0;
+        while (diff > 0 && index < result.length) { // Verify index constraint just in case
+            result[index]++;
+            diff--;
+            index++;
+            if (index >= result.length) {
+                index = 0;
+            }
+        }
+        // Handle fee scaling back
+        if (opt === null || opt === void 0 ? void 0 : opt.fee) {
+            for (let i = 0; i < result.length; i++) {
+                result[i] = result[i] / opt.fee;
+            }
+        }
+        return result;
+    }
+    /**
+     * 把一个大的，按比例分配给小的。类似10个苹果 ，5个人分。如果每个人需要的量加起来小于10个，则按需求量分配。如果大于，则按比例进行分配。
      * 如果需要分配的值大于被分配对象的值，那么需要分配的值将按比例缩小，直到等于被分配对象的值
      * @param numObj 被分配的值
      * @param assignNumObjs 需要分配的值

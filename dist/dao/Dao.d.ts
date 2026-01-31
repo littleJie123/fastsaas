@@ -107,7 +107,7 @@ export default abstract class Dao<Pojo = any> {
      * 更新一个数组
      * @param array
      */
-    updateArray(array: Pojo[], other?: object, whereObj?: any): Promise<number>;
+    updateArray(array: Pojo[], other?: any, whereObj?: any): Promise<number>;
     updateArrayWithCols(array: Pojo[], cols: string[], other?: object, whereObj?: any): Promise<number>;
     /**
      *删除一条数据
