@@ -8,6 +8,13 @@ interface ShareCostOpt {
   fee?: number;
 }
 
+interface AvgOpt {
+  /**
+   * 分配前乘以某个比例，分配后除以某个比例，例如金额单位为元，要分配到分，则改比例为100 
+   * */
+  fee?: number;
+}
+
 interface AssignOpt {
   /**
    * 被分配的值的属性
@@ -42,6 +49,36 @@ interface NumAndUnit {
   name: string;
 }
 export default class {
+
+  /**
+   * 将一个数平均分配到多个对象中
+   * @param sumValue 
+   * @param cnt 
+   * @param avgOpt 
+   */
+  static avg(sumValue: number, cnt: number, avgOpt?: AvgOpt): number[] {
+    let result: number[] = [];
+    if (cnt <= 0) {
+      return result;
+    }
+    let realSum = sumValue;
+    if (avgOpt?.fee) {
+      realSum = Math.round(sumValue * avgOpt.fee);
+    }
+    let avg = Math.floor(realSum / cnt);
+    let remain = realSum - avg * cnt;
+    for (let i = 0; i < cnt; i++) {
+      let val = avg;
+      if (i < remain) {
+        val = val + 1;
+      }
+      if (avgOpt?.fee) {
+        val = val / avgOpt.fee;
+      }
+      result.push(val);
+    }
+    return result;
+  }
 
   /**
    * 把类似“￥54.90”，“$10”,"10.01"等字符串转化成数字，上述返回分别是54.9， 10，10.01
