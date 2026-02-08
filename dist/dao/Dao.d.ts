@@ -7,6 +7,13 @@ import { OnlyArrayIntface, onlyDataInterface } from '../interface';
 import { Sql } from './sql';
 import IDaoOpt from '../inf/IDaoOpt';
 import ISaveItem from './ISaveItem';
+import { IGeter } from '../fastsaas';
+interface AddArrayNoRepeatOpt<Pojo = any> {
+    list: Pojo[];
+    query: any;
+    mapFun: IGeter<Pojo>;
+    sortFun?(array: Pojo[]): any;
+}
 export default abstract class Dao<Pojo = any> {
     protected _opt: DaoOpt;
     protected _map: object;
@@ -160,6 +167,11 @@ export default abstract class Dao<Pojo = any> {
      */
     findByIds(ids: Array<string | number>, key?: string, col?: string): Promise<Pojo[]>;
     /**
+     * 增加以后，通过查询再检查一下
+     * @param opt
+     */
+    addArrayNoRepeat(opt: AddArrayNoRepeatOpt<Pojo>): Promise<Pojo[]>;
+    /**
      *
      * @param opt
      * @returns
@@ -285,3 +297,4 @@ export default abstract class Dao<Pojo = any> {
      */
     changeDataToAddSql(pojo: Pojo, col: string): void;
 }
+export {};

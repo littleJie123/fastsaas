@@ -362,6 +362,45 @@ class Dao {
         return ret;
     }
     /**
+     * 增加以后，通过查询再检查一下
+     * @param opt
+     */
+    async addArrayNoRepeat(opt) {
+        await this.addArray(opt.list);
+        let dbs = await this.find(opt.query);
+        let pkCol = this.getPojoIdCol();
+        let needDel = [];
+        let sched = ArrayUtil_1.ArrayUtil.groupBy({
+            list: dbs,
+            key: opt.mapFun,
+            fun: (array) => {
+                if (array.length == 1) {
+                    return array[0];
+                }
+                if (opt.sortFun) {
+                    opt.sortFun(array);
+                }
+                else {
+                    ArrayUtil_1.ArrayUtil.order(array, pkCol);
+                }
+                needDel.push(...array.slice(1));
+                return array[0];
+            }
+        });
+        if (needDel.length > 0) {
+            await this.delArray(needDel);
+        }
+        return ArrayUtil_1.ArrayUtil.join({
+            list: opt.list,
+            list2: sched,
+            key: opt.mapFun,
+            fun(data, dbData) {
+                data[pkCol] = dbData[pkCol];
+                return data;
+            }
+        });
+    }
+    /**
      *
      * @param opt
      * @returns

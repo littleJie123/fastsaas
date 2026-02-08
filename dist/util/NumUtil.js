@@ -7,6 +7,35 @@ const ArrayUtil_1 = require("./ArrayUtil");
 const JsonUtil_1 = __importDefault(require("./JsonUtil"));
 class default_1 {
     /**
+     * 将一个数平均分配到多个对象中
+     * @param sumValue
+     * @param cnt
+     * @param avgOpt
+     */
+    static avg(sumValue, cnt, avgOpt) {
+        let result = [];
+        if (cnt <= 0) {
+            return result;
+        }
+        let realSum = sumValue;
+        if (avgOpt === null || avgOpt === void 0 ? void 0 : avgOpt.fee) {
+            realSum = Math.round(sumValue * avgOpt.fee);
+        }
+        let avg = Math.floor(realSum / cnt);
+        let remain = realSum - avg * cnt;
+        for (let i = 0; i < cnt; i++) {
+            let val = avg;
+            if (i < remain) {
+                val = val + 1;
+            }
+            if (avgOpt === null || avgOpt === void 0 ? void 0 : avgOpt.fee) {
+                val = val / avgOpt.fee;
+            }
+            result.push(val);
+        }
+        return result;
+    }
+    /**
      * 把类似“￥54.90”，“$10”,"10.01"等字符串转化成数字，上述返回分别是54.9， 10，10.01
      * @param str
      */

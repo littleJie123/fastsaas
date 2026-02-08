@@ -11,6 +11,16 @@ import { OnlyArrayIntface, AnyObject, onlyDataInterface } from '../interface'
 import { Sql } from './sql';
 import IDaoOpt from '../inf/IDaoOpt';
 import ISaveItem from './ISaveItem';
+import { IGeter } from '../fastsaas';
+
+
+interface AddArrayNoRepeatOpt<Pojo = any> {
+  list: Pojo[];
+  query: any;
+  mapFun: IGeter<Pojo>;
+  sortFun?(array: Pojo[])
+
+}
 
 export default abstract class Dao<Pojo = any> {
 
@@ -383,6 +393,47 @@ export default abstract class Dao<Pojo = any> {
     }
     let ret = await this.find(query)
     return ret
+  }
+
+  /**
+   * 增加以后，通过查询再检查一下
+   * @param opt 
+   */
+  async addArrayNoRepeat(opt: AddArrayNoRepeatOpt<Pojo>): Promise<Pojo[]> {
+    await this.addArray(opt.list);
+    let dbs = await this.find(opt.query);
+    let pkCol = this.getPojoIdCol();
+    let needDel: Pojo[] = [];
+    let sched = ArrayUtil.groupBy({
+      list: dbs,
+      key: opt.mapFun,
+      fun: (array: Pojo[]) => {
+        if (array.length == 1) {
+          return array[0]
+        }
+        if (opt.sortFun) {
+          opt.sortFun(array)
+        } else {
+          ArrayUtil.order(array, pkCol)
+        }
+        needDel.push(...array.slice(1))
+        return array[0]
+      }
+    })
+    if (needDel.length > 0) {
+      await this.delArray(needDel)
+    }
+    return ArrayUtil.join({
+      list: opt.list,
+      list2: sched,
+      key: opt.mapFun,
+      fun(data: Pojo, dbData: Pojo) {
+        data[pkCol] = dbData[pkCol]
+        return data;
+      }
+    })
+
+
   }
 
   /**
