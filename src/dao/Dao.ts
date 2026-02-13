@@ -452,10 +452,11 @@ export default abstract class Dao<Pojo = any> {
     )
     let self = this;
     const find = async (opt) => {
-      if (opt.finds)
+      if (opt.finds) {
         return await opt.finds();
-      else
+      } else {
         return await self.find(opt.query);
+      }
     }
 
     let list;
