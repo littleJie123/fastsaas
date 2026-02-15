@@ -361,7 +361,7 @@ class ListControl extends Control_1.default {
     async buildDownloadInfo() {
         return null;
     }
-    buildDownloadBuffer(list, downloadInfo) {
+    async buildDownloadBuffer(list, downloadInfo) {
         return CsvUtil_1.default.toBuffer(list, this.getDownloadCols());
     }
     async doExecute() {

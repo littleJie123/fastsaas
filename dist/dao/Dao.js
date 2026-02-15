@@ -415,10 +415,12 @@ class Dao {
         let checkUpdate = opt.checkUpdate || ((oldData, data) => !BeanUtil_1.BeanUtil.checkIgnore(oldData, data));
         let self = this;
         const find = async (opt) => {
-            if (opt.finds)
+            if (opt.finds) {
                 return await opt.finds();
-            else
+            }
+            else {
                 return await self.find(opt.query);
+            }
         };
         let list;
         if (opt.noSch) {

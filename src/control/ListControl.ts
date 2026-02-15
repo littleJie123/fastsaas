@@ -12,7 +12,7 @@ export interface ListParam {
   pageSize?: number;
   pageNo?: number;
   orderBy?: string;
-  desc?: 'desc'|'asc';
+  desc?: 'desc' | 'asc';
   __download?: boolean;
   [key: string]: any;
 }
@@ -20,8 +20,8 @@ export interface ListParam {
 export interface ListResult {
   content?: any[];
   totalElements?: number;
-  first?:number;
-  pageSize?:number;
+  first?: number;
+  pageSize?: number;
   [key: string]: any;
 }
 
@@ -29,7 +29,7 @@ export interface ListResult {
  * 参数__download不为空，则转为下载 
  * 查询（不包括group by）的控制类
  */
-export default abstract class ListControl<Param extends ListParam = ListParam  > extends Control<Param> {
+export default abstract class ListControl<Param extends ListParam = ListParam> extends Control<Param> {
   /**
    * 开关，不需要查询条件
    */
@@ -45,7 +45,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
           col:'sort',desc:'desc'
       }]
    */
-  protected _orderArray: {order:string,desc?:'desc'|'asc'}[] = null;
+  protected _orderArray: { order: string, desc?: 'desc' | 'asc' }[] = null;
   /*
   指定只有_schCols 才产生的查询条件
   */
@@ -73,14 +73,14 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
   /**
    * 查询值转化的map
    */
-  protected _valueMap:{[key:string]:(val:any)=>any} = null;
+  protected _valueMap: { [key: string]: (val: any) => any } = null;
   /**
    * 默认查询类型，可以是Array,结构体{store_id：330108}或者BaseCdt的实例
    * 
    */
   protected _schCdt: any = null;
 
-  
+
 
   protected getTableName(): string {
     return null
@@ -90,7 +90,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
    */
   protected getDao(): Dao {
     let tableName = this.getTableName();
-    if (tableName == null){
+    if (tableName == null) {
       throw new Error('必须冲载getTableName');
     }
     let context = this.getContext();
@@ -114,10 +114,10 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
    * 是否需要搜索数量
    * @returns 
    */
-  protected needSchCnt():boolean{
-    
-    return this._needCnt ;
-     
+  protected needSchCnt(): boolean {
+
+    return this._needCnt;
+
   }
   /**
    * 是否需要排序
@@ -130,7 +130,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
   /**
    根据params的列和值构建某个条件
   */
-  protected async buildCdt(e:string, val): Promise<BaseCdt> {
+  protected async buildCdt(e: string, val): Promise<BaseCdt> {
     if (e.substring(0, 1) == '_') return null;
     if (val == null) {
       return null;
@@ -166,8 +166,8 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
     return this.doBuildCdt(e, val)
   }
 
-  protected doBuildCdt(e: string, val: any):BaseCdt {
-    let newVal = this.getSchVal(e,val);
+  protected doBuildCdt(e: string, val: any): BaseCdt {
+    let newVal = this.getSchVal(e, val);
     if (newVal == null) {
       return null
     }
@@ -200,7 +200,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
       return new Cdt(field, '%' + val + '%', 'like')
     }
   }
- 
+
   /**
    * 返回分页大小
    */
@@ -215,9 +215,9 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
    * 设置分页
    * @param query 
    */
-  protected _setPage(query: Query):void {
+  protected _setPage(query: Query): void {
     if (!this.isDownload()) {
-      
+
       query.size(this.getPageSize())
       query.first(this.getFirst())
     }
@@ -226,13 +226,13 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
 
   protected getFirst() {
     var param = this._param
-    if(param._first != null){
+    if (param._first != null) {
       return parseInt(param._first as any);
     }
-    if(param.pageNo != null){
+    if (param.pageNo != null) {
       let pageNo = parseInt(param.pageNo as any);
 
-      return (pageNo-1)*this.getPageSize()
+      return (pageNo - 1) * this.getPageSize()
     }
     return 0;
   }
@@ -242,7 +242,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
   */
   protected async buildQuery() {
     var query = new Query()
-    let param:ListParam = this._param
+    let param: ListParam = this._param
     if (param == null) {
       param = {}
     }
@@ -338,7 +338,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
   /**
    * 使用findData 函数
    */
-  protected useFindData(){
+  protected useFindData() {
     return false;
   }
   /**
@@ -350,14 +350,14 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
     return this._opMap[name]
   }
   protected async findByDao(query: Query) {
-    if(this.useFindData()){
+    if (this.useFindData()) {
       return this.getDao().findData(query);
     }
     return this.getDao().find(query)
   }
 
   protected async find(query) {
-    if(query == null){
+    if (query == null) {
       return [];
     }
     var list = await this.findByDao(query)
@@ -371,12 +371,12 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
     return list
   }
   protected async findCnt(query: Query): Promise<number> {
-    if(query == null){
+    if (query == null) {
       return 0;
     }
     return await this.getDao().findCnt(query)
   }
-  protected async schCnt(map:ListResult, query: Query) {
+  protected async schCnt(map: ListResult, query: Query) {
     map.totalElements = await this.findCnt(query)
   }
 
@@ -391,18 +391,18 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
     return []
   }
 
-  protected async download():Promise<Buffer> {
+  protected async download(): Promise<Buffer> {
     this._param.pageSize = null;
     var query = await this.buildQuery()
     let list = await this.find(query);
-    return this.buildDownloadBuffer(list,await this.buildDownloadInfo());
+    return this.buildDownloadBuffer(list, await this.buildDownloadInfo());
   }
 
-  protected async buildDownloadInfo():Promise<any>{
+  protected async buildDownloadInfo(): Promise<any> {
     return null;
   }
 
-  protected buildDownloadBuffer(list: any[],downloadInfo?:any):Buffer {
+  protected async buildDownloadBuffer(list: any[], downloadInfo?: any): Promise<Buffer> {
     return CsvUtil.toBuffer(list, this.getDownloadCols())
   }
   protected async doExecute(): Promise<any> {
@@ -411,27 +411,27 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
     } else {
 
       let map = await this.findData()
- 
+
       return map
     }
 
   }
 
-  protected async findData():Promise<ListResult>{
+  protected async findData(): Promise<ListResult> {
     var query = await this.buildQuery()
-       
-      let map: ListResult = {}
-      if (query != null) {
-        map.content = this.onlyCols( await this.find(query))
-      } else {
-        map.content = []
-      }
-      if (this.needSchCnt()) {
-        await this.schCnt(map, query)
-      } 
-      map.first = this.getFirst()
-      map.pageSize = this.getPageSize()
-      return map
+
+    let map: ListResult = {}
+    if (query != null) {
+      map.content = this.onlyCols(await this.find(query))
+    } else {
+      map.content = []
+    }
+    if (this.needSchCnt()) {
+      await this.schCnt(map, query)
+    }
+    map.first = this.getFirst()
+    map.pageSize = this.getPageSize()
+    return map
   }
   protected _sendResp(resp, ret) {
     if (this.isDownload()) {
@@ -449,17 +449,17 @@ export default abstract class ListControl<Param extends ListParam = ListParam  >
   protected getDownloadFileName() {
     return 'export.csv'
   }
-   
 
-  protected getOnlyCols():string[]{
+
+  protected getOnlyCols(): string[] {
     return null;
   }
 
-  protected onlyCols(list:any[]){
+  protected onlyCols(list: any[]) {
     let cols = this.getOnlyCols();
-    
-    return JsonUtil.onlyKeys4List(list,cols)   
-    
+
+    return JsonUtil.onlyKeys4List(list, cols)
+
   }
 
 
