@@ -15,6 +15,11 @@ class DefaultLog extends LogType_1.default {
             needPrint = logs.includes(level);
         }
         if (needPrint) {
+            let message = opt.message;
+            console.log('message==null', message != null, message instanceof Error);
+            if (message != null && message instanceof Error) {
+                opt.message = message.message + "\r\n" + message.stack;
+            }
             let str = JSON.stringify(opt);
             console.log(str);
             let fileWriter = this.getLoggerWiter();

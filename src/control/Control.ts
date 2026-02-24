@@ -277,7 +277,7 @@ export default class Control<Param = any, Result = any> {
   protected _printErrorLog(error: Error) {
     let base = ConfigFac.get('base');
     if (error['code'] != 0 || base.env == 'local') {
-      let logger = this._getLogger();
+      let logger = this._getLogger(); 
       logger?.error(error);
     }
   }

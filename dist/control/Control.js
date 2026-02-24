@@ -234,6 +234,7 @@ class Control {
         let base = fastsaas_1.ConfigFac.get('base');
         if (error['code'] != 0 || base.env == 'local') {
             let logger = this._getLogger();
+            console.log('before print', error instanceof Error);
             logger === null || logger === void 0 ? void 0 : logger.error(error);
         }
     }
