@@ -26,7 +26,10 @@ class ImportorManager {
             let nextArray = [];
             for (let importor of imports) {
                 if (importor.isReady(datas, imports)) {
-                    processResult = await importor.process(context, param, datas);
+                    let ret = await importor.process(context, param, datas);
+                    if (ret != null) {
+                        processResult = ret;
+                    }
                     noRuned = false;
                 }
                 else {

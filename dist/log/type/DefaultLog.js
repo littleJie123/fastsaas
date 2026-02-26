@@ -16,7 +16,6 @@ class DefaultLog extends LogType_1.default {
         }
         if (needPrint) {
             let message = opt.message;
-            console.log('message==null', message != null, message instanceof Error);
             if (message != null && message instanceof Error) {
                 opt.message = message.message + "\r\n" + message.stack;
             }
