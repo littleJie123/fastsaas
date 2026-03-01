@@ -294,7 +294,7 @@ class default_1 {
      * 判断是不是数字，包括可以转化成数字的字符串
      */
     static isNumber(num) {
-        if (num == null) {
+        if (num == null || num == '') {
             return false;
         }
         if (((typeof num) == 'number') || (num instanceof Number)) {

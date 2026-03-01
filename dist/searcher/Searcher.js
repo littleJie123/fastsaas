@@ -234,9 +234,13 @@ class Searcher {
      * @param col
      */
     getFromCache(id) {
-        if (id == null)
+        if (id == null) {
             return null;
+        }
         var list = this.findByIdsFromCache(id);
+        if (list == null) {
+            return null;
+        }
         return list[0];
     }
 }

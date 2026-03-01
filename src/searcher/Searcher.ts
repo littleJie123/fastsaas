@@ -12,7 +12,7 @@ export default abstract class Searcher<Pojo = any> {
    * 传入的id中是否有0
    * @returns 
    */
-  protected hasZeroId():boolean{
+  protected hasZeroId(): boolean {
     return false;
   }
 
@@ -57,7 +57,7 @@ export default abstract class Searcher<Pojo = any> {
 
   afterBuild(context: Context) {
 
-    let opt:any = {
+    let opt: any = {
       col: this.getIdKey()
     }
     // if(this.getIsDel()){
@@ -111,8 +111,8 @@ export default abstract class Searcher<Pojo = any> {
    * @param key 
    * @param array 
    */
-  async saveByIds( array: any[]) {
-    await this.save('getById',array);
+  async saveByIds(array: any[]) {
+    await this.save('getById', array);
   }
   get(key): BaseInquiry {
     return this._map[key]
@@ -152,47 +152,47 @@ export default abstract class Searcher<Pojo = any> {
     var inquiry = this.get('getById')
     let array = idArray;
     let hasZero = false;
-    if(this.hasZeroId()){
+    if (this.hasZeroId()) {
       array = []
-      for(let id of idArray){
-        if(id != 0){
+      for (let id of idArray) {
+        if (id != 0) {
           array.push(id)
-        }else{
+        } else {
           hasZero = true;
         }
       }
     }
     let ret = await inquiry.find(array, col)
-    if(this.hasZeroId()){
-      if(hasZero){
+    if (this.hasZeroId()) {
+      if (hasZero) {
         ret.push(this.buildWithZeroId());
       }
     }
     return ret;
   }
 
-  async findAndCheck(idArray:any[],schQuery?:any,cols?:string[]) :Promise<Pojo[]> {
+  async findAndCheck(idArray: any[], schQuery?: any, cols?: string[]): Promise<Pojo[]> {
 
-    let ids:any[] = [];
+    let ids: any[] = [];
     let idCol = this.getIdKey()
-    for(let idObj of idArray){
-      if(StrUtil.isStr(idObj) || NumUtil.isNum(idObj)){
+    for (let idObj of idArray) {
+      if (StrUtil.isStr(idObj) || NumUtil.isNum(idObj)) {
         ids.push(idObj)
-      }else{
-        if(idObj[idCol] != null){
+      } else {
+        if (idObj[idCol] != null) {
           ids.push(idObj[idCol]);
         }
       }
     }
     let pojos = await this.findByIds(ids);
     let query = schQuery;
-    if(schQuery != null && cols != null){
+    if (schQuery != null && cols != null) {
       query = {}
-      for(let col of cols){
+      for (let col of cols) {
         query[col] = schQuery[col]
       }
     }
-    if(query == null){
+    if (query == null) {
       return pojos;
     }
 
@@ -206,32 +206,32 @@ export default abstract class Searcher<Pojo = any> {
    * @param cols  需要检查的字段
    * @returns 
    */
-  async getByObj(obj:any,cols?:string[]){
-    if(obj==null){
+  async getByObj(obj: any, cols?: string[]) {
+    if (obj == null) {
       return null;
     }
-    let schObj ;
-    if(cols == null){
+    let schObj;
+    if (cols == null) {
       schObj = obj;
-    }else{
+    } else {
       schObj = {};
-      for(let col of cols){
+      for (let col of cols) {
         schObj[col] = obj[col]
       }
-     
+
     }
     let ret = await this.getById(obj[this.getIdKey()]);
-    for(let e in schObj){
-      if(ret[e] != schObj[e]){
+    for (let e in schObj) {
+      if (ret[e] != schObj[e]) {
         return null;
       }
     }
     return ret;
-    
-    
+
+
   }
 
-  
+
   /**
    * 从缓存中拿
    * @param array 
@@ -242,24 +242,24 @@ export default abstract class Searcher<Pojo = any> {
     return inquiry.acqDataFromCache(array, col)
   }
 
-  buildWithZeroId():Pojo{
+  buildWithZeroId(): Pojo {
     return null;
   }
 
-  async getById(id,cols?:string[]): Promise<Pojo> {
-    if (id == null){
+  async getById(id, cols?: string[]): Promise<Pojo> {
+    if (id == null) {
       return null;
     }
-    if(this.hasZeroId() && id == 0){
+    if (this.hasZeroId() && id == 0) {
       return this.buildWithZeroId();
     }
 
     var list = await this.findByIds([id])
-    let ret =  list[0];
-    if(ret != null && cols != null){
-      let retObj:any = {};
-      for(let col of cols){
-        retObj[col] = ret[col] 
+    let ret = list[0];
+    if (ret != null && cols != null) {
+      let retObj: any = {};
+      for (let col of cols) {
+        retObj[col] = ret[col]
       }
       return retObj;
     }
@@ -271,10 +271,14 @@ export default abstract class Searcher<Pojo = any> {
    * @param col 
    */
   getFromCache(id) {
-    if (id == null)
+    if (id == null) {
       return null;
+    }
 
     var list = this.findByIdsFromCache(id)
+    if (list == null) {
+      return null
+    }
     return list[0]
   }
 
