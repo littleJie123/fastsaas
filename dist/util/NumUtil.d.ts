@@ -114,6 +114,10 @@ export default class {
      */
     static isNum(num: any): boolean;
     /**
+     * 判断是不是数字，包括可以转化成数字的字符串
+     */
+    static isNumber(num: any): boolean;
+    /**
      * 是否含有小数
      * @param num
      */

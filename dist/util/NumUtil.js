@@ -285,9 +285,22 @@ class default_1 {
      * @param num
      */
     static isNum(num) {
-        if (num == null)
+        if (num == null) {
             return false;
+        }
         return ((typeof num) == 'number') || (num instanceof Number);
+    }
+    /**
+     * 判断是不是数字，包括可以转化成数字的字符串
+     */
+    static isNumber(num) {
+        if (num == null) {
+            return false;
+        }
+        if (((typeof num) == 'number') || (num instanceof Number)) {
+            return true;
+        }
+        return !isNaN(num);
     }
     /**
      * 是否含有小数
