@@ -146,7 +146,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
       if (processedList != null) {
         list = processedList
       }
-      return CsvUtil.toBuffer(list, this.getDownloadCols());
+      return this.buildDownloadBuffer(list, await this.buildDownloadInfo())
 
 
     } else {
@@ -156,7 +156,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
     }
   }
 
-  protected async findData():Promise<ListResult> {
+  protected async findData(): Promise<ListResult> {
     let query = await this.buildQuery()
     let map: ListResult = {}
 

@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ArrayUtil_1 = require("./../util/ArrayUtil");
-const CsvUtil_1 = __importDefault(require("./../util/CsvUtil"));
 const ListControl_1 = __importDefault(require("./ListControl"));
 const Query_1 = __importDefault(require("./../dao/query/Query"));
 /**
@@ -136,7 +135,7 @@ class GroupControl extends ListControl_1.default {
             if (processedList != null) {
                 list = processedList;
             }
-            return CsvUtil_1.default.toBuffer(list, this.getDownloadCols());
+            return this.buildDownloadBuffer(list, await this.buildDownloadInfo());
         }
         else {
             let map = await this.findData();
