@@ -506,5 +506,41 @@ class BeanUtil {
         }
         return obj;
     }
+    static changeList(list, changers) {
+        let ret = [];
+        for (let row of list) {
+            ret.push(this.change(row, changers));
+        }
+        return ret;
+    }
+    static change(obj, changers) {
+        var _a;
+        let ret = {};
+        for (let e in obj) {
+            let changer = this.getChanger(e, changers);
+            if (changer != null) {
+                let srcCol = changer.srcCol;
+                let targetCol = (_a = changer.targetCol) !== null && _a !== void 0 ? _a : srcCol;
+                let val = obj[targetCol];
+                if (changer.change != null) {
+                    val = changer.change(obj, ret);
+                }
+                if (val != null) {
+                    ret[targetCol] = val;
+                }
+            }
+            else {
+                ret[e] = obj[e];
+            }
+        }
+        return ret;
+    }
+    static getChanger(col, changers) {
+        changers = changers.filter(row => row.srcCol == col);
+        if (changers.length == 0) {
+            return null;
+        }
+        return changers[0];
+    }
 }
 exports.BeanUtil = BeanUtil;

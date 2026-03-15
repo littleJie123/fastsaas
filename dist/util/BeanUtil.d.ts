@@ -1,4 +1,5 @@
 import { AnyObject } from '../interface';
+import { IColChanger } from '../fastsaas';
 export declare class BeanUtil {
     /**
      *
@@ -101,4 +102,7 @@ export declare class BeanUtil {
      * @param def
      */
     static setDefault<Opt = any>(obj: Opt, def: any): Opt;
+    static changeList(list: any[], changers: IColChanger[]): any[];
+    static change(obj: any, changers: IColChanger[]): any;
+    private static getChanger;
 }

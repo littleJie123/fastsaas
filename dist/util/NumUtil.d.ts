@@ -113,6 +113,7 @@ export default class {
      * @param num
      */
     static isNum(num: any): boolean;
+    static isZero(num: number): boolean;
     /**
      * 判断是不是数字，包括可以转化成数字的字符串
      */

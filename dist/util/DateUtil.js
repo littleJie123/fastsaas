@@ -15,6 +15,10 @@ function _changeMonth(date, changeCnt) {
     return ret;
 }
 class DateUtil {
+    static getTimeStr(date) {
+        let str = this.formatDate(date);
+        return str.substring(11);
+    }
     /**
      * @description 将 类似2015-04-16T03:38:12，2015-04-16 的字符串转化成Date对象
      * @param  {[type]} str [description]
@@ -188,7 +192,19 @@ class DateUtil {
      * @returns
      */
     static calDate(date1, date2) {
-        return Math.floor((date1.getTime() - date2.getTime()) / this._dayTimes);
+        const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+        const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+        return Math.floor((utc1 - utc2) / this._dayTimes);
+    }
+    /**
+     * 转化成excel的日期时间
+     * @param date
+     * @returns
+     */
+    static toExcelDateNum(date) {
+        const excelEpoch = new Date(Date.UTC(1899, 11, 30));
+        const diff = date.getTime() - excelEpoch.getTime();
+        return Math.floor(diff / this._dayTimes) + 1;
     }
 }
 exports.DateUtil = DateUtil;

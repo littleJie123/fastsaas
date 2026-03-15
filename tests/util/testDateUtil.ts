@@ -20,3 +20,9 @@ it('testLastMonth',()=>{
 
   
 })
+
+it.only('测试获得时间',()=>{
+  let str = DateUtil.getTimeStr(new Date);
+  console.log('str',str);
+  console.log(str>'09:00')
+})

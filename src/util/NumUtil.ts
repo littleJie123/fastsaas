@@ -354,6 +354,10 @@ export default class {
     return ((typeof num) == 'number') || (num instanceof Number)
   }
 
+  static isZero(num:number){
+    return this.isEq(num,0);
+  }
+
   /**
    * 判断是不是数字，包括可以转化成数字的字符串
    */

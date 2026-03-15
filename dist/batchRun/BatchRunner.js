@@ -13,7 +13,7 @@ class BatchRunner {
     }
     getInit() {
         return {
-            pageSize: 1000,
+            pageSize: 5000,
             query: {}
         };
     }
@@ -31,16 +31,11 @@ class BatchRunner {
             if (list.length > 0) {
                 let result = await this.doProcess(list);
                 cnt += list.length;
-                let col = this.getCol();
-                console.log(`已经处理${this.opt.tableName} ${cnt}条记录`);
-                console.log(`最后一条记录的id为${list[list.length - 1][col]}`);
                 if (result === null || result === void 0 ? void 0 : result.stop) {
-                    console.log(`====================${this.opt.tableName}处理完成 =============================`);
                     return;
                 }
             }
         }
-        console.log(`====================${this.opt.tableName}处理完成 =============================`);
     }
     async doProcess(list) {
         return this.opt.process(list);
@@ -49,7 +44,17 @@ class BatchRunner {
         let query = this.buildQuery();
         let col = this.getCol();
         if (list != null && list.length > 0) {
-            query.big(col, list[list.length - 1][col]);
+            let pkCol = this.getPkCol();
+            if (col == pkCol) {
+                query.big(col, list[list.length - 1][col]);
+            }
+            else {
+                query.bigEq(col, list[list.length - 1][col]);
+                let andCdt = new fastsaas_1.AndCdt();
+                andCdt.eq(col, list[list.length - 1][col]);
+                andCdt.lessEq(pkCol, list[list.length - 1][pkCol]);
+                query.addCdt(new fastsaas_1.NotCdt(andCdt));
+            }
         }
         return this.getDao().find(query);
     }
@@ -57,21 +62,30 @@ class BatchRunner {
         return this.opt.context.get(this.opt.tableName + 'Dao');
     }
     buildQuery() {
-        let query = new fastsaas_1.Query(this.opt.query);
+        let query = fastsaas_1.Query.parse(this.opt.query);
         if (this.opt.colArray != null) {
             query.col(this.opt.colArray);
         }
         query.size(this.opt.pageSize);
         let col = this.getCol();
-        query.order(col);
+        if (col == this.getPkCol()) {
+            query.order(col);
+        }
+        else {
+            query.addOrder(col);
+            query.addOrder(this.getPkCol());
+        }
         return query;
     }
     getCol() {
-        let col = this.opt.col;
+        let col = this.opt.sortCol;
         if (col == null) {
-            col = fastsaas_1.StrUtil.firstLower(fastsaas_1.StrUtil.changeUnderStringToCamel(this.opt.tableName) + 'Id');
+            col = this.getPkCol();
         }
         return col;
+    }
+    getPkCol() {
+        return fastsaas_1.StrUtil.firstLower(fastsaas_1.StrUtil.changeUnderStringToCamel(this.opt.tableName) + 'Id');
     }
 }
 exports.default = BatchRunner;

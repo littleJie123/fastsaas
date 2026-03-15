@@ -1,5 +1,6 @@
 export declare class DateUtil {
     private static _dayTimes;
+    static getTimeStr(date: Date): string;
     /**
      * @description 将 类似2015-04-16T03:38:12，2015-04-16 的字符串转化成Date对象
      * @param  {[type]} str [description]
@@ -33,4 +34,10 @@ export declare class DateUtil {
      * @returns
      */
     static calDate(date1: Date, date2: Date): number;
+    /**
+     * 转化成excel的日期时间
+     * @param date
+     * @returns
+     */
+    static toExcelDateNum(date: Date): number;
 }

@@ -15,8 +15,10 @@ function default_1() {
         version = StrUtil_1.StrUtil.replace(now, '-', '.');
     }
     return function (req, resp) {
+        var _a;
         resp.send({
-            version
+            version,
+            envName: (_a = base.envName) !== null && _a !== void 0 ? _a : 'local'
         });
     };
 }

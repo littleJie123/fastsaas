@@ -5,6 +5,8 @@
 import ImportorDto from "./ImportorDto";
 
 interface ImportorObj {
+
+
   [col: string]: ImportorDto;
 }
 

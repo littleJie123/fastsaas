@@ -9,7 +9,7 @@ interface Opt<Pojo = any> {
     /**
      * 排序字段，默认主键
      */
-    col?: string;
+    sortCol?: string;
     /**
      * 查询条件
      */
@@ -38,5 +38,6 @@ export default class BatchRunner<Pojo = any> {
     protected getDao(): Dao;
     protected buildQuery(): Query;
     protected getCol(): string;
+    private getPkCol;
 }
 export {};

@@ -1,4 +1,4 @@
-import { Context, Dao, Query, StrUtil } from "../fastsaas";
+import { AndCdt, Context, Dao, NotCdt, Query, StrUtil } from "../fastsaas";
 
 interface ProcessResult {
   stop?:boolean
@@ -10,7 +10,7 @@ interface Opt<Pojo = any>{
   /**
    * 排序字段，默认主键
    */
-  col?:string
+  sortCol?:string
   /**
    * 查询条件
    */
@@ -39,7 +39,7 @@ export default class BatchRunner<Pojo = any>{
   }
   protected getInit():Opt<Pojo>{
     return {
-      pageSize:1000,
+      pageSize:5000,
       query:{}
     }
   }
@@ -57,17 +57,14 @@ export default class BatchRunner<Pojo = any>{
       if(list.length > 0){
         let result:any = await this.doProcess(list);
         cnt += list.length;
-        let col = this.getCol()
-        console.log(`已经处理${this.opt.tableName} ${cnt}条记录`);
-        console.log(`最后一条记录的id为${list[list.length-1][col]}`);
+        
         if(result?.stop){
-          console.log(`====================${this.opt.tableName}处理完成 =============================`)
           return;
         }
         
       }
     }
-    console.log(`====================${this.opt.tableName}处理完成 =============================`)
+   
   }
 
   protected async doProcess(list:Pojo[]){
@@ -80,8 +77,16 @@ export default class BatchRunner<Pojo = any>{
     let query:Query = this.buildQuery();
     let col = this.getCol();
     if(list != null && list.length>0){
-      
-      query.big(col,list[list.length-1][col])
+      let pkCol = this.getPkCol();
+      if(col == pkCol){
+        query.big(col,list[list.length-1][col])
+      }else{
+        query.bigEq(col,list[list.length-1][col])
+        let andCdt = new AndCdt()
+        andCdt.eq(col,list[list.length-1][col]);
+        andCdt.lessEq(pkCol,list[list.length-1][pkCol]);
+        query.addCdt(new NotCdt(andCdt));
+      }
     }
     return this.getDao().find(query);
   }
@@ -91,20 +96,29 @@ export default class BatchRunner<Pojo = any>{
   }
 
   protected buildQuery():Query{
-    let query = new Query(this.opt.query);
+    let query = Query.parse(this.opt.query);
     if(this.opt.colArray != null){
       query.col(this.opt.colArray)
     }
     query.size(this.opt.pageSize)
     let col = this.getCol();
-    query.order(col)
+    if(col == this.getPkCol()){
+      query.order(col)
+    }else{
+      query.addOrder(col);
+      query.addOrder(this.getPkCol())
+    }
+    
     return query;
   }
   protected getCol():string{
-    let col = this.opt.col;
+    let col = this.opt.sortCol;
     if(col == null){
-      col = StrUtil.firstLower( StrUtil.changeUnderStringToCamel( this.opt.tableName) + 'Id')
+      col = this.getPkCol()
     }
     return col;
+  }
+  private getPkCol():string{
+    return StrUtil.firstLower( StrUtil.changeUnderStringToCamel( this.opt.tableName) + 'Id')
   }
 }
