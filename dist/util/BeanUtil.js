@@ -517,11 +517,14 @@ class BeanUtil {
         var _a;
         let ret = {};
         for (let e in obj) {
+            if (e.startsWith('__')) {
+                continue;
+            }
             let changer = this.getChanger(e, changers);
             if (changer != null) {
                 let srcCol = changer.srcCol;
                 let targetCol = (_a = changer.targetCol) !== null && _a !== void 0 ? _a : srcCol;
-                let val = obj[targetCol];
+                let val = obj[srcCol];
                 if (changer.change != null) {
                     val = changer.change(obj, ret);
                 }

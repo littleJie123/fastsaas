@@ -1,6 +1,16 @@
 import { DateUtil } from "./DateUtil";
 
 export default class{
+
+  static beforeDay(days?:number,today?:string){
+    if(days == null){
+      days = 1
+    }
+    if(today == null){
+      today = DateUtil.todayStr();
+    }
+    return this.add(today,days*-1);
+  }
   static add(strDate:string,day:number):string{
     if(day == 0){
       return strDate;

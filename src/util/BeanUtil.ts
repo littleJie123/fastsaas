@@ -517,38 +517,41 @@ export class BeanUtil {
     return obj;
   }
 
-  static changeList(list:any[],changers:IColChanger[]):any[]{
-    let ret:any[] = [];
-    for(let row of list){
-      ret.push(this.change(row,changers));
+  static changeList(list: any[], changers: IColChanger[]): any[] {
+    let ret: any[] = [];
+    for (let row of list) {
+      ret.push(this.change(row, changers));
     }
     return ret;
   }
 
-  static change(obj:any,changers:IColChanger[]):any{
-    let ret:any = {};
-    for(let e in obj){
-      let changer = this.getChanger(e,changers)
-      if(changer != null){
+  static change(obj: any, changers: IColChanger[]): any {
+    let ret: any = {};
+    for (let e in obj) {
+      if(e.startsWith('__')){
+        continue;
+      }
+      let changer = this.getChanger(e, changers)
+      if (changer != null) {
         let srcCol = changer.srcCol;
         let targetCol = changer.targetCol ?? srcCol;
-        let val = obj[targetCol];
-        if(changer.change != null){
-          val = changer.change(obj,ret)
+        let val = obj[srcCol];
+        if (changer.change != null) {
+          val = changer.change(obj, ret)
         }
-        if(val != null){
+        if (val != null) {
           ret[targetCol] = val;
         }
-      }else{
+      } else {
         ret[e] = obj[e]
       }
     }
     return ret;
   }
 
-  private static getChanger(col:string,changers:IColChanger[]):IColChanger{
-    changers = changers.filter(row=>row.srcCol == col);
-    if(changers.length == 0){
+  private static getChanger(col: string, changers: IColChanger[]): IColChanger {
+    changers = changers.filter(row => row.srcCol == col);
+    if (changers.length == 0) {
       return null;
     }
     return changers[0];
