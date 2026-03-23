@@ -1,4 +1,5 @@
 export default class {
+    static beforeDay(days?: number, today?: string): string;
     static add(strDate: string, day: number): string;
     static getToday(): string;
     /**

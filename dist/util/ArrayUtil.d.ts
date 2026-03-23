@@ -1,3 +1,4 @@
+import MergeOpt from "./dto/MergeOpt";
 import IGeter, { IGeterValue } from "./inf/IGeter";
 type OrderItemParam = string | ArrayOrderItem | ArrayOrderItem[];
 export default OrderItemParam;
@@ -204,6 +205,7 @@ opt:{
     private static _parseArray;
     static addAll(array1: any, array2: any): any;
     static toArray<Pojo>(array: Pojo[], key: IGeter<Pojo>): any[];
+    static merge(array: any[], opt: MergeOpt): any[];
     static isSame(array1: Array<any>, array2: Array<any>): boolean;
     static orByKey(array1: any, array2: any, key1?: IGeter, key2?: IGeter): any[];
     /**

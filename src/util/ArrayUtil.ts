@@ -8,6 +8,7 @@
  */
 
 import { ArrayDao } from "../fastsaas";
+import MergeOpt from "./dto/MergeOpt";
 import IGeter, { IGeterValue } from "./inf/IGeter"
 import JsonUtil from "./JsonUtil";
 import { StrUtil } from "./StrUtil";
@@ -767,6 +768,27 @@ opt:{
 			}
 		}
 		return ret
+	}
+
+	static merge(array:any[],opt:MergeOpt):any[]{
+		let retList:any[] = [];
+		let currentObj = null;
+		for(let row of array){
+			if(currentObj == null){
+				currentObj = opt.init != null ? opt.init(row): row;
+				continue;
+			}
+			if(opt.isHit(currentObj,row)){
+				currentObj = opt.addObj(currentObj,row)
+			}else{
+				retList.push(currentObj);
+				currentObj = opt.init != null ? opt.init(row): row;
+			}
+		}
+		if(currentObj != null){
+			retList.push(currentObj)
+		}
+		return retList
 	}
 
 	static isSame(array1: Array<any>, array2: Array<any>): boolean {

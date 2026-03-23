@@ -492,6 +492,20 @@ class BeanUtil {
         }
         return obj;
     }
+    static onlyCols4List(list, cols) {
+        let map = ArrayUtil_1.ArrayUtil.toMap(cols);
+        let ret = [];
+        for (let obj of list) {
+            let row = {};
+            for (let e in obj) {
+                if (map[e] && !e.startsWith('_')) {
+                    row[e] = obj[e];
+                }
+            }
+            ret.push(row);
+        }
+        return ret;
+    }
     /**
      * 设置默认值
      * @param obj

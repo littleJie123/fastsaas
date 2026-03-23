@@ -96,6 +96,7 @@ export declare class BeanUtil {
      * @param cols
      */
     static onlyCols(obj: any, cols: string[]): any;
+    static onlyCols4List(list: any[], cols: string[]): any[];
     /**
      * 设置默认值
      * @param obj

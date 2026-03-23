@@ -500,6 +500,20 @@ export class BeanUtil {
     }
     return obj;
   }
+  static onlyCols4List(list:any[],cols:string[]):any[]{
+    let map = ArrayUtil.toMap(cols);
+    let ret:any[] = []
+    for(let obj of list){
+      let row:any = {}
+      for (let e in obj) {
+        if (map[e] && !e.startsWith('_')) {
+          row[e] = obj[e];
+        }
+      }
+      ret.push(row);
+    }
+    return ret;
+  }
 
 
   /**

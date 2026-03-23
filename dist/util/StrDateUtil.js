@@ -2,6 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const DateUtil_1 = require("./DateUtil");
 class default_1 {
+    static beforeDay(days, today) {
+        if (days == null) {
+            days = 1;
+        }
+        if (today == null) {
+            today = DateUtil_1.DateUtil.todayStr();
+        }
+        return this.add(today, days * -1);
+    }
     static add(strDate, day) {
         if (day == 0) {
             return strDate;

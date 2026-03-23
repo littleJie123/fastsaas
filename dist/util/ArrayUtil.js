@@ -687,6 +687,27 @@ opt:{
         }
         return ret;
     }
+    static merge(array, opt) {
+        let retList = [];
+        let currentObj = null;
+        for (let row of array) {
+            if (currentObj == null) {
+                currentObj = opt.init != null ? opt.init(row) : row;
+                continue;
+            }
+            if (opt.isHit(currentObj, row)) {
+                currentObj = opt.addObj(currentObj, row);
+            }
+            else {
+                retList.push(currentObj);
+                currentObj = opt.init != null ? opt.init(row) : row;
+            }
+        }
+        if (currentObj != null) {
+            retList.push(currentObj);
+        }
+        return retList;
+    }
     static isSame(array1, array2) {
         function _isSame(a, b) {
             var aProps = Object.getOwnPropertyNames(a);
