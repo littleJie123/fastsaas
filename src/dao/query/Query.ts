@@ -4,12 +4,12 @@
  */
 
 export default class Query {
-	clazz:string = 'Query';
+	clazz: string = 'Query';
 	private _colArray: Array<string> = [];
-	private _cols:Array<Col> = null;
-	private _groupArray:Array<Col> = null;
+	private _cols: Array<Col> = null;
+	private _groupArray: Array<Col> = null;
 	private _havingColArray: Array<Cdt> = [];
-	private _havingCol:Array<Col> = null;
+	private _havingCol: Array<Col> = null;
 	private _groupColArray: Array<string> = [];
 	private _joinTables: Array<JoinTable> = [];
 	private _cdtArray: Array<BaseCdt> = []
@@ -34,8 +34,8 @@ export default class Query {
 
 	}
 
-	hitList(list:Array<any>){
-		return ArrayUtil.filter(list,(row)=>this.isHit(row));
+	hitList(list: Array<any>) {
+		return ArrayUtil.filter(list, (row) => this.isHit(row));
 	}
 	/**
 	 * 查询 肯定没结果
@@ -47,12 +47,12 @@ export default class Query {
 	/**
 	 * 返回的是col形式
 	 */
-	acqCol():Array<Col>{
+	acqCol(): Array<Col> {
 		if (this._cols == null) {
 			var cols = this._colArray
 			if (cols != null) {
 				var retCol = [];
-				for(var col of cols){
+				for (var col of cols) {
 					retCol.push(new Col(col));
 				}
 				this._cols = retCol;
@@ -80,6 +80,10 @@ export default class Query {
 		return this
 	}
 
+	addCol(col: string) {
+		this._colArray.push(col);
+	}
+
 	getCol(): Array<string> {
 
 
@@ -89,9 +93,9 @@ export default class Query {
 	/**
 	 * 表示该query的col具有聚合列
 	 */
-	colhasAgg(){
+	colhasAgg() {
 		var cols = this.acqCol();
-		if(cols.length == 0){
+		if (cols.length == 0) {
 			return false;
 		}
 		for (var col of cols) {
@@ -101,18 +105,18 @@ export default class Query {
 		}
 		return false
 	}
-	acqGroupCol():Array<Col> {
+	acqGroupCol(): Array<Col> {
 		if (this._groupArray == null) {
 			var groups = this._groupColArray;
 			//groups = ArrayUtil.parse(groups, (data) => new Col(data))
 			this._groupArray = [];
-			for(var col of this._groupColArray){
+			for (var col of this._groupColArray) {
 				this._groupArray.push(new Col(col));
 			}
 		}
 		return this._groupArray
 	}
-	acqHavingCols():Array<Col> {
+	acqHavingCols(): Array<Col> {
 		if (this._havingCol == null) {
 			var cols = this._havingColArray
 			if (cols != null) {
@@ -129,7 +133,7 @@ export default class Query {
 				})*/
 
 				this._havingCol = [];
-				for(var cdt of cols){
+				for (var cdt of cols) {
 					var col = new Col();
 					col.parseHavingCol(cdt);
 					this._havingCol.push(col);
@@ -146,11 +150,11 @@ export default class Query {
 	getGroups(): string[] {
 		return this._groupColArray
 	}
-	group(val: string|Array<string>): Query {
+	group(val: string | Array<string>): Query {
 		this._groupColArray = []
-		if(val instanceof Array){
-			this._groupColArray.push(... val);
-		}else{
+		if (val instanceof Array) {
+			this._groupColArray.push(...val);
+		} else {
 			this._groupColArray.push(...val.split(','));
 		}
 		return this;
@@ -236,9 +240,9 @@ export default class Query {
 	设置长度
 	*/
 	size(val: number): Query {
-		
+
 		this._pager.rp = val;
-		
+
 		return this
 	}
 	/**
@@ -251,14 +255,14 @@ export default class Query {
 	/**
 	设置页长 和 第几页
 	*/
-	setPage(pageth: number, len?: number):Query {
+	setPage(pageth: number, len?: number): Query {
 
-		if (pageth == null) 
+		if (pageth == null)
 			return this;
-		if(len == null){
+		if (len == null) {
 			len = this._pager.rp;
 		}
-		if(len == null)
+		if (len == null)
 			throw new Error('请先设置页长');
 
 		return this.first((pageth - 1) * len)
@@ -269,9 +273,9 @@ export default class Query {
 			return;
 		if (opts instanceof Array) {
 			this.ctor_array(opts)
-		}else{
+		} else {
 			this.ctor_map(opts)
-			
+
 		}
 	}
 	addHaving(cdt: Cdt) {
@@ -304,8 +308,8 @@ export default class Query {
 	ctor_map(map) {
 
 		for (var e in map) {
-			if (e.substring(0, 1) != '_' && map[e] != null){
-				
+			if (e.substring(0, 1) != '_' && map[e] != null) {
+
 				this.addCdt(new Cdt(e, map[e]))
 			}
 		}
@@ -327,29 +331,29 @@ export default class Query {
 	 * @param col 字段
 	 * @param val 查询数组
 	 */
-	in(col: string|string[], val: any[]): Query {
+	in(col: string | string[], val: any[]): Query {
 
 		return this.addCdt(new Cdt(col, val, 'in'))
 	}
 
-	inObjs(cols:string[],objs:any[]):Query{
-		if(cols == null || cols.length == 0){
+	inObjs(cols: string[], objs: any[]): Query {
+		if (cols == null || cols.length == 0) {
 			throw new Error('cols 不能为空');
 		}
-			
+
 		let values = [];
-		objs = ArrayUtil.distinctByKey(objs,cols);
-		if(cols.length >1){
-			for(let obj of objs){
+		objs = ArrayUtil.distinctByKey(objs, cols);
+		if (cols.length > 1) {
+			for (let obj of objs) {
 				let objArray = [];
-				for(let col of cols){
+				for (let col of cols) {
 					objArray.push(obj[col]);
 				}
 				values.push(objArray);
 			}
-			return this.in(cols,values);
-		}else{
-			return this.in(cols[0],ArrayUtil.toArray(objs,cols[0]));
+			return this.in(cols, values);
+		} else {
+			return this.in(cols[0], ArrayUtil.toArray(objs, cols[0]));
 		}
 	}
 	/**
@@ -429,8 +433,8 @@ export default class Query {
 		return this
 	}
 
-	sql(sql:string,val?:any):Query{
-		this.addCdt(new SqlCdt(sql,val))
+	sql(sql: string, val?: any): Query {
+		this.addCdt(new SqlCdt(sql, val))
 		return this;
 	}
 	/**
@@ -477,20 +481,20 @@ export default class Query {
 	 * @param query 
 	 * @returns 
 	 */
-	static parse(query):Query{
-		if(query == null)
+	static parse(query): Query {
+		if (query == null)
 			return new Query();
-		if(query.clazz == 'BaseCdt'){
+		if (query.clazz == 'BaseCdt') {
 			var ret = new Query();
 			ret.addCdt(query);
 			return ret;
 		}
-		if(query.clazz == 'Query')
+		if (query.clazz == 'Query')
 			return query;
 		return new Query(query);
 	}
 
-	
+
 	/**
 	 * {
 	 * 	query:{},
@@ -503,51 +507,51 @@ export default class Query {
 	 * 
 	 * @param params 
 	 */
-	static parseJson(json:ParseJsonDto,... params:any):Query{
-		
-		let query = Query.parse(BeanUtil.parseJsonFromParam(json.query,... params));
-		if(json.cdts){
-			for(let cdt of json.cdts){
-				let val = BeanUtil.changeVal(cdt.value,... params)
-				if(val != null)
-					query.addCdt(new Cdt(cdt.col,val,cdt.op))
+	static parseJson(json: ParseJsonDto, ...params: any): Query {
+
+		let query = Query.parse(BeanUtil.parseJsonFromParam(json.query, ...params));
+		if (json.cdts) {
+			for (let cdt of json.cdts) {
+				let val = BeanUtil.changeVal(cdt.value, ...params)
+				if (val != null)
+					query.addCdt(new Cdt(cdt.col, val, cdt.op))
 			}
 
 		}
-		if(json.having){
-			for(let cdt of json.having){
-				let val = BeanUtil.changeVal(cdt.value,... params)
-				if(val != null)
-					query.addHaving(new Cdt(cdt.col,cdt.value,cdt.op))
+		if (json.having) {
+			for (let cdt of json.having) {
+				let val = BeanUtil.changeVal(cdt.value, ...params)
+				if (val != null)
+					query.addHaving(new Cdt(cdt.col, cdt.value, cdt.op))
 			}
 		}
-		
-		if(json.group){
+
+		if (json.group) {
 			query.group(json.group)
 		}
-		if(json.size != null){
+		if (json.size != null) {
 			query.size(json.size);
 		}
-		if(json.cols != null){
+		if (json.cols != null) {
 			query.col(json.cols);
 		}
-		if(json.orders){
-			for(let order of json.orders){
-				query.order(order.col,order.desc);
+		if (json.orders) {
+			for (let order of json.orders) {
+				query.order(order.col, order.desc);
 			}
 		}
-		
+
 		return query;
 	}
-	
-	parseList(array:any[]){
-		let cols = this.acqCol();
-		if(cols==null || cols.length == 0)
-			return array;
-		if(this.colhasAgg()){
 
-		}else{
-			
+	parseList(array: any[]) {
+		let cols = this.acqCol();
+		if (cols == null || cols.length == 0)
+			return array;
+		if (this.colhasAgg()) {
+
+		} else {
+
 		}
 	}
 
@@ -557,7 +561,7 @@ export default class Query {
 import Cdt from './cdt/imp/Cdt'
 import JoinTable from './JoinTable'
 
-import OrderItem from './OrderItem' 
+import OrderItem from './OrderItem'
 import BaseCdt from './cdt/BaseCdt'
 
 import AndCdt from './cdt/imp/AndCdt'
@@ -565,9 +569,9 @@ import OrCdt from './cdt/imp/OrCdt'
 import IsNullCdt from './cdt/imp/IsNullCdt'
 import IsNotNullCdt from './cdt/imp/IsNotNullCdt'
 import Col from '../col/Col';
-import {ArrayUtil} from './../../util/ArrayUtil';
-import {StrUtil} from './../../util/StrUtil';
-import {BeanUtil} from './../../util/BeanUtil';
+import { ArrayUtil } from './../../util/ArrayUtil';
+import { StrUtil } from './../../util/StrUtil';
+import { BeanUtil } from './../../util/BeanUtil';
 import ParseJsonDto from './dto/ParseJsonDto';
 import { Sql } from '../sql';
 import SqlCdt from './cdt/imp/SqlCdt';

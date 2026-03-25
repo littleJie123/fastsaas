@@ -31,6 +31,7 @@ export default class Query {
      * @param val
      */
     col(val: any): Query;
+    addCol(col: string): void;
     getCol(): Array<string>;
     /**
      * 表示该query的col具有聚合列

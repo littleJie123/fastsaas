@@ -66,6 +66,9 @@ class Query {
         }
         return this;
     }
+    addCol(col) {
+        this._colArray.push(col);
+    }
     getCol() {
         return this._colArray;
     }
