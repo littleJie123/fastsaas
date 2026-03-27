@@ -500,11 +500,11 @@ export class BeanUtil {
     }
     return obj;
   }
-  static onlyCols4List(list:any[],cols:string[]):any[]{
+  static onlyCols4List(list: any[], cols: string[]): any[] {
     let map = ArrayUtil.toMap(cols);
-    let ret:any[] = []
-    for(let obj of list){
-      let row:any = {}
+    let ret: any[] = []
+    for (let obj of list) {
+      let row: any = {}
       for (let e in obj) {
         if (map[e] && !e.startsWith('_')) {
           row[e] = obj[e];
@@ -539,10 +539,16 @@ export class BeanUtil {
     return ret;
   }
 
+  /**
+   *将数据转成另外一种格式，不在changers存在的列将消失
+   * @param obj 
+   * @param changers 
+   * @returns 
+   */
   static change(obj: any, changers: IColChanger[]): any {
     let ret: any = {};
     for (let e in obj) {
-      if(e.startsWith('__')){
+      if (e.startsWith('__')) {
         continue;
       }
       let changer = this.getChanger(e, changers)
