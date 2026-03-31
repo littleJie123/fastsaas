@@ -527,6 +527,12 @@ class BeanUtil {
         }
         return ret;
     }
+    /**
+     *将数据转成另外一种格式，不在changers存在的列将消失
+     * @param obj
+     * @param changers
+     * @returns
+     */
     static change(obj, changers) {
         var _a;
         let ret = {};

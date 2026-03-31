@@ -104,6 +104,12 @@ export declare class BeanUtil {
      */
     static setDefault<Opt = any>(obj: Opt, def: any): Opt;
     static changeList(list: any[], changers: IColChanger[]): any[];
+    /**
+     *将数据转成另外一种格式，不在changers存在的列将消失
+     * @param obj
+     * @param changers
+     * @returns
+     */
     static change(obj: any, changers: IColChanger[]): any;
     private static getChanger;
 }

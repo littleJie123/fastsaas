@@ -354,8 +354,8 @@ export default class {
     return ((typeof num) == 'number') || (num instanceof Number)
   }
 
-  static isZero(num:number){
-    return this.isEq(num,0);
+  static isZero(num: number) {
+    return this.isEq(num, 0);
   }
 
   /**
@@ -381,5 +381,22 @@ export default class {
       return false;
     }
     return Math.floor(num) != num;
+  }
+
+  /**
+   * 判断给定的字符串是否全部由数字构成
+   * @param str 
+   */
+  static isAllNumber(str: string): boolean {
+    if (str == null) {
+      return false
+    }
+    for (let i = 0; i < str.length; i++) {
+      let c = str.charAt(i);
+      if (c < '0' || c > '9') {
+        return false;
+      }
+    }
+    return true;
   }
 }

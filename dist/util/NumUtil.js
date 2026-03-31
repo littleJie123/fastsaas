@@ -315,5 +315,21 @@ class default_1 {
         }
         return Math.floor(num) != num;
     }
+    /**
+     * 判断给定的字符串是否全部由数字构成
+     * @param str
+     */
+    static isAllNumber(str) {
+        if (str == null) {
+            return false;
+        }
+        for (let i = 0; i < str.length; i++) {
+            let c = str.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 exports.default = default_1;

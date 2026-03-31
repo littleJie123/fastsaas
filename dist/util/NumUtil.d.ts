@@ -123,5 +123,10 @@ export default class {
      * @param num
      */
     static isDecimal(num: number): boolean;
+    /**
+     * 判断给定的字符串是否全部由数字构成
+     * @param str
+     */
+    static isAllNumber(str: string): boolean;
 }
 export {};

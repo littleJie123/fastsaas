@@ -216,7 +216,7 @@ class OperatorFac {
                 code: 'like'
             })
         }
-
+    
         return new AddOpt()*/
     }
 }
