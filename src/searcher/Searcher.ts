@@ -89,7 +89,8 @@ export default abstract class Searcher<Pojo = any> {
     return null;
   }
 
-  _getAll(): Array<BaseInquiry> {
+
+  private _getAll(): Array<BaseInquiry> {
     var array = []
     for (var e in this._map) {
       var inquiry = this._map[e]
