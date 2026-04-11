@@ -13,7 +13,8 @@
       "rootDir": "./src",
       "target": "ES2018",
       "experimentalDecorators":true,
-      "newLine": "crlf"
+      "newLine": "crlf",
+      "noImplicitAny": false  
   },
   "include": [
       "src/**/*.ts"

@@ -85,7 +85,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
       }
     }
   }
-  async buildQuery() {
+  protected async buildQuery() {
     var query = await super.buildQuery();
     var group = this.acqGroup()
     if (group) {

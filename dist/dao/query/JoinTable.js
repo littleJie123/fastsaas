@@ -3,19 +3,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * 联合查询的
+ */
+const fastsaas_1 = require("../../fastsaas");
 const Sql_1 = __importDefault(require("../sql/Sql"));
 class JoinTable {
     /**
      * 联合查询
      * @param table  联合查询的表名
-     * @param col 主表的字段 默认是xxx_id
-     * @param id 次表的字段 默认id
+     * @param col 主表的字段 默认是xxxId
+     * @param id 次表的字段 默认xxxId
      */
     constructor(table, col, id) {
         this.type = 'inner';
         this.table = table;
-        if (col == null)
-            col = table + '_id';
+        if (col == null) {
+            col = fastsaas_1.StrUtil.camelToUnder(table) + '_id';
+        }
         if (id == null) {
             id = col;
         }

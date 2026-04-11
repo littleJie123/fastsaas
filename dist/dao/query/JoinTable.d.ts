@@ -1,6 +1,3 @@
-/**
- * 联合查询的
- */
 import ColChanger from '../colChanger/ColChanger';
 import Sql from '../sql/Sql';
 export default class JoinTable {
@@ -22,8 +19,8 @@ export default class JoinTable {
     /**
      * 联合查询
      * @param table  联合查询的表名
-     * @param col 主表的字段 默认是xxx_id
-     * @param id 次表的字段 默认id
+     * @param col 主表的字段 默认是xxxId
+     * @param id 次表的字段 默认xxxId
      */
     constructor(table: string, col?: string, id?: string);
     setType(val: any): JoinTable;

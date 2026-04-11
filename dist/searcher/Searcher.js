@@ -98,6 +98,10 @@ class Searcher {
         let inquiry = this.get(key);
         return inquiry.acqCache();
     }
+    /**
+     * 存入到所有的缓存中
+     * @param array
+     */
     async saveAll(array) {
         var list = this._getAll();
         for (var i = 0; i < list.length; i++) {

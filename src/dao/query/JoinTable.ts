@@ -1,6 +1,7 @@
 /**
  * 联合查询的
  */
+import { StrUtil } from '../../fastsaas';
 import ColChanger from '../colChanger/ColChanger';
 import Sql from '../sql/Sql'
 
@@ -25,13 +26,14 @@ export default class JoinTable {
   /**
    * 联合查询
    * @param table  联合查询的表名
-   * @param col 主表的字段 默认是xxx_id
-   * @param id 次表的字段 默认id
+   * @param col 主表的字段 默认是xxxId
+   * @param id 次表的字段 默认xxxId
    */
   constructor(table: string, col?: string, id?: string) {
     this.table = table;
-    if (col == null)
-      col = table + '_id';
+    if (col == null) {
+      col = StrUtil.camelToUnder(table) + '_id';
+    }
     if (id == null) {
       id = col;
     }
@@ -71,7 +73,7 @@ export default class JoinTable {
     return table;
   }
 
-  toSqlStr(tableName: string,colChanger:ColChanger): string {
+  toSqlStr(tableName: string, colChanger: ColChanger): string {
     let table = this.acqTable();
     let alias = this.acqAlias()
     var main = this.main;
@@ -79,15 +81,15 @@ export default class JoinTable {
       main = tableName;
     let col = this.col;
     let id = this.id;
-    if(colChanger != null){
+    if (colChanger != null) {
       col = colChanger.parsePojoField(col);
       id = colChanger.parsePojoField(id)
     }
     return `${this.type} join ${table} on  ${main}.${col}=${alias}.${id}`
   }
 
-  toSql(tableName: string,colChanger:ColChanger) {
-    return new Sql(this.toSqlStr(tableName,colChanger));
+  toSql(tableName: string, colChanger: ColChanger) {
+    return new Sql(this.toSqlStr(tableName, colChanger));
   }
   /**
    * 设置主表名称

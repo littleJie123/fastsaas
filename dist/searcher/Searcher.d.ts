@@ -33,7 +33,7 @@ export default abstract class Searcher<Pojo = any> {
      */
     reg(inquiryKey: string, inquiry: BaseInquiry): void;
     protected getSchCols(): Array<string>;
-    _getAll(): Array<BaseInquiry>;
+    private _getAll;
     save(key: string, array: Array<any>): Promise<void>;
     /**
      * 根据id保存到缓存中，以后get 和findByIds可以从缓存中读取数据
@@ -43,6 +43,10 @@ export default abstract class Searcher<Pojo = any> {
     saveByIds(array: any[]): Promise<void>;
     get(key: any): BaseInquiry;
     getCache(key: any): BaseCache;
+    /**
+     * 存入到所有的缓存中
+     * @param array
+     */
     saveAll(array: Array<any>): Promise<void>;
     /**
      * 清空缓存，对于多表查询可能无效

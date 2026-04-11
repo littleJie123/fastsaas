@@ -35,7 +35,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
     protected _pageOrder(list: any): void;
     addOrder(query: Query): Promise<void>;
     protected addCdt(query: Query): Promise<void>;
-    buildQuery(): Promise<Query>;
+    protected buildQuery(): Promise<Query>;
     /**
     * 使用findData 函数
     */
