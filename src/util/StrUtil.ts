@@ -1,23 +1,23 @@
- 
+
 import JsonUtil from './JsonUtil';
 import { assert } from 'console'
 import { transform, set } from 'lodash'
 import {
-  isArray, isObjectLike, isPlainObject, map,snakeCase
+  isArray, isObjectLike, isPlainObject, map, snakeCase
 } from 'lodash/fp'
 
-interface SplitRes{
-  str:string;
-  keyword?:string;
+interface SplitRes {
+  str: string;
+  keyword?: string;
   [prop: string]: any;
 }
 function createIteratee(converter, self) {
   return (result, value, key) => {
-    set(result,   converter(key) , isObjectLike(value) ? self(value) : value)
+    set(result, converter(key), isObjectLike(value) ? self(value) : value)
   }
 }
 
- 
+
 function toCamelCase(str) {
   return str.replace(/_(\w)/g, function (m, $1) {
     return $1 ? $1.toUpperCase() : m
@@ -42,12 +42,12 @@ export class StrUtil {
    * 将一个下划线的字符串转成驼峰式
    * @param str 
    */
-  static changeUnderStringToCamel(str:string){
-    if(str == null){
+  static changeUnderStringToCamel(str: string) {
+    if (str == null) {
       return null;
     }
     let strArray = str.split('_');
-    for(let i=1;i<strArray.length;i++){
+    for (let i = 1; i < strArray.length; i++) {
       strArray[i] = this.firstUpper(strArray[i]);
     }
     return strArray.join('')
@@ -58,8 +58,8 @@ export class StrUtil {
    * 将一个对象的属性 从驼峰转下划线
    * @param obj 
    */
-  static camelToUnder(obj){
-    if(obj == null)
+  static camelToUnder(obj) {
+    if (obj == null)
       return null;
     let fun = createHumps(snakeCase);
     return fun(obj);
@@ -68,8 +68,8 @@ export class StrUtil {
    * 将一个对象的属性 从下划线到驼峰
    * @param obj 
    */
-  static underToCamel(obj){
-    if(obj == null)
+  static underToCamel(obj) {
+    if (obj == null)
       return null;
     let fun = createHumps(toCamelCase);
     return fun(obj)
@@ -77,34 +77,34 @@ export class StrUtil {
   /**
    * 首字母小写
    */
-  static firstLower(str:string):string {
+  static firstLower(str: string): string {
     if (!str) return
     str = str.toString()
     var ret = str.substring(0, 1).toLowerCase()
     ret = ret + str.substring(1)
     return ret
   }
-  static firstUpper(str:string):string {
+  static firstUpper(str: string): string {
     if (!str) return
     str = str.toString()
     var ret = str.substring(0, 1).toUpperCase()
     ret = ret + str.substring(1)
     return ret
   }
-  static pasical(name:string):string {
+  static pasical(name: string): string {
     return StrUtil.firstLower(StrUtil.firstUpperPasical(name))
   }
-  static firstUpperPasical(name:string):string {
+  static firstUpperPasical(name: string): string {
     var names = name.split('_')
     for (var i = 0; i < names.length; i++) {
       names[i] = StrUtil.firstUpper(names[i])
     }
     return names.join('')
   }
-  static removeExtName(str:string) {
+  static removeExtName(str: string) {
     return str.substring(0, str.indexOf('.'))
   }
-  static pad(num, n):string {
+  static pad(num, n): string {
     var len = num.toString().length
     while (len < n) {
       num = '0' + num
@@ -113,13 +113,13 @@ export class StrUtil {
     return num
   }
   // 不是string的情况也返回true
-  static isEmpty(str):boolean  {
+  static isEmpty(str): boolean {
     return typeof str !== 'string' || str.length === 0
   }
   /**
   替换字符串,会替换所有
   */
-  static replace(str:string, substr:string, replacement:string):string {
+  static replace(str: string, substr: string, replacement: string): string {
     var array = []
     if (str != null &&
       substr != null) {
@@ -136,41 +136,41 @@ export class StrUtil {
     }
     return array.join('')
   }
-  static start(str:string, prefix:string,noCase?:boolean):boolean {
-    if(str==null || prefix==null) return false;
-    if(noCase){
+  static start(str: string, prefix: string, noCase?: boolean): boolean {
+    if (str == null || prefix == null) return false;
+    if (noCase) {
       str = str.toLowerCase();
       prefix = prefix.toLowerCase();
     }
     if (str.length < prefix.length) return false
     return str.substring(0, prefix.length) == prefix
   }
-  static startIngoreCase(str:string, prefix:string):boolean  {
+  static startIngoreCase(str: string, prefix: string): boolean {
     str = str.toLowerCase()
     prefix = prefix.toLowerCase()
     return StrUtil.start(str, prefix)
   }
-   
-  static end(str:string, suffix:string,noCase?:boolean):boolean  {
-    if(str==null || suffix==null) return false;
-    if(noCase){
+
+  static end(str: string, suffix: string, noCase?: boolean): boolean {
+    if (str == null || suffix == null) return false;
+    if (noCase) {
       str = str.toLowerCase();
       suffix = suffix.toLowerCase();
     }
     if (str.length < suffix.length) return false
     let ret = str.substring(str.length - suffix.length) == suffix
-    
+
     return ret;
   }
-  static trim(str:string) :string{
-    if(str==null)
+  static trim(str: string): string {
+    if (str == null)
       return null;
-    function isWhite(c){
-      return c== ' '
-        || c=='\r'
-        || c=='\n'
-        || c=='\t'
-     }
+    function isWhite(c) {
+      return c == ' '
+        || c == '\r'
+        || c == '\n'
+        || c == '\t'
+    }
     var i = 0
     for (; i < str.length; i++) {
       if (!isWhite(str.charAt(i))) {
@@ -186,7 +186,7 @@ export class StrUtil {
     }
     return str.substring(0, i + 1)
   }
-  static split(str:string|Array<string>, array:Array<string>):Array<string> {
+  static split(str: string | Array<string>, array: Array<string>): Array<string> {
     if (!(array instanceof Array)) {
       array = [array];
     }
@@ -210,30 +210,30 @@ export class StrUtil {
   /**
    * 可以通过多个key进行split，防止类似全角的；和;都可以应用
    */
-  static splitKeys(str:string,keys:Array<string>):Array<string>{
-    if(keys.length == 1){
+  static splitKeys(str: string, keys: Array<string>): Array<string> {
+    if (keys.length == 1) {
       return str.split(keys[0])
     }
     let key = keys[0];
-    for(let i=1;i<keys.length;i++){
-      str = StrUtil.replace(str,keys[i],key);
+    for (let i = 1; i < keys.length; i++) {
+      str = StrUtil.replace(str, keys[i], key);
     }
     return str.split(key);
   }
-   
+
   /**
   判断是否字符串
   */
-  static  isStr(str:any):boolean{
-    if(str == null)
+  static isStr(str: any): boolean {
+    if (str == null)
       return false;
-    return  ((typeof str)=='string') || (str instanceof String)
+    return ((typeof str) == 'string') || (str instanceof String)
   }
-  static trimList(list):Array<string>{
-    if(list == null)
+  static trimList(list): Array<string> {
+    if (list == null)
       return null;
     var array = [];
-    for(var str of list){
+    for (var str of list) {
       array.push(this.trim(str));
     }
     return array;
@@ -244,8 +244,8 @@ export class StrUtil {
    * @param strs 
    * @param key 
    */
-  static join(strs:Array<any>,key?:string){
-    if(key == null)
+  static join(strs: Array<any>, key?: string) {
+    if (key == null)
       key = '___';
     return strs.join(key);
   }
@@ -257,34 +257,34 @@ export class StrUtil {
    * @param str 
    * @param keyword 
    */
-  static splitToArray(str:string,keyword:string|string[]):SplitRes[]{
-    let ret:SplitRes[] = [];
-    if(!(keyword instanceof Array)){
+  static splitToArray(str: string, keyword: string | string[]): SplitRes[] {
+    let ret: SplitRes[] = [];
+    if (!(keyword instanceof Array)) {
       keyword = [keyword];
     }
     let len = str.length;
     let i = 0;
     let begin = 0;
-    while(i<len){
+    while (i < len) {
       let hit = false;
-      for(let key of keyword){
-        if(i+key.length<=len && str.substring(i,i+key.length)==key){
+      for (let key of keyword) {
+        if (i + key.length <= len && str.substring(i, i + key.length) == key) {
           hit = true;
           ret.push({
-            keyword:key,
-            str:str.substring(begin,i)
+            keyword: key,
+            str: str.substring(begin, i)
           })
-          begin = i =i+key.length;
+          begin = i = i + key.length;
           break;
-        }   
+        }
       }
-      if(!hit ){
+      if (!hit) {
         i++;
       }
     }
-    if(begin<i){
+    if (begin < i) {
       ret.push({
-        str:str.substring(begin,i)
+        str: str.substring(begin, i)
       })
     }
     return ret;
@@ -296,44 +296,44 @@ export class StrUtil {
    * @param obj 
    * @returns {sql:string,params:any[]}
    */
-  static formatSql(sql:string,obj:any):{
-    sql:string,
-    params?:any[]
-  }{
+  static formatSql(sql: string, obj: any): {
+    sql: string,
+    params?: any[]
+  } {
     let params = [];
-    if(sql == null || obj == null)
-      return {sql,params};
-    let start  = 0;
+    if (sql == null || obj == null)
+      return { sql, params };
+    let start = 0;
     let begin = sql.indexOf('${')
-    while(begin != -1){
-      let end = sql.indexOf('}',begin+2);
+    while (begin != -1) {
+      let end = sql.indexOf('}', begin + 2);
       assert(end != -1)
-      let key = sql.substring(begin +2,end).trim();
-      let val = JsonUtil.getByKeys(obj,key);
-      if(val == null){
+      let key = sql.substring(begin + 2, end).trim();
+      let val = JsonUtil.getByKeys(obj, key);
+      if (val == null) {
         start = end + 1;
-      }else{
-        let str:string = null;
-        if(val instanceof Array ){
-          if(val.length > 0){
+      } else {
+        let str: string = null;
+        if (val instanceof Array) {
+          if (val.length > 0) {
             let valArray = new Array(val.length).fill('?')
             str = valArray.join(',')
-            params.push(... val)
-          }else{
-            str = sql.substring(begin,end+1);
+            params.push(...val)
+          } else {
+            str = sql.substring(begin, end + 1);
           }
-        }else{
+        } else {
           str = '?';
           params.push(val)
         }
-        let beginStr = sql.substring(0,begin);
-        let endStr = sql.substring(end+1);
+        let beginStr = sql.substring(0, begin);
+        let endStr = sql.substring(end + 1);
         start = beginStr.length + str.length
         sql = `${beginStr}${str}${endStr}`
       }
-      begin = sql.indexOf('${',start);
+      begin = sql.indexOf('${', start);
     }
-    return {sql,params}
+    return { sql, params }
   }
 
 
@@ -343,31 +343,201 @@ export class StrUtil {
    * @param obj 
    * @returns {sql:string,params:any[]}
    */
-  static format(strFormat:string,obj:any):string{
+  static format(strFormat: string, obj: any): string {
 
-    if(strFormat == null || obj == null)
+    if (strFormat == null || obj == null)
       return strFormat;
-    let start  = 0;
+    let start = 0;
     let begin = strFormat.indexOf('${')
-    while(begin != -1){
-      let end = strFormat.indexOf('}',begin+2);
+    while (begin != -1) {
+      let end = strFormat.indexOf('}', begin + 2);
       assert(end != -1)
-      let key = strFormat.substring(begin +2,end).trim();
-      let val = JsonUtil.getByKeys(obj,key);
-      if(val == null){
+      let key = strFormat.substring(begin + 2, end).trim();
+      let val = JsonUtil.getByKeys(obj, key);
+      if (val == null) {
         start = end + 1;
-      }else{
-        let str:string = null;
+      } else {
+        let str: string = null;
         str = val.toString();
-        let beginStr = strFormat.substring(0,begin);
-        let endStr = strFormat.substring(end+1);
+        let beginStr = strFormat.substring(0, begin);
+        let endStr = strFormat.substring(end + 1);
         start = beginStr.length + str.length
         strFormat = `${beginStr}${str}${endStr}`
       }
-      begin = strFormat.indexOf('${',start);
+      begin = strFormat.indexOf('${', start);
     }
     return strFormat;
   }
 
+
+  /**
+   * 从一段对象中挑选和一个字符串含有最相近名称的对象
+   * 返回结果：
+   * {    
+   *  score //相似度分数 越高表示匹配度越高
+   *  data //array中的元素。
+   * }
+   * 返回之前按score倒叙排
+   * 计算score的步骤
+   * 1. 按word中字符的顺序匹配，每次匹配到1个 +1 分
+   * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
+   * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。
+   * 字符串 “你好啊” 和 “我好啊”。也能得到2分。
+   * 字符串 “你好啊” 和 “你坏啊”。也能得到2分。
+   * 
+   * 2. data字符串中间每个没有匹配上的字符减去0.4分
+    * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
+   * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。同时减去0.4分
+   * 字符串 “你好啊” 和 “我好啊”。也能得到2分。不用减分
+   * 字符串 “你好啊” 和 “你坏啊”。得到2分，并减去0.4*2 分
    
+  3.其他每个没有匹配上的字符减去0.1分
+  * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
+   * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。同时减去0.4分
+   * 字符串 “你好啊” 和 “我好啊”。也能得到2分。并减去0.1*2分
+   * 字符串 “你好啊” 和 “你坏啊”。得到2分，并减去0.4*2 分
+   
+  
+   * @param word 
+   * @param array 
+   * @param opt{
+   * 
+   *  col:string //指定比较的属性
+   * }
+   * 
+   */
+  static compare(word: string, array: any[], opt?: {
+    /**默认name */
+    col?: string,
+    cnt?: number
+  }): {
+    score: number,
+    data: any
+  }[] {
+    if (!word || !array || array.length === 0) return [];
+    // 移除所有空格，使其不参与评分
+    word = word.replace(/\s+/g, '');
+    const col = opt?.col || 'name';
+
+    let results = array.map(item => {
+      let target = null;
+      if (this.isStr(item)) {
+        target = item
+      } else {
+        target = item[col ?? 'name'];
+      }
+
+      if (target == null) target = '';
+
+      target = target.toString();
+      // 移除所有空格，使其不参与评分
+      target = target.replace(/\s+/g, '');
+      const score = this.calculateSimilarityScore(word, target);
+      return { score, data: item };
+    });
+    let cnt = opt?.cnt ?? 3;
+    results = results.filter(row => row.score > 0);
+    if (results.length > cnt) {
+      results = results.slice(0, cnt)
+    }
+    return results.sort((a, b) => b.score - a.score);
+  }
+
+  private static calculateSimilarityScore(word: string, target: string): number {
+    if (!word || !target) return 0;
+    const n = word.length;
+    const m = target.length;
+
+    let hasMatch = false;
+    // dp[i][j] 存储以匹配对 (word[i], target[j]) 结尾的匹配序列的最大得分
+    const dp = Array.from({ length: n }, () => new Float64Array(m).fill(-Infinity));
+    // M[i][j] 存储 i' <= i 且 j' <= j 的 dp[i'][j'] + 0.4 * (i' + j') 的最大值，用于加速中间间隙计算
+    const M = Array.from({ length: n }, () => new Float64Array(m).fill(-Infinity));
+
+    let maxFinalScore = 0;
+
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < m; j++) {
+        if (word[i] === target[j]) {
+          hasMatch = true;
+          const prevM = (i > 0 && j > 0) ? M[i - 1][j - 1] : -Infinity;
+
+          // 如果是序列中的第一个匹配：1 (匹配分) - 0.1 * i (word前缀) - 0.1 * j (target前缀)
+          const firstMatchScore = 1 - 0.1 * i - 0.1 * j;
+          // 如果接在之前的匹配后面：prevScore + 1 - 0.4 * (i - pi - 1) - 0.4 * (j - pj - 1)
+          // 变形为：(dp[pi][pj] + 0.4*pi + 0.4*pj) + 1.8 - 0.4*i - 0.4*j
+          const continueMatchScore = prevM + 1.8 - 0.4 * i - 0.4 * j;
+
+          dp[i][j] = Math.max(firstMatchScore, continueMatchScore);
+
+          // 计算最终得分（加上末尾未匹配字符的扣分 -0.1）
+          // Final = dp[i][j] - 0.1 * (n - 1 - i) - 0.1 * (m - 1 - j)
+          const finalScore = dp[i][j] - 0.1 * (n - 1 - i) - 0.1 * (m - 1 - j);
+          maxFinalScore = Math.max(maxFinalScore, finalScore);
+        }
+
+        // 更新 M 矩阵
+        let currentM = dp[i][j] + 0.4 * i + 0.4 * j;
+        if (i > 0) currentM = Math.max(currentM, M[i - 1][j]);
+        if (j > 0) currentM = Math.max(currentM, M[i][j - 1]);
+        M[i][j] = currentM;
+      }
+    }
+
+    return hasMatch ? Math.max(0, maxFinalScore) : 0;
+  }
+
+  static createMatchFun(cols: {
+    col: string,
+    needFormat?: boolean
+  }[]) {
+    return function (obj: any): string {
+      let ret: string[] = [];
+      for (let col of cols) {
+        ret.push(StrUtil.getByCol(obj, col))
+      }
+      return ret.join('$____$');
+    }
+  }
+
+  static getByCol(obj, col: {
+    col: string,
+    needFormat?: boolean
+  }) {
+    let ret = JsonUtil.getByKeys(obj, col.col);
+    if (ret == null) {
+      return ''
+    }
+    ret = ret.toString().toLowerCase();
+    if (col.needFormat) {
+      let changeCols = this.getNeedFormatChar()
+
+      for (let changeCol of changeCols) {
+        ret = ret.replaceAll(changeCol.src, changeCol.target)
+      }
+    }
+    if (ret.indexOf('大蒜') != -1) {
+      console.log(ret, '---------------')
+    }
+
+    return ret;
+  }
+
+  private static getNeedFormatChar() {
+    return [//替换字符串中的字符
+      { src: '(', target: "（" },
+      { src: ')', target: "）" }
+    ]
+  }
+
+  /**
+   * 对字符进行格式化处理 
+   * 
+   * */
+  static createFormatFun(col: string) {
+    return function (obj: any): string {
+      return StrUtil.getByCol(obj, { col, needFormat: true })
+    }
+  }
+
 }

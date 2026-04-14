@@ -14,7 +14,8 @@
       "target": "ES2018",
       "experimentalDecorators":true,
       "newLine": "crlf",
-      "noImplicitAny": false  
+      "noImplicitAny": false  ,
+      "strictNullChecks": false,
   },
   "include": [
       "src/**/*.ts"

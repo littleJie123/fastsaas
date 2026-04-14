@@ -357,5 +357,150 @@ class StrUtil {
         }
         return strFormat;
     }
+    /**
+     * 从一段对象中挑选和一个字符串含有最相近名称的对象
+     * 返回结果：
+     * {
+     *  score //相似度分数 越高表示匹配度越高
+     *  data //array中的元素。
+     * }
+     * 返回之前按score倒叙排
+     * 计算score的步骤
+     * 1. 按word中字符的顺序匹配，每次匹配到1个 +1 分
+     * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
+     * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。
+     * 字符串 “你好啊” 和 “我好啊”。也能得到2分。
+     * 字符串 “你好啊” 和 “你坏啊”。也能得到2分。
+     *
+     * 2. data字符串中间每个没有匹配上的字符减去0.4分
+      * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
+     * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。同时减去0.4分
+     * 字符串 “你好啊” 和 “我好啊”。也能得到2分。不用减分
+     * 字符串 “你好啊” 和 “你坏啊”。得到2分，并减去0.4*2 分
+     
+    3.其他每个没有匹配上的字符减去0.1分
+    * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
+     * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。同时减去0.4分
+     * 字符串 “你好啊” 和 “我好啊”。也能得到2分。并减去0.1*2分
+     * 字符串 “你好啊” 和 “你坏啊”。得到2分，并减去0.4*2 分
+     
+    
+     * @param word
+     * @param array
+     * @param opt{
+     *
+     *  col:string //指定比较的属性
+     * }
+     *
+     */
+    static compare(word, array, opt) {
+        var _a;
+        if (!word || !array || array.length === 0)
+            return [];
+        // 移除所有空格，使其不参与评分
+        word = word.replace(/\s+/g, '');
+        const col = (opt === null || opt === void 0 ? void 0 : opt.col) || 'name';
+        let results = array.map(item => {
+            let target = null;
+            if (this.isStr(item)) {
+                target = item;
+            }
+            else {
+                target = item[col !== null && col !== void 0 ? col : 'name'];
+            }
+            if (target == null)
+                target = '';
+            target = target.toString();
+            // 移除所有空格，使其不参与评分
+            target = target.replace(/\s+/g, '');
+            const score = this.calculateSimilarityScore(word, target);
+            return { score, data: item };
+        });
+        let cnt = (_a = opt === null || opt === void 0 ? void 0 : opt.cnt) !== null && _a !== void 0 ? _a : 3;
+        results = results.filter(row => row.score > 0);
+        if (results.length > cnt) {
+            results = results.slice(0, cnt);
+        }
+        return results.sort((a, b) => b.score - a.score);
+    }
+    static calculateSimilarityScore(word, target) {
+        if (!word || !target)
+            return 0;
+        const n = word.length;
+        const m = target.length;
+        let hasMatch = false;
+        // dp[i][j] 存储以匹配对 (word[i], target[j]) 结尾的匹配序列的最大得分
+        const dp = Array.from({ length: n }, () => new Float64Array(m).fill(-Infinity));
+        // M[i][j] 存储 i' <= i 且 j' <= j 的 dp[i'][j'] + 0.4 * (i' + j') 的最大值，用于加速中间间隙计算
+        const M = Array.from({ length: n }, () => new Float64Array(m).fill(-Infinity));
+        let maxFinalScore = 0;
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < m; j++) {
+                if (word[i] === target[j]) {
+                    hasMatch = true;
+                    const prevM = (i > 0 && j > 0) ? M[i - 1][j - 1] : -Infinity;
+                    // 如果是序列中的第一个匹配：1 (匹配分) - 0.1 * i (word前缀) - 0.1 * j (target前缀)
+                    const firstMatchScore = 1 - 0.1 * i - 0.1 * j;
+                    // 如果接在之前的匹配后面：prevScore + 1 - 0.4 * (i - pi - 1) - 0.4 * (j - pj - 1)
+                    // 变形为：(dp[pi][pj] + 0.4*pi + 0.4*pj) + 1.8 - 0.4*i - 0.4*j
+                    const continueMatchScore = prevM + 1.8 - 0.4 * i - 0.4 * j;
+                    dp[i][j] = Math.max(firstMatchScore, continueMatchScore);
+                    // 计算最终得分（加上末尾未匹配字符的扣分 -0.1）
+                    // Final = dp[i][j] - 0.1 * (n - 1 - i) - 0.1 * (m - 1 - j)
+                    const finalScore = dp[i][j] - 0.1 * (n - 1 - i) - 0.1 * (m - 1 - j);
+                    maxFinalScore = Math.max(maxFinalScore, finalScore);
+                }
+                // 更新 M 矩阵
+                let currentM = dp[i][j] + 0.4 * i + 0.4 * j;
+                if (i > 0)
+                    currentM = Math.max(currentM, M[i - 1][j]);
+                if (j > 0)
+                    currentM = Math.max(currentM, M[i][j - 1]);
+                M[i][j] = currentM;
+            }
+        }
+        return hasMatch ? Math.max(0, maxFinalScore) : 0;
+    }
+    static createMatchFun(cols) {
+        return function (obj) {
+            let ret = [];
+            for (let col of cols) {
+                ret.push(StrUtil.getByCol(obj, col));
+            }
+            return ret.join('$____$');
+        };
+    }
+    static getByCol(obj, col) {
+        let ret = JsonUtil_1.default.getByKeys(obj, col.col);
+        if (ret == null) {
+            return '';
+        }
+        ret = ret.toString().toLowerCase();
+        if (col.needFormat) {
+            let changeCols = this.getNeedFormatChar();
+            for (let changeCol of changeCols) {
+                ret = ret.replaceAll(changeCol.src, changeCol.target);
+            }
+        }
+        if (ret.indexOf('大蒜') != -1) {
+            console.log(ret, '---------------');
+        }
+        return ret;
+    }
+    static getNeedFormatChar() {
+        return [
+            { src: '(', target: "（" },
+            { src: ')', target: "）" }
+        ];
+    }
+    /**
+     * 对字符进行格式化处理
+     *
+     * */
+    static createFormatFun(col) {
+        return function (obj) {
+            return StrUtil.getByCol(obj, { col, needFormat: true });
+        };
+    }
 }
 exports.StrUtil = StrUtil;
