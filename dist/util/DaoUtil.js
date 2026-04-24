@@ -52,8 +52,9 @@ class DaoUtil {
             async onAdd(dao, data) {
                 for (let col of cols) {
                     let val = opt.processFun(dao, data);
-                    if (val != null)
+                    if (val != null && data[col] == null) {
                         data[col] = val;
+                    }
                 }
             },
             async onUpdate(dao, data, opts) {

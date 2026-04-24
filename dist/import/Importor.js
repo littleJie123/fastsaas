@@ -20,7 +20,9 @@ class Importor {
         let opt = this.opt;
         let value = oldData[opt.key];
         if (value == null || value == '') {
-            value = opt.defVal;
+            if (opt.defVal != null) {
+                value = opt.defVal;
+            }
         }
         newData[opt.key] = { name: value };
     }
@@ -259,7 +261,7 @@ class Importor {
     isAllNull(datas) {
         let key = this.opt.key;
         for (let data of datas) {
-            if (data[key] != null && data[key].name != null) {
+            if (data[key] != null && data[key].name != null && data[key].name != '') {
                 return false;
             }
         }
@@ -284,6 +286,7 @@ class Importor {
         return true;
     }
     isReady(datas, importors) {
+        console.log('this.opt.key-->', this.opt.key);
         if (this.opt.noCheck) {
             return this.needAllRun(importors);
         }
@@ -293,10 +296,12 @@ class Importor {
         let needId = this.opt.needId;
         if (needId != null) {
             for (let key of needId) {
+                console.log('key-->', key);
                 let allNull = true;
                 let allNameNull = true;
                 for (let data of datas) {
-                    if (data[key] != null && data[key].name != null) {
+                    console.log('data[key]', data[key]);
+                    if (data[key] != null && data[key].name != null && data[key].name != '') {
                         allNameNull = false;
                     }
                     if (data[key] != null && data[key].id != null) {
@@ -304,6 +309,8 @@ class Importor {
                         break;
                     }
                 }
+                console.log('allNameNull-->', allNameNull);
+                console.log('allNull-->', allNull);
                 if (!allNameNull && allNull) {
                     return false;
                 }

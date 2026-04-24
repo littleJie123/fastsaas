@@ -1,3 +1,10 @@
+export interface CompareResult {
+    word: any;
+    result: {
+        data: any;
+        score: number;
+    }[];
+}
 interface SplitRes {
     str: string;
     keyword?: string;
@@ -82,63 +89,45 @@ export declare class StrUtil {
      */
     static format(strFormat: string, obj: any): string;
     /**
+     * compare的批量版本 - 近似极速版 (Bigram + Map 优化)
+     */
+    /**
+     * compare的批量版本 - 近似极速版 (Bigram + Map 优化)
+     */
+    static compareList(words: any[], strArray: any[], opt?: {
+        /**words默认name */
+        wordsCol?: string;
+        /**strArray默认name */
+        col?: string;
+        cnt?: number;
+        threshold?: number;
+        maxLength?: number;
+        wordNameCol?: string;
+    }): CompareResult[];
+    /**
      * 从一段对象中挑选和一个字符串含有最相近名称的对象
-     * 返回结果：
-     * {
-     *  score //相似度分数 越高表示匹配度越高
-     *  data //array中的元素。
-     * }
-     * 返回之前按score倒叙排
-     * 计算score的步骤
-     * 1. 按word中字符的顺序匹配，每次匹配到1个 +1 分
-     * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
-     * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。
-     * 字符串 “你好啊” 和 “我好啊”。也能得到2分。
-     * 字符串 “你好啊” 和 “你坏啊”。也能得到2分。
-     *
-     * 2. data字符串中间每个没有匹配上的字符减去0.4分
-      * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
-     * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。同时减去0.4分
-     * 字符串 “你好啊” 和 “我好啊”。也能得到2分。不用减分
-     * 字符串 “你好啊” 和 “你坏啊”。得到2分，并减去0.4*2 分
-     
-    3.其他每个没有匹配上的字符减去0.1分
-    * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
-     * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。同时减去0.4分
-     * 字符串 “你好啊” 和 “我好啊”。也能得到2分。并减去0.1*2分
-     * 字符串 “你好啊” 和 “你坏啊”。得到2分，并减去0.4*2 分
-     
-    
-     * @param word
-     * @param array
-     * @param opt{
-     *
-     *  col:string //指定比较的属性
-     * }
-     *
      */
     static compare(word: string, array: any[], opt?: {
         /**默认name */
         col?: string;
         cnt?: number;
+        threshold?: number;
     }): {
         score: number;
         data: any;
     }[];
-    private static calculateSimilarityScore;
+    private static calculateSimilarityApprox;
+    private static getBigrams;
+    private static getUnigrams;
     static createMatchFun(cols: {
         col: string;
         needFormat?: boolean;
+        defVal?: any;
     }[]): (obj: any) => string;
     static getByCol(obj: any, col: {
         col: string;
         needFormat?: boolean;
     }): any;
-    private static getNeedFormatChar;
-    /**
-     * 对字符进行格式化处理
-     *
-     * */
     static createFormatFun(col: string): (obj: any) => string;
 }
 export {};

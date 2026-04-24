@@ -5,7 +5,14 @@ import { transform, set } from 'lodash'
 import {
   isArray, isObjectLike, isPlainObject, map, snakeCase
 } from 'lodash/fp'
+export interface CompareResult {
 
+  word: any;
+  result: {
+    data: any;
+    score: number
+  }[]
+}
 interface SplitRes {
   str: string;
   keyword?: string;
@@ -369,133 +376,210 @@ export class StrUtil {
     return strFormat;
   }
 
+  /**
+   * compare的批量版本 - 近似极速版 (Bigram + Map 优化)
+   */
+  /**
+   * compare的批量版本 - 近似极速版 (Bigram + Map 优化)
+   */
+  static compareList(words: any[], strArray: any[], opt?: {
+    /**words默认name */
+    wordsCol?: string;
+    /**strArray默认name */
+    col?: string;
+    cnt?: number;
+    threshold?: number;
+    maxLength?: number;
+    wordNameCol?: string
+  }): CompareResult[] {
+    if (!words || !strArray || words.length === 0 || strArray.length === 0) return [];
+    if (opt?.maxLength) {
+      if (words.length > opt.maxLength) {
+        words = words.slice(0, opt.maxLength)
+      }
+      if (strArray.length > opt.maxLength) {
+        strArray = strArray.slice(0, opt.maxLength)
+      }
+    }
+    const wordsCol = opt?.wordsCol || 'name';
+    const col = opt?.col || 'name';
+    const cnt = opt?.cnt ?? 3;
+
+    // 1. 预处理目标数组
+    const processedTargets = strArray.map(item => {
+      let target = this.isStr(item) ? item : JsonUtil.getByKeys(item, col);
+      const s = target?.toString().replace(/\s+/g, '').toLowerCase() || '';
+      return {
+        original: item,
+        processed: s,
+        grams: this.getBigrams(s),
+        unigrams: this.getUnigrams(s),
+        len: s.length
+      };
+    });
+
+    return words.map(wordItem => {
+      let word = this.isStr(wordItem) ? wordItem : JsonUtil.getByKeys(wordItem, wordsCol);
+      const s = word?.toString().replace(/\s+/g, '').toLowerCase() || '';
+      if (s.length === 0) return { word: wordItem, result: [] };
+
+      const wordInfo = {
+        processed: s,
+        grams: this.getBigrams(s),
+        unigrams: this.getUnigrams(s),
+        len: s.length
+      };
+      let results: { score: number, data: any }[] = [];
+
+      for (const targetObj of processedTargets) {
+        const score = this.calculateSimilarityApprox(wordInfo, targetObj);
+        if (score > 0) {
+          results.push({ score, data: targetObj.original });
+        }
+      }
+
+      // 动态调整阈值：如果设置的阈值高于词本身长度，自动下调
+      let threshold = opt?.threshold ?? 1.5;
+      if (threshold > s.length && s.length > 0) {
+        threshold = Math.max(0.5, s.length - 0.5);
+      }
+
+      results = results.filter(row => row.score >= threshold);
+      results.sort((a, b) => b.score - a.score);
+      if (results.length > cnt) results = results.slice(0, cnt);
+      if (opt?.wordNameCol) {
+        let array = [];
+        for (let result of results) {
+          let data = result.data
+          array.push(JsonUtil.getByKeys(data, opt?.col))
+        }
+        wordItem[opt?.wordNameCol] = array;
+      }
+      return { word: wordItem, result: results };
+    });
+  }
 
   /**
    * 从一段对象中挑选和一个字符串含有最相近名称的对象
-   * 返回结果：
-   * {    
-   *  score //相似度分数 越高表示匹配度越高
-   *  data //array中的元素。
-   * }
-   * 返回之前按score倒叙排
-   * 计算score的步骤
-   * 1. 按word中字符的顺序匹配，每次匹配到1个 +1 分
-   * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
-   * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。
-   * 字符串 “你好啊” 和 “我好啊”。也能得到2分。
-   * 字符串 “你好啊” 和 “你坏啊”。也能得到2分。
-   * 
-   * 2. data字符串中间每个没有匹配上的字符减去0.4分
-    * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
-   * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。同时减去0.4分
-   * 字符串 “你好啊” 和 “我好啊”。也能得到2分。不用减分
-   * 字符串 “你好啊” 和 “你坏啊”。得到2分，并减去0.4*2 分
-   
-  3.其他每个没有匹配上的字符减去0.1分
-  * 例如：字符串 “你好啊” 和 “你好啊” 完全匹配，score为3分
-   * 字符串 “你好啊” 和 “你啊好”。 “你”和“好”匹配上，“啊” 没有匹配上，只能得到2分。同时减去0.4分
-   * 字符串 “你好啊” 和 “我好啊”。也能得到2分。并减去0.1*2分
-   * 字符串 “你好啊” 和 “你坏啊”。得到2分，并减去0.4*2 分
-   
-  
-   * @param word 
-   * @param array 
-   * @param opt{
-   * 
-   *  col:string //指定比较的属性
-   * }
-   * 
    */
   static compare(word: string, array: any[], opt?: {
     /**默认name */
     col?: string,
-    cnt?: number
+    cnt?: number,
+    threshold?: number
   }): {
     score: number,
     data: any
   }[] {
     if (!word || !array || array.length === 0) return [];
-    // 移除所有空格，使其不参与评分
-    word = word.replace(/\s+/g, '');
+
+    const s = word.replace(/\s+/g, '').toLowerCase();
     const col = opt?.col || 'name';
+    const cnt = opt?.cnt ?? 3;
+    const wordInfo = {
+      processed: s,
+      grams: this.getBigrams(s),
+      unigrams: this.getUnigrams(s),
+      len: s.length
+    };
 
     let results = array.map(item => {
-      let target = null;
-      if (this.isStr(item)) {
-        target = item
-      } else {
-        target = item[col ?? 'name'];
-      }
-
-      if (target == null) target = '';
-
-      target = target.toString();
-      // 移除所有空格，使其不参与评分
-      target = target.replace(/\s+/g, '');
-      const score = this.calculateSimilarityScore(word, target);
+      let target = this.isStr(item) ? item : item[col];
+      const ts = target?.toString().replace(/\s+/g, '').toLowerCase() || '';
+      const targetInfo = {
+        processed: ts,
+        grams: this.getBigrams(ts),
+        unigrams: this.getUnigrams(ts),
+        len: ts.length
+      };
+      const score = this.calculateSimilarityApprox(wordInfo, targetInfo);
       return { score, data: item };
     });
-    let cnt = opt?.cnt ?? 3;
-    results = results.filter(row => row.score > 0);
-    if (results.length > cnt) {
-      results = results.slice(0, cnt)
+
+    let threshold = opt?.threshold ?? 1.5;
+    if (threshold > s.length && s.length > 0) {
+      threshold = Math.max(0.5, s.length - 0.5);
     }
-    return results.sort((a, b) => b.score - a.score);
+
+    results = results.filter(row => row.score >= threshold);
+    results.sort((a, b) => b.score - a.score);
+    if (results.length > cnt) results = results.slice(0, cnt);
+    return results;
   }
 
-  private static calculateSimilarityScore(word: string, target: string): number {
-    if (!word || !target) return 0;
-    const n = word.length;
-    const m = target.length;
 
-    let hasMatch = false;
-    // dp[i][j] 存储以匹配对 (word[i], target[j]) 结尾的匹配序列的最大得分
-    const dp = Array.from({ length: n }, () => new Float64Array(m).fill(-Infinity));
-    // M[i][j] 存储 i' <= i 且 j' <= j 的 dp[i'][j'] + 0.4 * (i' + j') 的最大值，用于加速中间间隙计算
-    const M = Array.from({ length: n }, () => new Float64Array(m).fill(-Infinity));
-
-    let maxFinalScore = 0;
-
-    for (let i = 0; i < n; i++) {
-      for (let j = 0; j < m; j++) {
-        if (word[i] === target[j]) {
-          hasMatch = true;
-          const prevM = (i > 0 && j > 0) ? M[i - 1][j - 1] : -Infinity;
-
-          // 如果是序列中的第一个匹配：1 (匹配分) - 0.1 * i (word前缀) - 0.1 * j (target前缀)
-          const firstMatchScore = 1 - 0.1 * i - 0.1 * j;
-          // 如果接在之前的匹配后面：prevScore + 1 - 0.4 * (i - pi - 1) - 0.4 * (j - pj - 1)
-          // 变形为：(dp[pi][pj] + 0.4*pi + 0.4*pj) + 1.8 - 0.4*i - 0.4*j
-          const continueMatchScore = prevM + 1.8 - 0.4 * i - 0.4 * j;
-
-          dp[i][j] = Math.max(firstMatchScore, continueMatchScore);
-
-          // 计算最终得分（加上末尾未匹配字符的扣分 -0.1）
-          // Final = dp[i][j] - 0.1 * (n - 1 - i) - 0.1 * (m - 1 - j)
-          const finalScore = dp[i][j] - 0.1 * (n - 1 - i) - 0.1 * (m - 1 - j);
-          maxFinalScore = Math.max(maxFinalScore, finalScore);
-        }
-
-        // 更新 M 矩阵
-        let currentM = dp[i][j] + 0.4 * i + 0.4 * j;
-        if (i > 0) currentM = Math.max(currentM, M[i - 1][j]);
-        if (j > 0) currentM = Math.max(currentM, M[i][j - 1]);
-        M[i][j] = currentM;
+  private static calculateSimilarityApprox(word: any, target: any): number {
+    // 1. Bigram 匹配 (相邻字符)
+    let bigramIntersection = 0;
+    for (const [gram, count] of word.grams) {
+      const targetCount = target.grams.get(gram);
+      if (targetCount !== undefined) {
+        bigramIntersection += count < targetCount ? count : targetCount;
       }
     }
+    const wordTotalGrams = word.len > 1 ? word.len - 1 : 0;
+    const bigramRatio = wordTotalGrams > 0 ? bigramIntersection / wordTotalGrams : 0;
 
-    return hasMatch ? Math.max(0, maxFinalScore) : 0;
+    // 2. Unigram 匹配 (单个字符)
+    let unigramIntersection = 0;
+    for (const [char, count] of word.unigrams) {
+      const targetCount = target.unigrams.get(char);
+      if (targetCount !== undefined) {
+        unigramIntersection += count < targetCount ? count : targetCount;
+      }
+    }
+    const unigramRatio = word.len > 0 ? unigramIntersection / word.len : 0;
+
+    if (unigramRatio === 0) return 0;
+
+    // 综合比例：Bigram 权重 0.7 (更精确)，Unigram 权重 0.3 (兜底)
+    const combinedRatio = (bigramRatio * 0.7) + (unigramRatio * 0.3);
+
+    // 3. 基础分 = 综合比例 * 搜索词长度
+    let score = combinedRatio * word.len;
+
+    // 4. 长度惩罚：每多出一个字符扣 0.1 分
+    const lenDiff = Math.abs(word.len - target.len);
+    score -= lenDiff * 0.1;
+
+    return score > 0 ? score : 0;
+  }
+
+  private static getBigrams(s: string): Map<string, number> {
+    const grams = new Map<string, number>();
+    for (let i = 0; i < s.length - 1; i++) {
+      const gram = s.substring(i, i + 2);
+      grams.set(gram, (grams.get(gram) || 0) + 1);
+    }
+    return grams;
+  }
+
+  private static getUnigrams(s: string): Map<string, number> {
+    const unigrams = new Map<string, number>();
+    for (const char of s) {
+      unigrams.set(char, (unigrams.get(char) || 0) + 1);
+    }
+    return unigrams;
   }
 
   static createMatchFun(cols: {
     col: string,
-    needFormat?: boolean
+    needFormat?: boolean,
+    defVal?: any
   }[]) {
     return function (obj: any): string {
       let ret: string[] = [];
       for (let col of cols) {
-        ret.push(StrUtil.getByCol(obj, col))
+        console.log('col', col);
+        let val = StrUtil.getByCol(obj, col);
+        console.log('val', val, 'col.defVal', col.defVal);
+        if (val == null && col.defVal != null) {
+          console.log('11111111');
+          val = col.defVal
+        }
+        ret.push(val);
       }
+      console.log(" ret.join('$____$')", ret.join('$____$'))
       return ret.join('$____$');
     }
   }
@@ -506,38 +590,24 @@ export class StrUtil {
   }) {
     let ret = JsonUtil.getByKeys(obj, col.col);
     if (ret == null) {
-      return ''
+      return null;
     }
     ret = ret.toString().toLowerCase();
     if (col.needFormat) {
-      let changeCols = this.getNeedFormatChar()
-
+      let changeCols = [{ src: '(', target: "（" }, { src: ')', target: "）" }];
       for (let changeCol of changeCols) {
         ret = ret.replaceAll(changeCol.src, changeCol.target)
       }
     }
-    if (ret.indexOf('大蒜') != -1) {
-      console.log(ret, '---------------')
-    }
-
     return ret;
   }
 
-  private static getNeedFormatChar() {
-    return [//替换字符串中的字符
-      { src: '(', target: "（" },
-      { src: ')', target: "）" }
-    ]
-  }
-
-  /**
-   * 对字符进行格式化处理 
-   * 
-   * */
   static createFormatFun(col: string) {
     return function (obj: any): string {
-      return StrUtil.getByCol(obj, { col, needFormat: true })
+      return StrUtil.getByCol(obj, {
+        col,
+        needFormat: true
+      })
     }
   }
-
 }

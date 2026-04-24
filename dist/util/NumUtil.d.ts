@@ -128,5 +128,11 @@ export default class {
      * @param str
      */
     static isAllNumber(str: string): boolean;
+    /**
+     * 数字开头，其他字结尾
+     * @param value
+     * @returns
+     */
+    static beginWithNum(value: string): boolean;
 }
 export {};

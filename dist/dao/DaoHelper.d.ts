@@ -44,7 +44,7 @@ export default class DaoHelper implements IDaoHelper {
      * @param key
      * @param list
      */
-    add(key: any, obj: any): Promise<void>;
+    add(key: any, obj: any): Promise<any>;
     /**
      * 更新数组
      * @param key

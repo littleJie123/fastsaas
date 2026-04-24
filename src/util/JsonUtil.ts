@@ -35,100 +35,190 @@ function setKey(obj, key, param) {
   return param
 }
 class JsonUtil {
+  static isObj(obj: any): boolean {
+    return !this.isDate(obj) && !this.isSimpleVal(obj);
+  }
+  static isDate(date: any): boolean {
+    return date instanceof Date;
+  }
+  static isSimpleVal(obj: any): boolean {
+    return this.isBoolean(obj) || NumUtil.isNum(obj) || StrUtil.isStr(obj);
+  }
+  static isBoolean(value: any): boolean {
+    return typeof value === 'boolean' || value instanceof Boolean;
+  }
+  static eqByDate(obj1: Date, obj2: Date): boolean {
+    return obj1.getTime() == obj2.getTime()
+  }
+  /**
+    * 支持多级
+    * @param ret 
+    * @param keys 
+    */
+  private static del(ret: any, keys: string[], index?: number) {
+    if (index == null) {
+      index = 0;
+    }
+    if (keys.length <= index) {
+      return;
+    }
+    let key = keys[index];
+    let nextIndex = index + 1;
+    if (nextIndex == keys.length) {
+      delete ret[key];
+    } else {
+      this.del(ret[key], keys, nextIndex);
+    }
+
+  }
+
+  /**
+   * 根据obj2的key，从obj1中取值
+   */
+  static inKey(obj1: any, obj2: any): any {
+    if (obj2 == null || obj1 == null) {
+      return obj1;
+    }
+    let ret: any = {};
+    for (let e in obj2) {
+      ret[e] = obj1[e]
+    }
+    return ret;
+  }
+  /**
+   * 根据keyStr删除对象中的某个字段，支持用aaa.bbb.cc表示多级
+   * @param ret 
+   * @param col 
+   */
+  static delByKeys(ret: any, col: string) {
+    let keys = col.split('.');
+    this.del(ret, keys);
+  }
+  /**
+   * 判断两个类型相等。
+   * @param obj1 
+   * @param obj2 
+   * @returns 
+   */
+  static isEqualObj(obj1: any, obj2: any): boolean {
+    if (obj1 == null && obj2 == null) {
+      return true;
+    }
+    if ((obj1 != null && obj2 == null) || (obj1 == null && obj2 != null)) {
+      return false;
+    }
+
+    if (this.isSimpleVal(obj1) && this.isSimpleVal(obj2)) {
+      return obj1 == obj2
+    }
+    if (this.isDate(obj1) && this.isDate(obj2)) {
+      return this.eqByDate(obj1, obj2)
+    }
+    if (this.isObj(obj1) && this.isObj(obj2)) {
+      for (let e in obj2) {
+        if (!this.isEqualObj(obj1[e], obj2[e])) {
+          return false;
+        }
+
+      }
+      return true
+    }
+    return false;
+  }
   /**
    * 将两个对象的属性相加
    * @param obj1 
    * @param obj2 
    * @param cols 
    */
-  static addObj(obj1,obj2,cols:string[]){
-    let ret:any = {};
-    for(let col of cols){
-      let val1 = this.getByKeys(obj1,col) ?? 0;
-      let val2 =  this.getByKeys(obj2,col) ?? 0;
-      this.setByKeys(ret,col, val1 + val2);
+  static addObj(obj1, obj2, cols: string[]) {
+    let ret: any = {};
+    for (let col of cols) {
+      let val1 = this.getByKeys(obj1, col) ?? 0;
+      let val2 = this.getByKeys(obj2, col) ?? 0;
+      this.setByKeys(ret, col, val1 + val2);
     }
     return ret;
   }
 
-   /**
-   * 将两个对象的属性相减
-   * @param obj1 
-   * @param obj2 
-   * @param cols 
-   */
-  static subObj(obj1,obj2,cols:string[]){
-    let ret:any = {};
-    for(let col of cols){
-      let val1 = this.getByKeys(obj1,col) ?? 0;
-      let val2 =  this.getByKeys(obj2,col) ?? 0;
-      this.setByKeys(ret,col, val1 - val2);
+  /**
+  * 将两个对象的属性相减
+  * @param obj1 
+  * @param obj2 
+  * @param cols 
+  */
+  static subObj(obj1, obj2, cols: string[]) {
+    let ret: any = {};
+    for (let col of cols) {
+      let val1 = this.getByKeys(obj1, col) ?? 0;
+      let val2 = this.getByKeys(obj2, col) ?? 0;
+      this.setByKeys(ret, col, val1 - val2);
     }
     return ret;
   }
-  
 
-  static parseJson(json:any,opt:any){
-    if(json == null || opt == null){
+
+  static parseJson(json: any, opt: any) {
+    if (json == null || opt == null) {
       return json;
     }
-    if(json instanceof Array){
-      let array:any[] = [];
-      for(let e of json){
-        array.push(this.changeVal(e,opt))
+    if (json instanceof Array) {
+      let array: any[] = [];
+      for (let e of json) {
+        array.push(this.changeVal(e, opt))
       }
       return array;
-    }else{
+    } else {
       let ret = {};
-      for(let e in json){
-        ret[e] = this.changeVal(json[e],opt)
+      for (let e in json) {
+        ret[e] = this.changeVal(json[e], opt)
       }
       return ret;
     }
   }
 
-  private static changeVal(val:any,opt:any){
-    if(val instanceof Array){
-      let array:any[] = [];
-      for(let e of val){
-        array.push(this.changeVal(e,opt))
+  private static changeVal(val: any, opt: any) {
+    if (val instanceof Array) {
+      let array: any[] = [];
+      for (let e of val) {
+        array.push(this.changeVal(e, opt))
       }
       return array;
-    } 
-    if(NumUtil.isNum(val)){
+    }
+    if (NumUtil.isNum(val)) {
       return val;
     }
-    if(val instanceof Date){
+    if (val instanceof Date) {
       return val;
     }
-    if(StrUtil.isStr(val)){
-      return this.parseStr(val,opt);
+    if (StrUtil.isStr(val)) {
+      return this.parseStr(val, opt);
     }
     let ret = {};
-    for(let e in val){
-      ret[e] = this.changeVal(val[e],opt)
+    for (let e in val) {
+      ret[e] = this.changeVal(val[e], opt)
     }
     return ret;
 
   }
-  private static parseStr(val:string,opt:any){
-    if(val.startsWith('${') && val.endsWith('}')){
-      let key = val.substring(2,val.length - 1);
+  private static parseStr(val: string, opt: any) {
+    if (val.startsWith('${') && val.endsWith('}')) {
+      let key = val.substring(2, val.length - 1);
       key = key.trim();
 
-      return this.getByKeys(opt,key);
-    }else{
+      return this.getByKeys(opt, key);
+    } else {
       return val;
     }
   }
   /**
    * 为Pojo写的copy方法
    */
-  static copyPojo(clazzName:string,srcPojo,targetPojo){
-    let pk = StrUtil.firstLower(clazzName)+'Id';
-    let notCols = [pk,'contextId','sysAddTime','sysModifyTime','addUser','modifyUser'];
-    for(let e in srcPojo){
-      if(!notCols.includes(e) && !e.startsWith('__')){
+  static copyPojo(clazzName: string, srcPojo, targetPojo) {
+    let pk = StrUtil.firstLower(clazzName) + 'Id';
+    let notCols = [pk, 'contextId', 'sysAddTime', 'sysModifyTime', 'addUser', 'modifyUser'];
+    for (let e in srcPojo) {
+      if (!notCols.includes(e) && !e.startsWith('__')) {
         targetPojo[e] = srcPojo[e];
       }
     }
@@ -164,9 +254,9 @@ class JsonUtil {
    * @param keyStr 
    * @param value 
    */
-  static setByKeys(obj:any,keyStr:string,value){
+  static setByKeys(obj: any, keyStr: string, value) {
     let keys = keyStr.split('.');
-    this.set(obj,keys,value);
+    this.set(obj, keys, value);
   }
   /**
    * 只保留某些字段，支持多级
@@ -174,10 +264,10 @@ class JsonUtil {
    * @param keyStrArray 
    * @returns 
    */
-  static onlyKeys(obj:any,keyStrArray:string[]):any{
-    let newObj:any = {};
-    for(let keyStr of keyStrArray){
-      this.setByKeys(newObj,keyStr,this.getByKeys(obj,keyStr))
+  static onlyKeys(obj: any, keyStrArray: string[]): any {
+    let newObj: any = {};
+    for (let keyStr of keyStrArray) {
+      this.setByKeys(newObj, keyStr, this.getByKeys(obj, keyStr))
     }
     return newObj;
   }
@@ -186,13 +276,13 @@ class JsonUtil {
    * @param obj 
    * @param keyStrArray 
    */
-  static onlyKeys4List(objs:any[],keyStrArray:string[]):any[]{
-    if(keyStrArray == null){
+  static onlyKeys4List(objs: any[], keyStrArray: string[]): any[] {
+    if (keyStrArray == null) {
       return objs;
     }
-    let array:any[] = [];
-    for(let obj of objs){
-      array.push(this.onlyKeys(obj,keyStrArray))
+    let array: any[] = [];
+    for (let obj of objs) {
+      array.push(this.onlyKeys(obj, keyStrArray))
     }
     return array;
   }

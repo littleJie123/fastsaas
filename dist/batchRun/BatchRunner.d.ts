@@ -25,7 +25,8 @@ interface Opt<Pojo = any> {
     process?(list: Pojo[]): Promise<ProcessResult | void>;
 }
 /**
- * 批量运行
+ *
+ * 分批查询数据，按披运行。需要指定sortCol
  */
 export default class BatchRunner<Pojo = any> {
     private opt;

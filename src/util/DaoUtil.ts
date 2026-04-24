@@ -56,8 +56,9 @@ export default class DaoUtil {
       async onAdd(dao, data) {
         for (let col of cols) {
           let val = opt.processFun(dao, data);
-          if (val != null)
+          if (val != null && data[col] == null) {
             data[col] = val;
+          }
         }
       },
 
@@ -87,22 +88,22 @@ export default class DaoUtil {
    * 给增加修改的时候设置某个值
    * @param opt 
    */
-  static createAddAndUpdateByProcessFun(fun:(dao:any,param:any)=>Promise<void>): Function {
-     
+  static createAddAndUpdateByProcessFun(fun: (dao: any, param: any) => Promise<void>): Function {
+
     let changeOpt: OnChangeOpt = {
       async onAdd(dao, data) {
-        await fun(dao,data);
+        await fun(dao, data);
       },
 
       async onUpdate(dao, data, opts) {
         await fun(dao, data);
-           
+
       },
 
       async onUpdateArray(dao: any, array: Array<any>, other?: any, whereObj?: any) {
         if (other == null)
           other = {};
-        for(let row of array){
+        for (let row of array) {
           fun(dao, row);
         }
       }

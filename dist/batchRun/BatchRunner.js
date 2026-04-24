@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastsaas_1 = require("../fastsaas");
 /**
- * 批量运行
+ *
+ * 分批查询数据，按披运行。需要指定sortCol
  */
 class BatchRunner {
     constructor(opt) {
@@ -13,7 +14,7 @@ class BatchRunner {
     }
     getInit() {
         return {
-            pageSize: 5000,
+            pageSize: 1000,
             query: {}
         };
     }

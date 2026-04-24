@@ -399,4 +399,19 @@ export default class {
     }
     return true;
   }
+
+  /**
+   * 数字开头，其他字结尾
+   * @param value 
+   * @returns 
+   */
+  static beginWithNum(value: string) {
+    if (value == null || value == '') {
+      return false;
+    }
+    let first = value.charAt(0);
+    let last = value.charAt(value.length - 1)
+
+    return (first >= '0' && first <= '9' && !(last >= '0' && last <= '9'));
+  }
 }

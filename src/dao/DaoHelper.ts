@@ -85,7 +85,7 @@ export default class DaoHelper implements IDaoHelper {
    */
   async add(key, obj) {
     let dao = this.getDao(key);
-    await dao.add(obj);
+    return await dao.add(obj);
   }
 
 

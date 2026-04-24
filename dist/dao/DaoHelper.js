@@ -69,7 +69,7 @@ class DaoHelper {
      */
     async add(key, obj) {
         let dao = this.getDao(key);
-        await dao.add(obj);
+        return await dao.add(obj);
     }
     /**
      * 更新数组

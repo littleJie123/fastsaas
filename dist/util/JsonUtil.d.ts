@@ -1,4 +1,32 @@
 declare class JsonUtil {
+    static isObj(obj: any): boolean;
+    static isDate(date: any): boolean;
+    static isSimpleVal(obj: any): boolean;
+    static isBoolean(value: any): boolean;
+    static eqByDate(obj1: Date, obj2: Date): boolean;
+    /**
+      * 支持多级
+      * @param ret
+      * @param keys
+      */
+    private static del;
+    /**
+     * 根据obj2的key，从obj1中取值
+     */
+    static inKey(obj1: any, obj2: any): any;
+    /**
+     * 根据keyStr删除对象中的某个字段，支持用aaa.bbb.cc表示多级
+     * @param ret
+     * @param col
+     */
+    static delByKeys(ret: any, col: string): void;
+    /**
+     * 判断两个类型相等。
+     * @param obj1
+     * @param obj2
+     * @returns
+     */
+    static isEqualObj(obj1: any, obj2: any): boolean;
     /**
      * 将两个对象的属性相加
      * @param obj1

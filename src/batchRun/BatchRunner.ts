@@ -1,124 +1,125 @@
 import { AndCdt, Context, Dao, NotCdt, Query, StrUtil } from "../fastsaas";
 
 interface ProcessResult {
-  stop?:boolean
+  stop?: boolean
 }
-interface Opt<Pojo = any>{
-  context?:Context;
-  pageSize?:number;
-  tableName?:string;
+interface Opt<Pojo = any> {
+  context?: Context;
+  pageSize?: number;
+  tableName?: string;
   /**
    * 排序字段，默认主键
    */
-  sortCol?:string
+  sortCol?: string
   /**
    * 查询条件
    */
-  query?:any;
+  query?: any;
   /**
    * 查询的字段
    */
-  colArray?:string[]
+  colArray?: string[]
   /**
    * 处理函数
    * @param list 
    */
-  process?(list:Pojo[]):Promise<ProcessResult|void>;
+  process?(list: Pojo[]): Promise<ProcessResult | void>;
 }
 /**
- * 批量运行
+ * 
+ * 分批查询数据，按披运行。需要指定sortCol
  */
-export default class BatchRunner<Pojo = any>{
-  private opt:Opt<Pojo>;
+export default class BatchRunner<Pojo = any> {
+  private opt: Opt<Pojo>;
 
-  constructor(opt:Opt<Pojo>){
+  constructor(opt: Opt<Pojo>) {
     this.opt = {
       ... this.getInit(),
-      ... opt
+      ...opt
     }
   }
-  protected getInit():Opt<Pojo>{
+  protected getInit(): Opt<Pojo> {
     return {
-      pageSize:5000,
-      query:{}
+      pageSize: 1000,
+      query: {}
     }
   }
-  private isOver(list:any[]){
-    if(list == null){
+  private isOver(list: any[]) {
+    if (list == null) {
       return false;
     }
     return list.length < this.opt.pageSize;
   }
-  async process(){
-    let list:Pojo[] = null;
+  async process() {
+    let list: Pojo[] = null;
     let cnt = 0;
-    while(!this.isOver(list)){
+    while (!this.isOver(list)) {
       list = await this.findList(list)
-      if(list.length > 0){
-        let result:any = await this.doProcess(list);
+      if (list.length > 0) {
+        let result: any = await this.doProcess(list);
         cnt += list.length;
-        
-        if(result?.stop){
+
+        if (result?.stop) {
           return;
         }
-        
+
       }
     }
-   
+
   }
 
-  protected async doProcess(list:Pojo[]){
-    
+  protected async doProcess(list: Pojo[]) {
+
     return this.opt.process(list);
   }
 
 
-  protected async findList(list:any[]):Promise<any[]>{
-    let query:Query = this.buildQuery();
+  protected async findList(list: any[]): Promise<any[]> {
+    let query: Query = this.buildQuery();
     let col = this.getCol();
-    if(list != null && list.length>0){
+    if (list != null && list.length > 0) {
       let pkCol = this.getPkCol();
-      if(col == pkCol){
-        query.big(col,list[list.length-1][col])
-      }else{
-        query.bigEq(col,list[list.length-1][col])
+      if (col == pkCol) {
+        query.big(col, list[list.length - 1][col])
+      } else {
+        query.bigEq(col, list[list.length - 1][col])
         let andCdt = new AndCdt()
-        andCdt.eq(col,list[list.length-1][col]);
-        andCdt.lessEq(pkCol,list[list.length-1][pkCol]);
+        andCdt.eq(col, list[list.length - 1][col]);
+        andCdt.lessEq(pkCol, list[list.length - 1][pkCol]);
         query.addCdt(new NotCdt(andCdt));
       }
     }
     return this.getDao().find(query);
   }
 
-  protected getDao():Dao{
-    return this.opt.context.get(this.opt.tableName+ 'Dao')
+  protected getDao(): Dao {
+    return this.opt.context.get(this.opt.tableName + 'Dao')
   }
 
-  protected buildQuery():Query{
+  protected buildQuery(): Query {
     let query = Query.parse(this.opt.query);
-    if(this.opt.colArray != null){
+    if (this.opt.colArray != null) {
       query.col(this.opt.colArray)
     }
     query.size(this.opt.pageSize)
     let col = this.getCol();
-    if(col == this.getPkCol()){
+    if (col == this.getPkCol()) {
       query.order(col)
-    }else{
+    } else {
       query.addOrder(col);
       query.addOrder(this.getPkCol())
     }
-    
+
     return query;
   }
-  protected getCol():string{
+  protected getCol(): string {
     let col = this.opt.sortCol;
-    if(col == null){
+    if (col == null) {
       col = this.getPkCol()
     }
     return col;
   }
-  private getPkCol():string{
-    return StrUtil.firstLower( StrUtil.changeUnderStringToCamel( this.opt.tableName) + 'Id')
+  private getPkCol(): string {
+    return StrUtil.firstLower(StrUtil.changeUnderStringToCamel(this.opt.tableName) + 'Id')
   }
 }
