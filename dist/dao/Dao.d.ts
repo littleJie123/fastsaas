@@ -100,6 +100,11 @@ export default abstract class Dao<Pojo = any> {
     update(obj: Pojo, whereObj?: any): Promise<number>;
     incre(pojo: Pojo, col: string, num?: number): Promise<number>;
     /**
+     * 更新数量
+     * @param pojo
+     */
+    changeNum(pojo: Pojo): Promise<number>;
+    /**
      * 多对1的保存，有点类似onlyArray，但是没有重复性检查
      * @param saveItems
      * @returns

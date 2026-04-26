@@ -10,6 +10,7 @@ const BeanUtil_1 = require("./../util/BeanUtil");
 const ArrayUtil_1 = require("./../util/ArrayUtil");
 const Context_1 = __importDefault(require("./../context/Context"));
 const sql_1 = require("./sql");
+const fastsaas_1 = require("../fastsaas");
 class Dao {
     /**
      * 根据id更新cdt中的数据，updateArray的语法糖
@@ -199,6 +200,31 @@ class Dao {
         }
         let sqlCol = this._opt.parsePojoField(col);
         obj[col] = new sql_1.Sql(`${sqlCol}=${sqlCol}+${num}`);
+        return this.update(obj);
+    }
+    /**
+     * 更新数量
+     * @param pojo
+     */
+    async changeNum(pojo) {
+        let id = this._opt.acqPojoFirstId();
+        let obj = {
+            [id]: pojo[id]
+        };
+        for (var key in pojo) {
+            if (key != id) {
+                let value = pojo[key];
+                if (value != null && fastsaas_1.NumUtil.isNum(value)) {
+                    let sqlCol = this._opt.parsePojoField(key);
+                    if (value >= 0) {
+                        obj[key] = new sql_1.Sql(`${sqlCol}=${sqlCol}+${value}`);
+                    }
+                    else {
+                        obj[key] = new sql_1.Sql(`${sqlCol}=${sqlCol}${value}`);
+                    }
+                }
+            }
+        }
         return this.update(obj);
     }
     /**

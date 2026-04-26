@@ -4,6 +4,7 @@ export default interface IColChanger {
      */
     srcCol?: string;
     targetCol?: string;
+    secSrcCol?: string;
     /**
      * 直接进行转换
      * @param data1

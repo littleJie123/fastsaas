@@ -11,7 +11,7 @@ import { OnlyArrayIntface, AnyObject, onlyDataInterface } from '../interface'
 import { Sql } from './sql';
 import IDaoOpt from '../inf/IDaoOpt';
 import ISaveItem from './ISaveItem';
-import { IGeter } from '../fastsaas';
+import { IGeter, NumUtil } from '../fastsaas';
 
 
 interface AddArrayNoRepeatOpt<Pojo = any> {
@@ -228,6 +228,32 @@ export default abstract class Dao<Pojo = any> {
     }
     let sqlCol = this._opt.parsePojoField(col)
     obj[col] = new Sql(`${sqlCol}=${sqlCol}+${num}`);
+    return this.update(obj);
+  }
+
+  /**
+   * 更新数量
+   * @param pojo 
+   */
+  async changeNum(pojo: Pojo) {
+    let id = this._opt.acqPojoFirstId()
+    let obj: any = {
+      [id]: pojo[id]
+    };
+    for (var key in pojo) {
+      if (key != id) {
+        let value = pojo[key];
+        if (value != null && NumUtil.isNum(value)) {
+
+          let sqlCol = this._opt.parsePojoField(key);
+          if ((value as number) >= 0) {
+            obj[key] = new Sql(`${sqlCol}=${sqlCol}+${value}`);
+          } else {
+            obj[key] = new Sql(`${sqlCol}=${sqlCol}${value}`);
+          }
+        }
+      }
+    }
     return this.update(obj);
   }
 
