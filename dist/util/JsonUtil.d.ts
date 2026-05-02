@@ -99,6 +99,7 @@ declare class JsonUtil {
     static get(obj: any, keys: string | Array<string>): any;
     static change(changer: IChanger | IChanger[], obj: any): any;
     static reverse(changer: IChanger | IChanger[], obj: any): any;
+    static del4List(list: any[], cols: string[]): void;
 }
 export default JsonUtil;
 import IChanger from "./dto/IChanger";

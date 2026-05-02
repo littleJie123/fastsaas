@@ -398,6 +398,14 @@ class JsonUtil {
     let jsonChanger = new ArrayJsonChanger(changer);
     return jsonChanger.reverse(obj)
   }
+
+  static del4List(list: any[], cols: string[]) {
+    for (let row of list) {
+      for (let col of cols) {
+        this.delByKeys(row, col)
+      }
+    }
+  }
 }
 export default JsonUtil;
 import JSONChanger from "./dto/JSONChanger";
