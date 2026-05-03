@@ -27,7 +27,7 @@ class ListControl extends Control_1.default {
         /**
          * 增加排序字段
          *  [{
-                col:'sort',desc:'desc'
+                order:'sort',desc:'desc'
             }]
          */
         this._orderArray = null;

@@ -402,9 +402,36 @@ class JsonUtil {
             }
         }
     }
+    /**
+     * 构建一个字符串，表示两个对象不同之处
+     * @param obj1
+     * @param obj2
+     * @param cols
+     */
+    static async buildDiffDetail(obj1, obj2, opt) {
+        var _a, _b, _c;
+        let names = opt.names;
+        let details = [];
+        for (let name in names) {
+            let type = (_a = opt.values) === null || _a === void 0 ? void 0 : _a[name];
+            let theTypeCompare = {
+                diff: (_b = type === null || type === void 0 ? void 0 : type.diff) !== null && _b !== void 0 ? _b : ((obj1, obj2) => !ValueTypeFac_1.default.isEq(obj1, obj2)),
+                getStr: (_c = type === null || type === void 0 ? void 0 : type.getStr) !== null && _c !== void 0 ? _c : ((val2) => { var _a; return (_a = val2 === null || val2 === void 0 ? void 0 : val2.toString()) !== null && _a !== void 0 ? _a : ''; }),
+            };
+            let value1 = this.getByKeys(obj1, name);
+            let value2 = this.getByKeys(obj2, name);
+            if (theTypeCompare.diff(value1, value2)) {
+                let str = await theTypeCompare.getStr(value2);
+                let detail = `${names[name]}:${str}`;
+                details.push(detail);
+            }
+        }
+        return details.join('');
+    }
 }
 exports.default = JsonUtil;
 const ArrayJSONChanger_1 = __importDefault(require("./dto/ArrayJSONChanger"));
 const ArrayUtil_1 = require("./ArrayUtil");
 const StrUtil_1 = require("./StrUtil");
 const NumUtil_1 = __importDefault(require("./NumUtil"));
+const ValueTypeFac_1 = __importDefault(require("../type/ValueTypeFac"));

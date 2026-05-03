@@ -1,11 +1,18 @@
 
 
+
+
 let keyMap = {
   $toArray: function (key: string) {
     return function (obj) {
       return ArrayUtil.toArray(obj, key)
     }
   }
+}
+
+interface BuildDiffDetailOpt {
+  names: { [key: string]: string };
+  values?: { [key: string]: TypeCompare };
 }
 
 function acqFunByKey(key: string) {
@@ -406,6 +413,33 @@ class JsonUtil {
       }
     }
   }
+
+  /**
+   * 构建一个字符串，表示两个对象不同之处
+   * @param obj1 
+   * @param obj2 
+   * @param cols 
+   */
+  static async buildDiffDetail(obj1, obj2, opt: BuildDiffDetailOpt): Promise<string> {
+    let names = opt.names
+    let details: string[] = []
+    for (let name in names) {
+      let type = opt.values?.[name];
+      let theTypeCompare: TypeCompare = {
+        diff: type?.diff ?? ((obj1, obj2) => !ValueTypeFac.isEq(obj1, obj2)),
+        getStr: type?.getStr ?? ((val2) => val2?.toString() ?? ''),
+      }
+      let value1 = this.getByKeys(obj1, name)
+      let value2 = this.getByKeys(obj2, name)
+
+      if (theTypeCompare.diff(value1, value2)) {
+        let str = await theTypeCompare.getStr(value2)
+        let detail = `${names[name]}:${str}`
+        details.push(detail)
+      }
+    }
+    return details.join('');
+  }
 }
 export default JsonUtil;
 import JSONChanger from "./dto/JSONChanger";
@@ -414,4 +448,6 @@ import ArrayJsonChanger from "./dto/ArrayJSONChanger";
 import { ArrayUtil } from "./ArrayUtil";
 import { StrUtil } from "./StrUtil";
 import NumUtil from "./NumUtil";
+import TypeCompare from "./inf/TypeCompare";
+import ValueTypeFac from "../type/ValueTypeFac";
 

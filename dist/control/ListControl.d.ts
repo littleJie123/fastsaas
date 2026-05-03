@@ -36,7 +36,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     /**
      * 增加排序字段
      *  [{
-            col:'sort',desc:'desc'
+            order:'sort',desc:'desc'
         }]
      */
     protected _orderArray: {

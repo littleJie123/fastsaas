@@ -1,3 +1,11 @@
+interface BuildDiffDetailOpt {
+    names: {
+        [key: string]: string;
+    };
+    values?: {
+        [key: string]: TypeCompare;
+    };
+}
 declare class JsonUtil {
     static isObj(obj: any): boolean;
     static isDate(date: any): boolean;
@@ -100,6 +108,14 @@ declare class JsonUtil {
     static change(changer: IChanger | IChanger[], obj: any): any;
     static reverse(changer: IChanger | IChanger[], obj: any): any;
     static del4List(list: any[], cols: string[]): void;
+    /**
+     * 构建一个字符串，表示两个对象不同之处
+     * @param obj1
+     * @param obj2
+     * @param cols
+     */
+    static buildDiffDetail(obj1: any, obj2: any, opt: BuildDiffDetailOpt): Promise<string>;
 }
 export default JsonUtil;
 import IChanger from "./dto/IChanger";
+import TypeCompare from "./inf/TypeCompare";
