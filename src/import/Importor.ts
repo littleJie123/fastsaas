@@ -44,6 +44,7 @@ interface ImportOpt {
   domainFun?: string;
   /**
    * 不检查数据
+   * @deprecated
    */
   noCheck?: boolean
 
@@ -78,13 +79,32 @@ export default class Importor {
     let opt = this.opt
     let value = oldData[opt.key];
 
-    if (value == null || value == '') {
+    if (this.isEmpty(value)) {
       if (opt.defVal != null) {
         value = opt.defVal;
       }
     }
+    if (StrUtil.isStr(value)) {
+      value = value.trim();
+    }
     newData[opt.key] = { name: value };
 
+  }
+
+  /**
+   * 判断对象是否为空
+   * @param value 
+   * @returns 
+   */
+  private isEmpty(value: any) {
+    if (value == null) {
+      return true;
+    }
+    if (StrUtil.isStr(value)) {
+      return value.trim() == '';
+    }
+
+    return false;
   }
 
   async checked(context: Context, param: any, datas: ImportorObj[]): Promise<boolean> {
@@ -375,38 +395,35 @@ export default class Importor {
     return true;
   }
   isReady(datas: ImportorObj[], importors: Importor[]): boolean {
-    console.log('this.opt.key-->', this.opt.key);
-    if (this.opt.noCheck) {
-      return this.needAllRun(importors)
-    }
+    // if (this.opt.noCheck) {
+
+    // }
     if (this.isAllNull(datas)) {
       return true;
     }
-    let needId = this.opt.needId;
-    if (needId != null) {
-      for (let key of needId) {
-        console.log('key-->', key);
-        let allNull = true;
-        let allNameNull = true;
-        for (let data of datas) {
-          console.log('data[key]', data[key]);
-          if (data[key] != null && data[key].name != null && data[key].name != '') {
-            allNameNull = false;
-          }
-          if (data[key] != null && data[key].id != null) {
-            allNull = false;
-            break;
-          }
 
-        }
-        console.log('allNameNull-->', allNameNull);
-        console.log('allNull-->', allNull);
-        if (!allNameNull && allNull) {
-          return false;
-        }
-      }
-    }
-    return true;
+    return this.needAllRun(importors)
+    // let needId = this.opt.needId;
+    // if (needId != null) {
+    //   for (let key of needId) {
+    //     let allNull = true;
+    //     let allNameNull = true;
+    //     for (let data of datas) {
+    //       if (data[key] != null && data[key].name != null && data[key].name != '') {
+    //         allNameNull = false;
+    //       }
+    //       if (data[key] != null && data[key].id != null) {
+    //         allNull = false;
+    //         break;
+    //       }
+
+    //     }
+    //     if (!allNameNull && allNull) {
+    //       return false;
+    //     }
+    //   }
+    // }
+    // return true;
   }
 
 }

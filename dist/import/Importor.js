@@ -19,12 +19,29 @@ class Importor {
     change(oldData, newData) {
         let opt = this.opt;
         let value = oldData[opt.key];
-        if (value == null || value == '') {
+        if (this.isEmpty(value)) {
             if (opt.defVal != null) {
                 value = opt.defVal;
             }
         }
+        if (fastsaas_1.StrUtil.isStr(value)) {
+            value = value.trim();
+        }
         newData[opt.key] = { name: value };
+    }
+    /**
+     * 判断对象是否为空
+     * @param value
+     * @returns
+     */
+    isEmpty(value) {
+        if (value == null) {
+            return true;
+        }
+        if (fastsaas_1.StrUtil.isStr(value)) {
+            return value.trim() == '';
+        }
+        return false;
     }
     async checked(context, param, datas) {
         let domainRet = await this.checkByDomain(context, param, datas);
@@ -286,37 +303,32 @@ class Importor {
         return true;
     }
     isReady(datas, importors) {
-        console.log('this.opt.key-->', this.opt.key);
-        if (this.opt.noCheck) {
-            return this.needAllRun(importors);
-        }
+        // if (this.opt.noCheck) {
+        // }
         if (this.isAllNull(datas)) {
             return true;
         }
-        let needId = this.opt.needId;
-        if (needId != null) {
-            for (let key of needId) {
-                console.log('key-->', key);
-                let allNull = true;
-                let allNameNull = true;
-                for (let data of datas) {
-                    console.log('data[key]', data[key]);
-                    if (data[key] != null && data[key].name != null && data[key].name != '') {
-                        allNameNull = false;
-                    }
-                    if (data[key] != null && data[key].id != null) {
-                        allNull = false;
-                        break;
-                    }
-                }
-                console.log('allNameNull-->', allNameNull);
-                console.log('allNull-->', allNull);
-                if (!allNameNull && allNull) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return this.needAllRun(importors);
+        // let needId = this.opt.needId;
+        // if (needId != null) {
+        //   for (let key of needId) {
+        //     let allNull = true;
+        //     let allNameNull = true;
+        //     for (let data of datas) {
+        //       if (data[key] != null && data[key].name != null && data[key].name != '') {
+        //         allNameNull = false;
+        //       }
+        //       if (data[key] != null && data[key].id != null) {
+        //         allNull = false;
+        //         break;
+        //       }
+        //     }
+        //     if (!allNameNull && allNull) {
+        //       return false;
+        //     }
+        //   }
+        // }
+        // return true;
     }
 }
 exports.default = Importor;

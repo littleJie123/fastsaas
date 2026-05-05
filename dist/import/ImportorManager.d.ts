@@ -13,7 +13,7 @@ export default class ImportorManager {
     constructor(opt: ImportorManagerOpt);
     process(context: Context, param: any, dataArray: any[]): Promise<ImportorResult>;
     /**
-     * 转变数据
+     * 转变数据变成ImportorObj数组
      * @param data
      * @param caolMap
      */

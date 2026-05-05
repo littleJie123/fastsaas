@@ -61,7 +61,7 @@ class ImportorManager {
         ;
     }
     /**
-     * 转变数据
+     * 转变数据变成ImportorObj数组
      * @param data
      * @param caolMap
      */

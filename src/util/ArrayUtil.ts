@@ -592,6 +592,7 @@ opt:{
 	}
 	/**
 	 * 查找最大的 支持属性是日期
+	 * 返回的是array中的对象
 	 * @param array 
 	 * @param fun 
 	 * @returns 
@@ -620,6 +621,7 @@ opt:{
 
 	/**
 	 * 查找最小的值,支持属性是日期
+	 * 返回的是array中的对象
 	 * @param array 
 	 * @param fun 
 	 * @returns 
@@ -770,22 +772,22 @@ opt:{
 		return ret
 	}
 
-	static merge(array:any[],opt:MergeOpt):any[]{
-		let retList:any[] = [];
+	static merge(array: any[], opt: MergeOpt): any[] {
+		let retList: any[] = [];
 		let currentObj = null;
-		for(let row of array){
-			if(currentObj == null){
-				currentObj = opt.init != null ? opt.init(row): row;
+		for (let row of array) {
+			if (currentObj == null) {
+				currentObj = opt.init != null ? opt.init(row) : row;
 				continue;
 			}
-			if(opt.isHit(currentObj,row)){
-				currentObj = opt.addObj(currentObj,row)
-			}else{
+			if (opt.isHit(currentObj, row)) {
+				currentObj = opt.addObj(currentObj, row)
+			} else {
 				retList.push(currentObj);
-				currentObj = opt.init != null ? opt.init(row): row;
+				currentObj = opt.init != null ? opt.init(row) : row;
 			}
 		}
-		if(currentObj != null){
+		if (currentObj != null) {
 			retList.push(currentObj)
 		}
 		return retList

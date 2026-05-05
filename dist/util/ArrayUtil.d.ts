@@ -161,6 +161,7 @@ opt:{
     static notInByKey(array1: any[], array2: any[], key?: any, key2?: any): any[];
     /**
      * 查找最大的 支持属性是日期
+     * 返回的是array中的对象
      * @param array
      * @param fun
      * @returns
@@ -168,6 +169,7 @@ opt:{
     static findMax(array: any[], fun: string | ((row: any) => any)): any;
     /**
      * 查找最小的值,支持属性是日期
+     * 返回的是array中的对象
      * @param array
      * @param fun
      * @returns

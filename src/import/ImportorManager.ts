@@ -6,84 +6,84 @@ import ImportorResult from "./dto/ImportorResult";
 /**
  * 导入指挥官
  */
-interface ImportorManagerOpt{
-  importors:Importor[]
+interface ImportorManagerOpt {
+  importors: Importor[]
 
 }
 
 export default class ImportorManager {
-  private opt:ImportorManagerOpt;
-  constructor(opt:ImportorManagerOpt){
-    
+  private opt: ImportorManagerOpt;
+  constructor(opt: ImportorManagerOpt) {
+
     this.opt = opt;
   }
 
-  async process(context:Context,param:any,dataArray:any[]):Promise<ImportorResult>{
+  async process(context: Context, param: any, dataArray: any[]): Promise<ImportorResult> {
     let imports = this.opt.importors;
     let count = 0;
-    let datas:ImportorObj[] = this.change(dataArray);
-    
-    for(let importor of imports){
-      let importorChecked = await importor.checked(context,param,datas);
-      if(!importorChecked){
+    let datas: ImportorObj[] = this.change(dataArray);
+
+    for (let importor of imports) {
+      let importorChecked = await importor.checked(context, param, datas);
+      if (!importorChecked) {
         return {
-          checked:false,
+          checked: false,
           datas
         }
       }
     }
     let processResult = null;
-    while(imports.length>0){
-      if(count++>200){
+    while (imports.length > 0) {
+      if (count++ > 200) {
         throw new Error('死循环了？');
       }
       let noRuned = true;
       let nextArray = [];
-      for(let importor of imports){
-        if(importor.isReady(datas,imports)){
-          let ret = await importor.process(context,param,datas);
-          if(ret != null){
+      for (let importor of imports) {
+        if (importor.isReady(datas, imports)) {
+          let ret = await importor.process(context, param, datas);
+          if (ret != null) {
             processResult = ret;
           }
           noRuned = false;
-        }else{
+        } else {
           nextArray.push(importor);
         }
       }
-      if(noRuned){
-        let noRuned = imports.filter(row=>!row.getRunned())
-        let keys = noRuned.map(row=>row.getKey())
+      if (noRuned) {
+        let noRuned = imports.filter(row => !row.getRunned())
+        let keys = noRuned.map(row => row.getKey())
         throw new Error(` 一个能import的都没有,还剩下${keys.join(',')}`);
       }
       imports = nextArray;
     }
-    if(processResult == null){
+    if (processResult == null) {
       return {
-        checked:true
+        checked: true
       }
     }
     //返回最后一个的处理结果
-    if(  processResult instanceof Array){
+    if (processResult instanceof Array) {
       return {
-        checked:true,
-        datas:processResult
+        checked: true,
+        datas: processResult
       }
-    }else{
+    } else {
       return processResult;
     };
-    
+
   }
   /**
-   * 转变数据
+   * 转变数据变成ImportorObj数组
    * @param data 
    * @param caolMap 
    */
-  protected change(datas:any[]):ImportorObj[]{
-    let retArray:ImportorObj[] = []
-    for(let data of datas){
-      let newData:ImportorObj = {};
-      for(let importor of this.opt.importors){
-        importor.change(data,newData);  
+  protected change(datas: any[]): ImportorObj[] {
+    let retArray: ImportorObj[] = []
+    for (let data of datas) {
+      let newData: ImportorObj = {};
+      for (let importor of this.opt.importors) {
+        importor.change(data, newData);
       }
       retArray.push(newData);
     }

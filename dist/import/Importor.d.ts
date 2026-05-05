@@ -35,6 +35,7 @@ interface ImportOpt {
     domainFun?: string;
     /**
      * 不检查数据
+     * @deprecated
      */
     noCheck?: boolean;
     /**
@@ -56,6 +57,12 @@ export default class Importor {
      * @param caolMap
      */
     change(oldData: any, newData: ImportorObj): void;
+    /**
+     * 判断对象是否为空
+     * @param value
+     * @returns
+     */
+    private isEmpty;
     checked(context: Context, param: any, datas: ImportorObj[]): Promise<boolean>;
     /**
      * 通过dao类来进行处理

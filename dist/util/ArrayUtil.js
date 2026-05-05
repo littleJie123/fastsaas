@@ -516,6 +516,7 @@ opt:{
     }
     /**
      * 查找最大的 支持属性是日期
+     * 返回的是array中的对象
      * @param array
      * @param fun
      * @returns
@@ -540,6 +541,7 @@ opt:{
     }
     /**
      * 查找最小的值,支持属性是日期
+     * 返回的是array中的对象
      * @param array
      * @param fun
      * @returns
