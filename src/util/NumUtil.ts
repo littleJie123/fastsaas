@@ -1,5 +1,5 @@
 import { ArrayUtil } from "./ArrayUtil";
-import JsonUtil from "./JsonUtil";
+import JsonUtil from "./JsonUtil"; 
 
 interface ShareCostOpt {
   /**
@@ -48,7 +48,7 @@ interface NumAndUnit {
    */
   name: string;
 }
-export default class {
+export default class NumUtil {
 
   /**
    * 将一个数平均分配到多个对象中
@@ -186,6 +186,9 @@ export default class {
    */
   static assign(numObj: any, assignNumObjs: any[], opt: AssignOpt) {
     let { col, assignNumObjCol } = opt;
+    if (assignNumObjs == null || assignNumObjs.length == 0) {
+      return;
+    }
     let value = JsonUtil.getByKeys(numObj, col) ?? 0;
     if (assignNumObjCol == null) {
       assignNumObjCol = col;
@@ -213,18 +216,34 @@ export default class {
     }
     for (let assignNumObj of assignNumObjs) {
       let assignValue = JsonUtil.getByKeys(assignNumObj, valueCol) ?? 0;
-      JsonUtil.setByKeys(assignNumObj, assignNumObjCol, Math.floor((assignValue / sumAssignValue) * value));
+      if (sumAssignValue > 0) {
+        let theValue = (assignValue / sumAssignValue) * value;
+        if (NumUtil.isEq(Math.floor(theValue) + 1, theValue)) {
+          theValue = Math.floor(theValue) + 1
+        } else {
+          theValue = Math.floor(theValue)
+        }
+        JsonUtil.setByKeys(assignNumObj, assignNumObjCol, theValue);
+      } else {
+        JsonUtil.setByKeys(assignNumObj, assignNumObjCol, Math.floor(value / assignNumObjs.length));
+      }
     }
     sumAssignValue = ArrayUtil.sum(assignNumObjs, assignNumObjCol);
     if (sumAssignValue < value) {
       let diff = value - sumAssignValue;
       let index = 0;
-      while (diff > 0) {
-        let val = JsonUtil.getByKeys(assignNumObjs[index], assignNumObjCol) ?? 0;
-        JsonUtil.setByKeys(assignNumObjs[index], assignNumObjCol, val + 1);
+      let hasVals = assignNumObjs.filter(row => JsonUtil.getByKeys(row, assignNumObjCol) > 0)
+      let reAssignNumObjs = assignNumObjs
+      if (hasVals.length > 0) {
+        reAssignNumObjs = hasVals;
+      }
+
+      while (diff > 0 && !this.isEq(diff, 0)) {
+        let val = JsonUtil.getByKeys(reAssignNumObjs[index], assignNumObjCol) ?? 0;
+        JsonUtil.setByKeys(reAssignNumObjs[index], assignNumObjCol, val + 1);
         diff--;
         index++;
-        if (index >= assignNumObjs.length) {
+        if (index >= reAssignNumObjs.length) {
           index = 0;
         }
       }

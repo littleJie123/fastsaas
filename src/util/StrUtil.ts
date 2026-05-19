@@ -570,16 +570,12 @@ export class StrUtil {
     return function (obj: any): string {
       let ret: string[] = [];
       for (let col of cols) {
-        console.log('col', col);
         let val = StrUtil.getByCol(obj, col);
-        console.log('val', val, 'col.defVal', col.defVal);
         if (val == null && col.defVal != null) {
-          console.log('11111111');
           val = col.defVal
         }
         ret.push(val);
       }
-      console.log(" ret.join('$____$')", ret.join('$____$'))
       return ret.join('$____$');
     }
   }

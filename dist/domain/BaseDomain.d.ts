@@ -3,7 +3,9 @@ import IDomainOpt from "./inf/IDomainOpt";
 import ISaveParam from "./inf/ISaveParam";
 import UpdateOpt from "./inf/UpdateOpt";
 export default abstract class BaseDomain<Do = any> {
+    protected needUpdates: Do[];
     protected _context: Context;
+    updateAndClear(): Promise<void>;
     setContext(context: Context): void;
     getContext(): Context;
     getDao(): Dao<Do>;

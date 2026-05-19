@@ -4,7 +4,18 @@ import ISaveParam from "./inf/ISaveParam";
 import UpdateOpt from "./inf/UpdateOpt";
 
 export default abstract class BaseDomain<Do = any> {
+
+  protected needUpdates: Do[] = [];
+
   protected _context: Context;
+
+  async updateAndClear(){
+    if( this.needUpdates.length > 0){
+      let dao = this.getDao()
+      await dao.updateArray(this.needUpdates);
+      this.needUpdates = [];
+    }
+  }
 
   setContext(context: Context) {
     this._context = context;

@@ -19,14 +19,17 @@ export class DateUtil {
     return str.substring(11);
   }
 
+
+
   /**
    * @description 将 类似2015-04-16T03:38:12，2015-04-16 的字符串转化成Date对象
    * @param  {[type]} str [description]
    * @return {[type]}	 [description]
    */
   static parse(str: Date | string): Date {
-    if (str == null || (str as string).length < 10) return null
+
     if (str instanceof Date) return str
+    if (str == null )return null
     var date = new Date()
     date.setDate(1)
     date.setFullYear(parseInt(str.substring(0, 4)))

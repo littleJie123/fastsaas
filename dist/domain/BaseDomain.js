@@ -2,6 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastsaas_1 = require("../fastsaas");
 class BaseDomain {
+    constructor() {
+        this.needUpdates = [];
+    }
+    async updateAndClear() {
+        if (this.needUpdates.length > 0) {
+            let dao = this.getDao();
+            await dao.updateArray(this.needUpdates);
+            this.needUpdates = [];
+        }
+    }
     setContext(context) {
         this._context = context;
     }

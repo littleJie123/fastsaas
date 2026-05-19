@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ArrayUtil_1 = require("./ArrayUtil");
 const JsonUtil_1 = __importDefault(require("./JsonUtil"));
-class default_1 {
+class NumUtil {
     /**
      * 将一个数平均分配到多个对象中
      * @param sumValue
@@ -129,6 +129,9 @@ class default_1 {
     static assign(numObj, assignNumObjs, opt) {
         var _a, _b, _c, _d;
         let { col, assignNumObjCol } = opt;
+        if (assignNumObjs == null || assignNumObjs.length == 0) {
+            return;
+        }
         let value = (_a = JsonUtil_1.default.getByKeys(numObj, col)) !== null && _a !== void 0 ? _a : 0;
         if (assignNumObjCol == null) {
             assignNumObjCol = col;
@@ -157,18 +160,35 @@ class default_1 {
         }
         for (let assignNumObj of assignNumObjs) {
             let assignValue = (_c = JsonUtil_1.default.getByKeys(assignNumObj, valueCol)) !== null && _c !== void 0 ? _c : 0;
-            JsonUtil_1.default.setByKeys(assignNumObj, assignNumObjCol, Math.floor((assignValue / sumAssignValue) * value));
+            if (sumAssignValue > 0) {
+                let theValue = (assignValue / sumAssignValue) * value;
+                if (NumUtil.isEq(Math.floor(theValue) + 1, theValue)) {
+                    theValue = Math.floor(theValue) + 1;
+                }
+                else {
+                    theValue = Math.floor(theValue);
+                }
+                JsonUtil_1.default.setByKeys(assignNumObj, assignNumObjCol, theValue);
+            }
+            else {
+                JsonUtil_1.default.setByKeys(assignNumObj, assignNumObjCol, Math.floor(value / assignNumObjs.length));
+            }
         }
         sumAssignValue = ArrayUtil_1.ArrayUtil.sum(assignNumObjs, assignNumObjCol);
         if (sumAssignValue < value) {
             let diff = value - sumAssignValue;
             let index = 0;
-            while (diff > 0) {
-                let val = (_d = JsonUtil_1.default.getByKeys(assignNumObjs[index], assignNumObjCol)) !== null && _d !== void 0 ? _d : 0;
-                JsonUtil_1.default.setByKeys(assignNumObjs[index], assignNumObjCol, val + 1);
+            let hasVals = assignNumObjs.filter(row => JsonUtil_1.default.getByKeys(row, assignNumObjCol) > 0);
+            let reAssignNumObjs = assignNumObjs;
+            if (hasVals.length > 0) {
+                reAssignNumObjs = hasVals;
+            }
+            while (diff > 0 && !this.isEq(diff, 0)) {
+                let val = (_d = JsonUtil_1.default.getByKeys(reAssignNumObjs[index], assignNumObjCol)) !== null && _d !== void 0 ? _d : 0;
+                JsonUtil_1.default.setByKeys(reAssignNumObjs[index], assignNumObjCol, val + 1);
                 diff--;
                 index++;
-                if (index >= assignNumObjs.length) {
+                if (index >= reAssignNumObjs.length) {
                     index = 0;
                 }
             }
@@ -345,4 +365,4 @@ class default_1 {
         return (first >= '0' && first <= '9' && !(last >= '0' && last <= '9'));
     }
 }
-exports.default = default_1;
+exports.default = NumUtil;

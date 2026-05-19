@@ -42,7 +42,7 @@ interface NumAndUnit {
      */
     name: string;
 }
-export default class {
+export default class NumUtil {
     /**
      * 将一个数平均分配到多个对象中
      * @param sumValue
