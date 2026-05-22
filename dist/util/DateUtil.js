@@ -25,10 +25,10 @@ class DateUtil {
      * @return {[type]}	 [description]
      */
     static parse(str) {
-        if (str == null || str.length < 10)
-            return null;
         if (str instanceof Date)
             return str;
+        if (str == null)
+            return null;
         var date = new Date();
         date.setDate(1);
         date.setFullYear(parseInt(str.substring(0, 4)));

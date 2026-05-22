@@ -1,7 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const fastsaas_1 = require("../fastsaas");
 const DateUtil_1 = require("./DateUtil");
 class default_1 {
+    static between(colName, begin, end, opt) {
+        let andCdt = new fastsaas_1.AndCdt();
+        if (begin != null) {
+            if (!(opt === null || opt === void 0 ? void 0 : opt.isTimeStamp)) {
+                andCdt.bigEq(colName, begin);
+            }
+            else {
+                andCdt.bigEq(colName, DateUtil_1.DateUtil.parse(begin).getTime());
+            }
+        }
+        if (end != null) {
+            let endStr = this.add(end, 1);
+            if (!(opt === null || opt === void 0 ? void 0 : opt.isTimeStamp)) {
+                andCdt.less(colName, endStr);
+            }
+            else {
+                andCdt.less(colName, DateUtil_1.DateUtil.parse(endStr).getTime());
+            }
+        }
+        return andCdt;
+    }
     static beforeDay(days, today) {
         if (days == null) {
             days = 1;

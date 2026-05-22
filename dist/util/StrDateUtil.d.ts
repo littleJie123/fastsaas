@@ -1,4 +1,8 @@
+import { BaseCdt } from "../fastsaas";
 export default class {
+    static between(colName: string, begin: string, end: string, opt?: {
+        isTimeStamp?: boolean;
+    }): BaseCdt;
     static beforeDay(days?: number, today?: string): string;
     static add(strDate: string, day: number): string;
     static getToday(): string;
