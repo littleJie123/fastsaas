@@ -61,7 +61,9 @@ class RepeatChecker extends ColChecker_1.default {
             return;
         let names = ArrayUtil_1.ArrayUtil.toArray(array, this.getCol());
         let query = new Query_1.default().in(this.getCol(), names);
-        query.addCdt(BaseCdt_1.default.parse(this._opt.otherCdt));
+        if (this._opt.otherCdt) {
+            query.addCdt(BaseCdt_1.default.parse(this._opt.otherCdt));
+        }
         let dao = this.getDao();
         let list = await dao.find(query);
         let datas = ArrayUtil_1.ArrayUtil.notInByKey(list, array, this.getIdCol());
@@ -81,7 +83,9 @@ class RepeatChecker extends ColChecker_1.default {
         let names = ArrayUtil_1.ArrayUtil.toArray(array, this.getCol());
         names = ArrayUtil_1.ArrayUtil.filter(names, (row) => row != '');
         let query = new Query_1.default().in(this.getCol(), names);
-        query.addCdt(BaseCdt_1.default.parse(this._opt.otherCdt));
+        if (this._opt.otherCdt) {
+            query.addCdt(BaseCdt_1.default.parse(this._opt.otherCdt));
+        }
         let dao = this.getDao();
         let list = await dao.find(query);
         if (list.length > 0) {

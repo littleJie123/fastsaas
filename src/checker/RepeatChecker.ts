@@ -94,7 +94,9 @@ export default class RepeatChecker extends ColChecker {
 
 
     let query = new Query().in(this.getCol(), names);
-    query.addCdt(BaseCdt.parse(this._opt.otherCdt));
+    if(this._opt.otherCdt){
+      query.addCdt(BaseCdt.parse(this._opt.otherCdt));
+    }
     let dao = this.getDao();
     let list = await dao.find(query);
 
@@ -120,7 +122,9 @@ export default class RepeatChecker extends ColChecker {
     let names = ArrayUtil.toArray(array, this.getCol())
     names = ArrayUtil.filter(names, (row) => row != '')
     let query = new Query().in(this.getCol(), names);
-    query.addCdt(BaseCdt.parse(this._opt.otherCdt));
+    if(this._opt.otherCdt){
+      query.addCdt(BaseCdt.parse(this._opt.otherCdt));
+    }
     let dao = this.getDao();
     let list = await dao.find(query);
     if (list.length > 0) {
