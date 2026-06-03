@@ -89,19 +89,18 @@ export declare class StrUtil {
      */
     static format(strFormat: string, obj: any): string;
     /**
-     * compare的批量版本 - 近似极速版 (Bigram + Map 优化)
-     */
-    /**
-     * compare的批量版本 - 近似极速版 (Bigram + Map 优化)
+     * 从strArray中找出相似字符串导words中
+     * words 比较的字符串，结果表里面
      */
     static compareList(words: any[], strArray: any[], opt?: {
         /**words默认name */
         wordsCol?: string;
-        /**strArray默认name */
+        /**strArray默认name   */
         col?: string;
         cnt?: number;
         threshold?: number;
         maxLength?: number;
+        /**放入比较结果的属性 */
         wordNameCol?: string;
     }): CompareResult[];
     /**

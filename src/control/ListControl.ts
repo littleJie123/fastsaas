@@ -5,7 +5,7 @@ import Query from './../dao/query/Query';
 import BaseCdt from './../dao/query/cdt/BaseCdt';
 import Dao from './../dao/Dao';
 import Control from "./Control";
-import { JsonUtil } from '../fastsaas';
+import { JsonUtil, StrUtil } from '../fastsaas';
 
 export interface ListParam {
   _first?: number;
@@ -279,14 +279,17 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
    * 增加排序
    * @param query 
    */
-  protected async addOrder(query) {
+  protected async addOrder(query:Query) {
     if (this._orderArray) {
       for (var i = 0; i < this._orderArray.length; i++) {
         var item = this._orderArray[i]
         if (item.order != null) {
           query.addOrder(item.order, item.desc)
         } else {
-          query.addOrder(item)
+          let itemStr:any = item;
+          if(StrUtil.isStr(itemStr)){
+            query.addOrder(itemStr)
+          }
         }
       }
     }

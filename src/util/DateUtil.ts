@@ -20,11 +20,24 @@ export class DateUtil {
   }
 
 
+  /**
+   * 判断一个日期对象的时间（时分秒）都是空的
+   * @param date 
+   */
+  static notAnyTime(date: Date): boolean {
+    if (!(date instanceof Date)) {
+      return false
+    }
+    if (isNaN(date.getTime())) {
+      return false
+    }
+    return date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() === 0
+  }
 
   /**
    * @description 将 类似2015-04-16T03:38:12，2015-04-16 的字符串转化成Date对象
    * @param  {[type]} str [description]
-   * @return {[type]}	 [description]
+   * @return {[type]}\t [description]
    */
   static parse(str: Date | string): Date {
 

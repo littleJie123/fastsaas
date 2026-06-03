@@ -250,7 +250,10 @@ class ListControl extends Control_1.default {
                     query.addOrder(item.order, item.desc);
                 }
                 else {
-                    query.addOrder(item);
+                    let itemStr = item;
+                    if (fastsaas_1.StrUtil.isStr(itemStr)) {
+                        query.addOrder(itemStr);
+                    }
                 }
             }
         }

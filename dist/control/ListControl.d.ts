@@ -130,7 +130,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
      * 增加排序
      * @param query
      */
-    protected addOrder(query: any): Promise<void>;
+    protected addOrder(query: Query): Promise<void>;
     /**
      * 返回默认的查询条件
      */

@@ -212,23 +212,22 @@ export default class Query {
 	desc(col: string): Query {
 		return this.order(col, 'desc')
 	}
-	addOrder(col, desc?: string) {
-
-		if (col instanceof Array) {
-			this._orders.push(...col);
-		} else {
-			if (col instanceof OrderItem) {
-				this._orders.push(col)
-			} else {
-				if (col.col) {
-					this._orders.push(new OrderItem(col.col, col.desc))
-				} else {
-					this._orders.push(new OrderItem(col, desc))
-				}
-			}
-		}
+	addOrder(col:string, desc?: string) {
+		this._orders.push(new OrderItem(col, desc))
+		
 		return this
 	}
+
+	addOrderItem(orderItem:OrderItem){
+		this._orders.push(orderItem)
+		return this;
+	}
+
+	addOrderItemArray(orderItems:OrderItem[]){
+		this._orders.push(... orderItems)
+		return this;
+	}
+	
 
 	/**
 	返回分页

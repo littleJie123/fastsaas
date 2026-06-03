@@ -289,8 +289,9 @@ class StrUtil {
      */
     static formatSql(sql, obj) {
         let params = [];
-        if (sql == null || obj == null)
+        if (sql == null || obj == null) {
             return { sql, params };
+        }
         let start = 0;
         let begin = sql.indexOf('${');
         while (begin != -1) {
@@ -358,10 +359,8 @@ class StrUtil {
         return strFormat;
     }
     /**
-     * compare的批量版本 - 近似极速版 (Bigram + Map 优化)
-     */
-    /**
-     * compare的批量版本 - 近似极速版 (Bigram + Map 优化)
+     * 从strArray中找出相似字符串导words中
+     * words 比较的字符串，结果表里面
      */
     static compareList(words, strArray, opt) {
         var _a;

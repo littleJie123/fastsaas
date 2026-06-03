@@ -190,22 +190,15 @@ class Query {
         return this.order(col, 'desc');
     }
     addOrder(col, desc) {
-        if (col instanceof Array) {
-            this._orders.push(...col);
-        }
-        else {
-            if (col instanceof OrderItem_1.default) {
-                this._orders.push(col);
-            }
-            else {
-                if (col.col) {
-                    this._orders.push(new OrderItem_1.default(col.col, col.desc));
-                }
-                else {
-                    this._orders.push(new OrderItem_1.default(col, desc));
-                }
-            }
-        }
+        this._orders.push(new OrderItem_1.default(col, desc));
+        return this;
+    }
+    addOrderItem(orderItem) {
+        this._orders.push(orderItem);
+        return this;
+    }
+    addOrderItemArray(orderItems) {
+        this._orders.push(...orderItems);
         return this;
     }
     /**

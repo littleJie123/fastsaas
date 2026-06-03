@@ -308,8 +308,9 @@ export class StrUtil {
     params?: any[]
   } {
     let params = [];
-    if (sql == null || obj == null)
+    if (sql == null || obj == null){
       return { sql, params };
+    }
     let start = 0;
     let begin = sql.indexOf('${')
     while (begin != -1) {

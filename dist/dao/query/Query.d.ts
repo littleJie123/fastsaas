@@ -67,7 +67,9 @@ export default class Query {
      * @param col
      */
     desc(col: string): Query;
-    addOrder(col: any, desc?: string): this;
+    addOrder(col: string, desc?: string): this;
+    addOrderItem(orderItem: OrderItem): this;
+    addOrderItemArray(orderItems: OrderItem[]): this;
     /**
     返回分页
     */
