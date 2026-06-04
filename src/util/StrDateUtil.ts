@@ -3,6 +3,15 @@ import { DateUtil } from "./DateUtil";
 
 export default class {
 
+  /**
+   * 返回时间部分 类似'00:00:00'
+   * @param date 
+   */
+  static getTime(date:Date):string{
+    let str = DateUtil.formatDate(date);
+    return str.substring(11);
+  }
+
   static between(colName: string, begin: string, end: string,opt?:{
     isTimeStamp?:boolean //是否是时间戳，默认false
   }): BaseCdt {

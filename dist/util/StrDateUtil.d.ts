@@ -1,5 +1,10 @@
 import { BaseCdt } from "../fastsaas";
 export default class {
+    /**
+     * 返回时间部分 类似'00:00:00'
+     * @param date
+     */
+    static getTime(date: Date): string;
     static between(colName: string, begin: string, end: string, opt?: {
         isTimeStamp?: boolean;
     }): BaseCdt;

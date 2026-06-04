@@ -3,6 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fastsaas_1 = require("../fastsaas");
 const DateUtil_1 = require("./DateUtil");
 class default_1 {
+    /**
+     * 返回时间部分 类似'00:00:00'
+     * @param date
+     */
+    static getTime(date) {
+        let str = DateUtil_1.DateUtil.formatDate(date);
+        return str.substring(11);
+    }
     static between(colName, begin, end, opt) {
         let andCdt = new fastsaas_1.AndCdt();
         if (begin != null) {
