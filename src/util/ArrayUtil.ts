@@ -38,8 +38,8 @@ interface AbsJoinParam {
 
 type OnlyFun = (obj: any) => (any | null);
 type OnlyArrayFun = (obj: any) => (any | null);
-type JoinFunction = (ojb1: any, obj2: any) => any;
-type JoinArrayFunction = (ojb: any, array: any[]) => any;
+type JoinFunction = (obj1: any, obj2: any) => any;
+type JoinArrayFunction = (obj: any, array: any[]) => any;
 type JoinMultiFunction = (array1: any[], array2: any[]) => any;
 /**
  * 数组的join

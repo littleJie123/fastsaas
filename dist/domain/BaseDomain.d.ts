@@ -8,7 +8,7 @@ export default abstract class BaseDomain<Do = any> {
     updateAndClear(): Promise<void>;
     setContext(context: Context): void;
     getContext(): Context;
-    getDao(): Dao<Do>;
+    protected getDao(): Dao<Do>;
     getSearcher(): Searcher<Do>;
     /**
      * 返回业务主键

@@ -25,7 +25,7 @@ export default abstract class BaseDomain<Do = any> {
   }
 
 
-  getDao(): Dao<Do> {
+  protected getDao(): Dao<Do> {
     return null
   };
 

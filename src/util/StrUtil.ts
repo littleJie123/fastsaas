@@ -121,7 +121,7 @@ export class StrUtil {
   }
   // 不是string的情况也返回true
   static isEmpty(str): boolean {
-    return typeof str !== 'string' || str.length === 0
+    return  str ==null || str == ''
   }
   /**
   替换字符串,会替换所有
@@ -392,6 +392,11 @@ export class StrUtil {
     maxLength?: number;
     /**放入比较结果的属性 */
     wordNameCol?: string
+
+    /** 需要全部结果 */
+    needAllResult?:boolean
+
+
   }): CompareResult[] {
     if (!words || !strArray || words.length === 0 || strArray.length === 0) return [];
     if (opt?.maxLength) {
@@ -449,10 +454,14 @@ export class StrUtil {
       results.sort((a, b) => b.score - a.score);
       if (results.length > cnt) results = results.slice(0, cnt);
       if (opt?.wordNameCol) {
-        let array = [];
+        let array:any[] = [];
         for (let result of results) {
           let data = result.data
-          array.push(JsonUtil.getByKeys(data, opt?.col))
+          if(opt?.needAllResult){
+            array.push(data)
+          }else{
+            array.push(JsonUtil.getByKeys(data, opt?.col))
+          }
         }
         wordItem[opt?.wordNameCol] = array;
       }

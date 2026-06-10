@@ -107,7 +107,7 @@ class StrUtil {
     }
     // 不是string的情况也返回true
     static isEmpty(str) {
-        return typeof str !== 'string' || str.length === 0;
+        return str == null || str == '';
     }
     /**
     替换字符串,会替换所有
@@ -421,7 +421,12 @@ class StrUtil {
                 let array = [];
                 for (let result of results) {
                     let data = result.data;
-                    array.push(JsonUtil_1.default.getByKeys(data, opt === null || opt === void 0 ? void 0 : opt.col));
+                    if (opt === null || opt === void 0 ? void 0 : opt.needAllResult) {
+                        array.push(data);
+                    }
+                    else {
+                        array.push(JsonUtil_1.default.getByKeys(data, opt === null || opt === void 0 ? void 0 : opt.col));
+                    }
                 }
                 wordItem[opt === null || opt === void 0 ? void 0 : opt.wordNameCol] = array;
             }

@@ -102,6 +102,8 @@ export declare class StrUtil {
         maxLength?: number;
         /**放入比较结果的属性 */
         wordNameCol?: string;
+        /** 需要全部结果 */
+        needAllResult?: boolean;
     }): CompareResult[];
     /**
      * 从一段对象中挑选和一个字符串含有最相近名称的对象
