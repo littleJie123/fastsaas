@@ -3,6 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fastsaas_1 = require("../fastsaas");
 const DateUtil_1 = require("./DateUtil");
 class default_1 {
+    static isToday(date) {
+        if (date == null) {
+            return false;
+        }
+        return DateUtil_1.DateUtil.todayStr() == date;
+    }
     /**
      * 返回时间部分 类似'00:00:00'
      * @param date

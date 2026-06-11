@@ -3,6 +3,13 @@ import { DateUtil } from "./DateUtil";
 
 export default class {
 
+  static isToday(date:string){
+    if(date == null){
+      return false;
+    }
+    return DateUtil.todayStr() == date;
+  }
+
   /**
    * 返回时间部分 类似'00:00:00'
    * @param date 
