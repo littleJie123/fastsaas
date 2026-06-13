@@ -1,5 +1,6 @@
 import { BaseCdt } from "../fastsaas";
 export default class {
+    static getYyMmDd(date: Date): string;
     static isToday(date: string): boolean;
     /**
      * 返回时间部分 类似'00:00:00'

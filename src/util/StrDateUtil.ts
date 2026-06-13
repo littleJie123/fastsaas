@@ -3,6 +3,13 @@ import { DateUtil } from "./DateUtil";
 
 export default class {
 
+
+  static getYyMmDd(date:Date){
+    let str = DateUtil.format(date);
+    let strs = str.split('-')
+    return [strs[0].substring(3),strs[1],strs[2]].join('')
+  }
+
   static isToday(date:string){
     if(date == null){
       return false;

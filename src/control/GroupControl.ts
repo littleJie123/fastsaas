@@ -194,7 +194,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
    */
   protected async schCnt(map, query) {
     if (this.needSchCnt()) {
-      map.totalElements = map.list.length
+      map.totalElements = map.content?.length
     }
   }
   /**

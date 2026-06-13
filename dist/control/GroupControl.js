@@ -172,8 +172,9 @@ class GroupControl extends ListControl_1.default {
      * @param query
      */
     async schCnt(map, query) {
+        var _a;
         if (this.needSchCnt()) {
-            map.totalElements = map.list.length;
+            map.totalElements = (_a = map.content) === null || _a === void 0 ? void 0 : _a.length;
         }
     }
     /**
