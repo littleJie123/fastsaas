@@ -395,7 +395,7 @@ class ListControl extends Control_1.default {
     _sendResp(resp, ret) {
         if (this.isDownload()) {
             resp.set({
-                'Content-Type': 'application/octet-stream',
+                'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'Content-Disposition': 'attachment; filename=' + this.getDownloadFileName(),
                 'Content-Length': ret.length
             });
@@ -406,7 +406,7 @@ class ListControl extends Control_1.default {
         }
     }
     getDownloadFileName() {
-        return 'export.csv';
+        return 'download.xlsx';
     }
     getOnlyCols() {
         return null;

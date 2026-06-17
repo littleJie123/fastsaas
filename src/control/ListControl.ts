@@ -439,7 +439,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
   protected _sendResp(resp, ret) {
     if (this.isDownload()) {
       resp.set({
-        'Content-Type': 'application/octet-stream',
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': 'attachment; filename=' + this.getDownloadFileName(),
         'Content-Length': ret.length
       })
@@ -450,7 +450,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
   }
 
   protected getDownloadFileName() {
-    return 'export.csv'
+    return 'download.xlsx'
   }
 
 
