@@ -249,7 +249,7 @@ export default class DaoHelper implements IDaoHelper {
   async find(key: string, query: any): Promise<any[]> {
     let dao = this.getDao(key);
     let list = await dao.find(query);
-    list = list.filter(row => row.isDel != 1);
+    //list = list.filter(row => row.isDel != 1);
     return list;
   }
 
