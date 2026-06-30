@@ -59,7 +59,7 @@ export default abstract class WebSocketInterceptor {
     if (this.isValid(url)) {
       try {
         await this.doOnBefore(param, url);
-      } catch (e) {
+      } catch (e:any) {
         this.socketProcessor.sendError(e);
 
         return true;

@@ -51,7 +51,7 @@ export default class Control<Param = any, Result = any> {
       return {
         result: ret
       }
-    } catch (e) {
+    } catch (e:any) {
       console.error(e);
       var code = e.code;
       if (code == null) {
@@ -240,7 +240,7 @@ export default class Control<Param = any, Result = any> {
 
       this._sendResp(resp, ret);
       this._printEndLog(new Date().getTime() - begin.getTime());
-    } catch (e) {
+    } catch (e:any) {
       this._printErrorLog(e);
       this._sendError(resp, e);
 

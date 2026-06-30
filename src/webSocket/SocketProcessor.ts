@@ -132,7 +132,7 @@ export default abstract class {
                     return
                   }
                 }
-              } catch (e) {
+              } catch (e:any) {
                 this.sendError(e)
                 console.error(e);
                 return;
