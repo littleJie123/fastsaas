@@ -3,6 +3,7 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "declaration": true,
+        "ignoreDeprecations": "6.0",
         "lib": [
             "ES2018",
             "DOM"
@@ -14,6 +15,7 @@
         "rootDir": "./src",
         "target": "ES2018",
         "experimentalDecorators": true,
+        "strict":false,
         "strictNullChecks": false,
         "noImplicitAny": false   
     },

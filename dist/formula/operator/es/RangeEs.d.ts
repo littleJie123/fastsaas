@@ -4,7 +4,7 @@ export default class RangeEs extends EsOp {
     protected getTerm(col?: string, val?: any): string;
     toEs(col: string, val?: any): {
         [x: string]: {
-            [x: string]: {
+            [col]: {
                 [x: string]: any;
             };
         };
