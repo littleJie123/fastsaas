@@ -45,12 +45,16 @@ class LogHelp {
         return this._opt;
     }
     print(obj, level) {
-        var logtype = this._acqLogType();
-        logtype.print({
-            ...obj,
-            ...this.getOpt(),
-            level
-        });
+        try {
+            let logtype = this._acqLogType();
+            logtype.print({
+                ...obj,
+                ...this.getOpt(),
+                level
+            });
+        }
+        catch (e) {
+        }
     }
     _acqLogType() {
         let base = fastsaas_1.ConfigFac.get('base');
@@ -59,8 +63,8 @@ class LogHelp {
         }
         return new DefaultLog_1.default();
     }
-    error(...message) {
-        this.print(this.changeMessageToObj(message), 'ERROR');
+    error(error) {
+        this.print({ message: error }, 'ERROR');
     }
     debug(...message) {
         this.print(this.changeMessageToObj(message), 'DEBUG');

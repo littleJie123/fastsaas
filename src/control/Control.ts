@@ -253,11 +253,15 @@ export default class Control<Param = any, Result = any> {
     if (code == null) {
       code = -1;
     }
+    let message = e?.message
+    if(message == null || StrUtil.isAllEnglish(message)){
+      message = `出错了：${this._context.getId()}`
+    }
 
     var errorData: any = {
       code,
       status: e?.status,
-      message: e?.message,
+      message,
       data: e?.data
 
     }
@@ -328,5 +332,5 @@ export default class Control<Param = any, Result = any> {
 
 }
 import IChecker from './inf/IChecker';
-import { ConfigFac, JsonUtil, SocketProcessor } from '../fastsaas';
+import { ConfigFac, JsonUtil, SocketProcessor, StrUtil } from '../fastsaas';
 

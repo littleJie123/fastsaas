@@ -8,10 +8,18 @@ var colorMap = {
 }
 export default class LocalLog extends LogType {
   print(obj: any) {
+    if(obj == null){
+      return 
+    }
     let fileWriter = this.getLoggerWiter();
 
     if (fileWriter) {
-      fileWriter.info(JSON.stringify(obj));
+      let infoObj = {... obj}
+      if(obj.message instanceof Error){
+        console.log('**************');
+        infoObj.stack = obj.message.stack
+      }
+      fileWriter.info(JSON.stringify(infoObj));
     }
     let log = ConfigFac.get('log');
     let category = obj.category;

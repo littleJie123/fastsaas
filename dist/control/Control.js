@@ -214,10 +214,14 @@ class Control {
         if (code == null) {
             code = -1;
         }
+        let message = e === null || e === void 0 ? void 0 : e.message;
+        if (message == null || fastsaas_1.StrUtil.isAllEnglish(message)) {
+            message = `出错了：${this._context.getId()}`;
+        }
         var errorData = {
             code,
             status: e === null || e === void 0 ? void 0 : e.status,
-            message: e === null || e === void 0 ? void 0 : e.message,
+            message,
             data: e === null || e === void 0 ? void 0 : e.data
         };
         if (code == -1 && e != null) {

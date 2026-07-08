@@ -26,7 +26,7 @@ export default class LogHelp {
     private getOpt;
     private print;
     private _acqLogType;
-    error(...message: any): void;
+    error(error: Error): void;
     debug(...message: any): void;
 }
 export {};

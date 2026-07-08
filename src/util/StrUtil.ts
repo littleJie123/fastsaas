@@ -44,6 +44,15 @@ function createHumps(keyConverter) {
  */
 export class StrUtil {
 
+  /**
+   * 判断字符串是否全部由英文字母、半角空格和半角标点符号组成
+   */
+  static isAllEnglish(str: string): boolean {
+    if (str == null || str === '') {
+      return false;
+    }
+    return /^[a-zA-Z \x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+$/.test(str);
+  }
 
   /**
    * 将一个下划线的字符串转成驼峰式

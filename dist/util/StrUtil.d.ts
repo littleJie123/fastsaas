@@ -15,6 +15,10 @@ interface SplitRes {
  */
 export declare class StrUtil {
     /**
+     * 判断字符串是否全部由英文字母、半角空格和半角标点符号组成
+     */
+    static isAllEnglish(str: string): boolean;
+    /**
      * 将一个下划线的字符串转成驼峰式
      * @param str
      */

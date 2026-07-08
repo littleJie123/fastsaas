@@ -12,9 +12,17 @@ var colorMap = {
 };
 class LocalLog extends LogType_1.default {
     print(obj) {
+        if (obj == null) {
+            return;
+        }
         let fileWriter = this.getLoggerWiter();
         if (fileWriter) {
-            fileWriter.info(JSON.stringify(obj));
+            let infoObj = { ...obj };
+            if (obj.message instanceof Error) {
+                console.log('**************');
+                infoObj.stack = obj.message.stack;
+            }
+            fileWriter.info(JSON.stringify(infoObj));
         }
         let log = fastsaas_1.ConfigFac.get('log');
         let category = obj.category;

@@ -67,12 +67,17 @@ export default class LogHelp {
     return this._opt;
   }
   private print(obj: any, level: Level) {
-    var logtype = this._acqLogType();
-    logtype.print({
-      ...obj,
-      ... this.getOpt(),
-      level
-    });
+   
+    try{
+      let logtype = this._acqLogType();
+      logtype.print({
+        ...obj,
+        ... this.getOpt(),
+        level
+      });
+    }catch(e){
+
+    }
   }
 
   private _acqLogType(): LogType {
@@ -83,8 +88,9 @@ export default class LogHelp {
     return new DefaultLog();
   }
 
-  error(...message: any) {
-    this.print(this.changeMessageToObj(message), 'ERROR')
+  error(error:Error) {
+    
+    this.print({message:error}, 'ERROR')
   }
 
   debug(...message: any) {
