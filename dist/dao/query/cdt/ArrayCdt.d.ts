@@ -3,6 +3,7 @@ import Sql from '../../sql/Sql';
 import ColChanger from '../../colChanger/ColChanger';
 export default abstract class ArrayCdt extends BaseCdt {
     protected _array: Array<BaseCdt>;
+    isValid(): boolean;
     addCdt(baseCdt: BaseCdt): ArrayCdt;
     /**
      * 增加相等条件

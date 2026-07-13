@@ -8,7 +8,10 @@ import ColChanger from '../../colChanger/ColChanger'
 export default abstract class  ArrayCdt extends BaseCdt{
   protected _array:Array<BaseCdt>=[];
 
-	
+
+	isValid(){
+		return this._array.length>0
+	}
 
 	addCdt (baseCdt:BaseCdt):ArrayCdt{
 		if(baseCdt){

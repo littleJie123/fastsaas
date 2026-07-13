@@ -6,6 +6,7 @@ export default abstract class BaseCdt {
     getSql(colChanger: ColChanger): Sql;
     abstract isHit(row: any): boolean;
     abstract toEs(): any;
+    isValid(): boolean;
     getClazz(): string;
     protected changeCol(col: string, colChanger?: ColChanger): string;
     /**

@@ -13,6 +13,9 @@ class ArrayCdt extends BaseCdt_1.default {
         super(...arguments);
         this._array = [];
     }
+    isValid() {
+        return this._array.length > 0;
+    }
     addCdt(baseCdt) {
         if (baseCdt) {
             this._array.push(baseCdt);

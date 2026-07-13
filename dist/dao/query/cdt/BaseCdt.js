@@ -10,6 +10,9 @@ class BaseCdt {
     getSql(colChanger) {
         return this.toSql(colChanger);
     }
+    isValid() {
+        return true;
+    }
     getClazz() {
         return 'BaseCdt';
     }

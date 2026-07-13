@@ -14,6 +14,11 @@ export default abstract class BaseCdt {
 
   abstract toEs():any;
 
+
+  isValid():boolean{
+    return true;
+  }
+
   getClazz(){
     return 'BaseCdt'
   }

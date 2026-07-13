@@ -21,7 +21,7 @@ class BaseFind extends SqlBuilder_1.default {
         }
         var count = 0;
         for (var i = 0; i < cdts.length; i++) {
-            if (cdts[i]) {
+            if (cdts[i] && (cdts[i].isValid == null || cdts[i].isValid())) {
                 if (count > 0) {
                     this._pushSqlTxt(sql, ' and ');
                 }
