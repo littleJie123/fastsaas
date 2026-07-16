@@ -14,6 +14,9 @@ interface AddArrayNoRepeatOpt<Pojo = any> {
     mapFun: IGeter<Pojo>;
     sortFun?(array: Pojo[]): any;
 }
+interface ChangeNmuOpt {
+    cols?: string[];
+}
 export default abstract class Dao<Pojo = any> {
     protected _opt: DaoOpt;
     protected _map: object;
@@ -103,7 +106,9 @@ export default abstract class Dao<Pojo = any> {
      * 更新数量
      * @param pojo
      */
-    changeNum(pojo: Pojo): Promise<number>;
+    changeNum(pojo: Pojo, opt?: ChangeNmuOpt): Promise<number>;
+    changeNumByArray(pojos: Pojo[], opt?: ChangeNmuOpt): Promise<void>;
+    private buildChangeNumData;
     /**
      * 多对1的保存，有点类似onlyArray，但是没有重复性检查
      * @param saveItems

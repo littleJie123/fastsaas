@@ -22,6 +22,10 @@ interface AddArrayNoRepeatOpt<Pojo = any> {
 
 }
 
+interface ChangeNmuOpt{
+  cols?:string[]
+}
+
 export default abstract class Dao<Pojo = any> {
 
 
@@ -235,26 +239,42 @@ export default abstract class Dao<Pojo = any> {
    * 更新数量
    * @param pojo 
    */
-  async changeNum(pojo: Pojo) {
-    let id = this._opt.acqPojoFirstId()
-    let obj: any = {
-      [id]: pojo[id]
-    };
-    for (var key in pojo) {
-      if (key != id) {
-        let value = pojo[key];
-        if (value != null && NumUtil.isNum(value)) {
+  async changeNum(pojo: Pojo,opt?:ChangeNmuOpt) {
+    let obj = this.buildChangeNumData(pojo,opt)
+    return this.update(obj);
+  }
 
-          let sqlCol = this._opt.parsePojoField(key);
-          if ((value as number) >= 0) {
-            obj[key] = new Sql(`${sqlCol}=${sqlCol}+${value}`);
-          } else {
-            obj[key] = new Sql(`${sqlCol}=${sqlCol}${value}`);
-          }
+  async changeNumByArray(pojos:Pojo[],opt?:ChangeNmuOpt){
+    let rows = pojos.map(pojo=>this.buildChangeNumData(pojo,opt))
+    await this.updateArray(rows);
+  }
+
+  private buildChangeNumData(pojo:Pojo,opt?:ChangeNmuOpt):Pojo{
+    let cols = opt?.cols;
+    let pk = this._opt.acqPojoFirstId();
+
+    let data:any = {
+      [pk]:pojo[pk]
+    }
+    
+    for(let e in pojo){
+      if(e==pk){
+        continue;
+      }
+      let sqlCol = this._opt.parsePojoField(e);
+      if(cols == null && NumUtil.isNum(pojo[e])){
+        data[e] =   new Sql(`(?)+\`${sqlCol}\``, pojo[e])
+        continue;
+      }else{
+        if(cols.includes(e)){
+          data[e] =   new Sql(`(?)+\`${sqlCol}\``, pojo[e])
+          continue;
         }
       }
+      data[e] = pojo[e]
+
     }
-    return this.update(obj);
+    return data;
   }
 
   /**

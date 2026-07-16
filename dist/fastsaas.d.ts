@@ -146,6 +146,7 @@ export { default as Trans } from './decorator/Trans';
 export { default as UserId } from './decorator/UserId';
 export { default as CoreDns } from './dns/CoreDns';
 export { default as myError } from './error/myError';
+export { default as TheError } from './error/TheError';
 export { default as ExportDataParam } from './exportData/dto/ExportDataParam';
 export { default as ExportDataResult } from './exportData/dto/ExportDataResult';
 export { default as ExportDepency } from './exportData/dto/ExportDepency';

@@ -206,26 +206,38 @@ class Dao {
      * 更新数量
      * @param pojo
      */
-    async changeNum(pojo) {
-        let id = this._opt.acqPojoFirstId();
-        let obj = {
-            [id]: pojo[id]
+    async changeNum(pojo, opt) {
+        let obj = this.buildChangeNumData(pojo, opt);
+        return this.update(obj);
+    }
+    async changeNumByArray(pojos, opt) {
+        let rows = pojos.map(pojo => this.buildChangeNumData(pojo, opt));
+        await this.updateArray(rows);
+    }
+    buildChangeNumData(pojo, opt) {
+        let cols = opt === null || opt === void 0 ? void 0 : opt.cols;
+        let pk = this._opt.acqPojoFirstId();
+        let data = {
+            [pk]: pojo[pk]
         };
-        for (var key in pojo) {
-            if (key != id) {
-                let value = pojo[key];
-                if (value != null && fastsaas_1.NumUtil.isNum(value)) {
-                    let sqlCol = this._opt.parsePojoField(key);
-                    if (value >= 0) {
-                        obj[key] = new sql_1.Sql(`${sqlCol}=${sqlCol}+${value}`);
-                    }
-                    else {
-                        obj[key] = new sql_1.Sql(`${sqlCol}=${sqlCol}${value}`);
-                    }
+        for (let e in pojo) {
+            if (e == pk) {
+                continue;
+            }
+            let sqlCol = this._opt.parsePojoField(e);
+            if (cols == null && fastsaas_1.NumUtil.isNum(pojo[e])) {
+                data[e] = new sql_1.Sql(`(?)+\`${sqlCol}\``, pojo[e]);
+                continue;
+            }
+            else {
+                if (cols.includes(e)) {
+                    data[e] = new sql_1.Sql(`(?)+\`${sqlCol}\``, pojo[e]);
+                    continue;
                 }
             }
+            data[e] = pojo[e];
         }
-        return this.update(obj);
+        return data;
     }
     /**
      * 多对1的保存，有点类似onlyArray，但是没有重复性检查
