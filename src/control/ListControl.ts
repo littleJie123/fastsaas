@@ -37,7 +37,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
   /**
    * 开关，不需要查询数量
    */
-  protected _needCnt: boolean = false;
+  protected _needCnt: boolean ;
 
   /**
    * 增加排序字段
@@ -116,7 +116,10 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
    */
   protected needSchCnt(): boolean {
 
-    return this._needCnt;
+    if( this._needCnt != null){
+      return this._needCnt
+    }
+    return this._param._needCnt
 
   }
   /**

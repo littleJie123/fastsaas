@@ -21,10 +21,6 @@ class ListControl extends Control_1.default {
          */
         this._noCdt = false;
         /**
-         * 开关，不需要查询数量
-         */
-        this._needCnt = false;
-        /**
          * 增加排序字段
          *  [{
                 order:'sort',desc:'desc'
@@ -98,7 +94,10 @@ class ListControl extends Control_1.default {
      * @returns
      */
     needSchCnt() {
-        return this._needCnt;
+        if (this._needCnt != null) {
+            return this._needCnt;
+        }
+        return this._param._needCnt;
     }
     /**
      * 是否需要排序

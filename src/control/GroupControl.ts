@@ -170,12 +170,12 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
 
 
     map.content = await this._filterByArrayCdt(map.content);
-    if (!this._needCnt) {
-      this._pageOrder(map.content)
-      await this.schCnt(map, query)
+    
+    this._pageOrder(map.content)
+    await this.schCnt(map, query)
 
 
-    }
+    
     if (this._processPageList) {
       let processedList = await this._processPageList(map.content)
       if (processedList != null) {
