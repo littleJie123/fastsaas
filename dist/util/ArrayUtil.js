@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArrayUtil = void 0;
-const fastsaas_1 = require("../fastsaas");
 const JsonUtil_1 = __importDefault(require("./JsonUtil"));
 const StrUtil_1 = require("./StrUtil");
 /**
@@ -38,7 +37,9 @@ function get(obj, key) {
 }
 class ArrayUtil {
     static async sch(array, query) {
-        let arrayDao = new fastsaas_1.ArrayDao(array);
+        // 避免与 ArrayDao 循环依赖，运行时再加载
+        const ArrayDao = require('../dao/imp/ArrayDao').default;
+        let arrayDao = new ArrayDao(array);
         return arrayDao.find(query);
     }
     /**

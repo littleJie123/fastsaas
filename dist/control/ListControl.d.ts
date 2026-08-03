@@ -1,9 +1,24 @@
 import { CsvCol } from './../util/CsvUtil';
 import Cdt from './../dao/query/cdt/imp/Cdt';
+import AndCdt from './../dao/query/cdt/imp/AndCdt';
+import OrCdt from './../dao/query/cdt/imp/OrCdt';
 import Query from './../dao/query/Query';
 import BaseCdt from './../dao/query/cdt/BaseCdt';
 import Dao from './../dao/Dao';
 import Control from "./Control";
+/** cdts 中单条条件；op 为 or/and 时可嵌套 array */
+export interface CdtItem {
+    col?: string;
+    value?: any;
+    op?: string;
+    array?: CdtItem[];
+}
+/** 客户端通用查询条件 */
+export interface CdtsParam {
+    array?: CdtItem[];
+    /** 默认为 or */
+    op?: string;
+}
 export interface ListParam {
     _first?: number;
     pageSize?: number;
@@ -11,6 +26,8 @@ export interface ListParam {
     orderBy?: string;
     desc?: 'desc' | 'asc';
     __download?: boolean;
+    /** 通用查询条件，见 CdtsParam */
+    cdts?: CdtsParam;
     [key: string]: any;
 }
 export interface ListResult {
@@ -96,10 +113,21 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
      */
     protected _needOrder(): boolean;
     /**
-     根据params的列和值构建某个条件
+    根据params的列和值构建某个条件
     */
     protected buildCdt(e: string, val: any): Promise<BaseCdt>;
     protected doBuildCdt(e: string, val: any): BaseCdt;
+    /**
+     * 将客户端传入的 cdts 转成 OrCdt / AndCdt。
+     * 值直接使用原值，不走 getSchVal。
+     */
+    protected buildCdtItems(cdts: CdtsParam): BaseCdt;
+    protected buildCdtItem(item: CdtItem): BaseCdt;
+    /**
+     * like 的 value：未含 % 时左右补 %；已有 % 则原样使用。
+     */
+    protected formatLikeValue(value: any): any;
+    protected createArrayCdt(op?: string): AndCdt | OrCdt;
     protected getSchVal(e: string, val: any): any;
     /**
      * 产生一个like查询语句

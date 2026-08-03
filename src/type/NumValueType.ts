@@ -1,4 +1,4 @@
-import { NumUtil } from "../fastsaas";
+import NumUtil from "../util/NumUtil";
 import ValueType from "./ValueType";
 
 export default class extends ValueType {

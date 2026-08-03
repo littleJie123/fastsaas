@@ -7,7 +7,7 @@
  * @LastEditTime : 2020-02-12 14:44:32
  */
 import Query from '../dao/query/Query'
-import { IGeter } from '../fastsaas'
+import IGeter from '../util/inf/IGeter'
 import { AnyObject } from './anyObject'
 
 interface sortFun {

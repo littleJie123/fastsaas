@@ -2,7 +2,7 @@
 import winston from 'winston';
 import 'winston-daily-rotate-file';
 import path from 'path';
-import { ConfigFac } from '../../fastsaas';
+import ConfigFac from '../../config/ConfigFac';
 // 定义日志格式
 const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),

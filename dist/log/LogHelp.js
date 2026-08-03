@@ -38,7 +38,7 @@ class LogHelp {
     getOpt() {
         var _a;
         if (this._opt.name == null) {
-            let base = fastsaas_1.ConfigFac.get('base');
+            let base = ConfigFac_1.default.get('base');
             let name = (_a = base.name) !== null && _a !== void 0 ? _a : '';
             this._opt.name = name;
         }
@@ -57,7 +57,7 @@ class LogHelp {
         }
     }
     _acqLogType() {
-        let base = fastsaas_1.ConfigFac.get('base');
+        let base = ConfigFac_1.default.get('base');
         if (base.envName == 'local' || base.envName == null) {
             return new LocalLog_1.default();
         }
@@ -73,4 +73,4 @@ class LogHelp {
 exports.default = LogHelp;
 const DefaultLog_1 = __importDefault(require("./type/DefaultLog"));
 const LocalLog_1 = __importDefault(require("./type/LocalLog"));
-const fastsaas_1 = require("../fastsaas");
+const ConfigFac_1 = __importDefault(require("../config/ConfigFac"));

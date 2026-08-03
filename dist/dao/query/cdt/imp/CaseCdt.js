@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fastsaas_1 = require("../../../../fastsaas");
+const StrUtil_1 = require("../../../../util/StrUtil");
 const sql_1 = require("../../../sql");
 const BaseCdt_1 = __importDefault(require("../BaseCdt"));
 class CaseCdt extends BaseCdt_1.default {
@@ -12,7 +12,7 @@ class CaseCdt extends BaseCdt_1.default {
         this.opt = opt;
     }
     getPkCol() {
-        return fastsaas_1.StrUtil.firstLower(this.opt.tableName + 'Id');
+        return StrUtil_1.StrUtil.firstLower(this.opt.tableName + 'Id');
     }
     changeSql(colChanger, col) {
         if (colChanger == null) {

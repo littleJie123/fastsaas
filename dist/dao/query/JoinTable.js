@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 联合查询的
  */
-const fastsaas_1 = require("../../fastsaas");
+const StrUtil_1 = require("../../util/StrUtil");
 const Sql_1 = __importDefault(require("../sql/Sql"));
 class JoinTable {
     /**
@@ -19,7 +19,7 @@ class JoinTable {
         this.type = 'inner';
         this.table = table;
         if (col == null) {
-            col = fastsaas_1.StrUtil.camelToUnder(table) + '_id';
+            col = StrUtil_1.StrUtil.camelToUnder(table) + '_id';
         }
         if (id == null) {
             id = col;

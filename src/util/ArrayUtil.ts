@@ -7,7 +7,6 @@
  * @LastEditTime : 2020-02-11 19:33:16
  */
 
-import { ArrayDao } from "../fastsaas";
 import MergeOpt from "./dto/MergeOpt";
 import IGeter, { IGeterValue } from "./inf/IGeter"
 import JsonUtil from "./JsonUtil";
@@ -98,6 +97,8 @@ function get<Pojo = any>(obj: Pojo, key: IGeter<Pojo>) {
 export class ArrayUtil {
 
 	static async sch(array: any[], query: any): Promise<any[]> {
+		// 避免与 ArrayDao 循环依赖，运行时再加载
+		const ArrayDao = require('../dao/imp/ArrayDao').default;
 		let arrayDao = new ArrayDao(array);
 		return arrayDao.find(query);
 	}

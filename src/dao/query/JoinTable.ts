@@ -1,7 +1,7 @@
 /**
  * 联合查询的
  */
-import { StrUtil } from '../../fastsaas';
+import { StrUtil } from '../../util/StrUtil';
 import ColChanger from '../colChanger/ColChanger';
 import Sql from '../sql/Sql'
 

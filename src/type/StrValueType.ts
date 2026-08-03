@@ -1,4 +1,4 @@
-import { StrUtil } from "../fastsaas";
+import { StrUtil } from "../util/StrUtil";
 import ValueType from "./ValueType";
 
 export default class extends ValueType {

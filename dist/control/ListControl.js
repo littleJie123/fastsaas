@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ArrayUtil_1 = require("./../util/ArrayUtil");
 const CsvUtil_1 = __importDefault(require("./../util/CsvUtil"));
 const Cdt_1 = __importDefault(require("./../dao/query/cdt/imp/Cdt"));
+const AndCdt_1 = __importDefault(require("./../dao/query/cdt/imp/AndCdt"));
+const OrCdt_1 = __importDefault(require("./../dao/query/cdt/imp/OrCdt"));
 const Query_1 = __importDefault(require("./../dao/query/Query"));
 const Control_1 = __importDefault(require("./Control"));
 const fastsaas_1 = require("../fastsaas");
@@ -106,7 +108,7 @@ class ListControl extends Control_1.default {
         return true;
     }
     /**
-     根据params的列和值构建某个条件
+    根据params的列和值构建某个条件
     */
     async buildCdt(e, val) {
         if (e.substring(0, 1) == '_')
@@ -116,6 +118,10 @@ class ListControl extends Control_1.default {
         }
         if (this._noCdt)
             return null;
+        // cdts 为通用查询条件，不受 _schCols / _noSchCols 限制
+        if (e == 'cdts') {
+            return this.doBuildCdt(e, val);
+        }
         if (this._schCols != null) {
             if (typeof this._schCols == 'string')
                 this._schCols = [this._schCols];
@@ -142,11 +148,71 @@ class ListControl extends Control_1.default {
         return this.doBuildCdt(e, val);
     }
     doBuildCdt(e, val) {
+        if (e == 'cdts') {
+            return this.buildCdtItems(val);
+        }
         let newVal = this.getSchVal(e, val);
         if (newVal == null) {
             return null;
         }
         return new Cdt_1.default(this.getCol(e), newVal, this.getOp(e));
+    }
+    /**
+     * 将客户端传入的 cdts 转成 OrCdt / AndCdt。
+     * 值直接使用原值，不走 getSchVal。
+     */
+    buildCdtItems(cdts) {
+        if (cdts == null || cdts.array == null || cdts.array.length == 0) {
+            return null;
+        }
+        let arrayCdt = this.createArrayCdt(cdts.op);
+        for (let item of cdts.array) {
+            arrayCdt.addCdt(this.buildCdtItem(item));
+        }
+        return arrayCdt.isValid() ? arrayCdt : null;
+    }
+    buildCdtItem(item) {
+        if (item == null) {
+            return null;
+        }
+        let op = item.op;
+        if (op == 'or' || op == 'and') {
+            if (item.array == null || item.array.length == 0) {
+                return null;
+            }
+            let arrayCdt = this.createArrayCdt(op);
+            for (let child of item.array) {
+                arrayCdt.addCdt(this.buildCdtItem(child));
+            }
+            return arrayCdt.isValid() ? arrayCdt : null;
+        }
+        if (item.col == null || item.value == null) {
+            return null;
+        }
+        let value = item.value;
+        if (op == 'like') {
+            value = this.formatLikeValue(value);
+        }
+        // Cdt 构造：op 空时，数组默认 in，否则 =
+        return new Cdt_1.default(item.col, value, op);
+    }
+    /**
+     * like 的 value：未含 % 时左右补 %；已有 % 则原样使用。
+     */
+    formatLikeValue(value) {
+        if (value == null || typeof value != 'string') {
+            return value;
+        }
+        if (value.indexOf('%') >= 0) {
+            return value;
+        }
+        return `%${value}%`;
+    }
+    createArrayCdt(op) {
+        if (op == 'and') {
+            return new AndCdt_1.default();
+        }
+        return new OrCdt_1.default();
     }
     getSchVal(e, val) {
         if (this._valueMap != null) {

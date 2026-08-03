@@ -1,4 +1,4 @@
-import { StrUtil } from "../../../../fastsaas";
+import { StrUtil } from "../../../../util/StrUtil";
 import ColChanger from "../../../colChanger/ColChanger";
 import { Sql } from "../../../sql";
 import BaseCdt from "../BaseCdt";

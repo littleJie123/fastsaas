@@ -1,5 +1,5 @@
 
-import { ConfigFac } from "../../fastsaas";
+import ConfigFac from "../../config/ConfigFac";
 import LogType from "./LogType";
 
 

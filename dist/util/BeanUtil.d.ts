@@ -1,5 +1,5 @@
 import { AnyObject } from '../interface';
-import { IColChanger } from '../fastsaas';
+import IColChanger from '../inf/IColChanger';
 export declare class BeanUtil {
     /**
      *

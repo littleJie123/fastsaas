@@ -101,5 +101,5 @@ export default class LogHelp {
 import LogType from "./type/LogType";
 import DefaultLog from "./type/DefaultLog";
 import LocalLog from "./type/LocalLog";
-import { ConfigFac } from "../fastsaas";
+import ConfigFac from "../config/ConfigFac";
 

@@ -6,7 +6,7 @@ import OperatorFac from './../../../../formula/operator/OperatorFac';
 import ColChanger from '../../../colChanger/ColChanger';
 import { Sql, ColSql, ValSql } from '../../../sql'
 import BaseCdt from '../BaseCdt'
-import { JsonUtil } from '../../../../fastsaas';
+import JsonUtil from '../../../../util/JsonUtil';
 
 /**
  * 支持多个字段的in查询

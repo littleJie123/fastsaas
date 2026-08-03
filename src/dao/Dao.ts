@@ -11,7 +11,8 @@ import { OnlyArrayIntface, AnyObject, onlyDataInterface } from '../interface'
 import { Sql } from './sql';
 import IDaoOpt from '../inf/IDaoOpt';
 import ISaveItem from './ISaveItem';
-import { IGeter, NumUtil } from '../fastsaas';
+import IGeter from '../util/inf/IGeter';
+import NumUtil from '../util/NumUtil';
 
 
 interface AddArrayNoRepeatOpt<Pojo = any> {

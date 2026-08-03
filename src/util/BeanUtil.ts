@@ -15,7 +15,7 @@ import _ from 'lodash'
 import Bean from './../context/decorator/Bean';
 import JsonUtil from './JsonUtil';
 import { StrUtil } from './StrUtil';
-import { ColChanger, IColChanger } from '../fastsaas';
+import IColChanger from '../inf/IColChanger';
 //返回一个高阶函数
 let ParseFunMap = {
   '#d': function (array: any[]) {

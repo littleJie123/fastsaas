@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const winston_1 = __importDefault(require("winston"));
 require("winston-daily-rotate-file");
 const path_1 = __importDefault(require("path"));
-const fastsaas_1 = require("../../fastsaas");
+const ConfigFac_1 = __importDefault(require("../../config/ConfigFac"));
 // 定义日志格式
 const logFormat = winston_1.default.format.combine(winston_1.default.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), winston_1.default.format.printf(({ timestamp, level, message }) => {
     return `{"timestamp":"${timestamp}","message" : ${message}}`;
@@ -17,7 +17,7 @@ function getLoger() {
     // 创建按天滚动的运输层
     if (logger == null && !loggerInited) {
         loggerInited = true;
-        let log = fastsaas_1.ConfigFac.get('log');
+        let log = ConfigFac_1.default.get('log');
         if (log.filePath) {
             const dailyRotateTransport = new winston_1.default.transports.DailyRotateFile({
                 filename: path_1.default.join(log.filePath, 'log%DATE%.log'),

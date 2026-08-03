@@ -1,4 +1,4 @@
-import { IGeter } from '../fastsaas';
+import IGeter from '../util/inf/IGeter';
 import { AnyObject } from './anyObject';
 interface sortFun {
     (obj1: AnyObject, obj2: AnyObject): number;

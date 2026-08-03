@@ -133,9 +133,27 @@ class OperatorFac {
                     return false;
                 if (val2 == null)
                     return false;
-                val2 = val2.toLowerCase();
-                val1 = val1.toLowerCase();
-                return val1.indexOf(val2) != -1;
+                val2 = String(val2).toLowerCase();
+                val1 = String(val1).toLowerCase();
+                // 无 %：保持原行为（子串包含）
+                if (val2.indexOf('%') == -1) {
+                    return val1.indexOf(val2) != -1;
+                }
+                // 有 %：与 SQL LIKE 一致（% 匹配任意长度字符串）
+                let regexBody = '';
+                for (let i = 0; i < val2.length; i++) {
+                    let c = val2.charAt(i);
+                    if (c == '%') {
+                        regexBody += '.*';
+                    }
+                    else if ('.*+?^${}()|[]\\'.indexOf(c) >= 0) {
+                        regexBody += '\\' + c;
+                    }
+                    else {
+                        regexBody += c;
+                    }
+                }
+                return new RegExp('^' + regexBody + '$').test(val1);
             },
             code: 'like',
             es: LikeEs_1.default

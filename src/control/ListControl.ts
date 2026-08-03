@@ -1,11 +1,28 @@
 import { ArrayUtil } from './../util/ArrayUtil';
 import CsvUtil, { CsvCol } from './../util/CsvUtil';
 import Cdt from './../dao/query/cdt/imp/Cdt';
+import AndCdt from './../dao/query/cdt/imp/AndCdt';
+import OrCdt from './../dao/query/cdt/imp/OrCdt';
 import Query from './../dao/query/Query';
 import BaseCdt from './../dao/query/cdt/BaseCdt';
 import Dao from './../dao/Dao';
 import Control from "./Control";
 import { JsonUtil, StrUtil } from '../fastsaas';
+
+/** cdts 中单条条件；op 为 or/and 时可嵌套 array */
+export interface CdtItem {
+  col?: string;
+  value?: any;
+  op?: string;
+  array?: CdtItem[];
+}
+
+/** 客户端通用查询条件 */
+export interface CdtsParam {
+  array?: CdtItem[];
+  /** 默认为 or */
+  op?: string;
+}
 
 export interface ListParam {
   _first?: number;
@@ -14,6 +31,8 @@ export interface ListParam {
   orderBy?: string;
   desc?: 'desc' | 'asc';
   __download?: boolean;
+  /** 通用查询条件，见 CdtsParam */
+  cdts?: CdtsParam;
   [key: string]: any;
 }
 
@@ -131,7 +150,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
 
 
   /**
-   根据params的列和值构建某个条件
+  根据params的列和值构建某个条件
   */
   protected async buildCdt(e: string, val): Promise<BaseCdt> {
     if (e.substring(0, 1) == '_') return null;
@@ -140,6 +159,10 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     }
     if (this._noCdt)
       return null
+    // cdts 为通用查询条件，不受 _schCols / _noSchCols 限制
+    if (e == 'cdts') {
+      return this.doBuildCdt(e, val);
+    }
     if (this._schCols != null) {
       if (typeof this._schCols == 'string')
         this._schCols = [this._schCols];
@@ -170,6 +193,9 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
   }
 
   protected doBuildCdt(e: string, val: any): BaseCdt {
+    if (e == 'cdts') {
+      return this.buildCdtItems(val);
+    }
     let newVal = this.getSchVal(e, val);
     if (newVal == null) {
       return null
@@ -178,6 +204,67 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
       this.getCol(e),
       newVal,
       this.getOp(e))
+  }
+
+  /**
+   * 将客户端传入的 cdts 转成 OrCdt / AndCdt。
+   * 值直接使用原值，不走 getSchVal。
+   */
+  protected buildCdtItems(cdts: CdtsParam): BaseCdt {
+    if (cdts == null || cdts.array == null || cdts.array.length == 0) {
+      return null;
+    }
+    let arrayCdt = this.createArrayCdt(cdts.op);
+    for (let item of cdts.array) {
+      arrayCdt.addCdt(this.buildCdtItem(item));
+    }
+    return arrayCdt.isValid() ? arrayCdt : null;
+  }
+
+  protected buildCdtItem(item: CdtItem): BaseCdt {
+    if (item == null) {
+      return null;
+    }
+    let op = item.op;
+    if (op == 'or' || op == 'and') {
+      if (item.array == null || item.array.length == 0) {
+        return null;
+      }
+      let arrayCdt = this.createArrayCdt(op);
+      for (let child of item.array) {
+        arrayCdt.addCdt(this.buildCdtItem(child));
+      }
+      return arrayCdt.isValid() ? arrayCdt : null;
+    }
+    if (item.col == null || item.value == null) {
+      return null;
+    }
+    let value = item.value;
+    if (op == 'like') {
+      value = this.formatLikeValue(value);
+    }
+    // Cdt 构造：op 空时，数组默认 in，否则 =
+    return new Cdt(item.col, value, op);
+  }
+
+  /**
+   * like 的 value：未含 % 时左右补 %；已有 % 则原样使用。
+   */
+  protected formatLikeValue(value: any): any {
+    if (value == null || typeof value != 'string') {
+      return value;
+    }
+    if (value.indexOf('%') >= 0) {
+      return value;
+    }
+    return `%${value}%`;
+  }
+
+  protected createArrayCdt(op?: string): AndCdt | OrCdt {
+    if (op == 'and') {
+      return new AndCdt();
+    }
+    return new OrCdt();
   }
 
   protected getSchVal(e: string, val: any): any {

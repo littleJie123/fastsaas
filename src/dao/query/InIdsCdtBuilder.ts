@@ -1,4 +1,4 @@
-import { ArrayUtil } from "../../fastsaas";
+import { ArrayUtil } from "../../util/ArrayUtil";
 import { Cdt } from "./cdt/imp";
 
 /**

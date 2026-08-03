@@ -28,7 +28,7 @@
         "ts-jest": "^24.3.0",
         "ts-node": "^8.6.1",
         "tsconfig-paths": "^3.9.0",
-        "typescript": "^5.7.3"
+        "typescript": "^6.0.3"
     },
     "dependencies": {
         "cors": "^2.8.5",

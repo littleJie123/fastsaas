@@ -7,7 +7,7 @@ import { OnlyArrayIntface, onlyDataInterface } from '../interface';
 import { Sql } from './sql';
 import IDaoOpt from '../inf/IDaoOpt';
 import ISaveItem from './ISaveItem';
-import { IGeter } from '../fastsaas';
+import IGeter from '../util/inf/IGeter';
 interface AddArrayNoRepeatOpt<Pojo = any> {
     list: Pojo[];
     query: any;
