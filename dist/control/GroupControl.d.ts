@@ -55,7 +55,7 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
      */
     protected schCnt(map: any, query: any): Promise<void>;
     /**
-     * 内存中分页
+     * 内存中分页。pageSize 为 0（如 `_onlyId`）时不分页，与 SQL 侧 `!pager.rp` 行为一致。
      * @param map
      */
     slice(map: ListResult): void;

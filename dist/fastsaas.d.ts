@@ -131,6 +131,7 @@ export { default as Sql } from './dao/sql/Sql';
 export { default as ValSql } from './dao/sql/ValSql';
 export { default as InIdsCdtBuilder } from './dao/query/InIdsCdtBuilder';
 export { default as Share } from './decorator/Share';
+export { default as SchIds } from './decorator/SchIds';
 export { default as Column } from './decorator/Column';
 export { default as ContextId } from './decorator/ContextId';
 export { default as LogicDel } from './decorator/LogicDel';

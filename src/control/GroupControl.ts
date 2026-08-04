@@ -137,14 +137,16 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
 
       let query = await this.buildQuery()
       let list = await this.find(query)
-      let processedList = await this._processList(list)
-      if (processedList != null) {
-        list = processedList
+      if (this.needProcessList()) {
+        let processedList = await this._processList(list)
+        if (processedList != null) {
+          list = processedList
+        }
       }
       list = await this._filterByArrayCdt(list);
-      processedList = await this._processPageList(list)
-      if (processedList != null) {
-        list = processedList
+      let pageProcessed = await this._processPageList(list)
+      if (pageProcessed != null) {
+        list = pageProcessed
       }
       return this.buildDownloadBuffer(list, await this.buildDownloadInfo())
 
@@ -162,12 +164,12 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
 
     map.content = await this.find(query)
 
-
-    let processedList = await this._processList(map.content)
-    if (processedList != null) {
-      map.content = processedList
+    if (this.needProcessList()) {
+      let processedList = await this._processList(map.content)
+      if (processedList != null) {
+        map.content = processedList
+      }
     }
-
 
     map.content = await this._filterByArrayCdt(map.content);
     
@@ -198,12 +200,15 @@ export default abstract class GroupControl<Param extends ListParam = ListParam> 
     }
   }
   /**
-   * 内存中分页
+   * 内存中分页。pageSize 为 0（如 `_onlyId`）时不分页，与 SQL 侧 `!pager.rp` 行为一致。
    * @param map 
    */
   slice(map: ListResult) {
     if (!this._needPager()) {
-      map.content = map.content.slice(this.getFirst(), this.getFirst() + this.getPageSize())
+      let pageSize = this.getPageSize()
+      if (pageSize) {
+        map.content = map.content.slice(this.getFirst(), this.getFirst() + pageSize)
+      }
     }
   }
 

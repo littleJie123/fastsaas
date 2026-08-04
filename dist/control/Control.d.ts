@@ -45,9 +45,9 @@ export default class Control<Param = any, Result = any> {
     protected _printBeforeLog(req: any): void;
     protected _printEndLog(time: number): void;
     /**
-     * 解析参数
+     * 解析参数（可为 async，如 Share / SchIds）
      */
-    protected _parseRequestParam(): void;
+    protected _parseRequestParam(req?: Request, resp?: Response): Promise<any>;
     execute(req: Request, resp: Response): Promise<void>;
     protected _sendError(resp: any, e: any): void;
     protected _printErrorLog(error: Error): void;

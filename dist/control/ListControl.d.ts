@@ -28,6 +28,14 @@ export interface ListParam {
     __download?: boolean;
     /** 通用查询条件，见 CdtsParam */
     cdts?: CdtsParam;
+    /**
+     * 仅查主键（分页选择 SchIds）：不分页、不跑关联表后处理
+     */
+    _onlyId?: boolean;
+    /**
+     * 分页全选后的反选 id 列表：buildQuery 时加「主键 not in _notInIds」
+     */
+    _notInIds?: number[];
     [key: string]: any;
 }
 export interface ListResult {
@@ -100,7 +108,12 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
      */
     protected _processList(list: any[]): Promise<any[]>;
     /**
-     返回查询字段
+     * 是否需要 _processList（关联表等后处理）。
+     * `_onlyId` 时只取主键，跳过关联查询以节省性能。
+     */
+    protected needProcessList(): boolean;
+    /**
+    返回查询字段
     */
     protected acqCol(): Array<string>;
     /**
@@ -136,7 +149,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
      */
     protected like(field: any, val: any, onlyLeft?: boolean): Cdt;
     /**
-     * 返回分页大小
+     * 返回分页大小。`_onlyId` 时返回 0（SQL 不加 LIMIT，拉全量主键）。
      */
     protected getPageSize(): number;
     /**
@@ -144,11 +157,18 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
      * @param query
      */
     protected _setPage(query: Query): void;
+    /**
+     * `_onlyId` 时返回 0（与 getPageSize 配合，不分页）。
+     */
     protected getFirst(): number;
     /**
     构建查询
     */
     protected buildQuery(): Promise<Query>;
+    /**
+     * 反选排除：`_notInIds` 非空时加「主键 not in _notInIds」
+     */
+    protected addNotInIdsCdt(query: Query): void;
     /**
      * 增加查询条件
      * @param query

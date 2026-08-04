@@ -86,9 +86,21 @@ class ListControl extends Control_1.default {
         return list;
     }
     /**
-     返回查询字段
+     * 是否需要 _processList（关联表等后处理）。
+     * `_onlyId` 时只取主键，跳过关联查询以节省性能。
+     */
+    needProcessList() {
+        var _a;
+        return !((_a = this._param) === null || _a === void 0 ? void 0 : _a._onlyId);
+    }
+    /**
+    返回查询字段
     */
     acqCol() {
+        var _a;
+        if ((_a = this._param) === null || _a === void 0 ? void 0 : _a._onlyId) {
+            return [this.getDao().getPojoIdCol()];
+        }
         return null;
     }
     /**
@@ -239,9 +251,13 @@ class ListControl extends Control_1.default {
         }
     }
     /**
-     * 返回分页大小
+     * 返回分页大小。`_onlyId` 时返回 0（SQL 不加 LIMIT，拉全量主键）。
      */
     getPageSize() {
+        var _a;
+        if ((_a = this._param) === null || _a === void 0 ? void 0 : _a._onlyId) {
+            return 0;
+        }
         var param = this._param;
         if (param.pageSize == null) {
             return this.acqDefPageSize();
@@ -258,7 +274,14 @@ class ListControl extends Control_1.default {
             query.first(this.getFirst());
         }
     }
+    /**
+     * `_onlyId` 时返回 0（与 getPageSize 配合，不分页）。
+     */
     getFirst() {
+        var _a;
+        if ((_a = this._param) === null || _a === void 0 ? void 0 : _a._onlyId) {
+            return 0;
+        }
         var param = this._param;
         if (param._first != null) {
             return parseInt(param._first);
@@ -279,7 +302,9 @@ class ListControl extends Control_1.default {
             param = {};
         }
         this._setPage(query);
-        var col = this.acqCol();
+        var col = param._onlyId
+            ? [this.getDao().getPojoIdCol()]
+            : this.acqCol();
         if (col) {
             query.col(col);
         }
@@ -290,8 +315,20 @@ class ListControl extends Control_1.default {
         //设置预定于的排序条件
         await this.addOrder(query);
         await this.addCdt(query);
+        this.addNotInIdsCdt(query);
         await this.processSchCdt(query);
         return query;
+    }
+    /**
+     * 反选排除：`_notInIds` 非空时加「主键 not in _notInIds」
+     */
+    addNotInIdsCdt(query) {
+        var _a;
+        let notInIds = (_a = this._param) === null || _a === void 0 ? void 0 : _a._notInIds;
+        if (notInIds == null || !(notInIds instanceof Array) || notInIds.length == 0) {
+            return;
+        }
+        query.notIn(this.getDao().getPojoIdCol(), notInIds);
     }
     /**
      * 增加查询条件
@@ -396,9 +433,11 @@ class ListControl extends Control_1.default {
             return [];
         }
         var list = await this.findByDao(query);
-        var processedList = await this._processList(list);
-        if (processedList != null) {
-            list = processedList;
+        if (this.needProcessList()) {
+            var processedList = await this._processList(list);
+            if (processedList != null) {
+                list = processedList;
+            }
         }
         return list;
     }

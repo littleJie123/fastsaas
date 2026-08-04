@@ -33,6 +33,14 @@ export interface ListParam {
   __download?: boolean;
   /** 通用查询条件，见 CdtsParam */
   cdts?: CdtsParam;
+  /**
+   * 仅查主键（分页选择 SchIds）：不分页、不跑关联表后处理
+   */
+  _onlyId?: boolean;
+  /**
+   * 分页全选后的反选 id 列表：buildQuery 时加「主键 not in _notInIds」
+   */
+  _notInIds?: number[];
   [key: string]: any;
 }
 
@@ -122,10 +130,22 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
   protected async _processList(list: any[]): Promise<any[]> {
     return list;
   }
+
   /**
-   返回查询字段
+   * 是否需要 _processList（关联表等后处理）。
+   * `_onlyId` 时只取主键，跳过关联查询以节省性能。
+   */
+  protected needProcessList(): boolean {
+    return !this._param?._onlyId;
+  }
+
+  /**
+  返回查询字段
   */
   protected acqCol(): Array<string> {
+    if (this._param?._onlyId) {
+      return [this.getDao().getPojoIdCol()];
+    }
     return null;
   }
 
@@ -292,9 +312,12 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
   }
 
   /**
-   * 返回分页大小
+   * 返回分页大小。`_onlyId` 时返回 0（SQL 不加 LIMIT，拉全量主键）。
    */
   protected getPageSize() {
+    if (this._param?._onlyId) {
+      return 0;
+    }
     var param = this._param
     if (param.pageSize == null) {
       return this.acqDefPageSize()
@@ -314,7 +337,13 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
 
   }
 
+  /**
+   * `_onlyId` 时返回 0（与 getPageSize 配合，不分页）。
+   */
   protected getFirst() {
+    if (this._param?._onlyId) {
+      return 0;
+    }
     var param = this._param
     if (param._first != null) {
       return parseInt(param._first as any);
@@ -338,7 +367,9 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     }
     this._setPage(query)
 
-    var col = this.acqCol()
+    var col = param._onlyId
+      ? [this.getDao().getPojoIdCol()]
+      : this.acqCol()
     if (col) {
       query.col(col)
     }
@@ -349,9 +380,21 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     //设置预定于的排序条件
     await this.addOrder(query)
     await this.addCdt(query);
+    this.addNotInIdsCdt(query);
 
     await this.processSchCdt(query)
     return query
+  }
+
+  /**
+   * 反选排除：`_notInIds` 非空时加「主键 not in _notInIds」
+   */
+  protected addNotInIdsCdt(query: Query) {
+    let notInIds = this._param?._notInIds;
+    if (notInIds == null || !(notInIds instanceof Array) || notInIds.length == 0) {
+      return;
+    }
+    query.notIn(this.getDao().getPojoIdCol(), notInIds);
   }
   /**
    * 增加查询条件
@@ -455,10 +498,11 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     }
     var list = await this.findByDao(query)
 
-
-    var processedList = await this._processList(list)
-    if (processedList != null) {
-      list = processedList
+    if (this.needProcessList()) {
+      var processedList = await this._processList(list)
+      if (processedList != null) {
+        list = processedList
+      }
     }
 
     return list

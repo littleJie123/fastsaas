@@ -31,7 +31,7 @@ export default class Control<Param = any, Result = any> {
   async executeWebSocket(param: any, url?: string) {
 
     this._param = param;
-    this._parseRequestParam();
+    await this._parseRequestParam();
     if (this._param == null) {
       this._param = <Param>{};
     }
@@ -208,9 +208,9 @@ export default class Control<Param = any, Result = any> {
 
   }
   /**
-   * 解析参数
+   * 解析参数（可为 async，如 Share / SchIds）
    */
-  protected _parseRequestParam() {
+  protected async _parseRequestParam(req?: Request, resp?: Response): Promise<any> {
 
   }
 
@@ -220,7 +220,7 @@ export default class Control<Param = any, Result = any> {
 
     this._resp = resp;
     this._param = req['_param'];
-    this._parseRequestParam();
+    await this._parseRequestParam(req, resp);
     if (this._param == null) {
       this._param = <Param>{};
     }

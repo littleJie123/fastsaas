@@ -24,7 +24,7 @@ class Control {
     }
     async executeWebSocket(param, url) {
         this._param = param;
-        this._parseRequestParam();
+        await this._parseRequestParam();
         if (this._param == null) {
             this._param = {};
         }
@@ -178,15 +178,15 @@ class Control {
         }
     }
     /**
-     * 解析参数
+     * 解析参数（可为 async，如 Share / SchIds）
      */
-    _parseRequestParam() {
+    async _parseRequestParam(req, resp) {
     }
     async execute(req, resp) {
         this._req = req;
         this._resp = resp;
         this._param = req['_param'];
-        this._parseRequestParam();
+        await this._parseRequestParam(req, resp);
         if (this._param == null) {
             this._param = {};
         }
