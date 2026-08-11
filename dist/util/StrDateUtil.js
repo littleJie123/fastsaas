@@ -6,7 +6,7 @@ class default_1 {
     static getYyMmDd(date) {
         let str = DateUtil_1.DateUtil.format(date);
         let strs = str.split('-');
-        return [strs[0].substring(3), strs[1], strs[2]].join('');
+        return [strs[0].substring(2), strs[1], strs[2]].join('');
     }
     static isToday(date) {
         if (date == null) {
