@@ -17,8 +17,19 @@ interface LogParam {
   cdts: LogCdt[]
 }
 
+interface LogFileInfo {
+  path: string;
+  isGzipped: boolean;
+  /** 分片序号：log{day}.log / .log.gz 为 0；.log.1 / .log.1.gz 为 1，以此类推 */
+  seq: number;
+}
+
+const MAX_LINES = 200;
+
 /**
- * 查询日志文件
+ * 查询日志文件。
+ * 支持按日切割的多文件：log{day}.log、log{day}.log.N、log{day}.log.N.gz，
+ * 从序号最大的分片开始遍历（最旧 → 最新），汇总最近匹配的 200 条。
  */
 export default class LogControl extends Control<LogParam> {
   private cdts: Cdt[];
@@ -32,25 +43,24 @@ export default class LogControl extends Control<LogParam> {
       throw new Error('Log file path or day parameter is not configured.');
     }
 
-    const fileInfo = await this.findLogFile(filePath);
-    if (fileInfo == null) {
+    const files = await this.findLogFiles(filePath);
+    if (files.length === 0) {
       throw new Error(`Log file for day ${this._param.day} not found.`);
     }
 
     const check = (json: any) => this.checkJson(json);
-    let array: any[];
+    // 环形缓冲：跨文件从前到后读，保留全局最后 MAX_LINES 条匹配
+    const buffer: any[] = new Array(MAX_LINES);
+    let lineCount = 0;
 
-    if (fileInfo.isGzipped) {
-      // For gzipped files, we have to stream from the beginning.
-      // This will read the whole file, filter matching lines, and return the last 200.
-      const fileStream = fs.createReadStream(fileInfo.path).pipe(zlib.createGunzip());
-      array = await this.readLinesFromStart(fileStream, check);
-    } else {
-      // For plain text files, read from the end for performance.
-      array = await this.readLinesBackwards(fileInfo.path, check);
+    for (const file of files) {
+      const fileStream = file.isGzipped
+        ? fs.createReadStream(file.path).pipe(zlib.createGunzip())
+        : fs.createReadStream(file.path);
+      lineCount = await this.appendMatchingFromStart(fileStream, check, buffer, lineCount);
     }
 
-    return { array };
+    return { array: this.reorderCircularBuffer(buffer, lineCount) };
   }
 
   private getCdts() {
@@ -76,36 +86,58 @@ export default class LogControl extends Control<LogParam> {
   }
 
   /**
-   * Finds the log file, preferring .log over .log.gz.
-   * @param dirPath The directory containing log files.
-   * @returns An object with the file path and a flag indicating if it's gzipped, or null if not found.
+   * 列出某日全部日志分片，按序号从大到小排序（最大序号最先读）。
+   * 同序号同时存在 .log.N 与 .log.N.gz 时优先非压缩文件。
    */
-  private async findLogFile(dirPath: string): Promise<{ path: string; isGzipped: boolean } | null> {
-    const logPath = path.join(dirPath, `log${this._param.day}.log`);
-    const gzPath = path.join(dirPath, `log${this._param.day}.log.gz`);
-
+  private async findLogFiles(dirPath: string): Promise<LogFileInfo[]> {
+    const day = this._param.day;
+    const prefix = `log${day}.log`;
+    let names: string[];
     try {
-      await fs.promises.access(logPath);
-      return { path: logPath, isGzipped: false };
-    } catch (error) {
-      try {
-        await fs.promises.access(gzPath);
-        return { path: gzPath, isGzipped: true };
-      } catch (gzError) {
-        return null;
+      names = await fs.promises.readdir(dirPath);
+    } catch (e) {
+      return [];
+    }
+
+    const bySeq = new Map<number, LogFileInfo>();
+    // log{day}.log | log{day}.log.gz | log{day}.log.N | log{day}.log.N.gz
+    const re = new RegExp(`^${this.escapeRegExp(prefix)}(?:\\.(\\d+))?(\\.gz)?$`);
+
+    for (const name of names) {
+      const m = name.match(re);
+      if (!m) {
+        continue;
+      }
+      const seq = m[1] != null ? parseInt(m[1], 10) : 0;
+      const isGzipped = m[2] === '.gz';
+      const info: LogFileInfo = {
+        path: path.join(dirPath, name),
+        isGzipped,
+        seq
+      };
+      const existing = bySeq.get(seq);
+      // 同序号优先明文，避免既有 .log.1 又有 .log.1.gz 时读两遍
+      if (existing == null || (existing.isGzipped && !isGzipped)) {
+        bySeq.set(seq, info);
       }
     }
+
+    return Array.from(bySeq.values()).sort((a, b) => b.seq - a.seq);
+  }
+
+  private escapeRegExp(str: string): string {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   /**
-   * Reads a stream line by line from the beginning. Used for gzipped files.
-   * It uses a fixed-size buffer to store only the last 200 matching lines, preventing OOM.
+   * 从流头开始逐行匹配，写入环形缓冲；返回更新后的匹配总数。
    */
-  private async readLinesFromStart(fileStream: Readable, check: (json: any) => boolean): Promise<any[]> {
-    const MAX_LINES = 200;
-    const buffer: any[] = new Array(MAX_LINES);
-    let lineCount = 0;
-
+  private async appendMatchingFromStart(
+    fileStream: Readable,
+    check: (json: any) => boolean,
+    buffer: any[],
+    lineCount: number
+  ): Promise<number> {
     const rl = readline.createInterface({
       input: fileStream,
       crlfDelay: Infinity
@@ -115,7 +147,6 @@ export default class LogControl extends Control<LogParam> {
       try {
         const json = JSON.parse(line);
         if (check(json)) {
-          // Use the array as a circular buffer
           buffer[lineCount % MAX_LINES] = json;
           lineCount++;
         }
@@ -124,7 +155,13 @@ export default class LogControl extends Control<LogParam> {
       }
     }
 
-    // Reorder the results from the circular buffer
+    return lineCount;
+  }
+
+  /**
+   * 将环形缓冲整理为「最新在前」的数组（最多 MAX_LINES 条）。
+   */
+  private reorderCircularBuffer(buffer: any[], lineCount: number): any[] {
     const result: any[] = [];
     const count = Math.min(lineCount, MAX_LINES);
     const start = lineCount > MAX_LINES ? (lineCount % MAX_LINES) : 0;
@@ -132,65 +169,7 @@ export default class LogControl extends Control<LogParam> {
     for (let i = 0; i < count; i++) {
       result.push(buffer[(start + i) % MAX_LINES]);
     }
-
-    // The result is now ordered from oldest to newest among the last 200 matches.
-    // Reverse it to show the absolute newest logs first.
+    // 缓冲内是最旧→最新，反转后最新在前
     return result.reverse();
-  }
-
-  /**
-   * Reads a file line by line from the end. Used for plain text .log files.
-   * Stops after finding 200 matching lines. This is memory-efficient for large files.
-   */
-  private async readLinesBackwards(filePath: string, check: (json: any) => boolean): Promise<any[]> {
-    const result: any[] = [];
-    const CHUNK_SIZE = 65536; // 64KB
-    let fileHandle;
-
-    try {
-      fileHandle = await fs.promises.open(filePath, 'r');
-      const stats = await fileHandle.stat();
-      let position = stats.size;
-      let leftover = '';
-
-      while (position > 0 && result.length < 200) {
-        const readLength = Math.min(CHUNK_SIZE, position);
-        const currentPos = position - readLength;
-        
-        const buffer = Buffer.alloc(readLength);
-        const { bytesRead } = await fileHandle.read(buffer, 0, readLength, currentPos);
-        position = currentPos;
-
-        if (bytesRead === 0) continue;
-
-        const chunk = buffer.toString('utf-8', 0, bytesRead);
-        const lines = (chunk + leftover).split(/\r?\n/);
-        
-        const firstLinePartial = position > 0;
-        leftover = firstLinePartial && lines.length > 0 ? lines.shift()! : '';
-
-        for (let i = lines.length - 1; i >= 0; i--) {
-          if (result.length >= 200) {
-            break;
-          }
-          const line = lines[i];
-          if (line) {
-            try {
-              const json = JSON.parse(line);
-              if (check(json)) {
-                result.push(json);
-              }
-            } catch (e) {
-              // Ignore invalid JSON lines
-            }
-          }
-        }
-      }
-    } finally {
-      if (fileHandle) {
-        await fileHandle.close();
-      }
-    }
-    return result;
   }
 }
