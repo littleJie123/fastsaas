@@ -230,7 +230,7 @@ class Dao {
                 continue;
             }
             else {
-                if (cols.includes(e)) {
+                if (cols != null && cols.includes(e)) {
                     data[e] = new sql_1.Sql(`(?)+\`${sqlCol}\``, pojo[e]);
                     continue;
                 }

@@ -19,6 +19,10 @@ export interface CdtsParam {
     /** 默认为 or */
     op?: string;
 }
+export type CdtFun = ((item: CdtItem) => Promise<BaseCdt>);
+export type CdtFunMap = {
+    [key: string]: CdtFun;
+};
 export interface ListParam {
     _first?: number;
     pageSize?: number;
@@ -45,11 +49,17 @@ export interface ListResult {
     pageSize?: number;
     [key: string]: any;
 }
+type TableCdts = {
+    [key: string]: BaseCdt[];
+};
 /**
  * 参数__download不为空，则转为下载
  * 查询（不包括group by）的控制类
  */
 export default abstract class ListControl<Param extends ListParam = ListParam> extends Control<Param> {
+    protected dataCdt: {
+        getOtherCdt(): any;
+    };
     /**
      * 开关，不需要查询条件
      */
@@ -97,6 +107,8 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
      *
      */
     protected _schCdt: any;
+    protected _tableCdts: TableCdts;
+    addTableCdt(table: string, cdt: BaseCdt): void;
     protected getTableName(): string;
     /**
      * 返回查询负责的dao
@@ -129,13 +141,22 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     根据params的列和值构建某个条件
     */
     protected buildCdt(e: string, val: any): Promise<BaseCdt>;
-    protected doBuildCdt(e: string, val: any): BaseCdt;
+    protected doBuildCdt(e: string, val: any): Promise<BaseCdt>;
+    protected doGetCdtTableMap(): {
+        [key: string]: string[];
+    };
+    /**
+     *
+     * @param item
+     */
+    protected getTableByCdt(item: CdtItem): string;
     /**
      * 将客户端传入的 cdts 转成 OrCdt / AndCdt。
      * 值直接使用原值，不走 getSchVal。
      */
-    protected buildCdtItems(cdts: CdtsParam): BaseCdt;
-    protected buildCdtItem(item: CdtItem): BaseCdt;
+    protected buildCdtItems(cdts: CdtsParam): Promise<BaseCdt>;
+    protected getCdtFunMap(): CdtFunMap;
+    protected buildCdtItem(item: CdtItem): Promise<BaseCdt>;
     /**
      * like 的 value：未含 % 时左右补 %；已有 % 则原样使用。
      */
@@ -165,6 +186,10 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     构建查询
     */
     protected buildQuery(): Promise<Query>;
+    getDataCdt(): {
+        getOtherCdt(): any;
+    };
+    protected addTableCdtToQuery(query: Query): Promise<void>;
     /**
      * 反选排除：`_notInIds` 非空时加「主键 not in _notInIds」
      */
@@ -217,3 +242,4 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     protected getOnlyCols(): string[];
     protected onlyCols(list: any[]): any[];
 }
+export {};

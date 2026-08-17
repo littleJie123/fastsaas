@@ -7,7 +7,7 @@ import Query from './../dao/query/Query';
 import BaseCdt from './../dao/query/cdt/BaseCdt';
 import Dao from './../dao/Dao';
 import Control from "./Control";
-import { JsonUtil, StrUtil } from '../fastsaas';
+import { Bean, JsonUtil, StrUtil } from '../fastsaas';
 
 /** cdts 中单条条件；op 为 or/and 时可嵌套 array */
 export interface CdtItem {
@@ -23,7 +23,8 @@ export interface CdtsParam {
   /** 默认为 or */
   op?: string;
 }
-
+export type CdtFun = ((item:CdtItem)=>Promise<BaseCdt>);
+export type CdtFunMap = {[key:string]:CdtFun}
 export interface ListParam {
   _first?: number;
   pageSize?: number;
@@ -52,11 +53,17 @@ export interface ListResult {
   [key: string]: any;
 }
 
+type TableCdts = {
+  [key:string]:BaseCdt[]
+}
+
 /**
  * 参数__download不为空，则转为下载 
  * 查询（不包括group by）的控制类
  */
 export default abstract class ListControl<Param extends ListParam = ListParam> extends Control<Param> {
+  @Bean()
+  protected dataCdt:{ getOtherCdt():any}
   /**
    * 开关，不需要查询条件
    */
@@ -108,6 +115,22 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
   protected _schCdt: any = null;
 
 
+  protected _tableCdts:TableCdts;
+
+
+  addTableCdt(table:string,cdt:BaseCdt){
+    if(cdt != null){
+      if(this._tableCdts == null){
+        this._tableCdts = {}
+      }
+      let array = this._tableCdts[table];
+      if(array == null){
+        array = [];
+        this._tableCdts[table] = array
+      }
+      array.push(cdt);
+    }
+  }
 
   protected getTableName(): string {
     return null
@@ -212,7 +235,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     return this.doBuildCdt(e, val)
   }
 
-  protected doBuildCdt(e: string, val: any): BaseCdt {
+  protected async doBuildCdt(e: string, val: any): Promise<BaseCdt> {
     if (e == 'cdts') {
       return this.buildCdtItems(val);
     }
@@ -226,22 +249,60 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
       this.getOp(e))
   }
 
+
+  protected doGetCdtTableMap():{[key:string]:string[]}{
+    return null;
+  }
+
+  /**
+   * 
+   * @param item 
+   */
+  protected getTableByCdt(item:CdtItem):string{
+    let map = this.doGetCdtTableMap();
+  
+    if(map == null){
+      return null;
+    }
+    for(let e in map){
+      let array = map[e];
+      if(array != null && item.col !=null && array.includes(item.col)){
+        return e;
+      }
+    }
+    return null;
+  }
+
   /**
    * 将客户端传入的 cdts 转成 OrCdt / AndCdt。
    * 值直接使用原值，不走 getSchVal。
    */
-  protected buildCdtItems(cdts: CdtsParam): BaseCdt {
+  protected async buildCdtItems(cdts: CdtsParam):Promise< BaseCdt> {
+
     if (cdts == null || cdts.array == null || cdts.array.length == 0) {
       return null;
     }
     let arrayCdt = this.createArrayCdt(cdts.op);
     for (let item of cdts.array) {
-      arrayCdt.addCdt(this.buildCdtItem(item));
+      let cdt = await this.buildCdtItem(item);
+      let table = this.getTableByCdt(item);
+
+      if(table == null){
+        arrayCdt.addCdt(cdt);
+      }else{
+        
+        this.addTableCdt(table,cdt);
+      }
     }
     return arrayCdt.isValid() ? arrayCdt : null;
   }
 
-  protected buildCdtItem(item: CdtItem): BaseCdt {
+
+  protected getCdtFunMap():CdtFunMap{
+    return null;
+  }
+
+  protected async buildCdtItem(item: CdtItem): Promise<BaseCdt> {
     if (item == null) {
       return null;
     }
@@ -252,18 +313,27 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
       }
       let arrayCdt = this.createArrayCdt(op);
       for (let child of item.array) {
-        arrayCdt.addCdt(this.buildCdtItem(child));
+        arrayCdt.addCdt(await this.buildCdtItem(child));
       }
       return arrayCdt.isValid() ? arrayCdt : null;
     }
     if (item.col == null || item.value == null) {
       return null;
     }
+    
+    let map = this.getCdtFunMap();
+    
+    if(map != null && map[item.col] != null){
+      let fun = map[item.col];
+      return fun(item);
+    }
     let value = item.value;
     if (op == 'like') {
       value = this.formatLikeValue(value);
     }
     // Cdt 构造：op 空时，数组默认 in，否则 =
+
+    
     return new Cdt(item.col, value, op);
   }
 
@@ -383,7 +453,41 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     this.addNotInIdsCdt(query);
 
     await this.processSchCdt(query)
+    await this.addTableCdtToQuery(query)
     return query
+  }
+
+  getDataCdt(){
+    return this.dataCdt;
+  }
+
+  protected async addTableCdtToQuery(query:Query){
+    if(this._tableCdts != null){
+      for(let table in this._tableCdts){
+        let array = this._tableCdts[table]
+         
+        if(array.length >0 ){
+          let arrayCdt = this.createArrayCdt(this._param?.cdts.op);
+          let opt = {isDel:0};
+          let dataCdt = this.getDataCdt();
+          if(dataCdt != null){
+            opt = dataCdt.getOtherCdt();
+          }
+          let tableQuery = new Query(opt)
+          for(let cdt of array){
+            arrayCdt.addCdt(cdt);
+          }
+          if(arrayCdt.isValid()){
+            tableQuery.addCdt(arrayCdt)
+          }
+          let dao:Dao = this._context.get(table+'Dao');
+          let pojoPk =dao.getPojoIdCol();
+          //tableQuery.col(pojoPk);
+          let ids =await dao.findCol(tableQuery,pojoPk)
+          query.in(pojoPk,ids)
+        }
+      }
+    }
   }
 
   /**

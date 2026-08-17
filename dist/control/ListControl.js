@@ -1,4 +1,10 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -62,6 +68,19 @@ class ListControl extends Control_1.default {
          *
          */
         this._schCdt = null;
+    }
+    addTableCdt(table, cdt) {
+        if (cdt != null) {
+            if (this._tableCdts == null) {
+                this._tableCdts = {};
+            }
+            let array = this._tableCdts[table];
+            if (array == null) {
+                array = [];
+                this._tableCdts[table] = array;
+            }
+            array.push(cdt);
+        }
     }
     getTableName() {
         return null;
@@ -159,7 +178,7 @@ class ListControl extends Control_1.default {
         }
         return this.doBuildCdt(e, val);
     }
-    doBuildCdt(e, val) {
+    async doBuildCdt(e, val) {
         if (e == 'cdts') {
             return this.buildCdtItems(val);
         }
@@ -169,21 +188,51 @@ class ListControl extends Control_1.default {
         }
         return new Cdt_1.default(this.getCol(e), newVal, this.getOp(e));
     }
+    doGetCdtTableMap() {
+        return null;
+    }
+    /**
+     *
+     * @param item
+     */
+    getTableByCdt(item) {
+        let map = this.doGetCdtTableMap();
+        if (map == null) {
+            return null;
+        }
+        for (let e in map) {
+            let array = map[e];
+            if (array != null && item.col != null && array.includes(item.col)) {
+                return e;
+            }
+        }
+        return null;
+    }
     /**
      * 将客户端传入的 cdts 转成 OrCdt / AndCdt。
      * 值直接使用原值，不走 getSchVal。
      */
-    buildCdtItems(cdts) {
+    async buildCdtItems(cdts) {
         if (cdts == null || cdts.array == null || cdts.array.length == 0) {
             return null;
         }
         let arrayCdt = this.createArrayCdt(cdts.op);
         for (let item of cdts.array) {
-            arrayCdt.addCdt(this.buildCdtItem(item));
+            let cdt = await this.buildCdtItem(item);
+            let table = this.getTableByCdt(item);
+            if (table == null) {
+                arrayCdt.addCdt(cdt);
+            }
+            else {
+                this.addTableCdt(table, cdt);
+            }
         }
         return arrayCdt.isValid() ? arrayCdt : null;
     }
-    buildCdtItem(item) {
+    getCdtFunMap() {
+        return null;
+    }
+    async buildCdtItem(item) {
         if (item == null) {
             return null;
         }
@@ -194,12 +243,17 @@ class ListControl extends Control_1.default {
             }
             let arrayCdt = this.createArrayCdt(op);
             for (let child of item.array) {
-                arrayCdt.addCdt(this.buildCdtItem(child));
+                arrayCdt.addCdt(await this.buildCdtItem(child));
             }
             return arrayCdt.isValid() ? arrayCdt : null;
         }
         if (item.col == null || item.value == null) {
             return null;
+        }
+        let map = this.getCdtFunMap();
+        if (map != null && map[item.col] != null) {
+            let fun = map[item.col];
+            return fun(item);
         }
         let value = item.value;
         if (op == 'like') {
@@ -317,7 +371,39 @@ class ListControl extends Control_1.default {
         await this.addCdt(query);
         this.addNotInIdsCdt(query);
         await this.processSchCdt(query);
+        await this.addTableCdtToQuery(query);
         return query;
+    }
+    getDataCdt() {
+        return this.dataCdt;
+    }
+    async addTableCdtToQuery(query) {
+        var _a;
+        if (this._tableCdts != null) {
+            for (let table in this._tableCdts) {
+                let array = this._tableCdts[table];
+                if (array.length > 0) {
+                    let arrayCdt = this.createArrayCdt((_a = this._param) === null || _a === void 0 ? void 0 : _a.cdts.op);
+                    let opt = { isDel: 0 };
+                    let dataCdt = this.getDataCdt();
+                    if (dataCdt != null) {
+                        opt = dataCdt.getOtherCdt();
+                    }
+                    let tableQuery = new Query_1.default(opt);
+                    for (let cdt of array) {
+                        arrayCdt.addCdt(cdt);
+                    }
+                    if (arrayCdt.isValid()) {
+                        tableQuery.addCdt(arrayCdt);
+                    }
+                    let dao = this._context.get(table + 'Dao');
+                    let pojoPk = dao.getPojoIdCol();
+                    //tableQuery.col(pojoPk);
+                    let ids = await dao.findCol(tableQuery, pojoPk);
+                    query.in(pojoPk, ids);
+                }
+            }
+        }
     }
     /**
      * 反选排除：`_notInIds` 非空时加「主键 not in _notInIds」
@@ -521,3 +607,6 @@ class ListControl extends Control_1.default {
     }
 }
 exports.default = ListControl;
+__decorate([
+    (0, fastsaas_1.Bean)()
+], ListControl.prototype, "dataCdt", void 0);

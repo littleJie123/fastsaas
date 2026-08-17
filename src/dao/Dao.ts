@@ -267,7 +267,7 @@ export default abstract class Dao<Pojo = any> {
         data[e] =   new Sql(`(?)+\`${sqlCol}\``, pojo[e])
         continue;
       }else{
-        if(cols.includes(e)){
+        if(cols!=null && cols.includes(e)){
           data[e] =   new Sql(`(?)+\`${sqlCol}\``, pojo[e])
           continue;
         }
