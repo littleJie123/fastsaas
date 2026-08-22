@@ -431,7 +431,7 @@ class ListControl extends Control_1.default {
      * @param query
      */
     async addOrder(query) {
-        if (this._orderArray) {
+        if (this._orderArray && fastsaas_1.StrUtil.isEmpty(this._param.orderBy)) {
             for (var i = 0; i < this._orderArray.length; i++) {
                 var item = this._orderArray[i];
                 if (item.order != null) {

@@ -517,7 +517,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
    * @param query 
    */
   protected async addOrder(query:Query) {
-    if (this._orderArray) {
+    if (this._orderArray && StrUtil.isEmpty(this._param.orderBy)) {
       for (var i = 0; i < this._orderArray.length; i++) {
         var item = this._orderArray[i]
         if (item.order != null) {
