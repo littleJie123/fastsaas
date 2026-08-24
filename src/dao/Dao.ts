@@ -171,6 +171,16 @@ export default abstract class Dao<Pojo = any> {
     return this._opt.acqPojoFirstId();
   }
   /**
+   * 返回该表所有 pojo 字段（驼峰）
+   */
+  getPojoCols(): string[] {
+    let colChanger = this._opt.getColChanger();
+    if (colChanger == null) {
+      return [];
+    }
+    return colChanger.getPojoCols();
+  }
+  /**
    *
    * 增加一条数据
    * @param obj 数据

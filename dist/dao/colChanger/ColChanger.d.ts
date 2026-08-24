@@ -16,6 +16,10 @@ export default class {
      */
     isValid(col: string): boolean;
     /**
+     * 返回所有 pojo 字段（驼峰）
+     */
+    getPojoCols(): string[];
+    /**
      * 将db的字段转成pojo的字段
      * @param col
      * @returns

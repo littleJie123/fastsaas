@@ -27,6 +27,12 @@ class default_1 {
         return this.pojoToDbMap[col] != null;
     }
     /**
+     * 返回所有 pojo 字段（驼峰）
+     */
+    getPojoCols() {
+        return Object.keys(this.pojoToDbMap);
+    }
+    /**
      * 将db的字段转成pojo的字段
      * @param col
      * @returns
