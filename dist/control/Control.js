@@ -247,9 +247,10 @@ class Control {
         }
         else {
             const res = this._processRet(ret);
-            resp.send({
+            resp.set('Content-Type', 'application/json');
+            resp.send(JSON.stringify({
                 result: res
-            });
+            }, (key, value) => value === null ? undefined : value));
         }
     }
     _processRet(ret) {

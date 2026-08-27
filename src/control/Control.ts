@@ -291,9 +291,10 @@ export default class Control<Param = any, Result = any> {
       resp.send({ result: {} });
     } else {
       const res = this._processRet(ret)
-      resp.send({
+      resp.set('Content-Type', 'application/json');
+      resp.send(JSON.stringify({
         result: res
-      });
+      }, (key, value) => value === null ? undefined : value));
     }
   }
 
