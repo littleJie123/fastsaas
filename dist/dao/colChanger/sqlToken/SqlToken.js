@@ -15,11 +15,29 @@ class default_1 {
         return this.chars[this.chars.length - 1];
     }
     /**
-     * 根据格式进行转化
-     * @param pojoToDbMap
+     * 返回原始 sql 片段
      */
-    change(pojoToDbMap) {
+    toSql() {
         return this.chars.join('');
+    }
+    /**
+     * 是否需要更改字段
+     */
+    needChange() {
+        return this.getField() != null;
+    }
+    /**
+     * 返回需要更改的字段，不需要更改则返回 null
+     */
+    getField() {
+        return null;
+    }
+    /**
+     * 将新的 db 字段组成合适的 sql
+     * @param dbField
+     */
+    changeByDbField(dbField) {
+        return this.toSql();
     }
 }
 exports.default = default_1;

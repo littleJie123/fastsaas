@@ -1,5 +1,5 @@
 import { StrUtil } from "../../../../util/StrUtil";
-import ColChanger from "../../../colChanger/ColChanger";
+import IColChanger from "../../../colChanger/IColChanger";
 import { Sql } from "../../../sql";
 import BaseCdt from "../BaseCdt";
 
@@ -20,7 +20,7 @@ export default class extends BaseCdt{
       this.val = s.toVal();
     }
   }
-  toSql(colChanger:ColChanger): Sql {
+  toSql(colChanger:IColChanger): Sql {
     let sql = this.sql;
     if(colChanger != null){
       sql = colChanger.changeSql(sql);

@@ -10,7 +10,7 @@ export default abstract class {
      * @param ormQuery
      */
     protected getRp(ormQuery: any): number;
-    protected _buildFirst(query: Query): any;
+    protected _buildFirst(query: Query): string | number;
     protected _buildOrder(query: Query): any[];
     abstract parseResult(query: Query, result: any): any;
 }

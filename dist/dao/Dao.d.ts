@@ -4,10 +4,10 @@ import Builder from './builder/Builder';
 import DaoOpt from './opt/DaoOpt';
 import Context from './../context/Context';
 import { OnlyArrayIntface, onlyDataInterface } from '../interface';
-import { Sql } from './sql';
 import IDaoOpt from '../inf/IDaoOpt';
 import ISaveItem from './ISaveItem';
 import IGeter from '../util/inf/IGeter';
+import IFind from './interface/IFind';
 interface AddArrayNoRepeatOpt<Pojo = any> {
     list: Pojo[];
     query: any;
@@ -17,7 +17,7 @@ interface AddArrayNoRepeatOpt<Pojo = any> {
 interface ChangeNmuOpt {
     cols?: string[];
 }
-export default abstract class Dao<Pojo = any> {
+export default abstract class Dao<Pojo = any> implements IFind<Pojo> {
     protected _opt: DaoOpt;
     protected _map: object;
     protected _context: Context;
@@ -157,7 +157,7 @@ export default abstract class Dao<Pojo = any> {
      * 创建查询的sql
      * @param query
      */
-    createFindSql(query: any): Sql;
+    private createFindSql;
     /**
      * 查询数量
      * @param query  可以是个结构体，可以是个Cdt，可以是个Query
@@ -305,7 +305,7 @@ export default abstract class Dao<Pojo = any> {
      * @param data
      */
     changeDbArray2Pojo(datas: any[]): Pojo[];
-    getColChanger(): import("./colChanger/ColChanger").default;
+    getColChanger(): import("./colChanger/IColChanger").default;
     /**
      * 根据数据和字段，将对应属性变成add 的sql
      */

@@ -1,6 +1,6 @@
 import BaseCdt from './BaseCdt';
 import Sql from '../../sql/Sql';
-import ColChanger from '../../colChanger/ColChanger';
+import IColChanger from '../../colChanger/IColChanger';
 export default abstract class ArrayCdt extends BaseCdt {
     protected _array: Array<BaseCdt>;
     isValid(): boolean;
@@ -69,5 +69,5 @@ export default abstract class ArrayCdt extends BaseCdt {
      * @param col 字段
      */
     isNotNull(col: string): ArrayCdt;
-    protected toSqlStr(str: any, colChanger: ColChanger): Sql;
+    protected toSqlStr(str: any, colChanger: IColChanger): Sql;
 }

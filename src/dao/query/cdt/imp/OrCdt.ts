@@ -3,7 +3,7 @@ import JsonUtil from './../../../../util/JsonUtil';
 import ArrayCdt from '../ArrayCdt'
 import Sql from '../../../sql/Sql'
 import BaseCdt from '../BaseCdt'
-import ColChanger from '../../../colChanger/ColChanger'
+import IColChanger from '../../../colChanger/IColChanger'
 
 
 
@@ -15,7 +15,7 @@ export default class OrCdt extends ArrayCdt{
 		}
 		return q
 	}
-	toSql(colChanger:ColChanger): Sql {
+	toSql(colChanger:IColChanger): Sql {
 		return this.toSqlStr('or',colChanger);
 	}
 	isHit(obj) {

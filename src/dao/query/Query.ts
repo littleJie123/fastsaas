@@ -1,4 +1,9 @@
 
+interface PageOfQuery{
+	rp?:number|string; //一页的长度
+	first?:number|string; //从第几条开始
+}
+
 /**
  * 查询条件的封装
  */
@@ -14,7 +19,7 @@ export default class Query {
 	private _joinTables: Array<JoinTable> = [];
 	private _cdtArray: Array<BaseCdt> = []
 	private _orders: Array<OrderItem> = [];
-	private _pager: any = {};
+	private _pager: PageOfQuery = {};
 	private _noResult: boolean = false;
 	private _forUpdate: boolean = false;
 
@@ -259,11 +264,11 @@ export default class Query {
 		if (pageth == null)
 			return this;
 		if (len == null) {
-			len = this._pager.rp;
+			len = this._pager.rp as number;
 		}
-		if (len == null)
+		if (len == null){
 			throw new Error('请先设置页长');
-
+		}
 		return this.first((pageth - 1) * len)
 			.size(len)
 	}
@@ -472,6 +477,26 @@ export default class Query {
 	cloneSameCdt(): Query {
 		var query = new Query(this.getCdts())
 		return query
+	}
+
+	/**
+	 * 克隆出一个query的实例
+	 */
+	clone():Query{
+		let query = new Query();
+		query._colArray = [...this._colArray];
+		query._cols = null;
+		query._groupArray = null;
+		query._havingColArray = [...this._havingColArray];
+		query._havingCol = null;
+		query._groupColArray = [...this._groupColArray];
+		query._joinTables = [...this._joinTables];
+		query._cdtArray = [...this._cdtArray];
+		query._orders = [...this._orders];
+		query._pager = {...this._pager};
+		query._noResult = this._noResult;
+		query._forUpdate = this._forUpdate;
+		return query;
 	}
 
 

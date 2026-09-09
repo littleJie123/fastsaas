@@ -18,16 +18,7 @@ class BaseCdt {
     }
     changeCol(col, colChanger) {
         if (colChanger != null) {
-            let index = col.lastIndexOf('.');
-            if (index == -1) {
-                col = colChanger.parsePojoField(col);
-            }
-            else {
-                let start = col.substring(0, index);
-                let end = col.substring(index + 1);
-                end = colChanger.parsePojoField(end);
-                col = `${start}.${end}`;
-            }
+            col = colChanger.parsePojoField(col);
         }
         return col;
     }

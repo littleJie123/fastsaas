@@ -98,9 +98,9 @@ export default abstract class BaseFind extends SqlBuilder {
       return sql
     }
     var first = pager.first
-    if (first == null || isNaN(first)) first = 0
+    if (first == null || isNaN(first as number)) first = 0;
 
-    sql.add(`LIMIT ${parseInt(pager.rp)} OFFSET ${parseInt(first)}`)
+    sql.add(`LIMIT ${parseInt(pager.rp as string)} OFFSET ${parseInt(first as string)}`)
     // sql.add( 'LIMIT  ' + parseInt(first) + ' , ' + parseInt(pager.rp))
     return sql
   }

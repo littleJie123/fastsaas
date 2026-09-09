@@ -1,12 +1,12 @@
 
-import ColChanger from '../../colChanger/ColChanger';
+import IColChanger from '../../colChanger/IColChanger';
 import Sql from '../../sql/Sql'
 
 export default abstract class BaseCdt {
   clazz:string =  'BaseCdt';
-  abstract toSql(colChanger:ColChanger):Sql;
+  abstract toSql(colChanger:IColChanger):Sql;
 
-  getSql(colChanger:ColChanger):Sql{
+  getSql(colChanger:IColChanger):Sql{
     return this.toSql(colChanger);
   }
 
@@ -24,17 +24,9 @@ export default abstract class BaseCdt {
   }
   
 
-  protected changeCol(col:string,colChanger?:ColChanger):string{
+  protected changeCol(col:string,colChanger?:IColChanger):string{
     if(colChanger!=null){
-      let index = col.lastIndexOf('.');
-      if(index == -1){
-        col = colChanger.parsePojoField(col)
-      }else{
-        let start = col.substring(0,index);
-        let end = col.substring(index+1);
-        end = colChanger.parsePojoField(end);
-        col = `${start}.${end}`
-      }
+      col = colChanger.parsePojoField(col)
     }
     return col;
   }

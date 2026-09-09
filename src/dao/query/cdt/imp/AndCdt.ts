@@ -1,9 +1,9 @@
 import ArrayCdt from '../ArrayCdt'
 import Sql from '../../../sql/Sql'
 import JsonUtil from './../../../../util/JsonUtil';
-import ColChanger from '../../../colChanger/ColChanger';
+import IColChanger from '../../../colChanger/IColChanger';
 export default class AndCdt extends ArrayCdt   {
-  toSql(colChanger:ColChanger): Sql {
+  toSql(colChanger:IColChanger): Sql {
     return this.toSqlStr('and',colChanger);
   }
   toEs() {

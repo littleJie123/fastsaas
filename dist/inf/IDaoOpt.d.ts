@@ -1,4 +1,4 @@
-import ColChanger from "../dao/colChanger/ColChanger";
+import IColChanger from "../dao/colChanger/IColChanger";
 interface IDaoOpt {
     /**
      * 主键列表
@@ -15,7 +15,7 @@ interface IDaoOpt {
     /**
      * 字段转化器
      */
-    colChanger?: ColChanger;
+    colChanger?: IColChanger;
     /**
      * 是否自增
      */

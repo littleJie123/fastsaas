@@ -9,14 +9,18 @@ class default_1 extends SqlToken_1.default {
     isEnd(c) {
         return !SqlTokenUtil_1.default.isNumber(c) && !SqlTokenUtil_1.default.isLetter(c);
     }
-    change(pojoToDbMap) {
-        let chars = this.chars.join('');
-        if (pojoToDbMap[chars] != null) {
-            return pojoToDbMap[chars];
-        }
-        else {
-            return this.chars.join('');
-        }
+    /**
+     * 返回标识符字段
+     */
+    getField() {
+        return this.chars.join('');
+    }
+    /**
+     * 直接返回新的 db 字段
+     * @param dbField
+     */
+    changeByDbField(dbField) {
+        return dbField;
     }
 }
 exports.default = default_1;

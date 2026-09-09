@@ -6,12 +6,18 @@ export default class extends SqlToken {
     return !SqlTokenUtil.isNumber(c) && !SqlTokenUtil.isLetter(c); 
   }
 
-  change(pojoToDbMap: { [key: string]: string; }) { 
-    let chars = this.chars.join('');
-    if(pojoToDbMap[chars] != null){
-      return pojoToDbMap[chars]
-    }else{
-      return this.chars.join('');
-    }
+  /**
+   * 返回标识符字段
+   */
+  getField(): string {
+    return this.chars.join('');
+  }
+
+  /**
+   * 直接返回新的 db 字段
+   * @param dbField 
+   */
+  changeByDbField(dbField: string): string {
+    return dbField;
   }
 }

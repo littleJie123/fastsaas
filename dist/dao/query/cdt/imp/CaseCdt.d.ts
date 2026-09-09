@@ -1,4 +1,4 @@
-import ColChanger from "../../../colChanger/ColChanger";
+import IColChanger from "../../../colChanger/IColChanger";
 import { Sql } from "../../../sql";
 import BaseCdt from "../BaseCdt";
 interface CaseCdtOpt {
@@ -12,7 +12,7 @@ export default class CaseCdt extends BaseCdt {
     constructor(opt: CaseCdtOpt);
     getPkCol(): string;
     private changeSql;
-    toSql(colChanger: ColChanger): Sql;
+    toSql(colChanger: IColChanger): Sql;
     isHit(row: any): boolean;
     toEs(): void;
 }

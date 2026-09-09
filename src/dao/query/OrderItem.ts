@@ -1,4 +1,4 @@
-import ColChanger from '../colChanger/ColChanger';
+import IColChanger from '../colChanger/IColChanger';
 import { ColSql, Sql } from '../sql'
 
 export default class OrderItem {
@@ -22,7 +22,7 @@ export default class OrderItem {
     return this.desc
   }
 
-  toSql(colChanger:ColChanger): Sql {
+  toSql(colChanger:IColChanger): Sql {
     const sql = new Sql()
     let col = this.col;
     if(colChanger!=null){

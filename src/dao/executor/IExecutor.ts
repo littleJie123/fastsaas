@@ -1,4 +1,3 @@
-import ColChanger from "../colChanger/ColChanger";
 import { Sql } from "../sql";
 
 export default interface IExecutor{

@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const SqlBuilder_1 = __importDefault(require("../SqlBuilder"));
 const sql_1 = require("../../../sql");
 const BaseCdt_1 = __importDefault(require("../../../query/cdt/BaseCdt"));
-const ColChanger_1 = __importDefault(require("../../../colChanger/ColChanger"));
 class UpdateArraySql extends SqlBuilder_1.default {
     /**
     拼凑modify的sql
@@ -61,6 +60,7 @@ class UpdateArraySql extends SqlBuilder_1.default {
     _buildBulkUpdate(sql, data, cols) {
         let cnt = 0;
         let opt = this._opt;
+        let colChanger = opt.getColChanger();
         let dbIdCol = opt.acqFirstId();
         for (let t = 0; t < cols.length; t++) {
             const pojoCol = cols[t];
@@ -82,7 +82,7 @@ class UpdateArraySql extends SqlBuilder_1.default {
                     this._pushSqlTxt(sql, new sql_1.ValSql(_data[this.parseDbField(dbIdCol)]));
                     this._pushSqlTxt(sql, 'THEN');
                     if (_data[pojoCol] && _data[pojoCol].getSql) {
-                        this._pushSqlTxt(sql, _data[pojoCol].getSql(ColChanger_1.default));
+                        this._pushSqlTxt(sql, _data[pojoCol].getSql(colChanger));
                     }
                     else {
                         this._pushSqlTxt(sql, this._caseValue(_data[pojoCol]));

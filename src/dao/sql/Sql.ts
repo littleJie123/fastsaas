@@ -3,7 +3,6 @@
  */
 import ISql from './ISql'
 import { sqlType } from '../.././constant'
-import ColChanger from '../colChanger/ColChanger';
 
 export default class Sql implements ISql{
   private _sql:string = '';

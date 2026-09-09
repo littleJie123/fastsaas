@@ -2,7 +2,7 @@
  * 联合查询的
  */
 import { StrUtil } from '../../util/StrUtil';
-import ColChanger from '../colChanger/ColChanger';
+import IColChanger from '../colChanger/IColChanger';
 import Sql from '../sql/Sql'
 
 export default class JoinTable {
@@ -73,7 +73,7 @@ export default class JoinTable {
     return table;
   }
 
-  toSqlStr(tableName: string, colChanger: ColChanger): string {
+  toSqlStr(tableName: string, colChanger: IColChanger): string {
     let table = this.acqTable();
     let alias = this.acqAlias()
     var main = this.main;
@@ -88,7 +88,7 @@ export default class JoinTable {
     return `${this.type} join ${table} on  ${main}.${col}=${alias}.${id}`
   }
 
-  toSql(tableName: string, colChanger: ColChanger) {
+  toSql(tableName: string, colChanger: IColChanger) {
     return new Sql(this.toSqlStr(tableName, colChanger));
   }
   /**

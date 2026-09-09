@@ -3,7 +3,7 @@
  * 支持sql 、monggo、es
  */
 import OperatorFac from './../../../../formula/operator/OperatorFac';
-import ColChanger from '../../../colChanger/ColChanger';
+import IColChanger from '../../../colChanger/IColChanger';
 import { Sql, ColSql, ValSql } from '../../../sql'
 import BaseCdt from '../BaseCdt'
 import JsonUtil from '../../../../util/JsonUtil';
@@ -45,7 +45,7 @@ export default class Cdt extends BaseCdt {
     return this.val
   }
 
-  toSql(colChanger?:ColChanger): Sql {
+  toSql(colChanger?:IColChanger): Sql {
     if(this.val instanceof Array && this.val.length == 0){
       return new Sql('1=2');
     }

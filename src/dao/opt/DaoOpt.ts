@@ -1,10 +1,11 @@
 import IDaoOpt from "../../inf/IDaoOpt";
+import IColChanger from "../colChanger/IColChanger";
 import ColChanger from "../colChanger/ColChanger";
 
 export default class DaoOpt{
 	
   
-  private _opt:IDaoOpt;
+  private _opt: IDaoOpt;
   constructor(opt:IDaoOpt){
     
     if(opt==null)
@@ -57,7 +58,7 @@ export default class DaoOpt{
 	 * 返回列的转换器
 	 * @returns 
 	 */
-	getColChanger(){
+	getColChanger(): IColChanger {
 		return this._opt.colChanger;
 	}
   /**

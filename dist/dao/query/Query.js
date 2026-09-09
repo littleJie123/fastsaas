@@ -1,11 +1,11 @@
 "use strict";
-/**
- * 查询条件的封装
- */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * 查询条件的封装
+ */
 class Query {
     isHit(row) {
         if (row == null) {
@@ -230,8 +230,9 @@ class Query {
         if (len == null) {
             len = this._pager.rp;
         }
-        if (len == null)
+        if (len == null) {
             throw new Error('请先设置页长');
+        }
         return this.first((pageth - 1) * len)
             .size(len);
     }
@@ -440,6 +441,25 @@ class Query {
     */
     cloneSameCdt() {
         var query = new Query(this.getCdts());
+        return query;
+    }
+    /**
+     * 克隆出一个query的实例
+     */
+    clone() {
+        let query = new Query();
+        query._colArray = [...this._colArray];
+        query._cols = null;
+        query._groupArray = null;
+        query._havingColArray = [...this._havingColArray];
+        query._havingCol = null;
+        query._groupColArray = [...this._groupColArray];
+        query._joinTables = [...this._joinTables];
+        query._cdtArray = [...this._cdtArray];
+        query._orders = [...this._orders];
+        query._pager = { ...this._pager };
+        query._noResult = this._noResult;
+        query._forUpdate = this._forUpdate;
         return query;
     }
     /**

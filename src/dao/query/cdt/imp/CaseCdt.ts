@@ -1,5 +1,5 @@
 import { StrUtil } from "../../../../util/StrUtil";
-import ColChanger from "../../../colChanger/ColChanger";
+import IColChanger from "../../../colChanger/IColChanger";
 import { Sql } from "../../../sql";
 import BaseCdt from "../BaseCdt";
 
@@ -21,14 +21,14 @@ export default class CaseCdt extends BaseCdt {
     return StrUtil.firstLower(this.opt.tableName + 'Id');
   }
 
-  private changeSql(colChanger: ColChanger, col: string) {
+  private changeSql(colChanger: IColChanger, col: string) {
     if (colChanger == null) {
       return col;
     }
     return colChanger.changeSql(col)
   }
 
-  toSql(colChanger: ColChanger): Sql {
+  toSql(colChanger: IColChanger): Sql {
     let opt = this.opt;
     let sql = new Sql();
     let col = this.changeSql(colChanger, opt.col)

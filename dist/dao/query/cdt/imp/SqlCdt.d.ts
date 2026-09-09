@@ -1,4 +1,4 @@
-import ColChanger from "../../../colChanger/ColChanger";
+import IColChanger from "../../../colChanger/IColChanger";
 import { Sql } from "../../../sql";
 import BaseCdt from "../BaseCdt";
 /**
@@ -8,7 +8,7 @@ export default class extends BaseCdt {
     private sql;
     private val;
     constructor(sql: string | Sql, val?: any);
-    toSql(colChanger: ColChanger): Sql;
+    toSql(colChanger: IColChanger): Sql;
     isHit(row: any): boolean;
     toEs(): void;
 }

@@ -3,7 +3,7 @@ import Cdt from './imp/Cdt'
 import IsNullCdt from './imp/IsNullCdt'
 import IsNotNullCdt from './imp/IsNotNullCdt'
 import Sql from '../../sql/Sql'
-import ColChanger from '../../colChanger/ColChanger'
+import IColChanger from '../../colChanger/IColChanger'
 
 export default abstract class  ArrayCdt extends BaseCdt{
   protected _array:Array<BaseCdt>=[];
@@ -113,7 +113,7 @@ export default abstract class  ArrayCdt extends BaseCdt{
 		return this
 	}
 
-	protected toSqlStr(str,colChanger:ColChanger):Sql{
+	protected toSqlStr(str,colChanger:IColChanger):Sql{
 
 		let sql = new Sql('(')
 		var array = this._array;

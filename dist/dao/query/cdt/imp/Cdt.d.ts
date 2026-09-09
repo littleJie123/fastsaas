@@ -1,4 +1,4 @@
-import ColChanger from '../../../colChanger/ColChanger';
+import IColChanger from '../../../colChanger/IColChanger';
 import { Sql } from '../../../sql';
 import BaseCdt from '../BaseCdt';
 /**
@@ -13,6 +13,6 @@ export default class Cdt extends BaseCdt {
     getCol(): string;
     getOp(): string;
     getVal(): any;
-    toSql(colChanger?: ColChanger): Sql;
+    toSql(colChanger?: IColChanger): Sql;
     isHit(obj: any): any;
 }

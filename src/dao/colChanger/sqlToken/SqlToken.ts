@@ -12,11 +12,32 @@ export default abstract class {
     return this.chars[this.chars.length-1]
   }
   /**
-   * 根据格式进行转化
-   * @param pojoToDbMap 
+   * 返回原始 sql 片段
    */
-  change(pojoToDbMap: { [key: string]: string; }):string{
-    return this.chars.join('')
+  toSql(): string {
+    return this.chars.join('');
+  }
+
+  /**
+   * 是否需要更改字段
+   */
+  needChange(): boolean {
+    return this.getField() != null;
+  }
+
+  /**
+   * 返回需要更改的字段，不需要更改则返回 null
+   */
+  getField(): string {
+    return null;
+  }
+
+  /**
+   * 将新的 db 字段组成合适的 sql
+   * @param dbField 
+   */
+  changeByDbField(dbField: string): string {
+    return this.toSql();
   }
 
   abstract isEnd(c:string):boolean;

@@ -13,6 +13,7 @@ import IDaoOpt from '../inf/IDaoOpt';
 import ISaveItem from './ISaveItem';
 import IGeter from '../util/inf/IGeter';
 import NumUtil from '../util/NumUtil';
+import IFind from './interface/IFind';
 
 
 interface AddArrayNoRepeatOpt<Pojo = any> {
@@ -27,7 +28,7 @@ interface ChangeNmuOpt{
   cols?:string[]
 }
 
-export default abstract class Dao<Pojo = any> {
+export default abstract class Dao<Pojo = any> implements IFind<Pojo> {
 
 
   protected _opt: DaoOpt;
@@ -399,7 +400,7 @@ export default abstract class Dao<Pojo = any> {
    * 创建查询的sql
    * @param query 
    */
-  createFindSql(query: any): Sql {
+  private createFindSql(query: any): Sql {
     let builder = this._acqBuilder('find');
     return builder.build(query);
   }

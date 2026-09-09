@@ -1,8 +1,8 @@
 import ArrayCdt from '../ArrayCdt';
 import Sql from '../../../sql/Sql';
-import ColChanger from '../../../colChanger/ColChanger';
+import IColChanger from '../../../colChanger/IColChanger';
 export default class AndCdt extends ArrayCdt {
-    toSql(colChanger: ColChanger): Sql;
+    toSql(colChanger: IColChanger): Sql;
     toEs(): {};
     isHit(obj: any): boolean;
 }

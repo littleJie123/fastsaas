@@ -1,4 +1,4 @@
-import ColChanger from '../colChanger/ColChanger';
+import IColChanger from '../colChanger/IColChanger';
 import { Sql } from '../sql';
 export default class OrderItem {
     private col;
@@ -6,5 +6,5 @@ export default class OrderItem {
     constructor(col: string, desc?: string);
     getCol(): string;
     getDesc(): string;
-    toSql(colChanger: ColChanger): Sql;
+    toSql(colChanger: IColChanger): Sql;
 }

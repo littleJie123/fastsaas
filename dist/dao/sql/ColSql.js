@@ -25,6 +25,10 @@ class ColSql extends Sql_1.default {
     }
     toSql() {
         const res = this.cols.map(col => {
+            // table.field 需要分别转义，避免变成 `table.field`
+            if (col != null && col.indexOf('.') != -1) {
+                return col.split('.').map(part => `\`${part}\``).join('.');
+            }
             return `\`${col}\``;
         });
         return res.join(',');

@@ -1,7 +1,7 @@
 import SqlBuilder from '../SqlBuilder'
 import { Sql, ColSql, ValSql } from '../../../sql'
 import BaseCdt from '../../../query/cdt/BaseCdt'
-import ColChanger from '../../../colChanger/ColChanger';
+import IColChanger from '../../../colChanger/IColChanger';
 
 
 export default class UpdateArraySql extends SqlBuilder { 
@@ -65,6 +65,7 @@ export default class UpdateArraySql extends SqlBuilder {
   protected _buildBulkUpdate(sql: Sql, data: any[], cols: string[]) {
     let cnt = 0
     let opt = this._opt;
+    let colChanger = opt.getColChanger();
     let dbIdCol = opt.acqFirstId()
     for (let t = 0; t < cols.length; t++) {
       const pojoCol = cols[t]
@@ -86,7 +87,7 @@ export default class UpdateArraySql extends SqlBuilder {
           this._pushSqlTxt(sql, new ValSql(_data[this.parseDbField(dbIdCol)]))  
           this._pushSqlTxt(sql, 'THEN')
           if (_data[pojoCol] && _data[pojoCol].getSql) {
-            this._pushSqlTxt(sql, _data[pojoCol].getSql(ColChanger))
+            this._pushSqlTxt(sql, _data[pojoCol].getSql(colChanger))
           } else {
             this._pushSqlTxt(
               sql,

@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const SqlTokenFac_1 = __importDefault(require("./sqlToken/SqlTokenFac"));
-class default_1 {
+class ColChanger {
     /**
      * 一个db的field为key，pojo属性为value的map
      * @param dbToPojoMap
@@ -12,7 +12,6 @@ class default_1 {
     constructor(dbToPojoMap, clazz) {
         this.clazz = clazz;
         this.dbToPojoMap = dbToPojoMap;
-        ;
         let pojoToDbMap = {};
         for (let e in dbToPojoMap) {
             pojoToDbMap[dbToPojoMap[e]] = e;
@@ -48,6 +47,16 @@ class default_1 {
      * @param pojoField 内存中的字段
      */
     parsePojoField(pojoField) {
+        let index = pojoField.indexOf('.');
+        if (index != -1) {
+            let start = pojoField.substring(0, index);
+            let end = pojoField.substring(index + 1);
+            let dbField = this.pojoToDbMap[end];
+            if (dbField == null) {
+                return pojoField;
+            }
+            return `${start}.${dbField}`;
+        }
         let pojoToDbMap = this.pojoToDbMap;
         let dbField = pojoToDbMap[pojoField];
         if (dbField == null)
@@ -76,30 +85,55 @@ class default_1 {
      */
     changeSql(sql) {
         let sqlTokens = this.scanTokens(sql);
-        let sqls = sqlTokens.map(token => token.change(this.pojoToDbMap));
+        let sqls = [];
+        for (let i = 0; i < sqlTokens.length; i++) {
+            let tableFieldSql = this.changeTableField(sqlTokens, i);
+            if (tableFieldSql != null) {
+                sqls.push(tableFieldSql);
+                i = i + 2;
+                continue;
+            }
+            sqls.push(this.changeToken(sqlTokens[i]));
+        }
         return sqls.join('');
     }
-    scanTokens(sql) {
-        let i = 0;
-        let token = null;
-        let ret = [];
-        while (i < sql.length) {
-            let c = sql.charAt(i);
-            if (token == null) {
-                token = SqlTokenFac_1.default.hit(c);
-                token.add(c);
-                ret.push(token);
-            }
-            else {
-                if (token.isEnd(c)) {
-                    token = SqlTokenFac_1.default.hit(c);
-                    ret.push(token);
-                }
-                token.add(c);
-            }
-            i++;
+    /**
+     * 把 table.field 整段交给 parsePojoField
+     */
+    changeTableField(tokens, i) {
+        let left = tokens[i];
+        let dot = tokens[i + 1];
+        let right = tokens[i + 2];
+        if (left == null || dot == null || right == null) {
+            return null;
         }
-        return ret;
+        if (!left.needChange() || !right.needChange()) {
+            return null;
+        }
+        if (dot.toSql() != '.') {
+            return null;
+        }
+        let table = left.getField();
+        let field = right.getField();
+        if (table == null || field == null) {
+            return null;
+        }
+        return this.parsePojoField(`${table}.${field}`);
+    }
+    /**
+     * 将单个 token 转成 sql
+     * @param token
+     */
+    changeToken(token) {
+        if (!token.needChange()) {
+            return token.toSql();
+        }
+        let field = token.getField();
+        if (field == null) {
+            return token.toSql();
+        }
+        let dbField = this.parsePojoField(field);
+        return token.changeByDbField(dbField);
     }
     /**
      * 把从db里面查询出来的对象转成内存
@@ -132,5 +166,27 @@ class default_1 {
     changeDbArray2Pojo(array) {
         return array.map(row => this.changeDb2Pojo(row));
     }
+    scanTokens(sql) {
+        let i = 0;
+        let token = null;
+        let ret = [];
+        while (i < sql.length) {
+            let c = sql.charAt(i);
+            if (token == null) {
+                token = SqlTokenFac_1.default.hit(c);
+                token.add(c);
+                ret.push(token);
+            }
+            else {
+                if (token.isEnd(c)) {
+                    token = SqlTokenFac_1.default.hit(c);
+                    ret.push(token);
+                }
+                token.add(c);
+            }
+            i++;
+        }
+        return ret;
+    }
 }
-exports.default = default_1;
+exports.default = ColChanger;

@@ -33,7 +33,7 @@ class MySqlDao extends SqlDao_1.default {
         for (let i = 0; i < querys.length; i++) {
             let query = querys[i];
             if (i > 0) {
-                sql.add('union');
+                sql.add('union all');
             }
             sql.add('(');
             sql.add(builder.build(query));

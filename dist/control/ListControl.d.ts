@@ -4,8 +4,8 @@ import AndCdt from './../dao/query/cdt/imp/AndCdt';
 import OrCdt from './../dao/query/cdt/imp/OrCdt';
 import Query from './../dao/query/Query';
 import BaseCdt from './../dao/query/cdt/BaseCdt';
-import Dao from './../dao/Dao';
 import Control from "./Control";
+import IFind from '../dao/interface/IFind';
 /** cdts 中单条条件；op 为 or/and 时可嵌套 array */
 export interface CdtItem {
     col?: string;
@@ -113,7 +113,7 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     /**
      * 返回查询负责的dao
      */
-    protected getDao(): Dao;
+    protected getDao(): IFind;
     /**
      * 对查询结果的后处理
      * @param list

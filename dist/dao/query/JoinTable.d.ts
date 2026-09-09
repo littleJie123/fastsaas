@@ -1,4 +1,4 @@
-import ColChanger from '../colChanger/ColChanger';
+import IColChanger from '../colChanger/IColChanger';
 import Sql from '../sql/Sql';
 export default class JoinTable {
     private type;
@@ -36,8 +36,8 @@ export default class JoinTable {
      * fanh
      */
     acqTable(): string;
-    toSqlStr(tableName: string, colChanger: ColChanger): string;
-    toSql(tableName: string, colChanger: ColChanger): Sql;
+    toSqlStr(tableName: string, colChanger: IColChanger): string;
+    toSql(tableName: string, colChanger: IColChanger): Sql;
     /**
      * 设置主表名称
      * @param main 主表名称

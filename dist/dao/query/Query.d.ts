@@ -1,3 +1,7 @@
+interface PageOfQuery {
+    rp?: number | string;
+    first?: number | string;
+}
 /**
  * 查询条件的封装
  */
@@ -73,7 +77,7 @@ export default class Query {
     /**
     返回分页
     */
-    getPager(): any;
+    getPager(): PageOfQuery;
     /**
     设置长度
     */
@@ -182,6 +186,10 @@ export default class Query {
     */
     cloneSameCdt(): Query;
     /**
+     * 克隆出一个query的实例
+     */
+    clone(): Query;
+    /**
      * 将cdt ，json，query 转成另外一个query
      * @param query
      * @returns
@@ -210,3 +218,4 @@ import AndCdt from './cdt/imp/AndCdt';
 import OrCdt from './cdt/imp/OrCdt';
 import Col from '../col/Col';
 import ParseJsonDto from './dto/ParseJsonDto';
+export {};

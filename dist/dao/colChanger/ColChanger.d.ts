@@ -1,5 +1,5 @@
-import SqlToken from "./sqlToken/SqlToken";
-export default class {
+import IColChanger from "./IColChanger";
+export default class ColChanger implements IColChanger {
     private dbToPojoMap;
     private pojoToDbMap;
     private clazz;
@@ -39,7 +39,15 @@ export default class {
      * 把一个字段为pojo属性的sql ，转成数据库的sql
      */
     changeSql(sql: string): string;
-    scanTokens(sql: string): SqlToken[];
+    /**
+     * 把 table.field 整段交给 parsePojoField
+     */
+    private changeTableField;
+    /**
+     * 将单个 token 转成 sql
+     * @param token
+     */
+    private changeToken;
     /**
      * 把从db里面查询出来的对象转成内存
      */
@@ -48,4 +56,5 @@ export default class {
      * 将一个数组的数据库对象转成内存的数组
      */
     changeDbArray2Pojo(array: any[]): any[];
+    private scanTokens;
 }
