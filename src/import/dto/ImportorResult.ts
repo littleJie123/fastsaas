@@ -10,6 +10,7 @@ interface ImportorResult {
   checked: boolean;
   datas?: ImportorObj[];
   msg?: string;
+  succMsg?: string;
   errorCode?: string
   errors?: ImportorError[]
   errorNo?: string;

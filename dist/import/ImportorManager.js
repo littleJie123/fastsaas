@@ -18,6 +18,7 @@ class ImportorManager {
             }
         }
         let processResult = null;
+        let succMsg = null;
         while (imports.length > 0) {
             if (count++ > 200) {
                 throw new Error('死循环了？');
@@ -28,6 +29,9 @@ class ImportorManager {
                 if (importor.isReady(datas, imports)) {
                     let ret = await importor.process(context, param, datas);
                     if (ret != null) {
+                        if (!(ret instanceof Array) && ret.succMsg != null && ret.succMsg != '') {
+                            succMsg = ret.succMsg;
+                        }
                         processResult = ret;
                     }
                     noRuned = false;
@@ -44,18 +48,29 @@ class ImportorManager {
             imports = nextArray;
         }
         if (processResult == null) {
-            return {
+            let result = {
                 checked: true
             };
+            if (succMsg != null) {
+                result.succMsg = succMsg;
+            }
+            return result;
         }
         //返回最后一个的处理结果
         if (processResult instanceof Array) {
-            return {
+            let result = {
                 checked: true,
                 datas: processResult
             };
+            if (succMsg != null) {
+                result.succMsg = succMsg;
+            }
+            return result;
         }
         else {
+            if (succMsg != null && (processResult.succMsg == null || processResult.succMsg == '')) {
+                processResult.succMsg = succMsg;
+            }
             return processResult;
         }
         ;
