@@ -1,4 +1,5 @@
+declare var get: () => any;
 declare const _default: {
-    get: () => any;
+    get: typeof get;
 };
 export default _default;

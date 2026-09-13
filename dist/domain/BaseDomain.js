@@ -253,20 +253,21 @@ class BaseDomain {
      * @param opt
      */
     async loadOtherTable(list, opt) {
-        var _a, _b, _c, _d, _e, _f;
+        var _a, _b, _c, _d;
+        var _e, _f;
         if (list == null || list.length == 0) {
             return;
         }
         let loadKeys = opt === null || opt === void 0 ? void 0 : opt.loadKeys;
         if (loadKeys != null && loadKeys.length > 0) {
             for (let loadKey of loadKeys) {
-                let table = (_c = (_b = (_a = opt === null || opt === void 0 ? void 0 : opt.loadOpt) === null || _a === void 0 ? void 0 : _a.tables) === null || _b === void 0 ? void 0 : _b[loadKey]) !== null && _c !== void 0 ? _c : loadKey;
+                let table = (_e = (_b = (_a = opt === null || opt === void 0 ? void 0 : opt.loadOpt) === null || _a === void 0 ? void 0 : _a.tables) === null || _b === void 0 ? void 0 : _b[loadKey]) !== null && _e !== void 0 ? _e : loadKey;
                 let searcher = this.getSearcherByKey(table);
                 await searcher.findByIds(fastsaas_1.ArrayUtil.toArrayDis(list, this.getIdColByKey(loadKey)));
             }
             for (let row of list) {
                 for (let loadKey of loadKeys) {
-                    let table = (_f = (_e = (_d = opt === null || opt === void 0 ? void 0 : opt.loadOpt) === null || _d === void 0 ? void 0 : _d.tables) === null || _e === void 0 ? void 0 : _e[loadKey]) !== null && _f !== void 0 ? _f : loadKey;
+                    let table = (_f = (_d = (_c = opt === null || opt === void 0 ? void 0 : opt.loadOpt) === null || _c === void 0 ? void 0 : _c.tables) === null || _d === void 0 ? void 0 : _d[loadKey]) !== null && _f !== void 0 ? _f : loadKey;
                     let searcher = this.getSearcherByKey(table);
                     let idCol = this.getIdColByKey(loadKey);
                     if (row[idCol] != null) {

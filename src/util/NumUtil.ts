@@ -339,10 +339,9 @@ export default class NumUtil {
       x = x * 10;
     }
     num = num * x;
-    let ret = Math.floor(num);
-    if (Math.abs((num - (ret + 1))) < 0.01) {
+    let ret = Math.round(num);
+    if (Math.abs((num - (ret + 1))) < 0.001) {
       ret = ret + 1;
-
     }
     return ret / x;
   }

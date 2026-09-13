@@ -409,7 +409,8 @@ class JsonUtil {
      * @param cols
      */
     static async buildDiffDetail(obj1, obj2, opt) {
-        var _a, _b, _c;
+        var _a;
+        var _b, _c;
         let names = opt.names;
         let details = [];
         for (let name in names) {
