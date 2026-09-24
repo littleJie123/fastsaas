@@ -251,7 +251,7 @@ class Importor {
         let domain = this.getDomain(context);
         let domFun = this.getDomainFun();
         if (domain === null || domain === void 0 ? void 0 : domain[domFun]) {
-            let ret = await domain[domFun](param, datas, datas.map(row => this.parseDataToPojo(param, row)));
+            let ret = await domain[domFun](param, datas, this.opt.query);
             if (ret instanceof Array) {
                 this.join(datas, ret);
             }

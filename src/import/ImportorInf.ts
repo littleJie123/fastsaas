@@ -8,7 +8,7 @@ interface ImportorInf{
    * @param datas 
    * @param rows 
    */
-  onImportChecker?(param: any, datas: ImportorObj[],rows:any[]):Promise<boolean>;
+  onImportChecker?(param: any, datas: ImportorObj[],query?:any):Promise<boolean>;
 
   /**
    * 导入的类，返回的数据会被和datas种的importorobj进行聚合
@@ -16,6 +16,6 @@ interface ImportorInf{
    * @param datas 
    * @param rows 
    */
-  onImport(param:any,datas: ImportorObj[],rows:any[]):Promise<any>;
+  onImport(param:any,datas: ImportorObj[],query?:any):Promise<any>;
 }
 export default ImportorInf;

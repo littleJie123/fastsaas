@@ -7,7 +7,6 @@ import buildParam from './wiget/buildParam'
 import Socket from '../webSocket/Socket';
 import loadRouter from './wiget/loadRouter';
 import debugHealth from './wiget/debugHealth';
-import { WebSocketTokenOpt } from '../interface/Websocket.interface';
 import Context from '../context/Context';
 import { Request, Response } from 'express';
 
@@ -19,8 +18,6 @@ export interface WebServerOption {
    */
   webPath?: string;
   webSocketClazz?: any;
-  webSocketOpt?: any;
-  webSocketTokenOpt?: WebSocketTokenOpt
   port?: number;
   /**
    * 中间件
