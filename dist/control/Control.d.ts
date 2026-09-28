@@ -55,7 +55,8 @@ export default class Control<Param = any, Result = any> {
     protected _processRet(ret: any): any;
     protected doExecute(req?: Request, resp?: Response): Promise<Result>;
     executeParam(param: any, req?: Request, resp?: Response): Promise<Result>;
-    buildControl(controlClazz: any): Control;
+    buildControl<E>(controlClazz: new () => E): E;
+    buildControlWithParam<E>(controlClazz: new () => E): E;
 }
 import IChecker from './inf/IChecker';
 import { SocketProcessor } from '../fastsaas';

@@ -70,4 +70,5 @@ export default abstract class ArrayCdt extends BaseCdt {
      */
     isNotNull(col: string): ArrayCdt;
     protected toSqlStr(str: any, colChanger: IColChanger): Sql;
+    length(): number;
 }

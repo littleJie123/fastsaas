@@ -279,6 +279,11 @@ class Control {
         }
         return ctrl;
     }
+    buildControlWithParam(controlClazz) {
+        let ret = this.buildControl(controlClazz);
+        ret._param = this._param;
+        return ret;
+    }
 }
 exports.default = Control;
 __decorate([

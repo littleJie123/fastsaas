@@ -182,6 +182,8 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
      * `_onlyId` 时返回 0（与 getPageSize 配合，不分页）。
      */
     protected getFirst(): number;
+    createQuery(): Promise<Query>;
+    protected orLike(val: any, cols: string[]): Promise<BaseCdt>;
     /**
     构建查询
     */

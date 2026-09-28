@@ -315,8 +315,8 @@ export default class Control<Param = any, Result = any> {
     return await this.doExecute(req, resp);
   }
 
-  buildControl(controlClazz): Control {
-    let ctrl = new controlClazz()
+  buildControl<E>(controlClazz:new ()=>E): E {
+    let ctrl:any = new controlClazz()
     let context = this._context;
     if (context != null) {
       if (ctrl.setContext) {
@@ -327,6 +327,11 @@ export default class Control<Param = any, Result = any> {
     return ctrl;
   }
 
+  buildControlWithParam<E>(controlClazz:new ()=>E): E {
+    let ret:any = this.buildControl(controlClazz);
+    ret._param = this._param;
+    return ret;
+  }
 
 
 

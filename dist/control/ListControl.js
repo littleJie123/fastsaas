@@ -346,6 +346,20 @@ class ListControl extends Control_1.default {
         }
         return 0;
     }
+    async createQuery() {
+        return this.buildQuery();
+    }
+    async orLike(val, cols) {
+        if (val == null || val == '' || cols == null || cols.length == 0) {
+            return null;
+        }
+        let orCdt = new OrCdt_1.default();
+        val = this.formatLikeValue(val);
+        for (let col of cols) {
+            orCdt.like(col, val);
+        }
+        return orCdt;
+    }
     /**
     构建查询
     */

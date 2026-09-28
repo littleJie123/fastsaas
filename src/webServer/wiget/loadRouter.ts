@@ -52,7 +52,9 @@ function createFun(clazz, opt: WebServerOption): Function {
 
       }
     }
-    ctrl.execute(req, resp);
+    if(ctrl.execute ){
+      ctrl.execute(req, resp);
+    }
   }
 }
 function loadFromWebPath(app, opt: WebServerOption) {

@@ -700,9 +700,16 @@ export default abstract class Dao<Pojo = any> implements IFind<Pojo> {
    * @yield {[type]} [description]
    */
   protected async _findCol(query: Query, col: string): Promise<any[]> {
-    if (!col) col = this._opt.acqFirstId();
+    if (!col) {
+      col = this._opt.acqFirstId();
+    }
     query = this._parseQuery(query)
-    query.col('distinct ' + col)
+    let pkCol = this.getPojoIdCol();
+    if(pkCol != col){
+      query.col('distinct ' + col)
+    }else{
+      query.col(col)
+    }
     var list = await this.find(query)
     return list.map(_data => _data[col])
   }

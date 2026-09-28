@@ -131,4 +131,8 @@ export default abstract class  ArrayCdt extends BaseCdt{
 		sql.add(')')
 		return sql;
 	}
+
+	length(){
+		return this._array.length;
+	}
 }

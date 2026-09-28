@@ -649,10 +649,17 @@ class Dao {
      * @yield {[type]} [description]
      */
     async _findCol(query, col) {
-        if (!col)
+        if (!col) {
             col = this._opt.acqFirstId();
+        }
         query = this._parseQuery(query);
-        query.col('distinct ' + col);
+        let pkCol = this.getPojoIdCol();
+        if (pkCol != col) {
+            query.col('distinct ' + col);
+        }
+        else {
+            query.col(col);
+        }
         var list = await this.find(query);
         return list.map(_data => _data[col]);
     }

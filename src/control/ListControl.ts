@@ -427,6 +427,22 @@ export default abstract class ListControl<Param extends ListParam = ListParam> e
     return 0;
   }
 
+  async createQuery(){
+    return this.buildQuery()
+  }
+
+  protected async orLike(val:any,cols:string[]):Promise<BaseCdt>{
+    if(val == null || val==''||cols ==null || cols.length==0){
+      return null;
+    }
+    let orCdt = new OrCdt();
+    val = this.formatLikeValue(val)
+    for(let col of cols){
+      orCdt.like(col,val);
+    }
+    return orCdt;
+  }
+
   /**
   构建查询
   */

@@ -46,7 +46,9 @@ function createFun(clazz, opt) {
                 }
             }
         }
-        ctrl.execute(req, resp);
+        if (ctrl.execute) {
+            ctrl.execute(req, resp);
+        }
     };
 }
 function loadFromWebPath(app, opt) {

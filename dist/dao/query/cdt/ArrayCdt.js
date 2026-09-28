@@ -130,5 +130,8 @@ class ArrayCdt extends BaseCdt_1.default {
         sql.add(')');
         return sql;
     }
+    length() {
+        return this._array.length;
+    }
 }
 exports.default = ArrayCdt;
