@@ -1,6 +1,7 @@
 import ISocketEvent from './inf/ISocketEvent';
 import IActionMsg from './inf/IActionMsg';
 import { WebServerOption } from '../webServer/webServer';
+import { Context } from '../fastsaas';
 /**
  * 一个websocket一个链接
  */
@@ -15,7 +16,7 @@ export default abstract class {
     getUuid(): string;
     onConnect(ws: any, map: any, opt: WebServerOption): void;
     processAction(json: IActionMsg): Promise<void>;
-    sendError(e: Error): void;
+    sendError(e: Error, context?: Context): void;
     onMessage(json: ISocketEvent): void;
     joinRoom(roomId: string): void;
     levelRoom(roomId: string): void;

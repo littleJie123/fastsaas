@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Control_1 = __importDefault(require("./Control"));
 class default_1 extends Control_1.default {
-    async doExecute(req, resp) {
+    async doExecute() {
         let control = this.getControl();
         let context = this._context;
         control.setContext(context);
@@ -15,7 +15,7 @@ class default_1 extends Control_1.default {
             _shareData: null
         };
         control._param = param;
-        return await control.executeParam(param, req, resp);
+        return await control.executeParam(param);
     }
 }
 exports.default = default_1;

@@ -80,7 +80,11 @@ class LogControl extends Control_1.default {
         }
         if (this.cdts == null) {
             this.cdts = this._param.cdts.map(logCdt => {
-                return new fastsaas_1.Cdt(logCdt.col, logCdt.value, logCdt.op);
+                let op = logCdt.op;
+                if (op == null && logCdt.col == 'message.context_id') {
+                    op = 'like';
+                }
+                return new fastsaas_1.Cdt(logCdt.col, logCdt.value, op);
             });
         }
         return this.cdts;

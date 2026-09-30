@@ -40,7 +40,7 @@ export default function SchIds(opt: SchIdsOpt) {
             context.assembly([ctrl]);
           }
           param._schParam._onlyId = true;
-          let result = await ctrl.executeParam(param._schParam, req as any, resp as any);
+          let result = await ctrl.executeParam(param._schParam);
           let content = result?.content ?? [];
           if (opt.needObj) {
             param[opt.targetCol] = content;

@@ -4,7 +4,7 @@ export default abstract class extends Control {
 
   abstract getControl(): any;
 
-  protected async doExecute(req, resp) {
+  protected async doExecute( ) {
     let control = this.getControl();
     let context = this._context;
     control.setContext(context);
@@ -14,6 +14,6 @@ export default abstract class extends Control {
       _shareData: null
     };
     control._param = param;
-    return await control.executeParam(param, req, resp);
+    return await control.executeParam(param );
   }
 }

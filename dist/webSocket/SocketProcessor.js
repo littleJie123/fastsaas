@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const SocketRoom_1 = __importDefault(require("./SocketRoom"));
 const ws_1 = __importDefault(require("ws"));
+const fastsaas_1 = require("../fastsaas");
 const UuidUtil_1 = __importDefault(require("../util/UuidUtil"));
 const S_Join = 'join';
 const S_Level = 'level';
@@ -99,8 +100,8 @@ class default_1 {
                 }
                 var ctrl = new ActionClazz();
                 if (opt.context) {
-                    var context = opt.context;
-                    var childContext = context.buildChild();
+                    let context = opt.context;
+                    let childContext = context.buildChild();
                     if (ctrl.setContext) {
                         ctrl.setContext(childContext);
                     }
@@ -126,26 +127,39 @@ class default_1 {
                             }
                         }
                     }
-                }
-                if (ctrl.setSocketProcessor) {
-                    ctrl.setSocketProcessor(this);
-                }
-                let result = await ctrl.executeWebSocket(param, url);
-                this.send({
-                    eventType: S_ActionResult,
-                    msg: {
-                        id: json.id,
-                        result
+                    if (ctrl.setSocketProcessor) {
+                        ctrl.setSocketProcessor(this);
                     }
-                });
+                    try {
+                        let result = await ctrl.executeWebSocket(param, url);
+                        this.send({
+                            eventType: S_ActionResult,
+                            msg: {
+                                id: json.id,
+                                result
+                            }
+                        });
+                    }
+                    catch (e) {
+                        this.sendError(e, childContext);
+                        console.error(e);
+                        return;
+                    }
+                }
             }
         }
     }
-    sendError(e) {
+    sendError(e, context) {
+        let message = e === null || e === void 0 ? void 0 : e.message;
+        if (context != null) {
+            if (message == null || fastsaas_1.StrUtil.isAllEnglish(message)) {
+                message = `出错了：${context.getId()}`;
+            }
+        }
         this.send({
             eventType: S_Error,
             msg: {
-                message: e.message
+                message
             }
         });
     }

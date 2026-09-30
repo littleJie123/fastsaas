@@ -22,7 +22,7 @@ function SchIds(opt) {
                         context.assembly([ctrl]);
                     }
                     param._schParam._onlyId = true;
-                    let result = await ctrl.executeParam(param._schParam, req, resp);
+                    let result = await ctrl.executeParam(param._schParam);
                     let content = (_a = result === null || result === void 0 ? void 0 : result.content) !== null && _a !== void 0 ? _a : [];
                     if (opt.needObj) {
                         param[opt.targetCol] = content;

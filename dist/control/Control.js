@@ -30,31 +30,14 @@ class Control {
         }
         let ret;
         let begin = new Date();
-        try {
-            this._printBeforeLog4WebSocket(param, url);
-            await this._checkParam(this._param);
-            await this._checkArray(this._param);
-            ret = await this.doExecute();
-            this._printEndLog(new Date().getTime() - begin.getTime());
-            return {
-                result: ret
-            };
-        }
-        catch (e) {
-            console.error(e);
-            var code = e.code;
-            if (code == null) {
-                code = -1;
-            }
-            var errorData = {
-                code,
-                status: e === null || e === void 0 ? void 0 : e.status,
-                message: e === null || e === void 0 ? void 0 : e.message,
-                data: e === null || e === void 0 ? void 0 : e.data,
-                error: true
-            };
-            return errorData;
-        }
+        this._printBeforeLog4WebSocket(param, url);
+        await this._checkParam(this._param);
+        await this._checkArray(this._param);
+        ret = await this.doExecute();
+        this._printEndLog(new Date().getTime() - begin.getTime());
+        return {
+            result: ret
+        };
     }
     setSocketProcessor(socketProcessor) {
         this.socketProcessor = socketProcessor;
@@ -200,7 +183,7 @@ class Control {
             await this._checkHeader(this._req.headers);
             await this._checkParam(this._param);
             await this._checkArray(this._param);
-            ret = await this.doExecute(req, resp);
+            ret = await this.doExecute();
             this._sendResp(resp, ret);
             this._printEndLog(new Date().getTime() - begin.getTime());
         }
@@ -261,12 +244,12 @@ class Control {
             return ret;
         }
     }
-    async doExecute(req, resp) {
+    async doExecute() {
         return null;
     }
-    async executeParam(param, req, resp) {
+    async executeParam(param) {
         this._param = param;
-        return await this.doExecute(req, resp);
+        return await this.doExecute();
     }
     buildControl(controlClazz) {
         let ctrl = new controlClazz();

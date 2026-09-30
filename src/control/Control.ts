@@ -37,37 +37,21 @@ export default class Control<Param = any, Result = any> {
     }
     let ret;
     let begin = new Date();
-    try {
+    
 
 
-      this._printBeforeLog4WebSocket(param, url)
-      await this._checkParam(this._param);
-      await this._checkArray(this._param);
+    this._printBeforeLog4WebSocket(param, url)
+    await this._checkParam(this._param);
+    await this._checkArray(this._param);
 
-      ret = await this.doExecute();
+    ret = await this.doExecute();
 
 
-      this._printEndLog(new Date().getTime() - begin.getTime());
-      return {
-        result: ret
-      }
-    } catch (e:any) {
-      console.error(e);
-      var code = e.code;
-      if (code == null) {
-        code = -1;
-      }
-
-      var errorData: any = {
-        code,
-        status: e?.status,
-        message: e?.message,
-        data: e?.data,
-        error: true
-      }
-
-      return errorData
+    this._printEndLog(new Date().getTime() - begin.getTime());
+    return {
+      result: ret
     }
+   
   }
 
   setSocketProcessor(socketProcessor: SocketProcessor) {
@@ -236,7 +220,7 @@ export default class Control<Param = any, Result = any> {
       await this._checkParam(this._param);
       await this._checkArray(this._param);
 
-      ret = await this.doExecute(req, resp);
+      ret = await this.doExecute();
 
       this._sendResp(resp, ret);
       this._printEndLog(new Date().getTime() - begin.getTime());
@@ -306,13 +290,13 @@ export default class Control<Param = any, Result = any> {
     }
   }
 
-  protected async doExecute(req?: Request, resp?: Response): Promise<Result> {
+  protected async doExecute(): Promise<Result> {
     return null;
   }
 
-  async executeParam(param: any, req?: Request, resp?: Response) {
+  async executeParam(param: any) {
     this._param = param;
-    return await this.doExecute(req, resp);
+    return await this.doExecute();
   }
 
   buildControl<E>(controlClazz:new ()=>E): E {

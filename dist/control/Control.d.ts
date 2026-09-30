@@ -14,7 +14,9 @@ export default class Control<Param = any, Result = any> {
     protected _context: Context;
     protected socketProcessor: SocketProcessor;
     protected beforeControlProcess: IExe;
-    executeWebSocket(param: any, url?: string): Promise<any>;
+    executeWebSocket(param: any, url?: string): Promise<{
+        result: any;
+    }>;
     setSocketProcessor(socketProcessor: SocketProcessor): void;
     getContext(): Context;
     /**
@@ -53,8 +55,8 @@ export default class Control<Param = any, Result = any> {
     protected _printErrorLog(error: Error): void;
     protected _sendResp(resp: any, ret: any): void;
     protected _processRet(ret: any): any;
-    protected doExecute(req?: Request, resp?: Response): Promise<Result>;
-    executeParam(param: any, req?: Request, resp?: Response): Promise<Result>;
+    protected doExecute(): Promise<Result>;
+    executeParam(param: any): Promise<Result>;
     buildControl<E>(controlClazz: new () => E): E;
     buildControlWithParam<E>(controlClazz: new () => E): E;
 }

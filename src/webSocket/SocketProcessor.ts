@@ -5,7 +5,7 @@ import SocketRoom from './SocketRoom';
 import WebSocket from 'ws';
 import IActionMsg from './inf/IActionMsg';
 import { WebServerOption } from '../webServer/webServer';
-import { Context } from '../fastsaas';
+import { Context, StrUtil } from '../fastsaas';
 import UuidUtil from '../util/UuidUtil';
 const S_Join = 'join';
 const S_Level = 'level';
@@ -111,9 +111,8 @@ export default abstract class {
         }
         var ctrl = new ActionClazz();
         if (opt.context) {
-          var context: Context = opt.context;
-
-          var childContext = context.buildChild();
+          let context: Context = opt.context;
+          let childContext = context.buildChild();
           if (ctrl.setContext) {
             ctrl.setContext(childContext);
           }
@@ -140,29 +139,42 @@ export default abstract class {
             }
 
           }
-        }
-        if (ctrl.setSocketProcessor) {
-          ctrl.setSocketProcessor(this);
-        }
-        let result = await ctrl.executeWebSocket(param, url);
-        this.send({
-          eventType: S_ActionResult,
-          msg: {
-            id: json.id,
-            result
+          
+          if (ctrl.setSocketProcessor) {
+            ctrl.setSocketProcessor(this);
           }
-        })
+          try{
+            let result = await ctrl.executeWebSocket(param, url);
+            this.send({
+              eventType: S_ActionResult,
+              msg: {
+                id: json.id,
+                result
+              }
+            })
+          }catch (e:any) {
+            this.sendError(e,childContext)
+            console.error(e);
+            return;
+          }
+        }
       }
 
 
     }
   }
 
-  sendError(e: Error) {
+  sendError(e: Error,context?:Context) {
+    let message = e?.message
+    if(context != null){
+      if(message == null || StrUtil.isAllEnglish(message)){
+        message = `出错了：${context.getId()}`
+      }
+    }
     this.send({
       eventType: S_Error,
       msg: {
-        message: e.message
+        message
       }
     })
   }

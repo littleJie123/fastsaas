@@ -69,7 +69,11 @@ export default class LogControl extends Control<LogParam> {
     }
     if (this.cdts == null) {
       this.cdts = this._param.cdts.map(logCdt => {
-        return new Cdt(logCdt.col, logCdt.value, logCdt.op)
+        let op = logCdt.op;
+        if(op == null && logCdt.col =='message.context_id'){
+          op = 'like'
+        }
+        return new Cdt(logCdt.col, logCdt.value, op)
       })
     }
     return this.cdts;
