@@ -1,6 +1,7 @@
 import SqlToken from "./sqlToken/SqlToken";
 import SqlTokenFac from "./sqlToken/SqlTokenFac";
 import IColChanger from "./IColChanger";
+import { MySqlUtil } from "../../fastsaas";
 
 export default class ColChanger implements IColChanger {
   private dbToPojoMap: { [key: string]: string };
@@ -59,14 +60,14 @@ export default class ColChanger implements IColChanger {
       let end = pojoField.substring(index + 1);
       let dbField = this.pojoToDbMap[end];
       if (dbField == null) {
-        return pojoField;
+        return   pojoField ;
       }
       return `${start}.${dbField}`;
     }
     let pojoToDbMap = this.pojoToDbMap;
     let dbField = pojoToDbMap[pojoField];
     if (dbField == null)
-      return pojoField;
+      return  pojoField ;
     return dbField;
   }
 

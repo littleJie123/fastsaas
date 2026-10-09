@@ -102,6 +102,7 @@ class default_1 {
                 if (opt.context) {
                     let context = opt.context;
                     let childContext = context.buildChild();
+                    childContext.regBean('socketProcessor', this);
                     if (ctrl.setContext) {
                         ctrl.setContext(childContext);
                     }

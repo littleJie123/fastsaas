@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ColChanger_1 = __importDefault(require("./ColChanger"));
 const StrUtil_1 = require("../../util/StrUtil");
+const fastsaas_1 = require("../../fastsaas");
 /**
  * 联合查询的字段转换器
  * 将 pojo 字段转成 tableName.dbField
@@ -38,10 +39,10 @@ class JointColChanger extends ColChanger_1.default {
         let field = pojoField.substring(index + 1);
         let dao = this.findDaoByTableName(daos, tableName);
         if (dao == null) {
-            return pojoField;
+            return fastsaas_1.MySqlUtil.quoteField(pojoField);
         }
         if (!this.hasPojoField(dao, field)) {
-            return pojoField;
+            return fastsaas_1.MySqlUtil.quoteField(pojoField);
         }
         return this.toTableDbField(dao, field);
     }

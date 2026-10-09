@@ -113,6 +113,7 @@ export default abstract class {
         if (opt.context) {
           let context: Context = opt.context;
           let childContext = context.buildChild();
+          childContext.regBean('socketProcessor',this)
           if (ctrl.setContext) {
             ctrl.setContext(childContext);
           }

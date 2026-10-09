@@ -7,24 +7,8 @@ import UuidUtil from "../util/UuidUtil";
 
 const AfterBuild = 'afterBuild' //后处理函数
 
-let spaceId: number = null;
-let nowId: number = 0;
-let randNum = Math.pow(2, 24);
-let maxId = randNum;
-function getContextId() {
-  let ret = null;
-  if (spaceId == null) {
-    spaceId = Math.floor(Math.random() * randNum) * randNum;
-  }
-  ret = spaceId + nowId;
-  nowId++;
-  if (nowId >= maxId) {
-    nowId = 0
-  }
-  return ret;
-
-
-}
+ 
+ 
 /**
  * bean 上下午相关的结构
  * {
@@ -120,8 +104,9 @@ export default class Context {
   }
 
   get<T = any>(beanId: string): T {
-    if (beanId != null)
+    if (beanId != null){
       beanId = this._parseBeanId(beanId);
+    }
     var map = this._map;
     let bean = map[beanId];
     if (bean != null) {
@@ -287,6 +272,13 @@ export default class Context {
     if (beanId != null)
       beanId = this._parseBeanId(beanId);
     this._builderMap[beanId] = builder;
+  }
+
+  regBean(beanId:string,obj){
+    if (beanId != null){
+      beanId = this._parseBeanId(beanId);
+    }
+    this._map[beanId] = obj
   }
 
   regClazz(beanId: string, clazz) {

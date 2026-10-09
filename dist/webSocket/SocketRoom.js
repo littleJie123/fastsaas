@@ -15,10 +15,24 @@ class default_1 {
     static joinRoom(roomId, processor) {
         let room = this.getRoom(roomId);
         room[processor.getUuid()] = processor;
+        console.log("[SocketRoom.joinRoom]", roomId, processor.getUuid(), "size=", Object.keys(room).length);
     }
     static levelRoom(roomId, processor) {
         let room = this.getRoom(roomId);
         delete room[processor.getUuid()];
+    }
+    static getSocket(roomId, socketId) {
+        let room = this.getRoom(roomId);
+        if (room == null) {
+            return null;
+        }
+        return room[socketId];
+    }
+    static sendMsg(roomId, socketId, msg) {
+        let socketProcessor = this.getSocket(roomId, socketId);
+        if (socketProcessor) {
+            socketProcessor.send(msg);
+        }
     }
     static emitMsg(roomId, msg, opt) {
         var _a;
@@ -29,9 +43,14 @@ class default_1 {
             }
         }
     }
+    static getRoomSize(roomId) {
+        return Object.keys(this.getRoom(roomId)).length;
+    }
     static emit(roomId, eventType, msg, opt) {
         var _a;
         let room = this.getRoom(roomId);
+        const ids = Object.keys(room);
+        console.log("[SocketRoom.emit]", { roomId, eventType, targetCount: ids.length, targets: ids });
         for (let e in room) {
             if (opt == null || e != ((_a = opt.socketProcessor) === null || _a === void 0 ? void 0 : _a.getUuid())) {
                 room[e].send({

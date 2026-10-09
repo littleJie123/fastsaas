@@ -10,6 +10,7 @@ export default class IsNullCdt extends BaseCdt{
     this._col = col
   }
   toSql(colChanger:IColChanger):Sql {
+    this.assertColSafe(this._col);
     let sql = new Sql()
     sql.add(new ColSql(this.changeCol(this._col,colChanger)))
     sql.add('is null')

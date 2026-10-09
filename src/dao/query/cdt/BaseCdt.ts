@@ -3,6 +3,9 @@ import IColChanger from '../../colChanger/IColChanger';
 import Sql from '../../sql/Sql'
 
 export default abstract class BaseCdt {
+  /** 标识符，或恰好一个点的 表.字段 */
+  private static readonly COL_REG = /^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?$/;
+
   clazz:string =  'BaseCdt';
   abstract toSql(colChanger:IColChanger):Sql;
 
@@ -23,6 +26,25 @@ export default abstract class BaseCdt {
     return 'BaseCdt'
   }
   
+
+  /**
+   * 字段只允许标识符，或恰好一个点的表.字段。
+   */
+  protected assertColSafe(col: string | string[]) {
+    if (col instanceof Array) {
+      for (let i = 0; i < col.length; i++) {
+        this.assertOneCol(col[i]);
+      }
+      return;
+    }
+    this.assertOneCol(col);
+  }
+
+  private assertOneCol(col: string) {
+    if (typeof col != 'string' || !BaseCdt.COL_REG.test(col)) {
+      throw new Error('Cdt字段不合法');
+    }
+  }
 
   protected changeCol(col:string,colChanger?:IColChanger):string{
     if(colChanger!=null){

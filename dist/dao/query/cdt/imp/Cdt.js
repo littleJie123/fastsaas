@@ -45,11 +45,12 @@ class Cdt extends BaseCdt_1.default {
         if (this.val instanceof Array && this.val.length == 0) {
             return new sql_1.Sql('1=2');
         }
+        let op = this.resolveSqlOp();
         const _sql = new sql_1.Sql();
         let col = this.col;
         if (!(col instanceof Array)) {
             if (colChanger == null) {
-                _sql.add(col);
+                _sql.add(Cdt.quoteField(col));
             }
             else {
                 _sql.add(colChanger.changeSql(col));
@@ -59,7 +60,7 @@ class Cdt extends BaseCdt_1.default {
             let colArray = this.col;
             let array = colArray.map((col) => {
                 if (colChanger == null) {
-                    return col;
+                    return Cdt.quoteField(col);
                 }
                 else {
                     return colChanger.changeSql(col);
@@ -68,9 +69,40 @@ class Cdt extends BaseCdt_1.default {
             let colSql = `(${array.join(',')})`;
             _sql.add(colSql);
         }
-        _sql.add(this.op);
+        _sql.add(op);
         _sql.add(new sql_1.ValSql(this.val));
         return _sql;
+    }
+    /**
+     * 与 MySqlUtil.quoteField 相同：包成反引号标识符，并去掉其中的反引号。
+     * 直接写在这里，避免 Cdt 引用 fastsaas 总出口造成循环依赖。
+     */
+    static quoteField(field) {
+        return `\`${field.replace(/`/g, '')}\``;
+    }
+    /**
+     * 校验字段和操作符，返回写入 SQL 的操作符。
+     * 子类可覆盖以跳过注入检查。
+     */
+    resolveSqlOp() {
+        this.assertColSafe(this.col);
+        return this.canonicalOp(this.op);
+    }
+    /**
+     * 已是规范操作符时直接返回，避免多余的 trim。
+     */
+    canonicalOp(op) {
+        if (typeof op == 'string' && Cdt.OP_SET.has(op)) {
+            return op;
+        }
+        if (typeof op != 'string') {
+            throw new Error('Cdt操作符不合法');
+        }
+        let key = op.trim().toLowerCase();
+        if (!Cdt.OP_SET.has(key)) {
+            throw new Error('Cdt操作符不合法');
+        }
+        return key;
     }
     isHit(obj) {
         if (!(this.col instanceof Array)) {
@@ -97,4 +129,7 @@ class Cdt extends BaseCdt_1.default {
         }
     }
 }
+Cdt.OP_SET = new Set([
+    '=', '!=', '<>', '>', '>=', '<', '<=', 'in', 'not in', 'like'
+]);
 exports.default = Cdt;

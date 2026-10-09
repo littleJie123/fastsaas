@@ -71,6 +71,7 @@ export default class Context {
     regParentBuilder(beanId: string, builder: BeanBuilder): void;
     regParentBuilderByClazz(beanId: string, clazz: any): void;
     regBuilder(beanId: string, builder: BeanBuilder): void;
+    regBean(beanId: string, obj: any): void;
     regClazz(beanId: string, clazz: any): void;
     /**
      * 合并两个context

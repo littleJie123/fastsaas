@@ -16,6 +16,23 @@ class BaseCdt {
     getClazz() {
         return 'BaseCdt';
     }
+    /**
+     * 字段只允许标识符，或恰好一个点的表.字段。
+     */
+    assertColSafe(col) {
+        if (col instanceof Array) {
+            for (let i = 0; i < col.length; i++) {
+                this.assertOneCol(col[i]);
+            }
+            return;
+        }
+        this.assertOneCol(col);
+    }
+    assertOneCol(col) {
+        if (typeof col != 'string' || !BaseCdt.COL_REG.test(col)) {
+            throw new Error('Cdt字段不合法');
+        }
+    }
     changeCol(col, colChanger) {
         if (colChanger != null) {
             col = colChanger.parsePojoField(col);
@@ -47,5 +64,7 @@ class BaseCdt {
         return andCdt;
     }
 }
+/** 标识符，或恰好一个点的 表.字段 */
+BaseCdt.COL_REG = /^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?$/;
 exports.default = BaseCdt;
 const AndCdt_1 = __importDefault(require("./imp/AndCdt"));

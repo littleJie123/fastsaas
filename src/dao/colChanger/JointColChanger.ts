@@ -1,6 +1,7 @@
 import ColChanger from "./ColChanger";
 import Dao from "../Dao";
 import { StrUtil } from "../../util/StrUtil";
+import { MySqlUtil } from "../../fastsaas";
 
 interface JointColParam{
   daos:Dao[]
@@ -41,10 +42,10 @@ export default class JointColChanger extends ColChanger {
     let field = pojoField.substring(index + 1);
     let dao = this.findDaoByTableName(daos, tableName);
     if (dao == null) {
-      return pojoField;
+      return MySqlUtil.quoteField( pojoField);
     }
     if (!this.hasPojoField(dao, field)) {
-      return pojoField;
+      return  MySqlUtil.quoteField(pojoField);
     }
     return this.toTableDbField(dao, field);
   }

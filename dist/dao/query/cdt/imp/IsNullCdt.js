@@ -11,6 +11,7 @@ class IsNullCdt extends BaseCdt_1.default {
         this._col = col;
     }
     toSql(colChanger) {
+        this.assertColSafe(this._col);
         let sql = new sql_1.Sql();
         sql.add(new sql_1.ColSql(this.changeCol(this._col, colChanger)));
         sql.add('is null');

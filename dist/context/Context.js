@@ -8,22 +8,6 @@ const LogHelp_1 = __importDefault(require("../log/LogHelp"));
 const ComponentBuilder_1 = __importDefault(require("./bean/ComponentBuilder"));
 const UuidUtil_1 = __importDefault(require("../util/UuidUtil"));
 const AfterBuild = 'afterBuild'; //后处理函数
-let spaceId = null;
-let nowId = 0;
-let randNum = Math.pow(2, 24);
-let maxId = randNum;
-function getContextId() {
-    let ret = null;
-    if (spaceId == null) {
-        spaceId = Math.floor(Math.random() * randNum) * randNum;
-    }
-    ret = spaceId + nowId;
-    nowId++;
-    if (nowId >= maxId) {
-        nowId = 0;
-    }
-    return ret;
-}
 /**
  * bean 上下午相关的结构
  * {
@@ -96,8 +80,9 @@ class Context {
         return beanId;
     }
     get(beanId) {
-        if (beanId != null)
+        if (beanId != null) {
             beanId = this._parseBeanId(beanId);
+        }
         var map = this._map;
         let bean = map[beanId];
         if (bean != null) {
@@ -255,6 +240,12 @@ class Context {
         if (beanId != null)
             beanId = this._parseBeanId(beanId);
         this._builderMap[beanId] = builder;
+    }
+    regBean(beanId, obj) {
+        if (beanId != null) {
+            beanId = this._parseBeanId(beanId);
+        }
+        this._map[beanId] = obj;
     }
     regClazz(beanId, clazz) {
         if (clazz.__needReg == 'single') {

@@ -53,6 +53,12 @@ export default class{
     return StrUtil.formatSql(sql,obj)
   }
   /**
+   * 将字段名包裹为 MySQL 标识符，并移除其中的反引号
+   */
+  static quoteField(field:string):string{
+    return `\`${field.replace(/`/g,'')}\``;
+  }
+  /**
    * 创建数据库的casesql ，如果有来自客户端的值，请做防sql注入的操作
    * @param col 
    * @returns 
@@ -75,4 +81,6 @@ export default class{
     sql = StrUtil.replace(sql,"/*",'');
     return sql;
   }
+
+  
 }

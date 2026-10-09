@@ -121,6 +121,7 @@ export { default as BaseCdt } from './dao/query/cdt/BaseCdt';
 export { default as FunCdt } from './dao/query/cdt/FunCdt';
 export { default as AndCdt } from './dao/query/cdt/imp/AndCdt';
 export { default as Cdt } from './dao/query/cdt/imp/Cdt';
+export { default as NoteSafeCdt } from './dao/query/cdt/imp/NoteSafeCdt';
 export { default as IsNotNullCdt } from './dao/query/cdt/imp/IsNotNullCdt';
 export { default as IsNullCdt } from './dao/query/cdt/imp/IsNullCdt';
 export { default as NotCdt } from './dao/query/cdt/imp/NotCdt';
