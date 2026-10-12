@@ -90,7 +90,7 @@ export default class LinkCdtImp {
         paramKeys.push(...table.paramKeys)
       }
       for (let paramKey of paramKeys) {
-        query.eq(paramKey, param.param[paramKey])
+        query.addCdt(new Cdt(paramKey,param.param[paramKey]) );
       }
     }
     query.addCdt(this.buildTableCdt(table, lastResult, param))
