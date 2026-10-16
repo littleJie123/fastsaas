@@ -78,7 +78,22 @@ class Cdt extends BaseCdt_1.default {
      * 直接写在这里，避免 Cdt 引用 fastsaas 总出口造成循环依赖。
      */
     static quoteField(field) {
-        return `\`${field.replace(/`/g, '')}\``;
+        let str = `${field.replace(/`/g, '')}`;
+        let array = [];
+        if (str.indexOf('.') == -1) {
+            array.push('`');
+            array.push(str);
+            array.push('`');
+            return array.join('');
+        }
+        else {
+            let strs = str.split('.');
+            for (let i = 0; i < strs.length; i++) {
+                let s = strs[i];
+                array.push('`' + s + '`');
+            }
+            return array.join('.');
+        }
     }
     /**
      * 校验字段和操作符，返回写入 SQL 的操作符。

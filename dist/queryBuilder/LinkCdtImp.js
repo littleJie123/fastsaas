@@ -43,7 +43,7 @@ class LinkCdtImp {
                 paramKeys.push(...table.paramKeys);
             }
             for (let paramKey of paramKeys) {
-                query.eq(paramKey, param.param[paramKey]);
+                query.addCdt(new fastsaas_1.Cdt(paramKey, param.param[paramKey]));
             }
         }
         query.addCdt(this.buildTableCdt(table, lastResult, param));

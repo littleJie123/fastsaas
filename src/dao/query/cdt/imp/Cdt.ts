@@ -55,12 +55,11 @@ export default class Cdt extends BaseCdt {
     }
     let op = this.resolveSqlOp();
     const _sql: Sql = new Sql()
-    let col = this.col;
-    
+    let col = this.col; 
     if(!(col instanceof Array)){
-      if(colChanger==null){
+      if(colChanger==null){ 
         _sql.add(Cdt.quoteField(col))
-      }else{
+      }else{ 
         _sql.add(colChanger.changeSql(col))
       }
     }else {
@@ -87,7 +86,21 @@ export default class Cdt extends BaseCdt {
    * 直接写在这里，避免 Cdt 引用 fastsaas 总出口造成循环依赖。
    */
   private static quoteField(field: string): string {
-    return `\`${field.replace(/`/g, '')}\``;
+    let str =  `${field.replace(/`/g, '')}`;
+    let array = []
+    if(str.indexOf('.')==-1){
+      array.push('`')
+      array.push(str);
+      array.push('`');
+      return array.join('')
+    }else{
+      let strs = str.split('.')
+      for(let i=0;i<strs.length;i++){
+        let s = strs[i]
+        array.push('`'+s+'`')
+      }
+      return array.join('.')
+    }
   }
 
   /**
