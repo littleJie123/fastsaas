@@ -328,3 +328,5 @@ export { default as LinkCdtImp } from './queryBuilder/LinkCdtImp';
 export { default as LinkCdtOpt } from './queryBuilder/LinkCdtOpt';
 export { default as OrCdtGeter } from './queryBuilder/OrCdtGeter';
 export { default as AndCdtGeter } from './queryBuilder/AndCdtGeter';
+export { default as FeatureCodeUtil } from './util/FeatureCodeUtil';
+export { default as SaveUtil } from './util/SaveUtil';
